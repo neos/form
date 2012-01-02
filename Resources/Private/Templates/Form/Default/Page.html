@@ -1,0 +1,5 @@
+<f:form>
+<f:for each="{page.elements}" as="element">
+	{element.renderedContent -> f:format.raw()}
+</f:for>
+</f:form>

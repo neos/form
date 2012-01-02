@@ -11,7 +11,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * A Page
  */
-class Page {
+class Page implements RenderableInterface {
 
 	/**
 	 * The identifier
@@ -27,7 +27,7 @@ class Page {
 
 	/**
 	 * The elements
-	 * @var array<TYPO3\Form\Domain\Model\FormElement>
+	 * @var array<TYPO3\Form\Domain\Model\FormElementInterface>
 	 */
 	protected $elements = array();
 
@@ -76,7 +76,7 @@ class Page {
 	/**
 	 * Get the Page's elements
 	 *
-	 * @return array<\TYPO3\Form\Domain\Model\FormElement> The Page's elements
+	 * @return array<\TYPO3\Form\Domain\Model\FormElementInterface> The Page's elements
 	 */
 	public function getElements() {
 		return $this->elements;
@@ -86,12 +86,35 @@ class Page {
 	/**
 	 * Add a new form element at the end of the page
 	 *
-	 * @param FormElement $formElement
+	 * @param FormElementInterface $formElement
 	 * @api
 	 */
-	public function addElement(FormElement $formElement) {
-		$this->elements[] = $page;
-		$page->setParentPage($this);
+	public function addElement(FormElementInterface $formElement) {
+		$this->elements[] = $formElement;
+		$formElement->setParentPage($this);
+	}
+
+	/**
+	 * @todo document
+	 * @internal
+	 */
+	public function render() {
+		$renderer = new \TYPO3\Form\Domain\Renderer\FluidRenderer($this);
+		$renderer->setRenderableVariableName('page');
+		$renderer->setControllerContext($this->getControllerContext());
+
+		// TODO: RendererResolver shall be called HERE
+		// TODO: move the "assign" to the RendererResolver lateron
+		$renderer->assign('page', $this);
+		return $renderer->render();
+	}
+
+	public function getControllerContext() {
+		return $this->parentForm->getControllerContext();
+	}
+
+	public function getType() {
+		return 'TYPO3.Form:Page';
 	}
 }
 ?>

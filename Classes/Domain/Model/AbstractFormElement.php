@@ -7,14 +7,11 @@ namespace TYPO3\Form\Domain\Model;
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A Form element
- *
- * @FLOW3\Entity
  */
-class FormElement {
+abstract class AbstractFormElement implements FormElementInterface {
 
 	/**
 	 * The identifier
@@ -23,20 +20,32 @@ class FormElement {
 	protected $identifier;
 
 	/**
+	 * @var string the form element type
+	 */
+	protected $type;
+
+	/**
 	 * The parent page
 	 * @var \TYPO3\Form\Domain\Model\Page
 	 */
 	protected $parentPage;
 
 	/**
+	 * @var string
+	 */
+	protected $label = '';
+
+	/**
 	 * Constructor. Needs this FormElement's identifier
 	 *
 	 * @param string $identifier The FormElement's identifier
+	 * @param string $type The Form Element Type
 	 * @return void
 	 * @api
 	 */
-	public function __construct($identifier) {
+	public function __construct($identifier, $type) {
 		$this->identifier = $identifier;
+		$this->type = $type;
 	}
 	/**
 	 * Get the Form element's identifier
@@ -68,6 +77,36 @@ class FormElement {
 	public function setParentPage(Page $parentPage) {
 		$this->parentPage = $parentPage;
 	}
+
+	/**
+	 * @return string
+	 * @api
+	 */
+	public function getLabel() {
+		return $this->label;
+	}
+
+	/**
+	 * @param string $label
+	 * @api
+	 */
+	public function setLabel($label) {
+		$this->label = $label;
+	}
+
+	/**
+	 * @api
+	 */
+	abstract public function getRenderedContent();
+
+	public function getControllerContext() {
+		return $this->parentPage->getControllerContext();
+	}
+
+	public function getType() {
+		return $this->type;
+	}
+
 
 }
 ?>
