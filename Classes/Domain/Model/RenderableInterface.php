@@ -17,5 +17,7 @@ interface RenderableInterface {
 	public function getType();
 
 	// TODO: maybe also a rendering context
+
+	public function getTemplateVariableName();
 }
 ?>

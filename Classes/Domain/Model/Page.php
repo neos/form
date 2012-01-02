@@ -94,27 +94,12 @@ class Page implements RenderableInterface {
 		$formElement->setParentPage($this);
 	}
 
-	/**
-	 * @todo document
-	 * @internal
-	 */
-	public function render() {
-		$renderer = new \TYPO3\Form\Domain\Renderer\FluidRenderer($this);
-		$renderer->setRenderableVariableName('page');
-		$renderer->setControllerContext($this->getControllerContext());
-
-		// TODO: RendererResolver shall be called HERE
-		// TODO: move the "assign" to the RendererResolver lateron
-		$renderer->assign('page', $this);
-		return $renderer->render();
-	}
-
-	public function getControllerContext() {
-		return $this->parentForm->getControllerContext();
-	}
-
 	public function getType() {
 		return 'TYPO3.Form:Page';
+	}
+
+	public function getTemplateVariableName() {
+		return 'page';
 	}
 }
 ?>

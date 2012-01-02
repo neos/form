@@ -11,7 +11,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * A Form
  */
-class Form {
+class Form implements RenderableInterface, \ArrayAccess {
 
 	/**
 	 * The identifier
@@ -36,6 +36,12 @@ class Form {
 	 * @todo should be custom response class (tailored to forms) lateron
 	 */
 	protected $response;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\MVC\Web\SubRequestBuilder
+	 */
+	protected $subRequestBuilder;
 
 	/**
 	 * Workaround...
@@ -98,8 +104,7 @@ class Form {
 	 * @todo request arguments rauspuhlen, current page befüllen
 	 */
 	public function bindRequest(\TYPO3\FLOW3\MVC\Web\Request $request) {
-		$this->request = $request;
-		// TODO: Request-Arguments rauspuhlen (basierend auf identifier)
+		$this->request = $this->subRequestBuilder->build($request, $this->identifier);
 	}
 
 	/**
@@ -108,19 +113,39 @@ class Form {
 	 */
 	public function render() {
 		// TODO: exception if $this->pages is empty! ->extract to method "ensureThat...."
-		if ($this->currentPage === NULL) {
-				// The first page is the default page
-			$this->currentPage = reset($this->pages);
-		}
-		$controllerContext = $this->getControllerContext();
 
-		return $this->currentPage->render($controllerContext);
+		$this->elements = array();
+		foreach ($this->pages as $page) {
+			foreach ($page->getElements() as $element) {
+				// TODO: check for duplicates
+				$this->elements[$element->getIdentifier()] = $element;
+			}
+		}
+
+		$controllerContext = $this->getControllerContext();
+		$view = new \TYPO3\Form\Domain\View\FluidRenderer();
+		$view->setControllerContext($controllerContext);
+		$view->assign('form', $this);
+		return $view->render('Form');
 	}
 
-	public function getControllerContext() {
+	public function getCurrentPage() {
+		$currentPageIndex = $this->request->getInternalArgument('__currentPage');
+		if ($currentPageIndex) {
+			$this->currentPage = $this->pages[intval($currentPageIndex)];
+		}
+		if ($this->currentPage === NULL) {
+				// The first page is the default page
+			return reset($this->pages);
+		}
+		return $this->currentPage;
+	}
+
+	protected function getControllerContext() {
 		// TODO: build contoller context and return the same one always
 		$uriBuilder = new \TYPO3\FLOW3\MVC\Web\Routing\UriBuilder();
 		$uriBuilder->setRequest($this->request);
+
 		return new \TYPO3\FLOW3\MVC\Controller\ControllerContext(
 			$this->request,
 			$this->response,
@@ -128,6 +153,30 @@ class Form {
 			$uriBuilder,
 			$this->flashMessageContainer
 		);
+	}
+
+	public function getType() {
+		return 'TYPO3.Form:Form';
+	}
+
+	public function getTemplateVariableName() {
+		return 'form';
+	}
+
+	public function offsetExists($offset) {
+		return isset($this->elements[$offset]);
+	}
+
+	public function offsetGet($offset) {
+		return (isset($this->elements[$offset]) ? $this->elements[$offset]->getValue() : NULL);
+	}
+
+	public function offsetSet($offset, $value) {
+		$this->elements[$offset]->setValue($value);
+	}
+
+	public function offsetUnset($offset) {
+		$this->elements[$offset]->setValue(NULL);
 	}
 }
 ?>

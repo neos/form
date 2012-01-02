@@ -36,6 +36,11 @@ abstract class AbstractFormElement implements FormElementInterface {
 	protected $label = '';
 
 	/**
+	 * @var string
+	 */
+	protected $value = NULL;
+
+	/**
 	 * Constructor. Needs this FormElement's identifier
 	 *
 	 * @param string $identifier The FormElement's identifier
@@ -94,11 +99,6 @@ abstract class AbstractFormElement implements FormElementInterface {
 		$this->label = $label;
 	}
 
-	/**
-	 * @api
-	 */
-	abstract public function getRenderedContent();
-
 	public function getControllerContext() {
 		return $this->parentPage->getControllerContext();
 	}
@@ -106,6 +106,19 @@ abstract class AbstractFormElement implements FormElementInterface {
 	public function getType() {
 		return $this->type;
 	}
+
+	public function getTemplateVariableName() {
+		return 'element';
+	}
+
+	public function getValue() {
+		return $this->value;
+	}
+
+	public function setValue($value) {
+		$this->value = $value;
+	}
+
 
 
 }

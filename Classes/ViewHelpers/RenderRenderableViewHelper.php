@@ -9,17 +9,16 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * PUBLIC API to render a form
- *
- * @todo document
+ * @todo rename
  */
-class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderRenderableViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
-	public function render($factoryClass) {
-		$factory = $this->objectManager->get($factoryClass);
-		$form = $factory->build(array());
-		$form->bindRequest($this->controllerContext->getRequest());
-		return $form->render();
+	/**
+	 * @param \TYPO3\Form\Domain\Model\RenderableInterface $renderable
+	 * @return type
+	 */
+	public function render(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
+		return $this->viewHelperVariableContainer->getView()->renderRenderable($renderable);
 	}
 }
 ?>
