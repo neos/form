@@ -1,8 +1,20 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 Form start <br />
-<f:form objectName="{form.identifier}" object="{form}" method="GET">
+<form:form objectName="{form.identifier}" object="{form}" method="GET">
 	<form:renderRenderable renderable="{form.currentPage}" />
-	<!-- TODO: Here, page 2 is hardcoded (value=1; starting to count from 0) -->
-	<f:form.submit name="__currentPage" value="1">Next</f:form.submit>
-</f:form>
+	<ul>
+		<f:for each="{form.pages}" as="page" iteration="iteration">
+			<li>
+				<f:if condition="{page} == {form.currentPage}">
+					<f:then>
+						{iteration.index} ({page.identifier})
+					</f:then>
+					<f:else>
+						<f:form.submit name="__currentPage" value="{iteration.index}">{iteration.cycle} ({page.identifier})</f:form.submit>
+					</f:else>
+				</f:if>
+			</li>
+		</f:for>
+	</ul>
+</form:form>
 <br />form end

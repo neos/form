@@ -52,7 +52,7 @@ class Form implements RenderableInterface, \ArrayAccess {
 	protected $flashMessageContainer;
 
 	/**
-	 * @var Page
+	 * @var \TYPO3\Form\Domain\Model\Page
 	 */
 	protected $currentPage = NULL;
 
@@ -129,16 +129,51 @@ class Form implements RenderableInterface, \ArrayAccess {
 		return $view->render('Form');
 	}
 
+	/**
+	 * Returns the currently selected page
+	 *
+	 * @return \TYPO3\Form\Domain\Model\Page
+	 */
 	public function getCurrentPage() {
-		$currentPageIndex = $this->request->getInternalArgument('__currentPage');
-		if ($currentPageIndex) {
-			$this->currentPage = $this->pages[intval($currentPageIndex)];
-		}
 		if ($this->currentPage === NULL) {
-				// The first page is the default page
-			return reset($this->pages);
+			$currentPageIndex = $this->getCurrentPageIndex();
+			$this->currentPage = isset($this->pages[$currentPageIndex]) ? $this->pages[$currentPageIndex] : reset($this->pages);
 		}
 		return $this->currentPage;
+	}
+
+	/**
+	 * Returns the previous page of the currently selected one or NULL if there is no previous page
+	 *
+	 * @return \TYPO3\Form\Domain\Model\Page
+	 */
+	public function getPreviousPage() {
+		$currentPageIndex = $this->getCurrentPageIndex();
+		if ($currentPageIndex > 0 && isset($this->pages[$currentPageIndex - 1])) {
+			return $this->pages[$currentPageIndex - 1];
+		}
+	}
+
+	/**
+	 * Returns the next page of the currently selected one or NULL if there is no next page
+	 *
+	 * @return \TYPO3\Form\Domain\Model\Page
+	 */
+	public function getNextPage() {
+		$currentPageIndex = $this->getCurrentPageIndex();
+		if (isset($this->pages[$currentPageIndex + 1])) {
+			return $this->pages[$currentPageIndex + 1];
+		}
+	}
+
+	/**
+	 * Returns the (0 based) index of the current page.
+	 * Defaults to zero
+	 *
+	 * @return integer
+	 */
+	protected function getCurrentPageIndex() {
+		return (integer)$this->request->getInternalArgument('__currentPage');
 	}
 
 	protected function getControllerContext() {
