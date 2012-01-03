@@ -114,6 +114,13 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 		return $view->renderRenderable($this);
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getIdentifier() {
+		return $this->formDefinition->getIdentifier();
+	}
+
 	protected function updateFormState() {
 		if ($this->formState->isFormSubmitted()) {
 			$lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());

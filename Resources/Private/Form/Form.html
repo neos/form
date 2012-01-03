@@ -1,20 +1,20 @@
 {namespace form=TYPO3\Form\ViewHelpers}
-Form start <br />
 <form:form object="{form}" method="GET">
-	<form:renderRenderable renderable="{form.currentPage}" />
-	<ul>
-		<f:for each="{form.pages}" as="page" iteration="iteration">
-			<li>
-				<f:if condition="{page} == {form.currentPage}">
-					<f:then>
-						{iteration.index} ({page.identifier})
-					</f:then>
-					<f:else>
-						<f:form.submit name="__currentPage" value="{iteration.index}">{iteration.cycle} ({page.identifier})</f:form.submit>
-					</f:else>
-				</f:if>
-			</li>
-		</f:for>
-	</ul>
+	<fieldset>
+		<form:renderRenderable renderable="{form.currentPage}" />
+	</fieldset>
+	<div class="actions">
+		<!-- TODO: use partials and button view helper -->
+		<f:if condition="{form.previousPage}">
+			<button type="submit" value="{form.previousPage.index}" name="{form.identifier}[__currentPage]" class="btn">Previous page ({form.previousPage.identifier})</button>
+		</f:if>
+		<f:if condition="{form.nextPage}">
+			<f:then>
+				<button type="submit" value="{form.nextPage.index}" name="{form.identifier}[__currentPage]" class="btn primary">Next page ({form.nextPage.identifier})</button>
+			</f:then>
+			<f:else>
+				<button type="submit" value="{form.pages -> f:count()}" name="{form.identifier}[__currentPage]" class="btn primary">Submit</button>
+			</f:else>
+		</f:if>
+	</div>
 </form:form>
-<br />form end

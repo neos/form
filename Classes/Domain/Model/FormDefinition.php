@@ -103,7 +103,7 @@ class FormDefinition {
 
 	/**
 	 * If index does not exist, returns NULL
-	 * @param type $index
+	 * @param integer $index
 	 * @return Page
 	 * @api
 	 */

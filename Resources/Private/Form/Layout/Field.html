@@ -1,14 +1,15 @@
-<div>
-	El Wrapper Start<f:render section="field" />
-
-	<f:form.validationResults for="{element.identifier}">
-
-		<f:if condition="{validationResults.flattenedErrors}">
-			<ul class="errors">
-				<f:for each="{validationResults.errors}" as="error">
-					<li>{error.code}: {error}</li>
-				</f:for>
-			</ul>
-		</f:if>
-	</f:form.validationResults>
-</div>
+<f:form.validationResults for="{element.identifier}">
+	<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}">
+		<label for="{element.identifier}">{element.label}</label>
+		<div class="input">
+			<f:render section="field" />
+			<f:if condition="{validationResults.flattenedErrors}">
+				<span class="help-inline">
+					<f:for each="{validationResults.errors}" as="error">
+						{error}<br />
+					</f:for>
+				</span>
+			</f:if>
+		</div>
+	</div>
+</f:form.validationResults>

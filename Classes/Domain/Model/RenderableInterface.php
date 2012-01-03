@@ -16,6 +16,13 @@ interface RenderableInterface {
 	 */
 	public function getType();
 
+	/**
+	 * The (globally unique) identifier of this renderable
+	 *
+	 * @return string
+	 */
+	public function getIdentifier();
+
 	// TODO: maybe also a rendering context
 
 	public function getTemplateVariableName();
