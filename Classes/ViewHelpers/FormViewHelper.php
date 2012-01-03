@@ -25,6 +25,16 @@ class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 		return '';
 	}
 
+	/**
+	 * We do NOT return NULL as in this case, the Form ViewHelpers do not enter $objectAccessorMode.
+	 * However, we return the *empty string* to avoid double-prefixing the current form,
+	 * as the prefixing is handled by the subrequest which is bound to the form.
+	 *
+	 * @return string
+	 */
+	protected function getFormObjectName() {
+		return '';
+	}
 }
 
 ?>

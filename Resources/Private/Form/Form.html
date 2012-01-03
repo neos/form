@@ -1,6 +1,6 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 Form start <br />
-<form:form objectName="{form.identifier}" object="{form}" method="GET">
+<form:form object="{form}" method="GET">
 	<form:renderRenderable renderable="{form.currentPage}" />
 	<ul>
 		<f:for each="{form.pages}" as="page" iteration="iteration">
