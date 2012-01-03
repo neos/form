@@ -11,19 +11,12 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * A Form
  */
-class Form implements RenderableInterface, \ArrayAccess {
+class FormRuntime implements RenderableInterface {
 
 	/**
-	 * The identifier
-	 * @var string
+	 * @var FormDefinition
 	 */
-	protected $identifier;
-
-	/**
-	 * The pages
-	 * @var array<TYPO3\Form\Domain\Model\Page>
-	 */
-	protected $pages = array();
+	protected $formDefinition;
 
 	/**
 	 * @var \TYPO3\FLOW3\MVC\Web\Request
@@ -57,58 +50,50 @@ class Form implements RenderableInterface, \ArrayAccess {
 	protected $currentPage = NULL;
 
 	/**
-	 * Constructor. Needs this Form's identifier
-	 *
-	 * @param string $identifier The Form's identifier
-	 * @return void
-	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
-	 * @api
+	 * @var FormState
 	 */
-	public function __construct($identifier) {
-		if (!is_string($identifier) || strlen($identifier) === 0) {
-			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
-		}
-		$this->identifier = $identifier;
-	}
+	protected $formState;
 
 	/**
-	 * Get the Form's identifier
-	 *
-	 * @return string The Form's identifier
-	 * @api
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Security\Cryptography\HashService
 	 */
-	public function getIdentifier() {
-		return $this->identifier;
-	}
+	protected $hashService;
 
 	/**
-	 * Get the Form's pages
-	 *
-	 * @return array<TYPO3\Form\Domain\Model\Page> The Form's pages
-	 * @api
-	 */
-	public function getPages() {
-		return $this->pages;
-	}
-
-	/**
-	 * Add a new page at the end of the form
-	 *
-	 * @param Page $page
-	 * @api
-	 */
-	public function addPage(Page $page) {
-		$this->pages[] = $page;
-		$page->setParentForm($this);
-	}
-
-	/**
+	 * @param FormDefinition $formDefinition
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
-	 * @api
-	 * @todo request arguments rauspuhlen, current page befüllen
+	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
+	 * @internal
 	 */
-	public function bindRequest(\TYPO3\FLOW3\MVC\Web\Request $request) {
-		$this->request = $this->subRequestBuilder->build($request, $this->identifier);
+	public function __construct(FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request) {
+		$this->formDefinition = $formDefinition;
+		$this->request = $request;
+	}
+
+	public function initializeObject() {
+		$this->request = $this->subRequestBuilder->build($this->request, $this->formDefinition->getIdentifier());
+		$this->initializeCurrentPageFromRequest();
+		$this->initializeFormStateFromRequest();
+	}
+
+	protected function initializeCurrentPageFromRequest() {
+		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
+		$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
+		if ($this->currentPage === NULL) {
+			$this->currentPage = $this->formDefinition->getPageByIndex(0);
+		}
+		// TODO: Exception if no page
+	}
+
+	protected function initializeFormStateFromRequest() {
+		$serializedFormStateWithHmac = $this->request->getInternalArgument('__state');
+		if ($serializedFormStateWithHmac === NULL) {
+			$this->formState = new FormState();
+		} else {
+			$serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
+			$this->formState = unserialize(base64_decode($serializedFormState));
+		}
 	}
 
 	/**
@@ -116,16 +101,6 @@ class Form implements RenderableInterface, \ArrayAccess {
 	 * @todo implement fully
 	 */
 	public function render() {
-		// TODO: exception if $this->pages is empty! ->extract to method "ensureThat...."
-
-		$this->elements = array();
-		foreach ($this->pages as $page) {
-			foreach ($page->getElements() as $element) {
-				// TODO: check for duplicates
-				$this->elements[$element->getIdentifier()] = $element;
-			}
-		}
-
 		$controllerContext = $this->getControllerContext();
 		$view = new \TYPO3\Form\Domain\View\FluidRenderer();
 		$view->setControllerContext($controllerContext);
@@ -138,10 +113,6 @@ class Form implements RenderableInterface, \ArrayAccess {
 	 * @return \TYPO3\Form\Domain\Model\Page
 	 */
 	public function getCurrentPage() {
-		if ($this->currentPage === NULL) {
-			$currentPageIndex = $this->getCurrentPageIndex();
-			$this->currentPage = isset($this->pages[$currentPageIndex]) ? $this->pages[$currentPageIndex] : reset($this->pages);
-		}
 		return $this->currentPage;
 	}
 
@@ -151,10 +122,8 @@ class Form implements RenderableInterface, \ArrayAccess {
 	 * @return \TYPO3\Form\Domain\Model\Page
 	 */
 	public function getPreviousPage() {
-		$currentPageIndex = $this->getCurrentPageIndex();
-		if ($currentPageIndex > 0 && isset($this->pages[$currentPageIndex - 1])) {
-			return $this->pages[$currentPageIndex - 1];
-		}
+		$currentPageIndex = $this->currentPage->getIndex();
+		return $this->formDefinition->getPageByIndex($currentPageIndex - 1);
 	}
 
 	/**
@@ -163,20 +132,8 @@ class Form implements RenderableInterface, \ArrayAccess {
 	 * @return \TYPO3\Form\Domain\Model\Page
 	 */
 	public function getNextPage() {
-		$currentPageIndex = $this->getCurrentPageIndex();
-		if (isset($this->pages[$currentPageIndex + 1])) {
-			return $this->pages[$currentPageIndex + 1];
-		}
-	}
-
-	/**
-	 * Returns the (0 based) index of the current page.
-	 * Defaults to zero
-	 *
-	 * @return integer
-	 */
-	protected function getCurrentPageIndex() {
-		return (integer)$this->request->getInternalArgument('__currentPage');
+		$currentPageIndex = $this->currentPage->getIndex();
+		return $this->formDefinition->getPageByIndex($currentPageIndex + 1);
 	}
 
 	protected function getControllerContext() {
@@ -216,5 +173,15 @@ class Form implements RenderableInterface, \ArrayAccess {
 	public function offsetUnset($offset) {
 		$this->elements[$offset]->setValue(NULL);
 	}
+
+	public function getPages() {
+		return $this->formDefinition->getPages();
+	}
+
+	public function getFormState() {
+		return $this->formState;
+	}
+
+
 }
 ?>

@@ -21,7 +21,7 @@ class Page implements RenderableInterface {
 
 	/**
 	 * The parent form
-	 * @var \TYPO3\Form\Domain\Model\Form
+	 * @var \TYPO3\Form\Domain\Model\FormDefinition
 	 */
 	protected $parentForm;
 
@@ -30,6 +30,13 @@ class Page implements RenderableInterface {
 	 * @var array<TYPO3\Form\Domain\Model\FormElementInterface>
 	 */
 	protected $elements = array();
+
+	/**
+	 * Position of page in form (0-based)
+	 *
+	 * @var integer
+	 */
+	protected $index = 0;
 
 	/**
 	 * Constructor. Needs this Page's identifier
@@ -60,7 +67,7 @@ class Page implements RenderableInterface {
 	/**
 	 * Get the Page's parent form
 	 *
-	 * @return \TYPO3\Form\Domain\Model\Form The Page's parent form
+	 * @return \TYPO3\Form\Domain\Model\FormDefinition The Page's parent form
 	 * @internal
 	 */
 	public function getParentForm() {
@@ -70,11 +77,11 @@ class Page implements RenderableInterface {
 	/**
 	 * Sets this Page's parent form
 	 *
-	 * @param \TYPO3\Form\Domain\Model\Form $parentForm The Page's parent form
+	 * @param \TYPO3\Form\Domain\Model\FormDefinition $parentForm The Page's parent form
 	 * @return void
 	 * @internal
 	 */
-	public function setParentForm(Form $parentForm) {
+	public function setParentForm(FormDefinition $parentForm) {
 		$this->parentForm = $parentForm;
 	}
 
@@ -106,5 +113,24 @@ class Page implements RenderableInterface {
 	public function getTemplateVariableName() {
 		return 'page';
 	}
+
+	/**
+	 *
+	 * @return integer
+	 * @api
+	 */
+	public function getIndex() {
+		return $this->index;
+	}
+
+	/**
+	 * @param integer $index
+	 * @internal
+	 */
+	public function setIndex($index) {
+		$this->index = $index;
+	}
+
+
 }
 ?>

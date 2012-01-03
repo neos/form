@@ -6,7 +6,7 @@ namespace TYPO3\Form\Tests\Unit\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Form\Domain\Model\Form;
+use TYPO3\Form\Domain\Model\FormDefinition;
 use TYPO3\Form\Domain\Model\Page;
 
 /**
@@ -19,10 +19,10 @@ class FormTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function identifierSetInConstructorCanBeReadAgain() {
-		$form = new Form('foo');
+		$form = new FormDefinition('foo');
 		$this->assertSame('foo', $form->getIdentifier());
 
-		$form = new Form('bar');
+		$form = new FormDefinition('bar');
 		$this->assertSame('bar', $form->getIdentifier());
 	}
 
@@ -40,14 +40,14 @@ class FormTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @dataProvider invalidIdentifiers
 	 */
 	public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier) {
-		new Form($identifier);
+		new FormDefinition($identifier);
 	}
 
 	/**
 	 * @test
 	 */
 	public function getPagesReturnsEmptyArrayByDefault() {
-		$form = new Form('foo');
+		$form = new FormDefinition('foo');
 		$this->assertSame(array(), $form->getPages());
 	}
 
@@ -55,7 +55,7 @@ class FormTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function addPageAddsPageToPagesArrayAndSetsBackReferenceToForm() {
-		$form = new Form('foo');
+		$form = new FormDefinition('foo');
 		$page = new Page('bar');
 		$form->addPage($page);
 		$this->assertSame(array($page), $form->getPages());

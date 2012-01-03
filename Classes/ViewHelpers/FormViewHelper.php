@@ -6,6 +6,8 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  * Custom form ViewHelper that renders custom referrer fields
  *
@@ -15,14 +17,24 @@ namespace TYPO3\Form\ViewHelpers;
 class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 
 	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Security\Cryptography\HashService
+	 */
+	protected $hashService;
+
+	/**
 	 * Renders hidden form fields for referrer information about
 	 * the current request.
 	 *
 	 * @return string Hidden fields with referrer information
 	 */
 	protected function renderHiddenReferrerFields() {
-		// TODO render form "meta data"
-		return '';
+		$tagBuilder = new \TYPO3\Fluid\Core\ViewHelper\TagBuilder('input');
+		$tagBuilder->addAttribute('type', 'hidden');
+		$tagBuilder->addAttribute('name', $this->prefixFieldName('__state'));
+		$serializedFormState = base64_encode(serialize($this->arguments['object']->getFormState()));
+		$tagBuilder->addAttribute('value', $this->hashService->appendHmac($serializedFormState));
+		return $tagBuilder->render();
 	}
 
 	/**
