@@ -61,6 +61,12 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	protected $hashService;
 
 	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Property\PropertyMapper
+	 */
+	protected $propertyMapper;
+
+	/**
 	 * @param FormDefinition $formDefinition
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
@@ -113,9 +119,18 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 			$lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
 
 			$result = new \TYPO3\FLOW3\Error\Result();
-
+			$mappingRules = $this->formDefinition->getMappingRules();
 			foreach ($lastDisplayedPage->getElements() as $element) {
-				$value = $this->request->getArgument($element->getIdentifier());
+				$value = NULL;
+				if ($this->request->hasArgument($element->getIdentifier())) {
+					$value = $this->request->getArgument($element->getIdentifier());
+					if (isset($mappingRules[$element->getIdentifier()])) {
+						$mappingRule = $mappingRules[$element->getIdentifier()];
+						$value = $this->propertyMapper->convert($value, $mappingRule->getDataType(), $mappingRule->getPropertyMappingConfiguration());
+						$result->forProperty($element->getIdentifier())->merge($this->propertyMapper->getMessages());
+					}
+				}
+
 					// TODO: support "." syntax (property paths, maybe through the Property Mapper)
 				$validator = $element->getValidator();
 

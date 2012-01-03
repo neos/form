@@ -26,6 +26,14 @@ class FormDefinition {
 	protected $pages = array();
 
 	/**
+	 * Property Mapping Rules, indexed by element
+	 * TODO: should this happen on page-level?
+	 *
+	 * @var array<TYPO3\Form\Domain\Model\MappingRule>
+	 */
+	protected $mappingRules = array();
+
+	/**
 	 * Contains all elements of the form, indexed by identifier.
 	 * Is used as internal cache as we need this really often.
 	 *
@@ -123,6 +131,23 @@ class FormDefinition {
 	public function bind(\TYPO3\FLOW3\MVC\Web\Request $request) {
 		return new FormRuntime($this, $request);
 	}
+
+	/**
+	 *
+	 * @param type $elementIdentifier
+	 * @todo This might be a property path later on!!
+	 */
+	public function getMappingRule($elementIdentifier) {
+		if (!isset($this->mappingRules[$elementIdentifier])) {
+			$this->mappingRules[$elementIdentifier] = new MappingRule();
+		}
+		return $this->mappingRules[$elementIdentifier];
+	}
+
+	public function getMappingRules() {
+		return $this->mappingRules;
+	}
+
 
 }
 ?>

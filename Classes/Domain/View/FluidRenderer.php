@@ -62,6 +62,9 @@ class FluidRenderer extends \TYPO3\Fluid\View\TemplateView {
 
 
 	protected function getParsedRenderable($renderableType, $renderablePathAndFilename) {
+		if (!file_exists($renderablePathAndFilename)) {
+			throw new \Exception('TODO (fix exception message): Path .... not found');
+		}
 		$templateModifiedTimestamp = \filemtime($renderablePathAndFilename);
 		$renderableIdentifier = sprintf('renderable_%s_%s', str_replace(array('.', ':'), '_', $renderableType), sha1($renderablePathAndFilename . '|' . $templateModifiedTimestamp));
 
