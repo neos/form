@@ -111,12 +111,24 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	protected function updateFormState() {
 		if ($this->formState->isFormSubmitted()) {
 			$lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
+
+			$result = new \TYPO3\FLOW3\Error\Result();
+
 			foreach ($lastDisplayedPage->getElements() as $element) {
+				$value = $this->request->getArgument($element->getIdentifier());
 					// TODO: support "." syntax (property paths, maybe through the Property Mapper)
-				$this->formState->setFormValue($element->getIdentifier(), $this->request->getArgument($element->getIdentifier()));
+				$validator = $element->getValidator();
+
+				$validationResult = $validator->validate($value);
+				$result->forProperty($element->getIdentifier())->merge($validationResult);
+
+				$this->formState->setFormValue($element->getIdentifier(), $value);
+			}
+			if ($result->hasErrors()) {
+				$this->currentPage = $lastDisplayedPage;
+				$this->request->setOriginalRequestMappingResults($result);
 			}
 			// TODO: Map arguments through property mapper
-			// TODO: Validate somehow
 		}
 
 		// Update currently shown page in FormState
