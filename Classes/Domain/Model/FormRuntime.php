@@ -11,7 +11,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * A Form
  */
-class FormRuntime implements RenderableInterface {
+class FormRuntime implements RenderableInterface, \ArrayAccess {
 
 	/**
 	 * @var FormDefinition
@@ -50,7 +50,7 @@ class FormRuntime implements RenderableInterface {
 	protected $currentPage = NULL;
 
 	/**
-	 * @var FormState
+	 * @var \TYPO3\Form\Domain\Model\FormState
 	 */
 	protected $formState;
 
@@ -101,10 +101,26 @@ class FormRuntime implements RenderableInterface {
 	 * @todo implement fully
 	 */
 	public function render() {
+		$this->updateFormState();
 		$controllerContext = $this->getControllerContext();
 		$view = new \TYPO3\Form\Domain\View\FluidRenderer();
 		$view->setControllerContext($controllerContext);
 		return $view->renderRenderable($this);
+	}
+
+	protected function updateFormState() {
+		if ($this->formState->isFormSubmitted()) {
+			$lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
+			foreach ($lastDisplayedPage->getElements() as $element) {
+					// TODO: support "." syntax (property paths, maybe through the Property Mapper)
+				$this->formState->setFormValue($element->getIdentifier(), $this->request->getArgument($element->getIdentifier()));
+			}
+			// TODO: Map arguments through property mapper
+			// TODO: Validate somehow
+		}
+
+		// Update currently shown page in FormState
+		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
 	}
 
 	/**
@@ -158,20 +174,32 @@ class FormRuntime implements RenderableInterface {
 		return 'form';
 	}
 
-	public function offsetExists($offset) {
-		return isset($this->elements[$offset]);
+	public function offsetExists($identifier) {
+		return ($this->getElementValue($identifier) !== NULL);
 	}
 
-	public function offsetGet($offset) {
-		return (isset($this->elements[$offset]) ? $this->elements[$offset]->getValue() : NULL);
+	protected function getElementValue($identifier) {
+		$formValue = $this->formState->getFormValue($identifier);
+		if ($formValue !== NULL) {
+			return $formValue;
+		}
+		$formElement = $this->formDefinition->getElementByIdentifier($identifier);
+		if ($formElement !== NULL) {
+			return $formElement->getDefaultValue();
+		}
+		return NULL;
+
+	}
+	public function offsetGet($identifier) {
+		return $this->getElementValue($identifier);
 	}
 
-	public function offsetSet($offset, $value) {
-		$this->elements[$offset]->setValue($value);
+	public function offsetSet($identifier, $value) {
+		$this->formState->setFormValue($identifier, $value);
 	}
 
-	public function offsetUnset($offset) {
-		$this->elements[$offset]->setValue(NULL);
+	public function offsetUnset($identifier) {
+		$this->formState->setFormValue($identifier, NULL);
 	}
 
 	public function getPages() {

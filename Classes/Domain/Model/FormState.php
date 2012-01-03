@@ -13,14 +13,37 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  */
 class FormState {
 
-	protected $lastDisplayedPage = 0;
+	const NOPAGE = -1;
 
-	public function getLastDisplayedPage() {
-		return $this->lastDisplayedPage;
+	protected $lastDisplayedPageIndex = self::NOPAGE;
+
+	/**
+	 * @var array
+	 */
+	protected $formValues;
+
+	public function isFormSubmitted() {
+		return ($this->lastDisplayedPageIndex !== self::NOPAGE);
 	}
 
-	public function setLastDisplayedPage($lastDisplayedPage) {
-		$this->lastDisplayedPage = $lastDisplayedPage;
+	public function getLastDisplayedPageIndex() {
+		return $this->lastDisplayedPageIndex;
+	}
+
+	public function setLastDisplayedPageIndex($lastDisplayedPageIndex) {
+		$this->lastDisplayedPageIndex = $lastDisplayedPageIndex;
+	}
+
+	public function getFormValues() {
+		return $this->formValues;
+	}
+
+	public function setFormValue($key, $value) {
+		$this->formValues[$key] = $value;
+	}
+
+	public function getFormValue($key) {
+		return isset($this->formValues[$key]) ? $this->formValues[$key] : NULL;
 	}
 }
 ?>

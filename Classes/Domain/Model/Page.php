@@ -104,6 +104,9 @@ class Page implements RenderableInterface {
 	public function addElement(FormElementInterface $formElement) {
 		$this->elements[] = $formElement;
 		$formElement->setParentPage($this);
+		if ($this->parentForm !== NULL) {
+			$this->parentForm->addElementToElementsByIdentifierCache($formElement);
+		}
 	}
 
 	public function getType() {

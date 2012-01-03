@@ -36,9 +36,9 @@ abstract class AbstractFormElement implements FormElementInterface {
 	protected $label = '';
 
 	/**
-	 * @var string
+	 * @var mixed
 	 */
-	protected $value = NULL;
+	protected $defaultValue = NULL;
 
 	/**
 	 * Constructor. Needs this FormElement's identifier
@@ -107,15 +107,12 @@ abstract class AbstractFormElement implements FormElementInterface {
 		return 'element';
 	}
 
-	public function getValue() {
-		return $this->value;
+	public function getDefaultValue() {
+		return $this->defaultValue;
 	}
 
-	public function setValue($value) {
-		$this->value = $value;
+	public function setDefaultValue($defaultValue) {
+		$this->defaultValue = $defaultValue;
 	}
-
-
-
 }
 ?>

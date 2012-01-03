@@ -26,6 +26,14 @@ class FormDefinition {
 	protected $pages = array();
 
 	/**
+	 * Contains all elements of the form, indexed by identifier.
+	 * Is used as internal cache as we need this really often.
+	 *
+	 * @var array <TYPO3\Form\Domain\Model\FormElementInterface>
+	 */
+	protected $elementsByIdentifier = array();
+
+	/**
 	 * Constructor. Needs this Form's identifier
 	 *
 	 * @param string $identifier The Form's identifier
@@ -70,16 +78,42 @@ class FormDefinition {
 		$this->pages[] = $page;
 		$page->setParentForm($this);
 		$page->setIndex(count($this->pages) - 1);
+		foreach ($page->getElements() as $element) {
+			$this->addElementToElementsByIdentifierCache($element);
+		}
+	}
+
+	/**
+	 *
+	 * @param type $element
+	 * @internal
+	 */
+	public function addElementToElementsByIdentifierCache(FormElementInterface $element) {
+		// TODO: Check for duplicates and throw exception if ID is inside twice
+		$this->elementsByIdentifier[$element->getIdentifier()] = $element;
 	}
 
 	/**
 	 * If index does not exist, returns NULL
 	 * @param type $index
-	 * @return type
+	 * @return Page
+	 * @api
 	 */
 	public function getPageByIndex($index) {
 		return isset($this->pages[$index]) ? $this->pages[$index] : NULL;
 	}
+
+	/**
+	 * If index does not exist, returns NULL
+	 * @param type $index
+	 * @return Page
+	 * @api
+	 */
+	public function getElementByIdentifier($elementIdentifier) {
+		return isset($this->elementsByIdentifier[$elementIdentifier]) ? $this->elementsByIdentifier[$elementIdentifier] : NULL;
+	}
+
+
 	/**
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
 	 * @return \TYPO3\Form\Domain\Model\FormRuntime
