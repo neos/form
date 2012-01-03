@@ -125,8 +125,7 @@ class Form implements RenderableInterface, \ArrayAccess {
 		$controllerContext = $this->getControllerContext();
 		$view = new \TYPO3\Form\Domain\View\FluidRenderer();
 		$view->setControllerContext($controllerContext);
-		$view->assign('form', $this);
-		return $view->render('Form');
+		return $view->renderRenderable($this);
 	}
 
 	/**
