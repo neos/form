@@ -99,10 +99,6 @@ abstract class AbstractFormElement implements FormElementInterface {
 		$this->label = $label;
 	}
 
-	public function getControllerContext() {
-		return $this->parentPage->getControllerContext();
-	}
-
 	public function getType() {
 		return $this->type;
 	}
