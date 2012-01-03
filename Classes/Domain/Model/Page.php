@@ -36,9 +36,14 @@ class Page implements RenderableInterface {
 	 *
 	 * @param string $identifier The Page's identifier
 	 * @return void
+	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
 	 * @api
 	 */
 	public function __construct($identifier) {
+		if (!is_string($identifier) || strlen($identifier) === 0) {
+			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
+		}
+
 		$this->identifier = $identifier;
 	}
 
