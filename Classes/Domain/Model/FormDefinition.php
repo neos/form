@@ -148,6 +148,12 @@ class FormDefinition {
 	protected $elementsByIdentifier = array();
 
 	/**
+	 * @var \TYPO3\Form\Utility\SupertypeResolver
+	 * @internal
+	 */
+	protected $formFieldTypeManager;
+
+	/**
 	 * Constructor. Creates a new FormDefinition with the given identifier.
 	 *
 	 * @param string $identifier The Form Definition's identifier, must be a non-empty string.
@@ -155,7 +161,8 @@ class FormDefinition {
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was not valid
 	 * @api
 	 */
-	public function __construct($identifier) {
+	public function __construct($identifier, $formDefaults = array()) {
+		$this->formFieldTypeManager = new \TYPO3\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : array());
 		if (!is_string($identifier) || strlen($identifier) === 0) {
 			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
 		}
@@ -170,6 +177,24 @@ class FormDefinition {
 	 */
 	public function getIdentifier() {
 		return $this->identifier;
+	}
+
+	public function createPage($identifier, $typeName = 'TYPO3.Form:Page') {
+		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($typeName);
+
+		if (!isset($typeDefinition['implementationClassName'])) {
+			throw new \Exception('TODO: impl class name not set');
+		}
+		$implementationClassName = $typeDefinition['implementationClassName'];
+		$page = new $implementationClassName($identifier);
+
+		if (isset($typeDefinition['label'])) {
+			$page->setLabel($typeDefinition['label']);
+		}
+		// TODO: if unknown elements in $typeDefinition -> throw exception
+		$this->addPage($page);
+
+		return $page;
 	}
 
 	/**
@@ -221,6 +246,7 @@ class FormDefinition {
 	 * @param FormElementInterface $element
 	 * @throws TYPO3\Form\Exception\DuplicateFormElementException
 	 * @internal
+	 * @todo rename to "registerElementInForm"
 	 */
 	public function addElementToElementsByIdentifierCache(FormElementInterface $element) {
 		if (isset($this->elementsByIdentifier[$element->getIdentifier()])) {
@@ -274,5 +300,15 @@ class FormDefinition {
 	public function getMappingRules() {
 		return $this->mappingRules;
 	}
+
+	/**
+	 * @return \TYPO3\Form\Utility\SupertypeResolver
+	 * @internal
+	 */
+	public function getFormFieldTypeManager() {
+		return $this->formFieldTypeManager;
+	}
+
+
 }
 ?>

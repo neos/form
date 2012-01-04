@@ -1,0 +1,33 @@
+TYPO3:
+  Form:
+    Presets:
+      Default:
+        ########### DEFAULT###########
+        formElementTypes:
+          'TYPO3.Form:Page':
+            implementationClassName: TYPO3\Form\Domain\Model\Page
+
+          'TYPO3.Form:Base':
+            implementationClassName: TYPO3\Form\Domain\Model\GenericFormElement
+
+          'TYPO3.Form:Textfield':
+            superTypes: ['TYPO3.Form:Base']
+          'TYPO3.Form:Date':
+            superTypes: ['TYPO3.Form:Base']
+            processingRule:
+              mapping:
+                availableOptions:
+                  dateFormat:
+#                    type: string // boolean // .... # for graphical UI
+#                    label: '....' # for graphical UI
+                    converterOptionName: 'TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter::format'
+                targetType: '\DateTime'
+                options:
+                  dateFormat: 'Y-m-d'
+
+    ############ CUSTOM PRESET #############
+      facebook:
+        parentPreset: 'Default'
+        formElementTypes:
+          'TYPO3.Form:Base':
+            implementationClassName: 'SomethingElse'

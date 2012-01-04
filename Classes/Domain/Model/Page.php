@@ -125,6 +125,27 @@ class Page implements RenderableInterface {
 		}
 	}
 
+	public function createElement($identifier, $typeName) {
+		if ($this->parentForm === NULL) {
+			throw new \Exception('TODO');
+		}
+		$typeDefinition = $this->parentForm->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
+
+		if (!isset($typeDefinition['implementationClassName'])) {
+			throw new \Exception('TODO: impl class name not set');
+		}
+		$implementationClassName = $typeDefinition['implementationClassName'];
+		$element = new $implementationClassName($identifier, $typeName);
+
+		if (isset($typeDefinition['label'])) {
+			$page->setLabel($typeDefinition['label']);
+		}
+		// TODO: if unknown elements in $typeDefinition -> throw exception
+		$this->addElement($element);
+
+		return $element;
+	}
+
 	/**
 	 * @return string
 	 * @todo document

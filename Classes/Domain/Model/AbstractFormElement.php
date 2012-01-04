@@ -72,6 +72,7 @@ abstract class AbstractFormElement implements FormElementInterface {
 		}
 		$this->identifier = $identifier;
 		$this->type = $type;
+
 		$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
 	}
 
