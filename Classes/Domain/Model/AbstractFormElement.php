@@ -54,6 +54,11 @@ abstract class AbstractFormElement implements FormElementInterface {
 	protected $defaultValue = NULL;
 
 	/**
+	 * @var array
+	 */
+	protected $properties = array();
+
+	/**
 	 * @var \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
 	 */
 	protected $conjunctionValidator;
@@ -63,7 +68,6 @@ abstract class AbstractFormElement implements FormElementInterface {
 	 *
 	 * @param string $identifier The FormElement's identifier
 	 * @param string $type The Form Element Type
-	 * @return void
 	 * @api
 	 */
 	public function __construct($identifier, $type) {
@@ -117,6 +121,22 @@ abstract class AbstractFormElement implements FormElementInterface {
 
 	public function getValidator() {
 		return $this->conjunctionValidator;
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setProperty($key, $value) {
+		$this->properties[$key] = $value;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getProperties() {
+		return $this->properties;
 	}
 }
 ?>
