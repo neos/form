@@ -42,13 +42,13 @@ class AbstractFormFactory implements FormFactoryInterface {
 	 * @return array
 	 * @api
 	 */
-	protected function getMergedConfiguration($presetName) {
+	protected function getPresetConfiguration($presetName) {
 		if (!isset($this->settings['Presets'][$presetName])) {
 			throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: Presets.', $presetName), 1325685498);
 		}
 		$preset = $this->settings['Presets'][$presetName];
 		if (isset($preset['parentPreset'])) {
-			$parentPreset = $this->getMergedConfiguration($preset['parentPreset']);
+			$parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
 			unset($preset['parentPreset']);
 			$preset = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
 		}

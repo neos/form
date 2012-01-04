@@ -80,13 +80,13 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @dataProvider dataProviderForConfigurationMerging
 	 * @test
 	 */
-	public function getMergedConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected) {
+	public function getPresetConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected) {
 		$abstractFormFactory = $this->getAbstractFormFactory();
 		$abstractFormFactory->_set('settings', array(
 			'Presets' => $presets
 		));
 
-		$actual = $abstractFormFactory->_call('getMergedConfiguration', $presetName);
+		$actual = $abstractFormFactory->_call('getPresetConfiguration', $presetName);
 		$this->assertSame($expected, $actual);
 	}
 
@@ -94,9 +94,9 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 * @expectedException TYPO3\Form\Exception\PresetNotFoundException
 	 */
-	public function getMergedConfigurationThrowsExceptionIfPresetIsNotFound() {
+	public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound() {
 		$abstractFormFactory = $this->getAbstractFormFactory();
-		$abstractFormFactory->_call('getMergedConfiguration', 'NonExistingPreset');
+		$abstractFormFactory->_call('getPresetConfiguration', 'NonExistingPreset');
 	}
 
 	/**
