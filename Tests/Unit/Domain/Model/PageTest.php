@@ -12,6 +12,7 @@ use TYPO3\Form\Domain\Model\Page;
 /**
  * Test for Page Domain Model
  * @covers \TYPO3\Form\Domain\Model\Page
+ * @covers \TYPO3\Form\Domain\Model\AbstractFormElement
  */
 class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -49,6 +50,20 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function getElementsReturnsEmptyArrayByDefault() {
 		$page = new Page('foo');
 		$this->assertSame(array(), $page->getElements());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function aFormElementCanOnlyBeAttachedToASinglePage() {
+		$element = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+
+		$page1 = new Page('bar1');
+		$page2 = new Page('bar2');
+
+		$page1->addElement($element);
+		$page2->addElement($element);
 	}
 
 	/**

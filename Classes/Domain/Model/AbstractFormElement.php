@@ -9,23 +9,36 @@ namespace TYPO3\Form\Domain\Model;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * A Form element
+ * A base form element, which is the starting point for creating custom (PHP-based)
+ * Form Elements.
+ *
+ * **This class is meant to be subclassed by developers.**
+ *
+ * A *FormElement* is a part of a *Page*, which in turn is part of a FormDefinition.
+ * See {@link FormDefinition} for an in-depth explanation.
+ *
+ * Often, you should rather subclass this class instead of directly
+ * implementing {@link FormElementInterface}.
  */
 abstract class AbstractFormElement implements FormElementInterface {
 
 	/**
 	 * The identifier
+	 *
 	 * @var string
 	 */
 	protected $identifier;
 
 	/**
-	 * @var string the form element type
+	 * the form element type
+	 *
+	 * @var string
 	 */
 	protected $type;
 
 	/**
 	 * The parent page
+	 *
 	 * @var \TYPO3\Form\Domain\Model\Page
 	 */
 	protected $parentPage;
@@ -46,7 +59,7 @@ abstract class AbstractFormElement implements FormElementInterface {
 	protected $conjunctionValidator;
 
 	/**
-	 * Constructor. Needs this FormElement's identifier
+	 * Constructor. Needs this FormElement's identifier and the FormElement type
 	 *
 	 * @param string $identifier The FormElement's identifier
 	 * @param string $type The Form Element Type
@@ -54,53 +67,30 @@ abstract class AbstractFormElement implements FormElementInterface {
 	 * @api
 	 */
 	public function __construct($identifier, $type) {
+		if (!is_string($identifier) || strlen($identifier) === 0) {
+			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
+		}
 		$this->identifier = $identifier;
 		$this->type = $type;
 		$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
 	}
-	/**
-	 * Get the Form element's identifier
-	 *
-	 * @return string The Form element's identifier
-	 * @api
-	 */
+
 	public function getIdentifier() {
 		return $this->identifier;
 	}
 
-	/**
-	 * Get the Form element's parent page
-	 *
-	 * @return \TYPO3\Form\Domain\Model\Page The Form element's parent page
-	 * @internal
-	 */
 	public function getParentPage() {
 		return $this->parentPage;
 	}
 
-	/**
-	 * Sets this Form element's parent page
-	 *
-	 * @param \TYPO3\Form\Domain\Model\Page $parentPage The Form element's parent page
-	 * @return void
-	 * @internal
-	 */
 	public function setParentPage(Page $parentPage) {
 		$this->parentPage = $parentPage;
 	}
 
-	/**
-	 * @return string
-	 * @api
-	 */
 	public function getLabel() {
 		return $this->label;
 	}
 
-	/**
-	 * @param string $label
-	 * @api
-	 */
 	public function setLabel($label) {
 		$this->label = $label;
 	}

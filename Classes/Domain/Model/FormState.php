@@ -9,7 +9,11 @@ namespace TYPO3\Form\Domain\Model;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * A Form
+ * The form state
+ *
+ * **This class is not meant to be subclassed by developers.**
+ *
+ * @todo greatly expand documentation
  */
 class FormState {
 

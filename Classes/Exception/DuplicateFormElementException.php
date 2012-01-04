@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Domain\Model;
+namespace TYPO3\Form\Exception;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -7,15 +7,11 @@ namespace TYPO3\Form\Tests\Unit\Domain\Model;
  *                                                                        */
 
 /**
- * Test
+ * This exception is thrown if two Form Elements with the same Identifier are added
+ * to a form.
+ *
+ * @api
  */
-class FormBuildingApiTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
-
-	/**
-	 * @test
-	 */
-	public function foo() {
-		$this->assertTrue(TRUE);
-	}
+class DuplicateFormElementException extends \TYPO3\Form\Exception {
 }
 ?>

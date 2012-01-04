@@ -9,15 +9,20 @@ namespace TYPO3\Form\Domain\Model;
 /**
  * A Form element contract
  * @todo Fill interface
+ * @todo document
  */
 interface RenderableInterface {
 	/**
+	 * Abstract "type" of this Renderable. Is used during the rendering process
+	 * to determine the template file or the View PHP class being used to render
+	 * the particular element
+	 *
 	 * @return string
 	 */
 	public function getType();
 
 	/**
-	 * The (globally unique) identifier of this renderable
+	 * The identifier of this renderable
 	 *
 	 * @return string
 	 */
