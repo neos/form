@@ -12,6 +12,8 @@ TYPO3:
 
           'TYPO3.Form:Textfield':
             superTypes: ['TYPO3.Form:Base']
+          'TYPO3.Form:Select':
+            superTypes: ['TYPO3.Form:Base']
           'TYPO3.Form:Date':
             superTypes: ['TYPO3.Form:Base']
             processingRule:
