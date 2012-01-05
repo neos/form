@@ -7,6 +7,7 @@ namespace TYPO3\Form\Domain\Model;
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
 
 /**
  * This class encapsulates a complete *Form Definition*, with all of its pages,
@@ -130,6 +131,14 @@ class FormDefinition {
 	protected $pages = array();
 
 	/**
+	 * The finishers for this form
+	 *
+	 * @var array<TYPO3\Form\Domain\Model\Finisher\FinisherInterface>
+	 * @internal
+	 */
+	protected $finishers = array();
+
+	/**
 	 * Property Mapping Rules, indexed by element identifier
 	 *
 	 * @todo should this happen on page-level?
@@ -247,6 +256,27 @@ class FormDefinition {
 	 */
 	public function getPageByIndex($index) {
 		return isset($this->pages[$index]) ? $this->pages[$index] : NULL;
+	}
+
+	/**
+	 * Adds the specified finisher to this form
+	 *
+	 * @param \TYPO3\Form\Domain\Model\Finisher\FinisherInterface $finisher
+	 * @return void
+	 * @api
+	 */
+	public function addFinisher(FinisherInterface $finisher) {
+		$this->finishers[] = $finisher;
+	}
+
+	/**
+	 * Gets all finishers of this form
+	 *
+	 * @return array<\TYPO3\Form\Domain\Model\Finisher\FinisherInterface>
+	 * @api
+	 */
+	public function getFinishers() {
+		return $this->finishers;
 	}
 
 	/**

@@ -89,11 +89,15 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 
 	protected function initializeCurrentPageFromRequest() {
 		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
-		$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
-		if ($this->currentPage === NULL) {
-			$this->currentPage = $this->formDefinition->getPageByIndex(0);
+		if ($currentPageIndex === count($this->formDefinition->getPages())) {
+			$this->invokeFinishers();
+		} else {
+			$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
+			if ($this->currentPage === NULL) {
+				$this->currentPage = $this->formDefinition->getPageByIndex(0);
+			}
+			// TODO: Exception if no page
 		}
-		// TODO: Exception if no page
 	}
 
 	protected function initializeFormStateFromRequest() {
@@ -159,6 +163,27 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 
 		// Update currently shown page in FormState
 		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
+	}
+
+	/**
+	 * Executes all finishers of this form
+	 *
+	 * @return void
+	 */
+	protected function invokeFinishers() {
+		foreach ($this->formDefinition->getFinishers() as $finisher) {
+			$finisherResult = $finisher->execute($this);
+			if ($finisherResult !== TRUE) {
+				break;
+			}
+		}
+	}
+
+	/**
+	 * @return \TYPO3\FLOW3\MVC\Web\Request
+	 */
+	public function getRequest() {
+		return $this->request;
 	}
 
 	/**

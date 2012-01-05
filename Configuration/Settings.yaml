@@ -5,10 +5,10 @@ TYPO3:
         ########### DEFAULT###########
         formElementTypes:
           'TYPO3.Form:Page':
-            implementationClassName: TYPO3\Form\Domain\Model\Page
+            implementationClassName: 'TYPO3\Form\Domain\Model\Page'
 
           'TYPO3.Form:Base':
-            implementationClassName: TYPO3\Form\Domain\Model\GenericFormElement
+            implementationClassName: 'TYPO3\Form\Domain\Model\GenericFormElement'
 
           'TYPO3.Form:Textfield':
             superTypes: ['TYPO3.Form:Base']
@@ -26,6 +26,12 @@ TYPO3:
                 targetType: '\DateTime'
                 options:
                   dateFormat: 'Y-m-d'
+        finisherTypes:
+          'TYPO3.Form:Redirect':
+            implementationClassName: 'TYPO3\Form\Domain\Model\Finisher\RedirectFinisher'
+            availableOptions:
+              sender:
+                type: 'string'
 
     ############ CUSTOM PRESET #############
       facebook:
