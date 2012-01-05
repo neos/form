@@ -51,6 +51,8 @@ class Page implements RenderableInterface {
 	 */
 	protected $index = 0;
 
+	protected $label;
+
 	/**
 	 * Constructor. Needs this Page's identifier
 	 *
@@ -125,24 +127,42 @@ class Page implements RenderableInterface {
 		}
 	}
 
+	/**
+	 *
+	 * @param string $identifier
+	 * @param string $typeName
+	 * @return \TYPO3\Form\Domain\Model\FormElementInterface
+	 * @throws \Exception
+	 */
 	public function createElement($identifier, $typeName) {
 		if ($this->parentForm === NULL) {
-			throw new \Exception('TODO');
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The page "%s" is not attached to a parent form, thus createElement() cannot be called.', $this->identifier), 1325742259);
 		}
 		$typeDefinition = $this->parentForm->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
 
 		if (!isset($typeDefinition['implementationClassName'])) {
-			throw new \Exception('TODO: impl class name not set');
+			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
 		}
 		$implementationClassName = $typeDefinition['implementationClassName'];
 		$element = new $implementationClassName($identifier, $typeName);
 
 		if (isset($typeDefinition['label'])) {
-			$page->setLabel($typeDefinition['label']);
+			$element->setLabel($typeDefinition['label']);
 		}
-		// TODO: if unknown elements in $typeDefinition -> throw exception
-		$this->addElement($element);
 
+		if (isset($typeDefinition['defaultValue'])) {
+			$element->setDefaultValue($typeDefinition['defaultValue']);
+		}
+
+		if (isset($typeDefinition['properties'])) {
+			foreach ($typeDefinition['properties'] as $key => $value) {
+				$element->setProperty($key, $value);
+			}
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'defaultValue', 'properties'));
+
+		$this->addElement($element);
 		return $element;
 	}
 
@@ -181,5 +201,15 @@ class Page implements RenderableInterface {
 	public function setIndex($index) {
 		$this->index = $index;
 	}
+
+	public function getLabel() {
+		return $this->label;
+	}
+
+	public function setLabel($label) {
+		$this->label = $label;
+	}
+
+
 }
 ?>

@@ -100,10 +100,27 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function initializeObjectLoadsSettings() {
+		$abstractFormFactory = $this->getAbstractFormFactory();
+		$mockConfigurationManager = $this->getMockBuilder('TYPO3\FLOW3\Configuration\ConfigurationManager')->disableOriginalConstructor()->getMock();
+		$mockConfigurationManager
+			->expects($this->once())
+			->method('getConfiguration')
+			->with(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
+			->will($this->returnValue('MyConfig'));
+		$abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
+
+		$abstractFormFactory->_call('initializeObject');
+		$this->assertSame('MyConfig', $abstractFormFactory->_get('settings'));
+	}
+
+	/**
 	 * @return \TYPO3\Form\Domain\Factory\AbstractFormFactory
 	 */
 	protected function getAbstractFormFactory() {
-		return $this->getAccessibleMock('TYPO3\Form\Domain\Factory\AbstractFormFactory', array('dummy'));
+		return $this->getAccessibleMock('TYPO3\Form\Domain\Factory\AbstractFormFactory', array('build'));
 	}
 }
 ?>

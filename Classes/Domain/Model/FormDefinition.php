@@ -179,11 +179,19 @@ class FormDefinition {
 		return $this->identifier;
 	}
 
+	/**
+	 *
+	 * @param string $identifier
+	 * @param string $typeName
+	 * @return \TYPO3\Form\Domain\Model\Page
+	 * @throws TYPO3\Form\Exception\TypeDefinitionNotValidException
+	 * @api
+	 */
 	public function createPage($identifier, $typeName = 'TYPO3.Form:Page') {
 		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($typeName);
 
 		if (!isset($typeDefinition['implementationClassName'])) {
-			throw new \Exception('TODO: impl class name not set');
+			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
 		}
 		$implementationClassName = $typeDefinition['implementationClassName'];
 		$page = new $implementationClassName($identifier);
@@ -191,9 +199,10 @@ class FormDefinition {
 		if (isset($typeDefinition['label'])) {
 			$page->setLabel($typeDefinition['label']);
 		}
-		// TODO: if unknown elements in $typeDefinition -> throw exception
-		$this->addPage($page);
 
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label'));
+
+		$this->addPage($page);
 		return $page;
 	}
 
@@ -308,7 +317,5 @@ class FormDefinition {
 	public function getFormFieldTypeManager() {
 		return $this->formFieldTypeManager;
 	}
-
-
 }
 ?>

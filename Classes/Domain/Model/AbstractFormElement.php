@@ -84,6 +84,10 @@ abstract class AbstractFormElement implements FormElementInterface {
 		return $this->identifier;
 	}
 
+	public function getType() {
+		return $this->type;
+	}
+
 	public function getParentPage() {
 		return $this->parentPage;
 	}
@@ -100,9 +104,6 @@ abstract class AbstractFormElement implements FormElementInterface {
 		$this->label = $label;
 	}
 
-	public function getType() {
-		return $this->type;
-	}
 
 	public function getTemplateVariableName() {
 		return 'element';

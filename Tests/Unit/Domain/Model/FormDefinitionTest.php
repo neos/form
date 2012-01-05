@@ -171,6 +171,77 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function createPageCreatesPageAndAddsItToForm() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Page' => array(
+					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
+				)
+			)
+		));
+		$page = $formDefinition->createPage('myPage');
+		$this->assertSame('myPage', $page->getIdentifier());
+		$this->assertSame($page, $formDefinition->getPageByIndex(0));
+		$this->assertSame(0, $page->getIndex());
+	}
+
+	/**
+	 * @test
+	 */
+	public function createPageSetsLabelFromTypeDefinition() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Page' => array(
+					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'label' => 'My Label'
+				)
+			)
+		));
+		$page = $formDefinition->createPage('myPage');
+		$this->assertSame('My Label', $page->getLabel());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\TypeDefinitionNotValidException
+	 */
+	public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Page' => array(
+					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'label' => 'My Label',
+					'unknownProperty' => 'this is an unknown property'
+				)
+			)
+		));
+		$page = $formDefinition->createPage('myPage');
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\TypeDefinitionNotFoundException
+	 */
+	public function createPageThrowsExceptionIfImplementationClassNameNotFound() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Page2' => array()
+			)
+		));
+		$page = $formDefinition->createPage('myPage', 'TYPO3.Form:Page2');
+	}
+
+	/**
+	 * @test
+	 */
+	public function formFieldTypeManagerIsReturned() {
+		$formDefinition = new FormDefinition('myForm');
+		$this->assertInstanceOf('TYPO3\Form\Utility\SupertypeResolver', $formDefinition->getFormFieldTypeManager());
+	}
+
+	/**
 	 * @param string $identifier
 	 * @return \TYPO3\Form\Domain\Model\FormElementInterface
 	 */

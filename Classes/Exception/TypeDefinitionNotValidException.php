@@ -7,11 +7,11 @@ namespace TYPO3\Form\Exception;
  *                                                                        */
 
 /**
- * This exception is thrown if a Type Definition for a form element was not found,
- * or if the implementationClassName was not set.
+ * This exception is thrown if a Type Definition for a form element was not valid,
+ * i.e. it has properties which are not supported.
  *
  * @api
  */
-class TypeDefinitionNotFoundException extends \TYPO3\Form\Exception {
+class TypeDefinitionNotValidException extends \TYPO3\Form\Exception {
 }
 ?>

@@ -11,7 +11,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * @todo document
  */
-class AbstractFormFactory implements FormFactoryInterface {
+abstract class AbstractFormFactory implements FormFactoryInterface {
 
 	/**
 	 * @var array
@@ -27,13 +27,6 @@ class AbstractFormFactory implements FormFactoryInterface {
 
 	public function initializeObject() {
 		$this->settings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
-	}
-
-	/**
-	 * @param array $configuration The factory-specific configuration
-	 * @todo document
-	 */
-	public function build(array $configuration, $presetName) {
 	}
 
 	/**
