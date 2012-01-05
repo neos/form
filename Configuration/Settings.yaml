@@ -16,16 +16,16 @@ TYPO3:
             superTypes: ['TYPO3.Form:Base']
           'TYPO3.Form:Date':
             superTypes: ['TYPO3.Form:Base']
-            processingRule:
-              mapping:
-                availableOptions:
-                  dateFormat:
-#                    type: string // boolean // .... # for graphical UI
-#                    label: '....' # for graphical UI
-                    converterOptionName: 'TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter::format'
-                targetType: '\DateTime'
-                options:
-                  dateFormat: 'Y-m-d'
+#            processingRule:
+#              mapping:
+#                availableOptions:
+#                  dateFormat:
+##                    type: string // boolean // .... # for graphical UI
+##                    label: '....' # for graphical UI
+#                    converterOptionName: 'TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter::format'
+#                targetType: '\DateTime'
+#                options:
+#                  dateFormat: 'Y-m-d'
         finisherTypes:
           'TYPO3.Form:Redirect':
             implementationClassName: 'TYPO3\Form\Domain\Model\Finisher\RedirectFinisher'

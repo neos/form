@@ -6,11 +6,11 @@
 	<div class="actions">
 		<!-- TODO: use partials and button view helper -->
 		<f:if condition="{form.previousPage}">
-			<button type="submit" value="{form.previousPage.index}" name="{form.identifier}[__currentPage]" class="btn">Previous page ({form.previousPage.label})</button>
+			<button type="submit" value="{form.previousPage.index}" name="{form.identifier}[__currentPage]" class="btn">Previous page</button>
 		</f:if>
 		<f:if condition="{form.nextPage}">
 			<f:then>
-				<button type="submit" value="{form.nextPage.index}" name="{form.identifier}[__currentPage]" class="btn primary">Next page ({form.nextPage.lable})</button>
+				<button type="submit" value="{form.nextPage.index}" name="{form.identifier}[__currentPage]" class="btn primary">Next page</button>
 			</f:then>
 			<f:else>
 				<button type="submit" value="{form.pages -> f:count()}" name="{form.identifier}[__currentPage]" class="btn primary">Submit</button>
