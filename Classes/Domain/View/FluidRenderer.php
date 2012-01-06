@@ -9,9 +9,10 @@ namespace TYPO3\Form\Domain\View;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * A Page
+ * The renderer for the form
  *
  * @todo check if we can use singleton at some point...
+ * @todo greatly expand documentation
  */
 class FluidRenderer extends \TYPO3\Fluid\View\TemplateView {
 

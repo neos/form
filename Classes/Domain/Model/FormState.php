@@ -9,11 +9,12 @@ namespace TYPO3\Form\Domain\Model;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * The form state
+ * The current state of the form which is attached to the {@link FormRuntime}
+ * and saved in a session or the client.
  *
  * **This class is not meant to be subclassed by developers.**
  *
- * @todo greatly expand documentation
+ * @internal
  */
 class FormState {
 

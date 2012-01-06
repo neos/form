@@ -9,7 +9,7 @@ namespace TYPO3\Form\Domain\Model;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * A Form element
+ * A generic form element
  */
 class GenericFormElement extends AbstractFormElement {
 

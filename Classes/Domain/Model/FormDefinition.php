@@ -11,7 +11,8 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
 
 /**
  * This class encapsulates a complete *Form Definition*, with all of its pages,
- * form elements, validation rules which apply.
+ * form elements, validation rules which apply and finishers which should be
+ * executed when the form is completely filled in.
  *
  * **This class is not meant to be subclassed by developers.**
  *
@@ -45,9 +46,123 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  * $page1 = new Page('myPage');
  * $formDefinition->addPage($page);
  *
- * $element1 = new GenericFormElement('title', 'TYPO3.Form:Text'); # the second argument is the type of the form element
+ * $element1 = new GenericFormElement('title', 'TYPO3.Form:Textfield'); # the second argument is the type of the form element
  * $page1->addElement($element1);
  * \---
+ *
+ * Creating a Form, Using Abstract Form Element Types
+ * =====================================================
+ *
+ * While you can use the {@link FormDefinition::addPage} or {@link Page::addElement}
+ * methods and create the Page and FormElement objects manually, it is often better
+ * to use the corresponding create* methods ({@link FormDefinition::createPage}
+ * and {@link Page::createElement}), as you pass them an abstract *Form Element Type*
+ * such as *TYPO3.Form:Text* or *TYPO3.Form.Page*, and the system **automatically
+ * resolves the implementation class name and sets default values**.
+ *
+ * So the simple example from above should be rewritten as follows:
+ *
+ * /---code php
+ * $formDefaults = array(); // We'll talk about this later
+ *
+ * $formDefinition = new FormDefinition('myForm', $formDefaults);
+ * $page1 = $formDefinition->createPage('myPage');
+ * $element1 = $page1->addElement('title', 'TYPO3.Form:Textfield');
+ * \---
+ *
+ * Now, you might wonder how the system knows that the element *TYPO3.Form:Textfield*
+ * is implemented using a GenericFormElement: **This is configured in the $formDefaults**.
+ *
+ * To make the example from above actually work, we need to add some sensible
+ * values to *$formDefaults*:
+ *
+ * <pre>
+ * $formDefaults = array(
+ *   'formElementTypes' => array(
+ *     'TYPO3.Form:Page' => array(
+ *       'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
+ *     ),
+ *     'TYPO3.Form:Textfield' => array(
+ *       'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement'
+ *     )
+ *   )
+ * )
+ * </pre>
+ *
+ * For each abstract *Form Element Type* we add some configuration; in the above
+ * case only the *implementation class name*. Still, it is possible to set defaults
+ * for *all* configuration options of such an element, as the following example
+ * shows:
+ *
+ * <pre>
+ * $formDefaults = array(
+ *   'formElementTypes' => array(
+ *     'TYPO3.Form:Page' => array(
+ *       'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+ *       'label' => 'this is the label of the page if nothing is specified'
+ *     ),
+ *     'TYPO3.Form:Textfield' => array(
+ *       'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement',
+ *       'label' = >'Default Label',
+ *       'defaultValue' => 'Default form element value',
+ *       'properties' => array(
+ *         'placeholder' => 'Text which is shown if element is empty'
+ *       )
+ *     )
+ *   )
+ * )
+ * </pre>
+ *
+ * Introducing Supertypes
+ * ----------------------
+ *
+ * Some form elements like the *Text* field and the *Date* field have a lot in common,
+ * and only differ in a few different default values. In order to reduce the typing
+ * overhead, it is possible to specify a list of **superTypes** which are used as a
+ * basis:
+ *
+ * <pre>
+ * $formDefaults = array(
+ *   'formElementTypes' => array(
+ *     'TYPO3.Form:Base' => array(
+ *       'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement',
+ *       'label' = >'Default Label'
+ *     ),
+ *     'TYPO3.Form:Textfield' => array(
+ *       'superTypes' => array('TYPO3.Form:Base'),
+ *       'defaultValue' => 'Default form element value',
+ *       'properties' => array(
+ *         'placeholder' => 'Text which is shown if element is empty'
+ *       )
+ *     )
+ *   )
+ * )
+ * </pre>
+ *
+ * Here, we specified that the *Textfield* uses *TYPO3.Form:Base* as **supertype**,
+ * which can reduce typing overhead a lot. It is also possible to use *multiple
+ * supertypes*, which are then evaluated in the order in which they are specified.
+ *
+ * Supertypes are evaluated recursively.
+ *
+ * Thus, default values are merged in the following order, while later values
+ * override prior ones:
+ *
+ * - configuration of 1st supertype
+ * - configuration of 2nd supertype
+ * - configuration of ... supertype
+ * - configuration of the type itself
+ *
+ * Using Preconfigured $formDefaults
+ * ---------------------------------
+ *
+ * Often, it is not really useful to manually create the $formDefaults array.
+ *
+ * Most of it comes pre-configured inside the *TYPO3.Form* package's **Settings.yaml**,
+ * and the {@link \TYPO3\Form\Domain\Factory\AbstractFormFactory} contains helper methods
+ * which return the ready-to-use *$formConfiguration*. Please read the documentation
+ * on {@link \TYPO3\Form\Domain\Factory\AbstractFormFactory} for some best-practice
+ * usage examples.
  *
  * Property Mapping and Validation Rules
  * =====================================
@@ -189,10 +304,16 @@ class FormDefinition {
 	}
 
 	/**
+	 * Create a page with the given $identifier and attach this page to the form.
 	 *
-	 * @param string $identifier
-	 * @param string $typeName
-	 * @return \TYPO3\Form\Domain\Model\Page
+	 * - Create Page object based on the given $typeName
+	 * - set defaults inside the Page object
+	 * - attach Page object to this form
+	 * - return the newly created Page object
+	 *
+	 * @param string $identifier Identifier of the new page
+	 * @param string $typeName Type of the new page
+	 * @return \TYPO3\Form\Domain\Model\Page the newly created page
 	 * @throws TYPO3\Form\Exception\TypeDefinitionNotValidException
 	 * @api
 	 */
@@ -216,10 +337,13 @@ class FormDefinition {
 	}
 
 	/**
-	 * Add a new page at the end of the form
+	 * Add a new page at the end of the form.
+	 *
+	 * Instead of this method, you should often use {@link createPage} instead.
 	 *
 	 * @param Page $page
 	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if Page is already added to a FormDefinition
+	 * @see createPage
 	 * @api
 	 */
 	public function addPage(Page $page) {
@@ -295,7 +419,7 @@ class FormDefinition {
 	}
 
 	/**
-	 * Get an Element by its identifier
+	 * Get a Form Element by its identifier
 	 *
 	 * If identifier does not exist, returns NULL.
 	 *

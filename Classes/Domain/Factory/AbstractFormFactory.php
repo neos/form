@@ -9,12 +9,17 @@ namespace TYPO3\Form\Domain\Factory;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document
+ * This
+ * **This class is meant to be subclassed by developers.**
+ * @api
  */
 abstract class AbstractFormFactory implements FormFactoryInterface {
 
 	/**
+	 * The settings of the TYPO3.Form package
+	 *
 	 * @var array
+	 * @api
 	 */
 	protected $settings;
 
@@ -25,6 +30,9 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 */
 	protected $configurationManager;
 
+	/**
+	 * @internal
+	 */
 	public function initializeObject() {
 		$this->settings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
 	}

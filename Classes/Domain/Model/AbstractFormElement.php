@@ -19,6 +19,9 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * Often, you should rather subclass this class instead of directly
  * implementing {@link FormElementInterface}.
+ *
+ * Still, it is quite rare that you need to subclass this class; often
+ * you can just use the {@link GenericFormElement} and replace some templates.
  */
 abstract class AbstractFormElement implements FormElementInterface {
 
