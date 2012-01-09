@@ -4,18 +4,34 @@ TYPO3:
       Default:
         ########### DEFAULT###########
         formElementTypes:
-          'TYPO3.Form:Page':
-            implementationClassName: 'TYPO3\Form\Domain\Model\Page'
-
           'TYPO3.Form:Base':
+            renderingOptions:
+              templatePathPattern: 'resource://{@package}/Private/Form/{@type}.html'
+              layoutPathPattern: 'resource://{@package}/Private/Form/Layout/{@type}.html'
+
+          'TYPO3.Form:Form':
+            superTypes: ['TYPO3.Form:Base']
+            renderingOptions:
+              templateVariableName: 'form'
+
+          'TYPO3.Form:Page':
+            superTypes: ['TYPO3.Form:Base']
+            implementationClassName: 'TYPO3\Form\Domain\Model\Page'
+            renderingOptions:
+              templateVariableName: 'page'
+
+          'TYPO3.Form:FormElement':
+            superTypes: ['TYPO3.Form:Base']
             implementationClassName: 'TYPO3\Form\Domain\Model\GenericFormElement'
+            renderingOptions:
+              templateVariableName: 'element'
 
           'TYPO3.Form:Textfield':
-            superTypes: ['TYPO3.Form:Base']
+            superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Select':
-            superTypes: ['TYPO3.Form:Base']
+            superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Date':
-            superTypes: ['TYPO3.Form:Base']
+            superTypes: ['TYPO3.Form:FormElement']
 #            processingRule:
 #              mapping:
 #                availableOptions:

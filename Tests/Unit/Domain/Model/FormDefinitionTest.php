@@ -176,6 +176,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function createPageCreatesPageAndAddsItToForm() {
 		$formDefinition = new FormDefinition('myForm', array(
 			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
 					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
 				)
@@ -193,6 +194,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function createPageSetsLabelFromTypeDefinition() {
 		$formDefinition = new FormDefinition('myForm', array(
 			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
 					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
 					'label' => 'My Label'
@@ -210,6 +212,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition() {
 		$formDefinition = new FormDefinition('myForm', array(
 			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
 					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
 					'label' => 'My Label',

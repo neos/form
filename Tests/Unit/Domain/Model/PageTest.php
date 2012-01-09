@@ -102,6 +102,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$this->assertSame('my label', $element->getLabel());
 		$this->assertSame('This is the default value', $element->getDefaultValue());
 		$this->assertSame(array('property1' => 'val1', 'property2' => 'val2'), $element->getProperties());
+		$this->assertSame(array('ro1' => 'rv1', 'ro2' => 'rv2'), $element->getRenderingOptions());
 	}
 
 	/**
@@ -223,6 +224,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	protected function getDummyFormDefinition() {
 		return new FormDefinition('myForm', array(
 			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
 					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
 				),
@@ -236,6 +238,10 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 					'properties' => array(
 						'property1' => 'val1',
 						'property2' => 'val2'
+					),
+					'renderingOptions' => array(
+						'ro1' => 'rv1',
+						'ro2' => 'rv2'
 					)
 				),
 				'TYPO3.Form:MyElementTypeWithoutImplementationClassName' => array(),

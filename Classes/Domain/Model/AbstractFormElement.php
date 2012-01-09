@@ -23,21 +23,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * Still, it is quite rare that you need to subclass this class; often
  * you can just use the {@link GenericFormElement} and replace some templates.
  */
-abstract class AbstractFormElement implements FormElementInterface {
-
-	/**
-	 * The identifier
-	 *
-	 * @var string
-	 */
-	protected $identifier;
-
-	/**
-	 * the form element type
-	 *
-	 * @var string
-	 */
-	protected $type;
+abstract class AbstractFormElement extends AbstractRenderable implements FormElementInterface {
 
 	/**
 	 * The parent page
@@ -83,14 +69,6 @@ abstract class AbstractFormElement implements FormElementInterface {
 		$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
 	}
 
-	public function getIdentifier() {
-		return $this->identifier;
-	}
-
-	public function getType() {
-		return $this->type;
-	}
-
 	public function getParentPage() {
 		return $this->parentPage;
 	}
@@ -105,11 +83,6 @@ abstract class AbstractFormElement implements FormElementInterface {
 
 	public function setLabel($label) {
 		$this->label = $label;
-	}
-
-
-	public function getTemplateVariableName() {
-		return 'element';
 	}
 
 	public function getDefaultValue() {

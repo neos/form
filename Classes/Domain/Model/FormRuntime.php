@@ -288,10 +288,6 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 		return 'TYPO3.Form:Form';
 	}
 
-	public function getTemplateVariableName() {
-		return 'form';
-	}
-
 	/**
 	 * @param type $identifier
 	 * @return type
@@ -352,6 +348,8 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 		return $this->formState;
 	}
 
-
+	public function getRenderingOptions() {
+		return $this->formDefinition->getRenderingOptions();
+	}
 }
 ?>

@@ -80,5 +80,14 @@ interface FormElementInterface extends RenderableInterface {
 	 * @return array
 	 */
 	public function getProperties();
+
+	/**
+	 * Set a rendering option
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 * @api
+	 */
+	public function setRenderingOption($key, $value);
 }
 ?>

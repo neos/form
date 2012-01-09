@@ -227,15 +227,7 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  *
  * Refer to the {@link FormRuntime} API doc for further information.
  */
-class FormDefinition {
-
-	/**
-	 * The identifier of this Form.
-	 *
-	 * @var string
-	 * @internal
-	 */
-	protected $identifier;
+class FormDefinition extends AbstractRenderable {
 
 	/**
 	 * The pages this form is comprised of, in a numerically-indexed array
@@ -285,22 +277,28 @@ class FormDefinition {
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was not valid
 	 * @api
 	 */
-	public function __construct($identifier, $formDefaults = array()) {
+	public function __construct($identifier, $formDefaults = array(), $type = 'TYPO3.Form:Form') {
 		$this->formFieldTypeManager = new \TYPO3\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : array());
 		if (!is_string($identifier) || strlen($identifier) === 0) {
 			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
 		}
 		$this->identifier = $identifier;
+		$this->type = $type;
+
+		if ($formDefaults !== array()) {
+			$this->initializeFromFormDefaults();
+		}
 	}
 
-	/**
-	 * Returns the Form Definition's identifier
-	 *
-	 * @return string The Form Definition's identifier
-	 * @api
-	 */
-	public function getIdentifier() {
-		return $this->identifier;
+	protected function initializeFromFormDefaults() {
+		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($this->type);
+		if (isset($typeDefinition['renderingOptions'])) {
+			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
+				$this->setRenderingOption($key, $value);
+			}
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('renderingOptions'));
 	}
 
 	/**
@@ -330,7 +328,13 @@ class FormDefinition {
 			$page->setLabel($typeDefinition['label']);
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label'));
+		if (isset($typeDefinition['renderingOptions'])) {
+			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
+				$page->setRenderingOption($key, $value);
+			}
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'renderingOptions'));
 
 		$this->addPage($page);
 		return $page;

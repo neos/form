@@ -17,7 +17,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * Please see {@link FormDefinition} for an in-depth explanation.
  */
-class Page implements RenderableInterface {
+class Page extends AbstractRenderable {
 
 	/**
 	 * The identifier
@@ -160,7 +160,13 @@ class Page implements RenderableInterface {
 			}
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'defaultValue', 'properties'));
+		if (isset($typeDefinition['renderingOptions'])) {
+			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
+				$element->setRenderingOption($key, $value);
+			}
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'defaultValue', 'properties', 'renderingOptions'));
 
 		$this->addElement($element);
 		return $element;
@@ -246,14 +252,6 @@ class Page implements RenderableInterface {
 			$this->parentForm->removeElementFromElementsByIdentifierCache($elementToRemove);
 		}
 		$elementToRemove->setParentPage(NULL);
-	}
-
-	/**
-	 * @return string
-	 * @todo document
-	 */
-	public function getTemplateVariableName() {
-		return 'page';
 	}
 
 	/**

@@ -62,6 +62,18 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function renderingOptionsCanBeSetAndGet() {
+		$formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+		$this->assertSame(array(), $formElement->getRenderingOptions());
+		$formElement->setRenderingOption('option1', 'value1');
+		$this->assertSame(array('option1' => 'value1'), $formElement->getRenderingOptions());
+		$formElement->setRenderingOption('option2', 'value2');
+		$this->assertSame(array('option1' => 'value1', 'option2' => 'value2'), $formElement->getRenderingOptions());
+	}
+
+	/**
 	 * @param array $constructorArguments
 	 * @return \TYPO3\Form\Domain\Model\AbstractFormElement
 	 */

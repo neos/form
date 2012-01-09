@@ -18,9 +18,10 @@ class FluidRenderer extends \TYPO3\Fluid\View\TemplateView {
 
 	public function renderRenderable(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
 		$renderableType = $renderable->getType();
+		$renderingOptions = $renderable->getRenderingOptions();
 
-		$renderablePathAndFilename = $this->getPathAndFilenameForRenderable($renderableType);
-		$parsedRenderable = $this->getParsedRenderable($renderableType, $renderablePathAndFilename);
+		$renderablePathAndFilename = $this->getPathAndFilenameForRenderable($renderableType, $renderingOptions);
+		$parsedRenderable = $this->getParsedRenderable($renderable->getType(), $renderablePathAndFilename);
 
 		if ($this->getCurrentRenderingContext() === NULL) {
 				// We do not have a "current" rendering context yet, so we use the base rendering context
@@ -30,12 +31,16 @@ class FluidRenderer extends \TYPO3\Fluid\View\TemplateView {
 			$renderingContext = clone $this->getCurrentRenderingContext();
 		}
 
-		$templateVariableContainer = new \TYPO3\Fluid\Core\ViewHelper\TemplateVariableContainer(array($renderable->getTemplateVariableName() => $renderable));
+		if (!isset($renderingOptions['templateVariableName'])) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templateVariableName" defined.', $renderableType), 1326094948);
+		}
+
+		$templateVariableContainer = new \TYPO3\Fluid\Core\ViewHelper\TemplateVariableContainer(array($renderingOptions['templateVariableName'] => $renderable));
 		$renderingContext->injectTemplateVariableContainer($templateVariableContainer);
 
 		if ($parsedRenderable->hasLayout()) {
 			$renderableLayoutName = $parsedRenderable->getLayoutName($renderingContext);
-			$renderableLayoutPathAndFilename = $this->getPathAndFilenameForRenderableLayout($renderableLayoutName);
+			$renderableLayoutPathAndFilename = $this->getPathAndFilenameForRenderableLayout($renderableLayoutName, $renderingOptions);
 			$parsedLayout = $this->getParsedRenderable($renderableLayoutName, $renderableLayoutPathAndFilename);
 
 			$this->startRendering(self::RENDERING_LAYOUT, $parsedRenderable, $renderingContext);
@@ -50,14 +55,28 @@ class FluidRenderer extends \TYPO3\Fluid\View\TemplateView {
 		return $output;
 	}
 
-	protected function getPathAndFilenameForRenderable($renderableType) {
+	protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions) {
+		if (!isset($renderingOptions['templatePathPattern'])) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templatePathPattern" defined.', $renderableType), 1326094041);
+		}
 		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
-		return sprintf('resource://%s/Private/Form/%s.html', $packageKey, $shortRenderableType);
+
+		return strtr($renderingOptions['templatePathPattern'], array(
+			'{@package}' => $packageKey,
+			'{@type}' => $shortRenderableType
+		));
 	}
 
-	protected function getPathAndFilenameForRenderableLayout($renderableType) {
+	protected function getPathAndFilenameForRenderableLayout($renderableType, array $renderingOptions) {
+		if (!isset($renderingOptions['layoutPathPattern'])) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "layoutPathPattern" defined.', $renderableType), 1326094161);
+		}
 		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
-		return sprintf('resource://%s/Private/Form/Layout/%s.html', $packageKey, $shortRenderableType);
+
+		return strtr($renderingOptions['layoutPathPattern'], array(
+			'{@package}' => $packageKey,
+			'{@type}' => $shortRenderableType
+		));
 	}
 
 

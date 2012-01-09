@@ -10,23 +10,39 @@ namespace TYPO3\Form\Domain\Model;
  * A Form element contract
  * @todo Fill interface
  * @todo document
+ * @internal
  */
-interface RenderableInterface {
+abstract class AbstractRenderable implements RenderableInterface {
+
 	/**
-	 * Abstract "type" of this Renderable. Is used during the rendering process
-	 * to determine the template file or the View PHP class being used to render
-	 * the particular element
-	 *
-	 * @return string
+	 * @var string
 	 */
-	public function getType();
+	protected $type;
+
+
+	/**
+	 * @var string
+	 */
+	protected $identifier;
+
+	/**
+	 * @var array
+	 */
+	protected $renderingOptions = array();
+
+
+	public function getType() {
+		return $this->type;
+	}
 
 	/**
 	 * The identifier of this renderable
 	 *
 	 * @return string
 	 */
-	public function getIdentifier();
+	public function getIdentifier() {
+		return $this->identifier;
+	}
 
 	/**
 	 * Get all rendering options
@@ -34,7 +50,12 @@ interface RenderableInterface {
 	 * @return array associative array of rendering options
 	 * @api
 	 */
-	public function getRenderingOptions();
+	public function getRenderingOptions() {
+		return $this->renderingOptions;
+	}
 
+	public function setRenderingOption($key, $value) {
+		$this->renderingOptions[$key] = $value;
+	}
 }
 ?>
