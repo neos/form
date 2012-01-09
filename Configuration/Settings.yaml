@@ -12,7 +12,7 @@ TYPO3:
           'TYPO3.Form:Form':
             superTypes: ['TYPO3.Form:Base']
             renderingOptions:
-              formRendererClassName: 'TYPO3\Form\Domain\FormRenderer\FluidRenderer'
+              formRendererClassName: 'TYPO3\Form\Domain\Renderer\FluidFormRenderer'
               templateVariableName: 'form'
 
           'TYPO3.Form:Page':

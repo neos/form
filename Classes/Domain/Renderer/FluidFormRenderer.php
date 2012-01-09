@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\FormRenderer;
+namespace TYPO3\Form\Domain\Renderer;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -14,7 +14,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * @todo check if we can use singleton at some point...
  * @todo greatly expand documentation
  */
-class FluidRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRendererInterface {
+class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRendererInterface {
 
 	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
@@ -23,6 +23,16 @@ class FluidRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRender
 	public function renderRenderable(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
 		$renderableType = $renderable->getType();
 		$renderingOptions = $renderable->getRenderingOptions();
+
+		if (isset($renderingOptions['rendererClassName'])) {
+			$rendererClassName = $renderingOptions['rendererClassName'];
+			$renderer = new $rendererClassName;
+			if (!($renderer instanceof ElementRendererInterface)) {
+				throw new \Exception('TODO: Renderer not of correct type');
+			}
+			$renderer->setControllerContext($this->controllerContext);
+			return $renderer->renderRenderable($renderable);
+		}
 
 		$renderablePathAndFilename = $this->getPathAndFilenameForRenderable($renderableType, $renderingOptions);
 		$parsedRenderable = $this->getParsedRenderable($renderable->getType(), $renderablePathAndFilename);

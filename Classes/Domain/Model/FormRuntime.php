@@ -165,7 +165,7 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 		$this->updateFormState();
 		$controllerContext = $this->getControllerContext();
 		$formRenderer = new $formRendererClassName();
-		if (!($formRenderer instanceof \TYPO3\Form\Domain\FormRenderer\FormRendererInterface)) {
+		if (!($formRenderer instanceof \TYPO3\Form\Domain\Renderer\FormRendererInterface)) {
 			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form renderer "%s" des not implement FormRendererInterface', $formRendererClassName), 1326096024);
 		}
 
