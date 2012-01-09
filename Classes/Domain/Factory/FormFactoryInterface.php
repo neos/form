@@ -32,7 +32,7 @@ interface FormFactoryInterface {
 	 * directly.
 	 *
 	 * @param array $configuration factory-specific configuration array
-	 * @parent string $presetName The name of the "Form Preset" to use; it is factory-specific to implement this.
+	 * @param string $presetName The name of the "Form Preset" to use; it is factory-specific to implement this.
 	 * @return \TYPO3\Form\Domain\Model\FormDefinition a newly built form definition
 	 * @api
 	 */

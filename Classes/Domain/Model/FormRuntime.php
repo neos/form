@@ -128,6 +128,7 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	protected function initializeCurrentPageFromRequest() {
 		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
 		if ($currentPageIndex === count($this->formDefinition->getPages())) {
+			// last page
 			$this->invokeFinishers();
 		} else {
 			$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
