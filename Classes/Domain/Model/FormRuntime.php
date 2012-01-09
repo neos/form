@@ -156,11 +156,21 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	 * @api
 	 */
 	public function render() {
+		$renderingOptions = $this->formDefinition->getRenderingOptions();
+		if (!isset($renderingOptions['formRendererClassName'])) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have the rendering option "formRendererClassName" set.', $this->formDefinition->getIdentifier()), 1326095912);
+		}
+		$formRendererClassName = $renderingOptions['formRendererClassName'];
+
 		$this->updateFormState();
 		$controllerContext = $this->getControllerContext();
-		$view = new \TYPO3\Form\Domain\View\FluidRenderer();
-		$view->setControllerContext($controllerContext);
-		return $view->renderRenderable($this);
+		$formRenderer = new $formRendererClassName();
+		if (!($formRenderer instanceof \TYPO3\Form\Domain\FormRenderer\FormRendererInterface)) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form renderer "%s" des not implement FormRendererInterface', $formRendererClassName), 1326096024);
+		}
+
+		$formRenderer->setControllerContext($controllerContext);
+		return $formRenderer->renderRenderable($this);
 	}
 
 	/**

@@ -7,10 +7,10 @@ namespace TYPO3\Form\Exception;
  *                                                                        */
 
 /**
- * This exception is thrown if a form preset for a given name was not found.
+ * This exception is thrown if a rendering error occurs
  *
  * @api
  */
-class PresetNotFoundException extends \TYPO3\Form\Exception {
+class RenderingException extends \TYPO3\Form\Exception {
 }
 ?>

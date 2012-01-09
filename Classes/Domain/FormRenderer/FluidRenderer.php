@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\View;
+namespace TYPO3\Form\Domain\FormRenderer;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -14,7 +14,11 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * @todo check if we can use singleton at some point...
  * @todo greatly expand documentation
  */
-class FluidRenderer extends \TYPO3\Fluid\View\TemplateView {
+class FluidRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRendererInterface {
+
+	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {
+		$this->controllerContext = $controllerContext;
+	}
 
 	public function renderRenderable(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
 		$renderableType = $renderable->getType();
