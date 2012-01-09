@@ -10,7 +10,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
  * This class implements the *runtime logic* of a form, i.e. deciding which
- * page is shown currently, what the current values of the form are.
+ * page is shown currently, what the current values of the form are, trigger
+ * validation and property mapping.
  *
  * **This class is not meant to be subclassed by developers.**
  *
@@ -35,7 +36,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * You can also set values in the same way.
  *
- * @todo Greatly expand documentation!
+ * @api
  */
 class FormRuntime implements RenderableInterface, \ArrayAccess {
 
@@ -151,8 +152,9 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	}
 
 	/**
-	 * @todo document
-	 * @todo implement fully
+	 * Render this form.
+	 *
+	 * @return string rendered form
 	 * @api
 	 */
 	public function render() {
@@ -295,7 +297,7 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	}
 
 	public function getType() {
-		return 'TYPO3.Form:Form';
+		return $this->formDefinition->getType();
 	}
 
 	/**

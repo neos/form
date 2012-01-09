@@ -11,7 +11,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 /**
  * The renderer for the form
  *
- * @todo check if we can use singleton at some point...
  * @todo greatly expand documentation
  */
 class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRendererInterface {

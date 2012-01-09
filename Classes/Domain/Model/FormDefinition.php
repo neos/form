@@ -160,7 +160,7 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  *
  * Most of it comes pre-configured inside the *TYPO3.Form* package's **Settings.yaml**,
  * and the {@link \TYPO3\Form\Domain\Factory\AbstractFormFactory} contains helper methods
- * which return the ready-to-use *$formConfiguration*. Please read the documentation
+ * which return the ready-to-use *$formDefaults*. Please read the documentation
  * on {@link \TYPO3\Form\Domain\Factory\AbstractFormFactory} for some best-practice
  * usage examples.
  *
@@ -174,29 +174,29 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  * - Property Mapping Configuration to be used
  * - Validation Rules which should apply
  *
- * > Background Info
- * > ---------------
- * > You might wonder why Data Types and Validation Rules are *not attached
- * > to each FormElement itself*.
- * >
- * > If the form should create a *hierarchical output structure* such as a multi-
- * > dimensional array or a PHP object, your expected data structure might look as follows:
- * > <pre>
- * > - person
- * > -- firstName
- * > -- lastName
- * > -- address
- * > --- street
- * > --- city
- * > </pre>
- * >
- * > Now, let's imagine you want to edit *person.address.street* and *person.address.city*,
- * > but want to validate that the *combination* of *street* and *city* is valid
- * > according to some address database.
- * >
- * > In this case, the form elements would be configured to fill *street* and *city*,
- * > but the *validator* needs to be attached to the *compound object* *address*,
- * > as both parts need to be
+ * Background Info
+ * ---------------
+ * You might wonder why Data Types and Validation Rules are *not attached
+ * to each FormElement itself*.
+ *
+ * If the form should create a *hierarchical output structure* such as a multi-
+ * dimensional array or a PHP object, your expected data structure might look as follows:
+ * <pre>
+ * - person
+ * -- firstName
+ * -- lastName
+ * -- address
+ * --- street
+ * --- city
+ * </pre>
+ *
+ * Now, let's imagine you want to edit *person.address.street* and *person.address.city*,
+ * but want to validate that the *combination* of *street* and *city* is valid
+ * according to some address database.
+ *
+ * In this case, the form elements would be configured to fill *street* and *city*,
+ * but the *validator* needs to be attached to the *compound object* *address*,
+ * as both parts need to be
  *
  * Connecting FormElements to the output data structure
  * ====================================================
