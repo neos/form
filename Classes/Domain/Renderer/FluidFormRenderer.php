@@ -28,7 +28,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRe
 			$rendererClassName = $renderingOptions['rendererClassName'];
 			$renderer = new $rendererClassName;
 			if (!($renderer instanceof ElementRendererInterface)) {
-				throw new \Exception('TODO: Renderer not of correct type');
+				throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement ElementRendererInterface.', $rendererClassName, $renderableType), 1326098022);
 			}
 			$renderer->setControllerContext($this->controllerContext);
 			return $renderer->renderRenderable($renderable);

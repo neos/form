@@ -2,14 +2,14 @@
 
 namespace TYPO3\Form\Domain\Renderer;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
+/*                                                                        *
+ * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ *                                                                        *
+ *                                                                        */
 
 /**
  *
- * @author sebastian
  */
 interface FormRendererInterface {
 	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext);
