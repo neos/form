@@ -175,6 +175,79 @@ class Page implements RenderableInterface {
 	}
 
 	/**
+	 * Move FormElement $element before $referenceElement.
+	 *
+	 * Both $element and $referenceElement must be direct descendants of this $page.
+	 *
+	 * @param FormElementInterface $elementToMove
+	 * @param FormElementInterface $referenceElement
+	 * @api
+	 */
+	public function moveElementBefore(FormElementInterface $elementToMove, FormElementInterface $referenceElement) {
+		if ($elementToMove->getParentPage() !== $referenceElement->getParentPage() || $elementToMove->getParentPage() !== $this) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved elements need to be on the same page.', 1326088365);
+		}
+		$reorderedElements = array();
+		foreach ($this->elements as $element) {
+			if ($element === $elementToMove) continue;
+
+			if ($element === $referenceElement) {
+				$reorderedElements[] = $elementToMove;
+			}
+			$reorderedElements[] = $element;
+		}
+		$this->elements = $reorderedElements;
+	}
+
+	/**
+	 * Move FormElement $element after $referenceElement
+	 *
+	 * Both $element and $referenceElement must be direct descendants of this $page.
+	 *
+	 * @param FormElementInterface $elementToMove
+	 * @param FormElementInterface $referenceElement
+	 * @api
+	 */
+	public function moveElementAfter(FormElementInterface $elementToMove, FormElementInterface $referenceElement) {
+		if ($elementToMove->getParentPage() !== $referenceElement->getParentPage() || $elementToMove->getParentPage() !== $this) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved elements need to be on the same page.', 1326088369);
+		}
+		$reorderedElements = array();
+		foreach ($this->elements as $element) {
+			if ($element === $elementToMove) continue;
+
+			$reorderedElements[] = $element;
+			if ($element === $referenceElement) {
+				$reorderedElements[] = $elementToMove;
+			}
+		}
+		$this->elements = $reorderedElements;
+	}
+
+	/**
+	 * Remove $elementToRemove from Page
+	 *
+	 * @param FormElementInterface $elementToRemove
+	 * @api
+	 */
+	public function removeElement(FormElementInterface $elementToRemove) {
+		if ($elementToRemove->getParentPage() !== $this) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('The element to be removed must be part of the given page.', 1326088956);
+		}
+
+		$updatedElements = array();
+		foreach ($this->elements as $element) {
+			if ($element === $elementToRemove) continue;
+
+			$updatedElements[] = $element;
+		}
+		$this->elements = $updatedElements;
+		if ($this->parentForm !== NULL) {
+			$this->parentForm->removeElementFromElementsByIdentifierCache($elementToRemove);
+		}
+	}
+
+	/**
 	 * @return string
 	 * @todo document
 	 */

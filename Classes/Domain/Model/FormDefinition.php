@@ -419,6 +419,16 @@ class FormDefinition {
 	}
 
 	/**
+	 * Remove an element from the ElementsByIdentifier cache
+	 *
+	 * @param FormElementInterface $element
+	 * @internal
+	 */
+	public function removeElementFromElementsByIdentifierCache(FormElementInterface $element) {
+		unset($this->elementsByIdentifier[$element->getIdentifier()]);
+	}
+
+	/**
 	 * Get a Form Element by its identifier
 	 *
 	 * If identifier does not exist, returns NULL.

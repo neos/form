@@ -134,7 +134,89 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$element = $page->createElement('myElement', 'TYPO3.Form:MyElementTypeWithUnknownProperties');
 	}
 
+	/**
+	 * @test
+	 */
+	public function moveBeforeMovesElementBeforeReferenceElement() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page = $formDefinition->createPage('myPage');
+		$element1 = $page->createElement('myElement', 'TYPO3.Form:MyElementType');
+		$element2 = $page->createElement('myElement2', 'TYPO3.Form:MyElementType');
 
+		$this->assertSame(array($element1, $element2), $page->getElements());
+		$page->moveElementBefore($element2, $element1);
+		$this->assertSame(array($element2, $element1), $page->getElements());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function moveBeforeThrowsExceptionIfElementsAreNotOnSamePage() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page1 = $formDefinition->createPage('myPage1');
+		$page2 = $formDefinition->createPage('myPage2');
+
+		$element1 = $page1->createElement('myElement', 'TYPO3.Form:MyElementType');
+		$element2 = $page2->createElement('myElement2', 'TYPO3.Form:MyElementType');
+
+		$page1->moveElementBefore($element1, $element2);
+	}
+
+	/**
+	 * @test
+	 */
+	public function moveAfterMovesElementAfterReferenceElement() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page = $formDefinition->createPage('myPage');
+		$element1 = $page->createElement('myElement', 'TYPO3.Form:MyElementType');
+		$element2 = $page->createElement('myElement2', 'TYPO3.Form:MyElementType');
+
+		$this->assertSame(array($element1, $element2), $page->getElements());
+		$page->moveElementAfter($element1, $element2);
+		$this->assertSame(array($element2, $element1), $page->getElements());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function moveAfterThrowsExceptionIfElementsAreNotOnSamePage() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page1 = $formDefinition->createPage('myPage1');
+		$page2 = $formDefinition->createPage('myPage2');
+
+		$element1 = $page1->createElement('myElement', 'TYPO3.Form:MyElementType');
+		$element2 = $page2->createElement('myElement2', 'TYPO3.Form:MyElementType');
+
+		$page1->moveElementAfter($element1, $element2);
+	}
+
+	/**
+	 * @test
+	 */
+	public function removeElementRemovesElementFromCurrentPageAndUnregistersItFromForm() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page1 = $formDefinition->createPage('myPage1');
+		$element1 = $page1->createElement('myElement', 'TYPO3.Form:MyElementType');
+
+		$page1->removeElement($element1);
+
+		$this->assertSame(array(), $page1->getElements());
+		$this->assertNull($formDefinition->getElementByIdentifier('myElement'));
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function removeElementThrowsExceptionIfElementIsNotOnCurrentPage() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page1 = $formDefinition->createPage('myPage1');
+		$element1 = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+
+		$page1->removeElement($element1);
+	}
 
 	protected function getDummyFormDefinition() {
 		return new FormDefinition('myForm', array(
