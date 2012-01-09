@@ -242,6 +242,118 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function movePageBeforeMovesPageBeforeReferenceElement() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$page2 = new Page('bar2');
+		$formDefinition->addPage($page1);
+		$formDefinition->addPage($page2);
+
+		$this->assertSame(0, $page1->getIndex());
+		$this->assertSame(1, $page2->getIndex());
+		$this->assertSame(array($page1, $page2), $formDefinition->getPages());
+
+		$formDefinition->movePageBefore($page2, $page1);
+
+		$this->assertSame(1, $page1->getIndex());
+		$this->assertSame(0, $page2->getIndex());
+		$this->assertSame(array($page2, $page1), $formDefinition->getPages());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function movePageBeforeThrowsExceptionIfPagesDoNotBelongToSameForm() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$page2 = new Page('bar2');
+		$formDefinition->addPage($page1);
+
+		$formDefinition->movePageBefore($page2, $page1);
+	}
+
+	/**
+	 * @test
+	 */
+	public function movePageAfterMovesPageAfterReferenceElement() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$page2 = new Page('bar2');
+		$formDefinition->addPage($page1);
+		$formDefinition->addPage($page2);
+
+		$this->assertSame(0, $page1->getIndex());
+		$this->assertSame(1, $page2->getIndex());
+		$this->assertSame(array($page1, $page2), $formDefinition->getPages());
+
+		$formDefinition->movePageAfter($page1, $page2);
+
+		$this->assertSame(1, $page1->getIndex());
+		$this->assertSame(0, $page2->getIndex());
+		$this->assertSame(array($page2, $page1), $formDefinition->getPages());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function movePageAfterThrowsExceptionIfPagesDoNotBelongToSameForm() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$page2 = new Page('bar2');
+		$formDefinition->addPage($page1);
+
+		$formDefinition->movePageAfter($page2, $page1);
+	}
+
+	/**
+	 * @test
+	 */
+	public function removePageRemovesPageFromForm() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$formDefinition->addPage($page1);
+
+		$formDefinition->removePage($page1);
+		$this->assertNull($page1->getParentForm());
+		$this->assertSame(array(), $formDefinition->getPages());
+	}
+
+	/**
+	 * @test
+	 */
+	public function removePageRemovesFormElementsOnPageFromForm() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$element1 = $this->getMockFormElement('el1');
+		$page1->addElement($element1);
+		$formDefinition->addPage($page1);
+		$element2 = $this->getMockFormElement('el2');
+		$page1->addElement($element2);
+
+		$this->assertSame($element1, $formDefinition->getElementByIdentifier('el1'));
+		$this->assertSame($element2, $formDefinition->getElementByIdentifier('el2'));
+
+		$formDefinition->removePage($page1);
+
+		$this->assertNull($formDefinition->getElementByIdentifier('el1'));
+		$this->assertNull($formDefinition->getElementByIdentifier('el2'));
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 */
+	public function removePageThrowsExceptionIfPageIsNotOnForm() {
+		$formDefinition = new FormDefinition('foo1');
+		$page1 = new Page('bar1');
+		$formDefinition->removePage($page1);
+	}
+
+	/**
 	 * @param string $identifier
 	 * @return \TYPO3\Form\Domain\Model\FormElementInterface
 	 */

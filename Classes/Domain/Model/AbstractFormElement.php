@@ -95,7 +95,7 @@ abstract class AbstractFormElement implements FormElementInterface {
 		return $this->parentPage;
 	}
 
-	public function setParentPage(Page $parentPage) {
+	public function setParentPage(Page $parentPage = NULL) {
 		$this->parentPage = $parentPage;
 	}
 

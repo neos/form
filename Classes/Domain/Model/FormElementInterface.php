@@ -25,7 +25,7 @@ interface FormElementInterface extends RenderableInterface {
 	 * @return void
 	 * @internal
 	 */
-	public function setParentPage(Page $parentPage);
+	public function setParentPage(Page $parentPage = NULL);
 
 	/**
 	 * Get the Form element's parent page

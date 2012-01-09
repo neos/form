@@ -137,7 +137,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function moveBeforeMovesElementBeforeReferenceElement() {
+	public function moveElementBeforeMovesElementBeforeReferenceElement() {
 		$formDefinition = $this->getDummyFormDefinition();
 		$page = $formDefinition->createPage('myPage');
 		$element1 = $page->createElement('myElement', 'TYPO3.Form:MyElementType');
@@ -152,7 +152,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 */
-	public function moveBeforeThrowsExceptionIfElementsAreNotOnSamePage() {
+	public function moveElementBeforeThrowsExceptionIfElementsAreNotOnSamePage() {
 		$formDefinition = $this->getDummyFormDefinition();
 		$page1 = $formDefinition->createPage('myPage1');
 		$page2 = $formDefinition->createPage('myPage2');
@@ -166,7 +166,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function moveAfterMovesElementAfterReferenceElement() {
+	public function moveElementAfterMovesElementAfterReferenceElement() {
 		$formDefinition = $this->getDummyFormDefinition();
 		$page = $formDefinition->createPage('myPage');
 		$element1 = $page->createElement('myElement', 'TYPO3.Form:MyElementType');
@@ -181,7 +181,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 */
-	public function moveAfterThrowsExceptionIfElementsAreNotOnSamePage() {
+	public function moveElementAfterThrowsExceptionIfElementsAreNotOnSamePage() {
 		$formDefinition = $this->getDummyFormDefinition();
 		$page1 = $formDefinition->createPage('myPage1');
 		$page2 = $formDefinition->createPage('myPage2');
@@ -204,6 +204,8 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$this->assertSame(array(), $page1->getElements());
 		$this->assertNull($formDefinition->getElementByIdentifier('myElement'));
+
+		$this->assertNull($element1->getParentPage());
 	}
 
 	/**

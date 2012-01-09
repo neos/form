@@ -94,7 +94,7 @@ class Page implements RenderableInterface {
 	 * @param \TYPO3\Form\Domain\Model\FormDefinition $parentForm The Page's parent form definition
 	 * @internal
 	 */
-	public function setParentForm(FormDefinition $parentForm) {
+	public function setParentForm(FormDefinition $parentForm = NULL) {
 		$this->parentForm = $parentForm;
 	}
 
@@ -245,6 +245,7 @@ class Page implements RenderableInterface {
 		if ($this->parentForm !== NULL) {
 			$this->parentForm->removeElementFromElementsByIdentifierCache($elementToRemove);
 		}
+		$elementToRemove->setParentPage(NULL);
 	}
 
 	/**

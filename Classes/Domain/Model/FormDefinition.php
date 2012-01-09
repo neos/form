@@ -442,6 +442,91 @@ class FormDefinition {
 	}
 
 	/**
+	 * Move $pageToMove before $referencePage
+	 *
+	 * @param Page $pageToMove
+	 * @param Page $referencePage
+	 * @api
+	 */
+	public function movePageBefore(Page $pageToMove, Page $referencePage) {
+		if ($pageToMove->getParentForm() !== $referencePage->getParentForm() || $pageToMove->getParentForm() !== $this) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved pages need to be parts of the same form.', 1326089744);
+		}
+
+		$reorderedPages = array();
+		$i = 0;
+		foreach ($this->pages as $page) {
+			if ($page === $pageToMove) continue;
+
+			if ($page === $referencePage) {
+				$reorderedPages[] = $pageToMove;
+				$pageToMove->setIndex($i);
+				$i++;
+			}
+			$reorderedPages[] = $page;
+			$page->setIndex($i);
+			$i++;
+		}
+		$this->pages = $reorderedPages;
+	}
+
+	/**
+	 * Move $pageToMove after $referencePage
+	 *
+	 * @param Page $pageToMove
+	 * @param Page $referencePage
+	 * @api
+	 */
+	public function movePageAfter(Page $pageToMove, Page $referencePage) {
+		if ($pageToMove->getParentForm() !== $referencePage->getParentForm() || $pageToMove->getParentForm() !== $this) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved pages need to be parts of the same form.', 1326089756);
+		}
+
+		$reorderedPages = array();
+		$i = 0;
+		foreach ($this->pages as $page) {
+			if ($page === $pageToMove) continue;
+
+			$reorderedPages[] = $page;
+			$page->setIndex($i);
+			$i++;
+
+			if ($page === $referencePage) {
+				$reorderedPages[] = $pageToMove;
+				$pageToMove->setIndex($i);
+				$i++;
+			}
+		}
+		$this->pages = $reorderedPages;
+	}
+
+	/**
+	 * Remove $pageToRemove from form
+	 *
+	 * @param Page $pageToRemove
+	 * @api
+	 */
+	public function removePage(Page $pageToRemove) {
+		if ($pageToRemove->getParentForm() !== $this) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('The page to be removed must be part of the given form.', 1326090127);
+		}
+
+		$updatedPages = array();
+		foreach ($this->pages as $page) {
+			if ($page === $pageToRemove) continue;
+
+			$updatedPages[] = $page;
+		}
+		$this->pages = $updatedPages;
+
+		$pageToRemove->setParentForm(NULL);
+
+		foreach ($pageToRemove->getElements() as $element) {
+			$this->removeElementFromElementsByIdentifierCache($element);
+		}
+	}
+
+	/**
 	 * Bind the current request to this form instance, effectively creating
 	 * a new "instance" of the Form.
 	 *
