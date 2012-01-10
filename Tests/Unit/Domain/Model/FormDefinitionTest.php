@@ -47,6 +47,51 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
+	public function constructorSetsRendererClassName() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(
+					'rendererClassName' => 'FooRenderer'
+				)
+			)
+		));
+		$this->assertSame('FooRenderer', $formDefinition->getRendererClassName());
+	}
+
+	/**
+	 * @test
+	 */
+	public function constructorSetsRenderingOptions() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(
+					'renderingOptions' => array(
+						'foo' => 'bar',
+						'baz' => 'test'
+					)
+				)
+			)
+		));
+		$this->assertSame(array('foo' => 'bar', 'baz' => 'test'), $formDefinition->getRenderingOptions());
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\TypeDefinitionNotValidException
+	 */
+	public function constructorThrowsExceptionIfUnknownPropertySet() {
+		new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(
+					'unknownFormProperty' => 'val'
+				)
+			)
+		));
+	}
+
+	/**
+	 * @test
+	 */
 	public function getPagesReturnsEmptyArrayByDefault() {
 		$formDefinition = new FormDefinition('foo');
 		$this->assertSame(array(), $formDefinition->getPages());
@@ -207,6 +252,40 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @test
+	 */
+	public function createPageSetsRendererClassNameFromTypeDefinition() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(),
+				'TYPO3.Form:Page' => array(
+					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'rendererClassName' => 'MyRenderer'
+				)
+			)
+		));
+		$page = $formDefinition->createPage('myPage');
+		$this->assertSame('MyRenderer', $page->getRendererClassName());
+	}
+
+	/**
+	 * @test
+	 */
+	public function createPageSetsRenderingOptionsFromTypeDefinition() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(),
+				'TYPO3.Form:Page' => array(
+					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
+				)
+			)
+		));
+		$page = $formDefinition->createPage('myPage');
+		$this->assertSame(array('foo' => 'bar', 'baz' => 'asdf'), $page->getRenderingOptions());
+	}
+
+	/**
+	 * @test
 	 * @expectedException TYPO3\Form\Exception\TypeDefinitionNotValidException
 	 */
 	public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition() {
@@ -230,6 +309,9 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function createPageThrowsExceptionIfImplementationClassNameNotFound() {
 		$formDefinition = new FormDefinition('myForm', array(
 			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(
+
+				),
 				'TYPO3.Form:Page2' => array()
 			)
 		));
@@ -251,18 +333,22 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = new FormDefinition('foo1');
 		$page1 = new Page('bar1');
 		$page2 = new Page('bar2');
+		$page3 = new Page('bar3');
 		$formDefinition->addPage($page1);
 		$formDefinition->addPage($page2);
+		$formDefinition->addPage($page3);
 
 		$this->assertSame(0, $page1->getIndex());
 		$this->assertSame(1, $page2->getIndex());
-		$this->assertSame(array($page1, $page2), $formDefinition->getPages());
+		$this->assertSame(2, $page3->getIndex());
+		$this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
 
 		$formDefinition->movePageBefore($page2, $page1);
 
 		$this->assertSame(1, $page1->getIndex());
 		$this->assertSame(0, $page2->getIndex());
-		$this->assertSame(array($page2, $page1), $formDefinition->getPages());
+		$this->assertSame(2, $page3->getIndex());
+		$this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
 	}
 
 	/**
@@ -318,11 +404,13 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function removePageRemovesPageFromForm() {
 		$formDefinition = new FormDefinition('foo1');
 		$page1 = new Page('bar1');
+		$page2 = new Page('bar2');
 		$formDefinition->addPage($page1);
+		$formDefinition->addPage($page2);
 
 		$formDefinition->removePage($page1);
 		$this->assertNull($page1->getParentRenderable());
-		$this->assertSame(array(), $formDefinition->getPages());
+		$this->assertSame(array($page2), $formDefinition->getPages());
 	}
 
 	/**

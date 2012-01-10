@@ -74,6 +74,16 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function rendererClassNameCanBeGetAndSet() {
+		$formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+		$this->assertNull($formElement->getRendererClassName());
+		$formElement->setRendererClassName('MyRendererClassName');
+		$this->assertSame('MyRendererClassName', $formElement->getRendererClassName());
+	}
+
+	/**
 	 * @param array $constructorArguments
 	 * @return \TYPO3\Form\Domain\Model\AbstractFormElement
 	 */

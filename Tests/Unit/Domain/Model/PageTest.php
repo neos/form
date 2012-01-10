@@ -103,6 +103,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$this->assertSame('This is the default value', $element->getDefaultValue());
 		$this->assertSame(array('property1' => 'val1', 'property2' => 'val2'), $element->getProperties());
 		$this->assertSame(array('ro1' => 'rv1', 'ro2' => 'rv2'), $element->getRenderingOptions());
+		$this->assertSame('MyRendererClassName', $element->getRendererClassName());
 	}
 
 	/**
@@ -123,7 +124,6 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$page = $formDefinition->createPage('myPage');
 		$element = $page->createElement('myElement', 'TYPO3.Form:MyElementTypeWithoutImplementationClassName');
 	}
-
 
 	/**
 	 * @test
@@ -242,7 +242,8 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 					'renderingOptions' => array(
 						'ro1' => 'rv1',
 						'ro2' => 'rv2'
-					)
+					),
+					'rendererClassName' => 'MyRendererClassName'
 				),
 				'TYPO3.Form:MyElementTypeWithoutImplementationClassName' => array(),
 				'TYPO3.Form:MyElementTypeWithUnknownProperties' => array(

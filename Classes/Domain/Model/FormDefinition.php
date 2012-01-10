@@ -323,14 +323,14 @@ class FormDefinition extends AbstractCompositeRenderable {
 			$page->setLabel($typeDefinition['label']);
 		}
 
+		if (isset($typeDefinition['rendererClassName'])) {
+			$page->setRendererClassName($typeDefinition['rendererClassName']);
+		}
+
 		if (isset($typeDefinition['renderingOptions'])) {
 			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
 				$page->setRenderingOption($key, $value);
 			}
-		}
-
-		if (isset($typeDefinition['rendererClassName'])) {
-			$page->setRendererClassName($typeDefinition['rendererClassName']);
 		}
 
 		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'rendererClassName', 'renderingOptions'));
