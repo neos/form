@@ -41,6 +41,10 @@ TYPO3:
             superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Date':
             superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:Checkboxes':
+            superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:Radiobuttons':
+            superTypes: ['TYPO3.Form:FormElement']
 #            processingRule:
 #              mapping:
 #                availableOptions:

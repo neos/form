@@ -1,0 +1,14 @@
+{namespace form=TYPO3\Form\ViewHelpers}
+<f:layout name="TYPO3.Form:Field" />
+<f:section name="field">
+	<ul class="inputs-list">
+		<f:for each="{element.properties.options}" as="label" key="value">
+			<li>
+				<label>
+					<form:form.radio property="{element.identifier}" value="{value}" errorClass="error" />
+					<span>{label}</span>
+				</label>
+			</li>
+		</f:for>
+	</ul>
+</f:section>
