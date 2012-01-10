@@ -9,9 +9,19 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * PUBLIC API to render a form
+ * Main Entry Point to render a Form into a Fluid Template
  *
- * @todo document
+ * Usage
+ * =====
+ *
+ * <pre>
+ * {namespace form=TYPO3\Form\ViewHelpers}
+ * <form:render factoryClass="NameOfYourCustomFactoryClass" />
+ * </pre>
+ *
+ * The factory class must implement {@link TYPO3\Form\Factory\FormFactoryInterface}.
+ *
+ * @api
  */
 class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
