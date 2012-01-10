@@ -292,13 +292,16 @@ class FormDefinition extends AbstractRenderable {
 
 	protected function initializeFromFormDefaults() {
 		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($this->type);
+		if (isset($typeDefinition['rendererClassName'])) {
+			$this->setRendererClassName($typeDefinition['rendererClassName']);
+		}
 		if (isset($typeDefinition['renderingOptions'])) {
 			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
 				$this->setRenderingOption($key, $value);
 			}
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('renderingOptions'));
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('rendererClassName', 'renderingOptions'));
 	}
 
 	/**
@@ -334,7 +337,11 @@ class FormDefinition extends AbstractRenderable {
 			}
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'renderingOptions'));
+		if (isset($typeDefinition['rendererClassName'])) {
+			$page->setRendererClassName($typeDefinition['rendererClassName']);
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'rendererClassName', 'renderingOptions'));
 
 		$this->addPage($page);
 		return $page;

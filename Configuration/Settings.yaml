@@ -13,24 +13,21 @@ TYPO3:
 
           'TYPO3.Form:Form':
             superTypes: ['TYPO3.Form:Base']
-            # TODO: rendererClassName should be property with getter / setter (implemented in Renderable)
+            rendererClassName: 'TYPO3\Form\Domain\Renderer\FluidFormRenderer'
             renderingOptions:
-              # TODO: rename to "rendererClassName"?
-              formRendererClassName: 'TYPO3\Form\Domain\Renderer\FluidFormRenderer'
-              # RENAME TO: renderableNameInTemplate??
-              templateVariableName: 'form'
+              renderableNameInTemplate: 'form'
 
           'TYPO3.Form:Page':
             superTypes: ['TYPO3.Form:Base']
             implementationClassName: 'TYPO3\Form\Domain\Model\Page'
             renderingOptions:
-              templateVariableName: 'page'
+              renderableNameInTemplate: 'page'
 
           'TYPO3.Form:FormElement':
             superTypes: ['TYPO3.Form:Base']
             implementationClassName: 'TYPO3\Form\Domain\Model\GenericFormElement'
             renderingOptions:
-              templateVariableName: 'element'
+              renderableNameInTemplate: 'element'
 
           'TYPO3.Form:Textfield':
             superTypes: ['TYPO3.Form:FormElement']

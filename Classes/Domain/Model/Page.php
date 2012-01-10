@@ -160,13 +160,17 @@ class Page extends AbstractRenderable {
 			}
 		}
 
+		if (isset($typeDefinition['rendererClassName'])) {
+			$element->setRendererClassName($typeDefinition['rendererClassName']);
+		}
+
 		if (isset($typeDefinition['renderingOptions'])) {
 			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
 				$element->setRenderingOption($key, $value);
 			}
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'defaultValue', 'properties', 'renderingOptions'));
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions'));
 
 		$this->addElement($element);
 		return $element;

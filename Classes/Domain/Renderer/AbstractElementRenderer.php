@@ -10,7 +10,7 @@ namespace TYPO3\Form\Domain\Renderer;
 /**
  *
  */
-abstract class AbstractElementRenderer implements ElementRendererInterface {
+abstract class AbstractElementRenderer implements RendererInterface {
 	protected $controllerContext;
 
 	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {

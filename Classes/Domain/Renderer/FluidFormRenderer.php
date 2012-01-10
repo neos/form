@@ -13,7 +13,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @todo greatly expand documentation
  */
-class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRendererInterface {
+class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements RendererInterface {
 
 	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
@@ -21,17 +21,18 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRe
 
 	public function renderRenderable(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
 		$renderableType = $renderable->getType();
-		$renderingOptions = $renderable->getRenderingOptions();
 
-		if (isset($renderingOptions['rendererClassName'])) {
-			$rendererClassName = $renderingOptions['rendererClassName'];
+		if ($renderable->getRendererClassName() !== NULL && $renderable->getRendererClassName() !== get_class($this)) {
+			$rendererClassName = $renderable->getRendererClassName();
 			$renderer = new $rendererClassName;
-			if (!($renderer instanceof ElementRendererInterface)) {
-				throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement ElementRendererInterface.', $rendererClassName, $renderableType), 1326098022);
+			if (!($renderer instanceof RendererInterface)) {
+				throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement RendererInterface.', $rendererClassName, $renderableType), 1326098022);
 			}
 			$renderer->setControllerContext($this->controllerContext);
 			return $renderer->renderRenderable($renderable);
 		}
+
+		$renderingOptions = $renderable->getRenderingOptions();
 
 		$renderablePathAndFilename = $this->getPathAndFilenameForRenderable($renderableType, $renderingOptions);
 		$parsedRenderable = $this->getParsedRenderable($renderable->getType(), $renderablePathAndFilename);
@@ -44,11 +45,11 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements FormRe
 			$renderingContext = clone $this->getCurrentRenderingContext();
 		}
 
-		if (!isset($renderingOptions['templateVariableName'])) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templateVariableName" defined.', $renderableType), 1326094948);
+		if (!isset($renderingOptions['renderableNameInTemplate'])) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "renderableNameInTemplate" defined.', $renderableType), 1326094948);
 		}
 
-		$templateVariableContainer = new \TYPO3\Fluid\Core\ViewHelper\TemplateVariableContainer(array($renderingOptions['templateVariableName'] => $renderable));
+		$templateVariableContainer = new \TYPO3\Fluid\Core\ViewHelper\TemplateVariableContainer(array($renderingOptions['renderableNameInTemplate'] => $renderable));
 		$renderingContext->injectTemplateVariableContainer($templateVariableContainer);
 
 		if ($parsedRenderable->hasLayout()) {

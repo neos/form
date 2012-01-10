@@ -38,6 +38,17 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 */
 	protected $renderingOptions = array();
 
+	/**
+	 * Renderer class name to be used for this renderable.
+	 *
+	 * Is only set if a specific renderer should be used for this renderable,
+	 * if it is NULL the caller needs to determine the renderer or take care
+	 * of the renderer itself.
+	 *
+	 * @var string
+	 */
+	protected $rendererClassName = NULL;
+
 
 	public function getType() {
 		return $this->type;
@@ -45,6 +56,21 @@ abstract class AbstractRenderable implements RenderableInterface {
 
 	public function getIdentifier() {
 		return $this->identifier;
+	}
+
+	/**
+	 * Set the renderer class name
+	 *
+	 * @param string $rendererClassName
+	 * @api
+	 */
+	public function setRendererClassName($rendererClassName) {
+		$this->rendererClassName = $rendererClassName;
+	}
+
+
+	public function getRendererClassName() {
+		return $this->rendererClassName;
 	}
 
 	public function getRenderingOptions() {
@@ -61,5 +87,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 	public function setRenderingOption($key, $value) {
 		$this->renderingOptions[$key] = $value;
 	}
+
+
 }
 ?>

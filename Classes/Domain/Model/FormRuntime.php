@@ -159,21 +159,20 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 	 * @api
 	 */
 	public function render() {
-		$renderingOptions = $this->formDefinition->getRenderingOptions();
-		if (!isset($renderingOptions['formRendererClassName'])) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have the rendering option "formRendererClassName" set.', $this->formDefinition->getIdentifier()), 1326095912);
+		if ($this->formDefinition->getRendererClassName() === NULL) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have a rendererClassName set.', $this->formDefinition->getIdentifier()), 1326095912);
 		}
-		$formRendererClassName = $renderingOptions['formRendererClassName'];
+		$rendererClassName = $this->formDefinition->getRendererClassName();
 
 		$this->updateFormState();
 		$controllerContext = $this->getControllerContext();
-		$formRenderer = new $formRendererClassName();
-		if (!($formRenderer instanceof \TYPO3\Form\Domain\Renderer\FormRendererInterface)) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form renderer "%s" des not implement FormRendererInterface', $formRendererClassName), 1326096024);
+		$renderer = new $rendererClassName();
+		if (!($renderer instanceof \TYPO3\Form\Domain\Renderer\RendererInterface)) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer "%s" des not implement RendererInterface', $rendererClassName), 1326096024);
 		}
 
-		$formRenderer->setControllerContext($controllerContext);
-		return $formRenderer->renderRenderable($this);
+		$renderer->setControllerContext($controllerContext);
+		return $renderer->renderRenderable($this);
 	}
 
 	/**
@@ -363,6 +362,10 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 
 	public function getRenderingOptions() {
 		return $this->formDefinition->getRenderingOptions();
+	}
+
+	public function getRendererClassName() {
+		return $this->formDefinition->getRendererClassName();
 	}
 }
 ?>
