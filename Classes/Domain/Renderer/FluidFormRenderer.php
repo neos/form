@@ -71,6 +71,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 
 	protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions) {
 		if (!isset($renderingOptions['templatePathPattern'])) {
+			var_dump($renderingOptions);
 			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templatePathPattern" defined.', $renderableType), 1326094041);
 		}
 		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
@@ -97,7 +98,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 
 	protected function getParsedRenderable($renderableType, $renderablePathAndFilename) {
 		if (!file_exists($renderablePathAndFilename)) {
-			throw new \Exception('TODO (fix exception message): Path .... not found');
+			throw new \Exception('TODO (fix exception message): Path ' . $renderablePathAndFilename . ' not found');
 		}
 		$templateModifiedTimestamp = \filemtime($renderablePathAndFilename);
 		$renderableIdentifier = sprintf('renderable_%s_%s', str_replace(array('.', ':'), '_', $renderableType), sha1($renderablePathAndFilename . '|' . $templateModifiedTimestamp));

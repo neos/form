@@ -56,5 +56,7 @@ interface FormElementInterface extends RenderableInterface {
 	 * @api
 	 */
 	public function setRenderingOption($key, $value);
+
+	public function getValidator();
 }
 ?>

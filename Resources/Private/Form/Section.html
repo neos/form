@@ -1,0 +1,8 @@
+{namespace form=TYPO3\Form\ViewHelpers}
+
+<fieldset>
+	<legend>{section.label}</legend>
+	<f:for each="{section.elements}" as="element">
+		<form:renderRenderable renderable="{element}" />
+	</f:for>
+</fieldset>

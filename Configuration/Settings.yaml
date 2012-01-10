@@ -29,6 +29,12 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'element'
 
+          'TYPO3.Form:Section':
+            superTypes: ['TYPO3.Form:FormElement']
+            implementationClassName: 'TYPO3\Form\Domain\Model\Section'
+            renderingOptions:
+              renderableNameInTemplate: 'section'
+
           'TYPO3.Form:Textfield':
             superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Select':

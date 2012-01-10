@@ -204,6 +204,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 				}
 
 					// TODO: support "." syntax (property paths, maybe through the Property Mapper)
+					// TODO: Sections are not supported yet (elements inside sections are not validated!)
 				$validator = $element->getValidator();
 
 				$validationResult = $validator->validate($value);
