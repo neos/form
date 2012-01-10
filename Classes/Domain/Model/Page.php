@@ -131,14 +131,16 @@ class Page extends AbstractRenderable {
 	 *
 	 * @param string $identifier
 	 * @param string $typeName
+	 * @param array $additionalTypeDefinition
 	 * @return \TYPO3\Form\Domain\Model\FormElementInterface
 	 * @throws \Exception
 	 */
-	public function createElement($identifier, $typeName) {
+	public function createElement($identifier, $typeName, $additionalTypeDefinition = array()) {
 		if ($this->parentForm === NULL) {
 			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The page "%s" is not attached to a parent form, thus createElement() cannot be called.', $this->identifier), 1325742259);
 		}
 		$typeDefinition = $this->parentForm->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
+		$typeDefinition = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($typeDefinition, $additionalTypeDefinition);
 
 		if (!isset($typeDefinition['implementationClassName'])) {
 			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
