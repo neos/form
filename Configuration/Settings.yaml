@@ -4,6 +4,8 @@ TYPO3:
       Default:
         ########### DEFAULT###########
         formElementTypes:
+
+          # NAMING: base class for everything is RENDERABLE
           'TYPO3.Form:Base':
             renderingOptions:
               templatePathPattern: 'resource://{@package}/Private/Form/{@type}.html'
@@ -11,8 +13,11 @@ TYPO3:
 
           'TYPO3.Form:Form':
             superTypes: ['TYPO3.Form:Base']
+            # TODO: rendererClassName should be property with getter / setter (implemented in Renderable)
             renderingOptions:
+              # TODO: rename to "rendererClassName"?
               formRendererClassName: 'TYPO3\Form\Domain\Renderer\FluidFormRenderer'
+              # RENAME TO: renderableNameInTemplate??
               templateVariableName: 'form'
 
           'TYPO3.Form:Page':
