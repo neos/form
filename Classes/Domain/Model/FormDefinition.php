@@ -334,32 +334,9 @@ class FormDefinition extends AbstractRenderable {
 			}
 		}
 
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'renderingOptions'));
+
 		$this->addPage($page);
-
-		if (isset($typeDefinition['elements'])) {
-			foreach ($typeDefinition['elements'] as $elementDefinition) {
-				if (!isset($elementDefinition['identifier']) || !isset($elementDefinition['type'])) {
-					throw new \Exception('TODO: identifier or type not set');
-				}
-
-					// TODO: shall this be moved to page::createElement (and support a simple array there as well??)
-				foreach ($elementDefinition as $key => $value) {
-					$elementDefinition[$key] = preg_replace_callback('/{parent\.(.*?)}/', function($match) use($page) {
-						return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($page, $match[1]);
-					}, $value);
-				}
-
-				$elementIdentifier = $elementDefinition['identifier'];
-				$elementType = $elementDefinition['type'];
-				unset($elementDefinition['identifier']);
-				unset($elementDefinition['type']);
-
-				$page->createElement($elementIdentifier, $elementType, $elementDefinition);
-			}
-		}
-
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'renderingOptions', 'elements'));
-
 		return $page;
 	}
 
