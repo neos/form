@@ -10,7 +10,7 @@ use TYPO3\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
- * @covers \TYPO3\Form\Domain\Factory\AbstractFormFactory
+ * @covers \TYPO3\Form\Domain\Factory\AbstractFormFactory<extended>
  */
 class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 

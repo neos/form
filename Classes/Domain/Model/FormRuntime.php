@@ -38,7 +38,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @api
  */
-class FormRuntime implements RenderableInterface, \ArrayAccess {
+class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 
 	/**
 	 * @var FormDefinition
@@ -366,6 +366,10 @@ class FormRuntime implements RenderableInterface, \ArrayAccess {
 
 	public function getRendererClassName() {
 		return $this->formDefinition->getRendererClassName();
+	}
+
+	public function getLabel() {
+		$this->formDefinition->getLabel();
 	}
 }
 ?>

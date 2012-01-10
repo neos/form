@@ -13,6 +13,6 @@ namespace TYPO3\Form\Domain\Renderer;
  */
 interface RendererInterface {
 	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext);
-	public function renderRenderable(\TYPO3\Form\Domain\Model\RenderableInterface $renderable);
+	public function renderRenderable(\TYPO3\Form\Domain\Model\RootRenderableInterface $renderable);
 }
 ?>

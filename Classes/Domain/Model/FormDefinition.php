@@ -227,15 +227,7 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  *
  * Refer to the {@link FormRuntime} API doc for further information.
  */
-class FormDefinition extends AbstractRenderable {
-
-	/**
-	 * The pages this form is comprised of, in a numerically-indexed array
-	 *
-	 * @var array<TYPO3\Form\Domain\Model\Page>
-	 * @internal
-	 */
-	protected $pages = array();
+class FormDefinition extends AbstractCompositeRenderable {
 
 	/**
 	 * The finishers for this form
@@ -325,7 +317,7 @@ class FormDefinition extends AbstractRenderable {
 			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
 		}
 		$implementationClassName = $typeDefinition['implementationClassName'];
-		$page = new $implementationClassName($identifier);
+		$page = new $implementationClassName($identifier, $typeName);
 
 		if (isset($typeDefinition['label'])) {
 			$page->setLabel($typeDefinition['label']);
@@ -358,16 +350,7 @@ class FormDefinition extends AbstractRenderable {
 	 * @api
 	 */
 	public function addPage(Page $page) {
-		if ($page->getParentForm() !== NULL) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The Page with identifier "%s" is already added to another form (form identifier: "%s").', $page->getIdentifier(), $page->getParentForm()->getIdentifier()), 1325665144);
-		}
-
-		$this->pages[] = $page;
-		$page->setParentForm($this);
-		$page->setIndex(count($this->pages) - 1);
-		foreach ($page->getElements() as $element) {
-			$this->addElementToElementsByIdentifierCache($element);
-		}
+		$this->addRenderable($page);
 	}
 
 	/**
@@ -377,7 +360,7 @@ class FormDefinition extends AbstractRenderable {
 	 * @api
 	 */
 	public function getPages() {
-		return $this->pages;
+		return $this->renderables;
 	}
 
 	/**
@@ -390,7 +373,7 @@ class FormDefinition extends AbstractRenderable {
 	 * @api
 	 */
 	public function getPageByIndex($index) {
-		return isset($this->pages[$index]) ? $this->pages[$index] : NULL;
+		return isset($this->renderables[$index]) ? $this->renderables[$index] : NULL;
 	}
 
 	/**
@@ -422,11 +405,13 @@ class FormDefinition extends AbstractRenderable {
 	 * @internal
 	 * @todo rename to "registerElementInForm"
 	 */
-	public function addElementToElementsByIdentifierCache(FormElementInterface $element) {
-		if (isset($this->elementsByIdentifier[$element->getIdentifier()])) {
-			throw new \TYPO3\Form\Exception\DuplicateFormElementException(sprintf('A form element with identifier "%s" is already part of the form.', $element->getIdentifier()), 1325663761);
+	public function registerRenderable(RenderableInterface $renderable) {
+		if ($renderable instanceof FormElementInterface) {
+			if (isset($this->elementsByIdentifier[$renderable->getIdentifier()])) {
+				throw new \TYPO3\Form\Exception\DuplicateFormElementException(sprintf('A form element with identifier "%s" is already part of the form.', $renderable->getIdentifier()), 1325663761);
+			}
+			$this->elementsByIdentifier[$renderable->getIdentifier()] = $renderable;
 		}
-		$this->elementsByIdentifier[$element->getIdentifier()] = $element;
 	}
 
 	/**
@@ -435,8 +420,10 @@ class FormDefinition extends AbstractRenderable {
 	 * @param FormElementInterface $element
 	 * @internal
 	 */
-	public function removeElementFromElementsByIdentifierCache(FormElementInterface $element) {
-		unset($this->elementsByIdentifier[$element->getIdentifier()]);
+	public function unregisterRenderable(RenderableInterface $renderable) {
+		if ($renderable instanceof FormElementInterface) {
+			unset($this->elementsByIdentifier[$renderable->getIdentifier()]);
+		}
 	}
 
 	/**
@@ -460,25 +447,7 @@ class FormDefinition extends AbstractRenderable {
 	 * @api
 	 */
 	public function movePageBefore(Page $pageToMove, Page $referencePage) {
-		if ($pageToMove->getParentForm() !== $referencePage->getParentForm() || $pageToMove->getParentForm() !== $this) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved pages need to be parts of the same form.', 1326089744);
-		}
-
-		$reorderedPages = array();
-		$i = 0;
-		foreach ($this->pages as $page) {
-			if ($page === $pageToMove) continue;
-
-			if ($page === $referencePage) {
-				$reorderedPages[] = $pageToMove;
-				$pageToMove->setIndex($i);
-				$i++;
-			}
-			$reorderedPages[] = $page;
-			$page->setIndex($i);
-			$i++;
-		}
-		$this->pages = $reorderedPages;
+		$this->moveRenderableBefore($pageToMove, $referencePage);
 	}
 
 	/**
@@ -489,26 +458,7 @@ class FormDefinition extends AbstractRenderable {
 	 * @api
 	 */
 	public function movePageAfter(Page $pageToMove, Page $referencePage) {
-		if ($pageToMove->getParentForm() !== $referencePage->getParentForm() || $pageToMove->getParentForm() !== $this) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved pages need to be parts of the same form.', 1326089756);
-		}
-
-		$reorderedPages = array();
-		$i = 0;
-		foreach ($this->pages as $page) {
-			if ($page === $pageToMove) continue;
-
-			$reorderedPages[] = $page;
-			$page->setIndex($i);
-			$i++;
-
-			if ($page === $referencePage) {
-				$reorderedPages[] = $pageToMove;
-				$pageToMove->setIndex($i);
-				$i++;
-			}
-		}
-		$this->pages = $reorderedPages;
+		$this->moveRenderableAfter($pageToMove, $referencePage);
 	}
 
 	/**
@@ -518,23 +468,7 @@ class FormDefinition extends AbstractRenderable {
 	 * @api
 	 */
 	public function removePage(Page $pageToRemove) {
-		if ($pageToRemove->getParentForm() !== $this) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('The page to be removed must be part of the given form.', 1326090127);
-		}
-
-		$updatedPages = array();
-		foreach ($this->pages as $page) {
-			if ($page === $pageToRemove) continue;
-
-			$updatedPages[] = $page;
-		}
-		$this->pages = $updatedPages;
-
-		$pageToRemove->setParentForm(NULL);
-
-		foreach ($pageToRemove->getElements() as $element) {
-			$this->removeElementFromElementsByIdentifierCache($element);
-		}
+		$this->removeRenderable($pageToRemove);
 	}
 
 	/**

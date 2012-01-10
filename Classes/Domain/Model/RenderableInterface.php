@@ -14,45 +14,45 @@ namespace TYPO3\Form\Domain\Model;
  * used for improving the internal code structure.
  *
  */
-interface RenderableInterface {
+interface RenderableInterface extends RootRenderableInterface {
 
 	/**
-	 * Abstract "type" of this Renderable. Is used during the rendering process
-	 * to determine the template file or the View PHP class being used to render
-	 * the particular element.
+	 * Return the parent renderable
 	 *
-	 * @return string
-	 * @api
+	 * @return CompositeRenderableInterface the parent renderable
+	 * @internal
 	 */
-	public function getType();
+	public function getParentRenderable();
 
 	/**
-	 * The identifier of this renderable
-	 *
-	 * @return string
-	 * @api
+	 * @param CompositeRenderableInterface $renderable
+	 * @internal
 	 */
-	public function getIdentifier();
+	public function setParentRenderable(CompositeRenderableInterface $renderable);
 
 	/**
-	 * Get the renderer class name to be used to display this renderable;
-	 * must implement RendererInterface
+	 * Set the index in the parent renderable
 	 *
-	 * Is only set if a specific renderer should be used for this renderable,
-	 * if it is NULL the caller needs to determine the renderer or take care
-	 * of the renderer itself.
-	 *
-	 * @return string the renderer class name
+	 * @param integer $index
+	 * @internal
 	 */
-	public function getRendererClassName();
+	public function setIndex($index);
 
 	/**
-	 * Get all rendering options
+	 * Get the index inside the parent renderable
 	 *
-	 * @return array associative array of rendering options
-	 * @api
+	 * @return integer
 	 */
-	public function getRenderingOptions();
+	public function getIndex();
 
+	/**
+	 * This function is called after a renderable has been removed from its parent
+	 * renderable. The function should make sure to clean up the internal state,
+	 * like reseting $this->parentRenderable or deregistering the renderable
+	 * at the form.
+	 *
+	 * @internal
+	 */
+	public function onRemoveFromParentRenderable();
 }
 ?>

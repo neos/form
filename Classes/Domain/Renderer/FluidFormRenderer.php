@@ -19,7 +19,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		$this->controllerContext = $controllerContext;
 	}
 
-	public function renderRenderable(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
+	public function renderRenderable(\TYPO3\Form\Domain\Model\RootRenderableInterface $renderable) {
 		$renderableType = $renderable->getType();
 
 		if ($renderable->getRendererClassName() !== NULL && $renderable->getRendererClassName() !== get_class($this)) {

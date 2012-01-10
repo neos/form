@@ -11,8 +11,8 @@ use TYPO3\Form\Domain\Model\Page;
 
 /**
  * Test for FormDefinition Domain Model
- * @covers \TYPO3\Form\Domain\Model\FormDefinition
- * @covers \TYPO3\Form\Domain\Model\Page
+ * @covers \TYPO3\Form\Domain\Model\FormDefinition<extended>
+ * @covers \TYPO3\Form\Domain\Model\Page<extended>
  */
 class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -62,7 +62,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$page = new Page('bar');
 		$formDefinition->addPage($page);
 		$this->assertSame(array($page), $formDefinition->getPages());
-		$this->assertSame($formDefinition, $page->getParentForm());
+		$this->assertSame($formDefinition, $page->getParentRenderable());
 
 		$this->assertSame($page, $formDefinition->getPageByIndex(0));
 		$this->assertNull($formDefinition->getPageByIndex(1));
@@ -321,7 +321,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition->addPage($page1);
 
 		$formDefinition->removePage($page1);
-		$this->assertNull($page1->getParentForm());
+		$this->assertNull($page1->getParentRenderable());
 		$this->assertSame(array(), $formDefinition->getPages());
 	}
 
@@ -361,7 +361,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @return \TYPO3\Form\Domain\Model\FormElementInterface
 	 */
 	protected function getMockFormElement($identifier) {
-		$mockFormElement = $this->getMockBuilder('TYPO3\Form\Domain\Model\FormElementInterface')->getMock();
+		$mockFormElement = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
 		$mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
 		return $mockFormElement;

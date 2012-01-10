@@ -11,7 +11,7 @@ use TYPO3\Form\Domain\Model\Page;
 
 /**
  * Test for AbstractFormElement Domain Model
- * @covers \TYPO3\Form\Domain\Model\AbstractFormElement
+ * @covers \TYPO3\Form\Domain\Model\AbstractFormElement<extended>
  */
 class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 

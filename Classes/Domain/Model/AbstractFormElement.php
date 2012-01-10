@@ -26,18 +26,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 abstract class AbstractFormElement extends AbstractRenderable implements FormElementInterface {
 
 	/**
-	 * The parent page
-	 *
-	 * @var \TYPO3\Form\Domain\Model\Page
-	 */
-	protected $parentPage;
-
-	/**
-	 * @var string
-	 */
-	protected $label = '';
-
-	/**
 	 * @var mixed
 	 */
 	protected $defaultValue = NULL;
@@ -67,22 +55,6 @@ abstract class AbstractFormElement extends AbstractRenderable implements FormEle
 		$this->type = $type;
 
 		$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
-	}
-
-	public function getParentPage() {
-		return $this->parentPage;
-	}
-
-	public function setParentPage(Page $parentPage = NULL) {
-		$this->parentPage = $parentPage;
-	}
-
-	public function getLabel() {
-		return $this->label;
-	}
-
-	public function setLabel($label) {
-		$this->label = $label;
 	}
 
 	public function getDefaultValue() {

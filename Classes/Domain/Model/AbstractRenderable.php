@@ -10,7 +10,7 @@ namespace TYPO3\Form\Domain\Model;
  * Convenience base class which implements common functionality for most
  * classes which implement RenderableInterface.
  *
- * **This interface should not be implemented by developers**, it is only
+ * **This class should not be implemented by developers**, it is only
  * used for improving the internal code structure.
  */
 abstract class AbstractRenderable implements RenderableInterface {
@@ -32,6 +32,15 @@ abstract class AbstractRenderable implements RenderableInterface {
 	protected $identifier;
 
 	/**
+	 * The parent renderable
+	 *
+	 * @var CompositeRenderableInterface
+	 */
+	protected $parentRenderable;
+
+	protected $label = '';
+
+	/**
 	 * associative array of rendering options
 	 *
 	 * @var array
@@ -49,6 +58,10 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 */
 	protected $rendererClassName = NULL;
 
+	/**
+	 * @var integer
+	 */
+	protected $index = 0;
 
 	public function getType() {
 		return $this->type;
@@ -87,6 +100,60 @@ abstract class AbstractRenderable implements RenderableInterface {
 	public function setRenderingOption($key, $value) {
 		$this->renderingOptions[$key] = $value;
 	}
+
+	public function getParentRenderable() {
+		return $this->parentRenderable;
+	}
+
+	public function setParentRenderable(CompositeRenderableInterface $parentRenderable) {
+		$this->parentRenderable = $parentRenderable;
+		$this->registerInFormIfPossible();
+	}
+
+	public function registerInFormIfPossible() {
+		$rootRenderable = $this->parentRenderable;
+		while ($rootRenderable !== NULL && !($rootRenderable instanceof FormDefinition)) {
+			$rootRenderable = $rootRenderable->getParentRenderable();
+		}
+		if ($rootRenderable !== NULL) {
+			$rootRenderable->registerRenderable($this);
+		}
+	}
+
+
+	public function onRemoveFromParentRenderable() {
+		$rootForm = $this->parentRenderable;
+		while ($rootForm !== NULL && !($rootForm instanceof FormDefinition)) {
+			$rootForm = $rootForm->getParentRenderable();
+		}
+		if ($rootForm !== NULL) {
+			$rootForm->unregisterRenderable($this);
+		}
+		$this->parentRenderable = NULL;
+	}
+
+	public function getIndex() {
+		return $this->index;
+	}
+
+	public function setIndex($index) {
+		$this->index = $index;
+	}
+
+	public function getLabel() {
+		return $this->label;
+	}
+
+	/**
+	 * Set the label which shall be displayed next to the form element
+	 *
+	 * @param string $label
+	 * @api
+	 */
+	public function setLabel($label) {
+		$this->label = $label;
+	}
+
 
 
 }

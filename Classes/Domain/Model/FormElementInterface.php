@@ -19,39 +19,6 @@ namespace TYPO3\Form\Domain\Model;
 interface FormElementInterface extends RenderableInterface {
 
 	/**
-	 * Sets this Form element's parent page
-	 *
-	 * @param \TYPO3\Form\Domain\Model\Page $parentPage The Form element's parent page
-	 * @return void
-	 * @internal
-	 */
-	public function setParentPage(Page $parentPage = NULL);
-
-	/**
-	 * Get the Form element's parent page
-	 *
-	 * @return \TYPO3\Form\Domain\Model\Page The Form element's parent page
-	 * @internal
-	 */
-	public function getParentPage();
-
-	/**
-	 * Get the label which shall be displayed next to the form element
-	 *
-	 * @return string
-	 * @api
-	 */
-	public function getLabel();
-
-	/**
-	 * Set the label which shall be displayed next to the form element
-	 *
-	 * @param string $label
-	 * @api
-	 */
-	public function setLabel($label);
-
-	/**
 	 * Get the default value with which the Form Element should be initialized
 	 * during display.
 	 *

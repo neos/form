@@ -11,8 +11,8 @@ use TYPO3\Form\Domain\Model\Page;
 
 /**
  * Test for Page Domain Model
- * @covers \TYPO3\Form\Domain\Model\Page
- * @covers \TYPO3\Form\Domain\Model\AbstractFormElement
+ * @covers \TYPO3\Form\Domain\Model\Page<extended>
+ * @covers \TYPO3\Form\Domain\Model\AbstractFormElement<extended>
  */
 class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -74,7 +74,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$element = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
 		$page->addElement($element);
 		$this->assertSame(array($element), $page->getElements());
-		$this->assertSame($page, $element->getParentPage());
+		$this->assertSame($page, $element->getParentRenderable());
 	}
 
 	/**
@@ -206,7 +206,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$this->assertSame(array(), $page1->getElements());
 		$this->assertNull($formDefinition->getElementByIdentifier('myElement'));
 
-		$this->assertNull($element1->getParentPage());
+		$this->assertNull($element1->getParentRenderable());
 	}
 
 	/**

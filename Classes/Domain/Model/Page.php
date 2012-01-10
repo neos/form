@@ -17,85 +17,40 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * Please see {@link FormDefinition} for an in-depth explanation.
  */
-class Page extends AbstractRenderable {
+class Page extends AbstractCompositeRenderable {
+
 
 	/**
-	 * The identifier
+	 * We know that the parent renderable *must be* a form definition in this case
+	 * (as we enforce it in setParentRenderable)
 	 *
-	 * @var string
+	 * @var FormDefinition
 	 * @internal
 	 */
-	protected $identifier;
-
-	/**
-	 * The parent form definition
-	 *
-	 * @var \TYPO3\Form\Domain\Model\FormDefinition
-	 * @internal
-	 */
-	protected $parentForm;
-
-	/**
-	 * The elements of this form, numerically indexed
-	 *
-	 * @var array<TYPO3\Form\Domain\Model\FormElementInterface>
-	 * @internal
-	 */
-	protected $elements = array();
-
-	/**
-	 * Position of page in form (0-based)
-	 *
-	 * @var integer
-	 * @internal
-	 */
-	protected $index = 0;
-
-	protected $label;
+	protected $parentRenderable;
 
 	/**
 	 * Constructor. Needs this Page's identifier
 	 *
 	 * @param string $identifier The Page's identifier
+	 * @param string $type The Page's type
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
 	 * @api
 	 */
-	public function __construct($identifier) {
+	public function __construct($identifier, $type = 'TYPO3.Form:Page') {
 		if (!is_string($identifier) || strlen($identifier) === 0) {
 			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
 		}
 
 		$this->identifier = $identifier;
+		$this->type = $type;
 	}
 
-	/**
-	 * Get the Page's identifier
-	 *
-	 * @return string The Page's identifier
-	 * @api
-	 */
-	public function getIdentifier() {
-		return $this->identifier;
-	}
-
-	/**
-	 * Get the FormDefinition this page belongs to
-	 *
-	 * @return \TYPO3\Form\Domain\Model\FormDefinition The Page's parent form definition
-	 * @internal
-	 */
-	public function getParentForm() {
-		return $this->parentForm;
-	}
-
-	/**
-	 * Set the FormDefinition this page belongs to
-	 *
-	 * @param \TYPO3\Form\Domain\Model\FormDefinition $parentForm The Page's parent form definition
-	 * @internal
-	 */
-	public function setParentForm(FormDefinition $parentForm = NULL) {
-		$this->parentForm = $parentForm;
+	public function setParentRenderable(CompositeRenderableInterface $parentRenderable) {
+		if (!($parentRenderable instanceof FormDefinition)) {
+			throw new \Exception('TODO: parent renderable ....');
+		}
+		parent::setParentRenderable($parentRenderable);
 	}
 
 	/**
@@ -105,7 +60,7 @@ class Page extends AbstractRenderable {
 	 * @api
 	 */
 	public function getElements() {
-		return $this->elements;
+		return $this->renderables;
 	}
 
 	/**
@@ -116,15 +71,7 @@ class Page extends AbstractRenderable {
 	 * @api
 	 */
 	public function addElement(FormElementInterface $formElement) {
-		if ($formElement->getParentPage() !== NULL) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The FormElement with identifier "%s" is already added to another Page (page identifier: "%s").', $formElement->getIdentifier(), $formElement->getParentPage()->getIdentifier()), 1325665144);
-		}
-
-		$this->elements[] = $formElement;
-		$formElement->setParentPage($this);
-		if ($this->parentForm !== NULL) {
-			$this->parentForm->addElementToElementsByIdentifierCache($formElement);
-		}
+		$this->addRenderable($formElement);
 	}
 
 	/**
@@ -135,10 +82,10 @@ class Page extends AbstractRenderable {
 	 * @throws \Exception
 	 */
 	public function createElement($identifier, $typeName) {
-		if ($this->parentForm === NULL) {
+		if ($this->parentRenderable === NULL) {
 			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The page "%s" is not attached to a parent form, thus createElement() cannot be called.', $this->identifier), 1325742259);
 		}
-		$typeDefinition = $this->parentForm->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
+		$typeDefinition = $this->parentRenderable->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
 
 		if (!isset($typeDefinition['implementationClassName'])) {
 			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
@@ -177,14 +124,6 @@ class Page extends AbstractRenderable {
 	}
 
 	/**
-	 * @return string
-	 * @todo document
-	 */
-	public function getType() {
-		return 'TYPO3.Form:Page';
-	}
-
-	/**
 	 * Move FormElement $element before $referenceElement.
 	 *
 	 * Both $element and $referenceElement must be direct descendants of this $page.
@@ -194,19 +133,7 @@ class Page extends AbstractRenderable {
 	 * @api
 	 */
 	public function moveElementBefore(FormElementInterface $elementToMove, FormElementInterface $referenceElement) {
-		if ($elementToMove->getParentPage() !== $referenceElement->getParentPage() || $elementToMove->getParentPage() !== $this) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved elements need to be on the same page.', 1326088365);
-		}
-		$reorderedElements = array();
-		foreach ($this->elements as $element) {
-			if ($element === $elementToMove) continue;
-
-			if ($element === $referenceElement) {
-				$reorderedElements[] = $elementToMove;
-			}
-			$reorderedElements[] = $element;
-		}
-		$this->elements = $reorderedElements;
+		$this->moveRenderableBefore($elementToMove, $referenceElement);
 	}
 
 	/**
@@ -219,19 +146,7 @@ class Page extends AbstractRenderable {
 	 * @api
 	 */
 	public function moveElementAfter(FormElementInterface $elementToMove, FormElementInterface $referenceElement) {
-		if ($elementToMove->getParentPage() !== $referenceElement->getParentPage() || $elementToMove->getParentPage() !== $this) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('Moved elements need to be on the same page.', 1326088369);
-		}
-		$reorderedElements = array();
-		foreach ($this->elements as $element) {
-			if ($element === $elementToMove) continue;
-
-			$reorderedElements[] = $element;
-			if ($element === $referenceElement) {
-				$reorderedElements[] = $elementToMove;
-			}
-		}
-		$this->elements = $reorderedElements;
+		$this->moveRenderableAfter($elementToMove, $referenceElement);
 	}
 
 	/**
@@ -241,51 +156,7 @@ class Page extends AbstractRenderable {
 	 * @api
 	 */
 	public function removeElement(FormElementInterface $elementToRemove) {
-		if ($elementToRemove->getParentPage() !== $this) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('The element to be removed must be part of the given page.', 1326088956);
-		}
-
-		$updatedElements = array();
-		foreach ($this->elements as $element) {
-			if ($element === $elementToRemove) continue;
-
-			$updatedElements[] = $element;
-		}
-		$this->elements = $updatedElements;
-		if ($this->parentForm !== NULL) {
-			$this->parentForm->removeElementFromElementsByIdentifierCache($elementToRemove);
-		}
-		$elementToRemove->setParentPage(NULL);
+		$this->removeRenderable($elementToRemove);
 	}
-
-	/**
-	 * Get the index of the page inside the form.
-	 *
-	 * Only meaningful if this page is attached to a FormDefinition.
-	 *
-	 * @return integer The index of the Page
-	 * @api
-	 */
-	public function getIndex() {
-		return $this->index;
-	}
-
-	/**
-	 * @param integer $index
-	 * @internal
-	 */
-	public function setIndex($index) {
-		$this->index = $index;
-	}
-
-	public function getLabel() {
-		return $this->label;
-	}
-
-	public function setLabel($label) {
-		$this->label = $label;
-	}
-
-
 }
 ?>
