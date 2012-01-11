@@ -53,8 +53,6 @@ abstract class AbstractFormElement extends AbstractRenderable implements FormEle
 		}
 		$this->identifier = $identifier;
 		$this->type = $type;
-
-		$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
 	}
 
 	public function getDefaultValue() {
@@ -66,10 +64,16 @@ abstract class AbstractFormElement extends AbstractRenderable implements FormEle
 	}
 
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
+		if ($this->conjunctionValidator === NULL) {
+			$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
+		}
 		$this->conjunctionValidator->addValidator($validator);
 	}
 
 	public function getValidator() {
+		if ($this->conjunctionValidator === NULL) {
+			$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
+		}
 		return $this->conjunctionValidator;
 	}
 

@@ -371,18 +371,22 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = new FormDefinition('foo1');
 		$page1 = new Page('bar1');
 		$page2 = new Page('bar2');
+		$page3 = new Page('bar3');
 		$formDefinition->addPage($page1);
 		$formDefinition->addPage($page2);
+		$formDefinition->addPage($page3);
 
 		$this->assertSame(0, $page1->getIndex());
 		$this->assertSame(1, $page2->getIndex());
-		$this->assertSame(array($page1, $page2), $formDefinition->getPages());
+		$this->assertSame(2, $page3->getIndex());
+		$this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
 
 		$formDefinition->movePageAfter($page1, $page2);
 
 		$this->assertSame(1, $page1->getIndex());
 		$this->assertSame(0, $page2->getIndex());
-		$this->assertSame(array($page2, $page1), $formDefinition->getPages());
+		$this->assertSame(2, $page3->getIndex());
+		$this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
 	}
 
 	/**

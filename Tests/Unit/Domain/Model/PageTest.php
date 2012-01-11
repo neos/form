@@ -27,6 +27,22 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$this->assertSame('bar', $page->getIdentifier());
 	}
 
+	/**
+	 * @test
+	 */
+	public function defaultTypeIsCorrect() {
+		$page = new Page('foo');
+		$this->assertSame('TYPO3.Form:Page', $page->getType());
+	}
+
+	/**
+	 * @test
+	 */
+	public function typeCanBeOverridden() {
+		$page = new Page('foo', 'TYPO3.Foo:Bar');
+		$this->assertSame('TYPO3.Foo:Bar', $page->getType());
+	}
+
 	public function invalidIdentifiers() {
 		return array(
 			'Null Identifier' => array(NULL),
