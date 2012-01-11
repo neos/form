@@ -1,18 +1,17 @@
 <?php
-
-namespace TYPO3\Form\Domain\Renderer;
-
+namespace TYPO3\Form\FormElements;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
  *                                                                        *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
- *
+ * A generic form element
  */
-interface RendererInterface {
-	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext);
-	public function renderRenderable(\TYPO3\Form\Domain\Model\RootRenderableInterface $renderable);
+class GenericFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
+
 }
 ?>

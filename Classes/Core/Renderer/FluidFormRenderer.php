@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Renderer;
+namespace TYPO3\Form\Core\Renderer;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -19,7 +19,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		$this->controllerContext = $controllerContext;
 	}
 
-	public function renderRenderable(\TYPO3\Form\Domain\Model\RootRenderableInterface $renderable) {
+	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
 		$renderableType = $renderable->getType();
 
 		if ($renderable->getRendererClassName() !== NULL && $renderable->getRendererClassName() !== get_class($this)) {

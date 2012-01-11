@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\FormElements;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -17,7 +17,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * Please see {@link FormDefinition} for an in-depth explanation.
  */
-class Section extends AbstractSection implements FormElementInterface {
+class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\Form\Core\Model\FormElementInterface {
 
 	public function getDefaultValue() {
 		return NULL;

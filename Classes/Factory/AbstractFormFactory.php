@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Factory;
+namespace TYPO3\Form\Factory;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -10,7 +10,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
  * Base class for custom *Form Factories*. A Form Factory is responsible for building
- * a {@link TYPO3\Form\Domain\Model\FormDefinition}.
+ * a {@link TYPO3\Form\Core\Model\FormDefinition}.
  *
  * **This class is meant to be subclassed by developers.**
  *
@@ -29,7 +29,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * class MyFooBarFactory extends AbstractFormFactory {
  *   public function build(array $configuration, $presetName) {
  *     $formDefaults = $this->getPresetConfiguration($presetName);
- *     $formDefinition = new \TYPO3\Form\Domain\Model\FormDefinition('nameOfMyForm', $formDefaults);
+ *     $formDefinition = new \TYPO3\Form\Core\Model\FormDefinition('nameOfMyForm', $formDefaults);
  *
  *     // now, you should call methods on $formDefinition to add pages and form elements
  *
@@ -57,7 +57,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *       Default:
  *         formElementTypes:
  *           # ... definition of form element types,
- *           #     see {@link TYPO3\Form\Domain\Model\FormDefinition}
+ *           #     see {@link TYPO3\Form\Core\Model\FormDefinition}
  *           #     for the internal structure inside here
  *         finisherTypes:
  *           # definition of the available finishers inside this preset

@@ -1,18 +1,18 @@
 <?php
-namespace TYPO3\Form\Domain\Model\Finisher;
+namespace TYPO3\Form\Finishers;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
  *                                                                        *
  *                                                                        */
 
-use \TYPO3\Form\Domain\Model\FormRuntime;
+use TYPO3\Form\Core\Runtime\FormRuntime;
 
 /**
  * Finisher that can be attached to a form in order to be invoked
  * as soon as the complete form is submitted
  */
-class RedirectFinisher implements FinisherInterface {
+class RedirectFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 
 	/**
 	 * @var array
@@ -22,7 +22,7 @@ class RedirectFinisher implements FinisherInterface {
 	/**
 	 * Executes the finisher for the
 	 *
-	 * @param \TYPO3\Form\Domain\Model\FormRuntime $formRuntime The Form runtime that invokes this finisher
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime The Form runtime that invokes this finisher
 	 * @return boolean TRUE by default, FALSE if invocation chain should be canceled
 	 * @internal
 	 */

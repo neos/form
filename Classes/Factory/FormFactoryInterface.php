@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Factory;
+namespace TYPO3\Form\Factory;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -7,7 +7,7 @@ namespace TYPO3\Form\Domain\Factory;
  *                                                                        */
 
 /**
- * A Form Factory is responsible for building a {@link TYPO3\Form\Domain\Model\FormDefinition}.
+ * A Form Factory is responsible for building a {@link TYPO3\Form\Core\Model\FormDefinition}.
  * **Instead of implementing this interface, subclassing {@link AbstractFormFactory} is more appropriate
  * in most cases**.
  *
@@ -33,7 +33,7 @@ interface FormFactoryInterface {
 	 *
 	 * @param array $configuration factory-specific configuration array
 	 * @param string $presetName The name of the "Form Preset" to use; it is factory-specific to implement this.
-	 * @return \TYPO3\Form\Domain\Model\FormDefinition a newly built form definition
+	 * @return \TYPO3\Form\Core\Model\FormDefinition a newly built form definition
 	 * @api
 	 */
 	public function build(array $configuration, $presetName);

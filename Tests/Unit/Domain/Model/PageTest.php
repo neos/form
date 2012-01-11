@@ -6,13 +6,13 @@ namespace TYPO3\Form\Tests\Unit\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Form\Domain\Model\FormDefinition;
-use TYPO3\Form\Domain\Model\Page;
+use TYPO3\Form\Core\Model\FormDefinition;
+use TYPO3\Form\Core\Model\Page;
 
 /**
  * Test for Page Domain Model
- * @covers \TYPO3\Form\Domain\Model\Page<extended>
- * @covers \TYPO3\Form\Domain\Model\AbstractFormElement<extended>
+ * @covers \TYPO3\Form\Core\Model\Page<extended>
+ * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
  */
 class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -73,7 +73,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 */
 	public function aFormElementCanOnlyBeAttachedToASinglePage() {
-		$element = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
 
 		$page1 = new Page('bar1');
 		$page2 = new Page('bar2');
@@ -87,7 +87,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function addElementAddsElementAndSetsBackReferenceToPage() {
 		$page = new Page('bar');
-		$element = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
 		$page->addElement($element);
 		$this->assertSame(array($element), $page->getElements());
 		$this->assertSame($page, $element->getParentRenderable());
@@ -102,7 +102,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$element = $page->createElement('myElement', 'TYPO3.Form:MyElementType');
 
 		$this->assertSame('myElement', $element->getIdentifier());
-		$this->assertInstanceOf('TYPO3\Form\Domain\Model\GenericFormElement', $element);
+		$this->assertInstanceOf('TYPO3\Form\FormElements\GenericFormElement', $element);
 		$this->assertSame('TYPO3.Form:MyElementType', $element->getType());
 		$this->assertSame(array($element), $page->getElements());
 	}
@@ -232,7 +232,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function removeElementThrowsExceptionIfElementIsNotOnCurrentPage() {
 		$formDefinition = $this->getDummyFormDefinition();
 		$page1 = $formDefinition->createPage('myPage1');
-		$element1 = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element1 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
 
 		$page1->removeElement($element1);
 	}
@@ -242,13 +242,13 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
+					'implementationClassName' => 'TYPO3\Form\Core\Model\Page'
 				),
 				'TYPO3.Form:MyElementType' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement'
+					'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement'
 				),
 				'TYPO3.Form:MyElementTypeWithAdditionalProperties' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement',
+					'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement',
 					'label' => 'my label',
 					'defaultValue' => 'This is the default value',
 					'properties' => array(
@@ -263,7 +263,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 				),
 				'TYPO3.Form:MyElementTypeWithoutImplementationClassName' => array(),
 				'TYPO3.Form:MyElementTypeWithUnknownProperties' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement',
+					'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement',
 					'unknownProperty' => 'foo'
 				),
 

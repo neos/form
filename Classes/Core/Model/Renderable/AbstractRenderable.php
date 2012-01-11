@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model\Renderable;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -112,7 +112,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 
 	public function registerInFormIfPossible() {
 		$rootRenderable = $this->parentRenderable;
-		while ($rootRenderable !== NULL && !($rootRenderable instanceof FormDefinition)) {
+		while ($rootRenderable !== NULL && !($rootRenderable instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
 			$rootRenderable = $rootRenderable->getParentRenderable();
 		}
 		if ($rootRenderable !== NULL) {
@@ -123,7 +123,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 
 	public function onRemoveFromParentRenderable() {
 		$rootForm = $this->parentRenderable;
-		while ($rootForm !== NULL && !($rootForm instanceof FormDefinition)) {
+		while ($rootForm !== NULL && !($rootForm instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
 			$rootForm = $rootForm->getParentRenderable();
 		}
 		if ($rootForm !== NULL) {

@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -23,7 +23,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * Still, it is quite rare that you need to subclass this class; often
  * you can just use the {@link GenericFormElement} and replace some templates.
  */
-abstract class AbstractFormElement extends AbstractRenderable implements FormElementInterface {
+abstract class AbstractFormElement extends Renderable\AbstractRenderable implements FormElementInterface {
 
 	/**
 	 * @var mixed

@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Runtime;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -38,7 +38,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * @api
  */
-class FormRuntime implements RootRenderableInterface, \ArrayAccess {
+class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface, \ArrayAccess {
 
 	/**
 	 * @var FormDefinition
@@ -77,13 +77,13 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 	protected $flashMessageContainer;
 
 	/**
-	 * @var \TYPO3\Form\Domain\Model\Page
+	 * @var \TYPO3\Form\Core\Model\Page
 	 * @internal
 	 */
 	protected $currentPage = NULL;
 
 	/**
-	 * @var \TYPO3\Form\Domain\Model\FormState
+	 * @var \TYPO3\Form\Core\Runtime\FormState
 	 * @internal
 	 */
 	protected $formState;
@@ -103,12 +103,12 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 	protected $propertyMapper;
 
 	/**
-	 * @param FormDefinition $formDefinition
+	 * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
 	 * @internal
 	 */
-	public function __construct(FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request) {
+	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request) {
 		$this->formDefinition = $formDefinition;
 		$this->request = $request;
 	}
@@ -167,7 +167,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 		$this->updateFormState();
 		$controllerContext = $this->getControllerContext();
 		$renderer = new $rendererClassName();
-		if (!($renderer instanceof \TYPO3\Form\Domain\Renderer\RendererInterface)) {
+		if (!($renderer instanceof \TYPO3\Form\Core\Renderer\RendererInterface)) {
 			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer "%s" des not implement RendererInterface', $rendererClassName), 1326096024);
 		}
 
@@ -249,7 +249,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 	/**
 	 * Returns the currently selected page
 	 *
-	 * @return \TYPO3\Form\Domain\Model\Page
+	 * @return \TYPO3\Form\Core\Model\Page
 	 * @api
 	 */
 	public function getCurrentPage() {
@@ -259,7 +259,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 	/**
 	 * Returns the previous page of the currently selected one or NULL if there is no previous page
 	 *
-	 * @return \TYPO3\Form\Domain\Model\Page
+	 * @return \TYPO3\Form\Core\Model\Page
 	 * @api
 	 */
 	public function getPreviousPage() {
@@ -270,7 +270,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess {
 	/**
 	 * Returns the next page of the currently selected one or NULL if there is no next page
 	 *
-	 * @return \TYPO3\Form\Domain\Model\Page
+	 * @return \TYPO3\Form\Core\Model\Page
 	 * @api
 	 */
 	public function getNextPage() {

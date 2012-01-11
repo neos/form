@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model\Renderable;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -18,7 +18,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	/**
 	 * array of child renderables
 	 *
-	 * @var array<TYPO3\Form\Domain\Model\RenderableInterface>
+	 * @var array<TYPO3\Form\Core\Model\RenderableInterface>
 	 */
 	protected $renderables = array();
 

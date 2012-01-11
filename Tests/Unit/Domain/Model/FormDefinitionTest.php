@@ -6,13 +6,13 @@ namespace TYPO3\Form\Tests\Unit\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Form\Domain\Model\FormDefinition;
-use TYPO3\Form\Domain\Model\Page;
+use TYPO3\Form\Core\Model\FormDefinition;
+use TYPO3\Form\Core\Model\Page;
 
 /**
  * Test for FormDefinition Domain Model
- * @covers \TYPO3\Form\Domain\Model\FormDefinition<extended>
- * @covers \TYPO3\Form\Domain\Model\Page<extended>
+ * @covers \TYPO3\Form\Core\Model\FormDefinition<extended>
+ * @covers \TYPO3\Form\Core\Model\Page<extended>
  */
 class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -165,7 +165,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$mockRequest = $this->getMockBuilder('TYPO3\FLOW3\MVC\Web\Request')->getMock();
 
 		$form = $formDefinition->bind($mockRequest);
-		$this->assertInstanceOf('TYPO3\Form\Domain\Model\FormRuntime', $form);
+		$this->assertInstanceOf('TYPO3\Form\Core\Runtime\FormRuntime', $form);
 	}
 
 	/**
@@ -223,7 +223,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
+					'implementationClassName' => 'TYPO3\Form\Core\Model\Page'
 				)
 			)
 		));
@@ -241,7 +241,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
 					'label' => 'My Label'
 				)
 			)
@@ -258,7 +258,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
 					'rendererClassName' => 'MyRenderer'
 				)
 			)
@@ -275,7 +275,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
 					'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
 				)
 			)
@@ -293,7 +293,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
-					'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+					'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
 					'label' => 'My Label',
 					'unknownProperty' => 'this is an unknown property'
 				)
@@ -450,10 +450,10 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @param string $identifier
-	 * @return \TYPO3\Form\Domain\Model\FormElementInterface
+	 * @return \TYPO3\Form\Core\Model\FormElementInterface
 	 */
 	protected function getMockFormElement($identifier) {
-		$mockFormElement = $this->getMockBuilder('TYPO3\Form\Domain\Model\AbstractFormElement')->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
+		$mockFormElement = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
 		$mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
 		return $mockFormElement;

@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -16,7 +16,7 @@ namespace TYPO3\Form\Domain\Model;
  * Often, you should rather subclass {@link AbstractFormElement} instead of
  * implementing this interface.
  */
-interface FormElementInterface extends RenderableInterface {
+interface FormElementInterface extends Renderable\RenderableInterface {
 
 	/**
 	 * Get the default value with which the Form Element should be initialized

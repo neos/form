@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -7,7 +7,6 @@ namespace TYPO3\Form\Domain\Model;
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
-use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
 
 /**
  * This class encapsulates a complete *Form Definition*, with all of its pages,
@@ -80,10 +79,10 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  * $formDefaults = array(
  *   'formElementTypes' => array(
  *     'TYPO3.Form:Page' => array(
- *       'implementationClassName' => 'TYPO3\Form\Domain\Model\Page'
+ *       'implementationClassName' => 'TYPO3\Form\Core\Model\Page'
  *     ),
  *     'TYPO3.Form:Textfield' => array(
- *       'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement'
+ *       'implementationClassName' => 'TYPO3\Form\Core\Model\GenericFormElement'
  *     )
  *   )
  * )
@@ -98,11 +97,11 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  * $formDefaults = array(
  *   'formElementTypes' => array(
  *     'TYPO3.Form:Page' => array(
- *       'implementationClassName' => 'TYPO3\Form\Domain\Model\Page',
+ *       'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
  *       'label' => 'this is the label of the page if nothing is specified'
  *     ),
  *     'TYPO3.Form:Textfield' => array(
- *       'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement',
+ *       'implementationClassName' => 'TYPO3\Form\Core\Model\GenericFormElement',
  *       'label' = >'Default Label',
  *       'defaultValue' => 'Default form element value',
  *       'properties' => array(
@@ -125,7 +124,7 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  * $formDefaults = array(
  *   'formElementTypes' => array(
  *     'TYPO3.Form:Base' => array(
- *       'implementationClassName' => 'TYPO3\Form\Domain\Model\GenericFormElement',
+ *       'implementationClassName' => 'TYPO3\Form\Core\Model\GenericFormElement',
  *       'label' = >'Default Label'
  *     ),
  *     'TYPO3.Form:Textfield' => array(
@@ -227,12 +226,12 @@ use TYPO3\Form\Domain\Model\Finisher\FinisherInterface;
  *
  * Refer to the {@link FormRuntime} API doc for further information.
  */
-class FormDefinition extends AbstractCompositeRenderable {
+class FormDefinition extends Renderable\AbstractCompositeRenderable {
 
 	/**
 	 * The finishers for this form
 	 *
-	 * @var array<TYPO3\Form\Domain\Model\Finisher\FinisherInterface>
+	 * @var array<TYPO3\Form\Core\Model\FinisherInterface>
 	 * @internal
 	 */
 	protected $finishers = array();
@@ -241,7 +240,7 @@ class FormDefinition extends AbstractCompositeRenderable {
 	 * Property Mapping Rules, indexed by element identifier
 	 *
 	 * @todo should this happen on page-level?
-	 * @var array<TYPO3\Form\Domain\Model\MappingRule>
+	 * @var array<TYPO3\Form\Core\Model\MappingRule>
 	 * @internal
 	 */
 	protected $mappingRules = array();
@@ -250,7 +249,7 @@ class FormDefinition extends AbstractCompositeRenderable {
 	 * Contains all elements of the form, indexed by identifier.
 	 * Is used as internal cache as we need this really often.
 	 *
-	 * @var array <TYPO3\Form\Domain\Model\FormElementInterface>
+	 * @var array <TYPO3\Form\Core\Model\FormElementInterface>
 	 * @internal
 	 */
 	protected $elementsByIdentifier = array();
@@ -306,7 +305,7 @@ class FormDefinition extends AbstractCompositeRenderable {
 	 *
 	 * @param string $identifier Identifier of the new page
 	 * @param string $typeName Type of the new page
-	 * @return \TYPO3\Form\Domain\Model\Page the newly created page
+	 * @return \TYPO3\Form\Core\Model\Page the newly created page
 	 * @throws TYPO3\Form\Exception\TypeDefinitionNotValidException
 	 * @api
 	 */
@@ -356,7 +355,7 @@ class FormDefinition extends AbstractCompositeRenderable {
 	/**
 	 * Get the Form's pages
 	 *
-	 * @return array<TYPO3\Form\Domain\Model\Page> The Form's pages in the correct order
+	 * @return array<TYPO3\Form\Core\Model\Page> The Form's pages in the correct order
 	 * @api
 	 */
 	public function getPages() {
@@ -379,7 +378,7 @@ class FormDefinition extends AbstractCompositeRenderable {
 	/**
 	 * Adds the specified finisher to this form
 	 *
-	 * @param \TYPO3\Form\Domain\Model\Finisher\FinisherInterface $finisher
+	 * @param \TYPO3\Form\Core\Model\FinisherInterface $finisher
 	 * @return void
 	 * @api
 	 */
@@ -390,7 +389,7 @@ class FormDefinition extends AbstractCompositeRenderable {
 	/**
 	 * Gets all finishers of this form
 	 *
-	 * @return array<\TYPO3\Form\Domain\Model\Finisher\FinisherInterface>
+	 * @return array<\TYPO3\Form\Core\Model\FinisherInterface>
 	 * @api
 	 */
 	public function getFinishers() {
@@ -400,12 +399,12 @@ class FormDefinition extends AbstractCompositeRenderable {
 	/**
 	 * Add an element to the ElementsByIdentifier Cache.
 	 *
-	 * @param FormElementInterface $element
+	 * @param Renderable\RenderableInterface $renderable
 	 * @throws TYPO3\Form\Exception\DuplicateFormElementException
 	 * @internal
 	 * @todo rename to "registerElementInForm"
 	 */
-	public function registerRenderable(RenderableInterface $renderable) {
+	public function registerRenderable(Renderable\RenderableInterface $renderable) {
 		if ($renderable instanceof FormElementInterface) {
 			if (isset($this->elementsByIdentifier[$renderable->getIdentifier()])) {
 				throw new \TYPO3\Form\Exception\DuplicateFormElementException(sprintf('A form element with identifier "%s" is already part of the form.', $renderable->getIdentifier()), 1325663761);
@@ -417,10 +416,10 @@ class FormDefinition extends AbstractCompositeRenderable {
 	/**
 	 * Remove an element from the ElementsByIdentifier cache
 	 *
-	 * @param FormElementInterface $element
+	 * @param Renderable\RenderableInterface $renderable
 	 * @internal
 	 */
-	public function unregisterRenderable(RenderableInterface $renderable) {
+	public function unregisterRenderable(Renderable\RenderableInterface $renderable) {
 		if ($renderable instanceof FormElementInterface) {
 			unset($this->elementsByIdentifier[$renderable->getIdentifier()]);
 		}
@@ -476,11 +475,11 @@ class FormDefinition extends AbstractCompositeRenderable {
 	 * a new "instance" of the Form.
 	 *
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
-	 * @return \TYPO3\Form\Domain\Model\FormRuntime
+	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
 	 * @api
 	 */
 	public function bind(\TYPO3\FLOW3\MVC\Web\Request $request) {
-		return new FormRuntime($this, $request);
+		return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request);
 	}
 
 	/**

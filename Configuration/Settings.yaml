@@ -13,25 +13,25 @@ TYPO3:
 
           'TYPO3.Form:Form':
             superTypes: ['TYPO3.Form:Base']
-            rendererClassName: 'TYPO3\Form\Domain\Renderer\FluidFormRenderer'
+            rendererClassName: 'TYPO3\Form\Core\Renderer\FluidFormRenderer'
             renderingOptions:
               renderableNameInTemplate: 'form'
 
           'TYPO3.Form:Page':
             superTypes: ['TYPO3.Form:Base']
-            implementationClassName: 'TYPO3\Form\Domain\Model\Page'
+            implementationClassName: 'TYPO3\Form\Core\Model\Page'
             renderingOptions:
               renderableNameInTemplate: 'page'
 
           'TYPO3.Form:FormElement':
             superTypes: ['TYPO3.Form:Base']
-            implementationClassName: 'TYPO3\Form\Domain\Model\GenericFormElement'
+            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
             renderingOptions:
               renderableNameInTemplate: 'element'
 
           'TYPO3.Form:Section':
             superTypes: ['TYPO3.Form:FormElement']
-            implementationClassName: 'TYPO3\Form\Domain\Model\Section'
+            implementationClassName: 'TYPO3\Form\FormElements\Section'
             renderingOptions:
               renderableNameInTemplate: 'section'
 
@@ -57,7 +57,7 @@ TYPO3:
 #                  dateFormat: 'Y-m-d'
         finisherTypes:
           'TYPO3.Form:Redirect':
-            implementationClassName: 'TYPO3\Form\Domain\Model\Finisher\RedirectFinisher'
+            implementationClassName: 'TYPO3\Form\Finishers\RedirectFinisher'
             availableOptions:
               sender:
                 type: 'string'

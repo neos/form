@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -17,7 +17,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * Please see {@link FormDefinition} for an in-depth explanation.
  */
-abstract class AbstractSection extends AbstractCompositeRenderable {
+abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 
 	/**
 	 * Constructor. Needs this Section's identifier abd type.

@@ -10,7 +10,7 @@ use TYPO3\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
- * @covers \TYPO3\Form\Domain\Factory\AbstractFormFactory<extended>
+ * @covers \TYPO3\Form\Factory\AbstractFormFactory<extended>
  */
 class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -117,10 +117,10 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
-	 * @return \TYPO3\Form\Domain\Factory\AbstractFormFactory
+	 * @return \TYPO3\Form\Factory\AbstractFormFactory
 	 */
 	protected function getAbstractFormFactory() {
-		return $this->getAccessibleMock('TYPO3\Form\Domain\Factory\AbstractFormFactory', array('build'));
+		return $this->getAccessibleMock('TYPO3\Form\Factory\AbstractFormFactory', array('build'));
 	}
 }
 ?>

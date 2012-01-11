@@ -14,10 +14,10 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class RenderRenderableViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
-	 * @param \TYPO3\Form\Domain\Model\RenderableInterface $renderable
+	 * @param \TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable
 	 * @return type
 	 */
-	public function render(\TYPO3\Form\Domain\Model\RenderableInterface $renderable) {
+	public function render(\TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable) {
 		return $this->viewHelperVariableContainer->getView()->renderRenderable($renderable);
 	}
 }

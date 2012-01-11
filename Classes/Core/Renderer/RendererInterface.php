@@ -1,6 +1,7 @@
 <?php
 
-namespace TYPO3\Form\Domain\Renderer;
+namespace TYPO3\Form\Core\Renderer;
+
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -10,11 +11,8 @@ namespace TYPO3\Form\Domain\Renderer;
 /**
  *
  */
-abstract class AbstractElementRenderer implements RendererInterface {
-	protected $controllerContext;
-
-	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {
-		$this->controllerContext = $controllerContext;
-	}
+interface RendererInterface {
+	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext);
+	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable);
 }
 ?>

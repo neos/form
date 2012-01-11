@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Domain\Model;
+namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
@@ -30,7 +30,7 @@ class Page extends AbstractSection {
 		parent::__construct($identifier, $type);
 	}
 
-	public function setParentRenderable(CompositeRenderableInterface $parentRenderable) {
+	public function setParentRenderable(Renderable\CompositeRenderableInterface $parentRenderable) {
 		if (!($parentRenderable instanceof FormDefinition)) {
 			throw new \Exception('TODO: parent renderable ....');
 		}

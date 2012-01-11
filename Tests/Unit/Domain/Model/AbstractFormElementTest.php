@@ -6,12 +6,12 @@ namespace TYPO3\Form\Tests\Unit\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Form\Domain\Model\FormDefinition;
-use TYPO3\Form\Domain\Model\Page;
+use TYPO3\Form\Core\Model\FormDefinition;
+use TYPO3\Form\Core\Model\Page;
 
 /**
  * Test for AbstractFormElement Domain Model
- * @covers \TYPO3\Form\Domain\Model\AbstractFormElement<extended>
+ * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
  */
 class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
@@ -85,10 +85,10 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @param array $constructorArguments
-	 * @return \TYPO3\Form\Domain\Model\AbstractFormElement
+	 * @return \TYPO3\Form\Core\Model\AbstractFormElement
 	 */
 	protected function getFormElement(array $constructorArguments) {
-		return $this->getMock('TYPO3\Form\Domain\Model\AbstractFormElement', array('dummy'), $constructorArguments);
+		return $this->getMock('TYPO3\Form\Core\Model\AbstractFormElement', array('dummy'), $constructorArguments);
 	}
 }
 ?>
