@@ -38,6 +38,11 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 */
 	protected $parentRenderable;
 
+	/**
+	 * The label of this renderable
+	 *
+	 * @var string
+	 */
 	protected $label = '';
 
 	/**
@@ -52,13 +57,15 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 *
 	 * Is only set if a specific renderer should be used for this renderable,
 	 * if it is NULL the caller needs to determine the renderer or take care
-	 * of the renderer itself.
+	 * of the rendering itself.
 	 *
 	 * @var string
 	 */
 	protected $rendererClassName = NULL;
 
 	/**
+	 * The position of this renderable inside the parent renderable.
+	 *
 	 * @var integer
 	 */
 	protected $index = 0;
@@ -110,6 +117,11 @@ abstract class AbstractRenderable implements RenderableInterface {
 		$this->registerInFormIfPossible();
 	}
 
+	/**
+	 * Register this element at the parent form, if there is a connection to the parent form.
+	 *
+	 * @internal
+	 */
 	public function registerInFormIfPossible() {
 		$rootRenderable = $this->parentRenderable;
 		while ($rootRenderable !== NULL && !($rootRenderable instanceof \TYPO3\Form\Core\Model\FormDefinition)) {

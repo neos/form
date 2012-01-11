@@ -9,15 +9,21 @@ namespace TYPO3\Form\Core\Model;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * A Page, being part of a bigger FormDefinition.
+ * A Page, being part of a bigger FormDefinition. It contains numerous FormElements
+ * as children.
  *
  * **This class is not meant to be subclassed by developers.**
  *
- * This class contains multiple FormElements ({@link FormElementInterface}).
+ * A FormDefinition consists of multiple Pages, where only one page is visible
+ * at any given time.
+ *
+ * Most of the API of this object is implemented in {@link AbstractSection},
+ * so make sure to review this class as well.
  *
  * Please see {@link FormDefinition} for an in-depth explanation.
  */
 class Page extends AbstractSection {
+
 	/**
 	 * Constructor. Needs this Page's identifier
 	 *

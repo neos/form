@@ -13,8 +13,8 @@ namespace TYPO3\Form\Core\Model;
  * A *FormElement* is a part of a *Page*, which in turn is part of a FormDefinition.
  * See {@link FormDefinition} for an in-depth explanation.
  *
- * Often, you should rather subclass {@link AbstractFormElement} instead of
- * implementing this interface.
+ * **Often, you should rather subclass {@link AbstractFormElement} instead of
+ * implementing this interface.**
  */
 interface FormElementInterface extends Renderable\RenderableInterface {
 
@@ -37,14 +37,20 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	public function setDefaultValue($defaultValue);
 
 	/**
+	 * Set an element-specific configuration property.
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 * @return void
+	 * @api
 	 */
 	public function setProperty($key, $value);
 
 	/**
+	 * Get all element-specific configuration properties
+	 *
 	 * @return array
+	 * @api
 	 */
 	public function getProperties();
 
@@ -57,6 +63,10 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	 */
 	public function setRenderingOption($key, $value);
 
+	/**
+	 * @internal
+	 * @todo this should be removed maybe!?
+	 */
 	public function getValidator();
 }
 ?>

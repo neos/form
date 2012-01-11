@@ -9,7 +9,13 @@ namespace TYPO3\Form\Core\Model;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * A mapping Rule
+ * A mapping Rule which contains information
+ * for property mapping and validation.
+ *
+ * **This class is not meant to be subclassed by developers.**
+ *
+ * **This class is not yet fully specified; and is also only used internally
+ * in the framework**.
  */
 class MappingRule {
 

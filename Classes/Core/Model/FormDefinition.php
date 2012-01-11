@@ -158,9 +158,9 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * Often, it is not really useful to manually create the $formDefaults array.
  *
  * Most of it comes pre-configured inside the *TYPO3.Form* package's **Settings.yaml**,
- * and the {@link \TYPO3\Form\Domain\Factory\AbstractFormFactory} contains helper methods
+ * and the {@link \TYPO3\Form\Factory\AbstractFormFactory} contains helper methods
  * which return the ready-to-use *$formDefaults*. Please read the documentation
- * on {@link \TYPO3\Form\Domain\Factory\AbstractFormFactory} for some best-practice
+ * on {@link \TYPO3\Form\Factory\AbstractFormFactory} for some best-practice
  * usage examples.
  *
  * Property Mapping and Validation Rules
@@ -195,7 +195,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * In this case, the form elements would be configured to fill *street* and *city*,
  * but the *validator* needs to be attached to the *compound object* *address*,
- * as both parts need to be
+ * as both parts need to be validated together.
  *
  * Connecting FormElements to the output data structure
  * ====================================================
@@ -212,7 +212,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * In order to trigger *rendering* on a FormDefinition,
  * the current {@link \TYPO3\FLOW3\MVC\Web\Request} needs to be bound to the FormDefinition,
- * resulting in a {@link FormRuntime} object which contains the *Runtime State* of the form
+ * resulting in a {@link \TYPO3\Form\Core\Runtime\FormRuntime} object which contains the *Runtime State* of the form
  * (such as the currently inserted values).
  *
  * /---code php
@@ -224,7 +224,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * # entered values into the form, etc.
  * \---
  *
- * Refer to the {@link FormRuntime} API doc for further information.
+ * Refer to the {@link \TYPO3\Form\Core\Runtime\FormRuntime} API doc for further information.
  */
 class FormDefinition extends Renderable\AbstractCompositeRenderable {
 
@@ -281,6 +281,11 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 		}
 	}
 
+	/**
+	 * Initialize the form defaults of the current type
+	 *
+	 * @internal
+	 */
 	protected function initializeFromFormDefaults() {
 		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($this->type);
 		if (isset($typeDefinition['rendererClassName'])) {
@@ -306,7 +311,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @param string $identifier Identifier of the new page
 	 * @param string $typeName Type of the new page
 	 * @return \TYPO3\Form\Core\Model\Page the newly created page
-	 * @throws TYPO3\Form\Exception\TypeDefinitionNotValidException
+	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotValidException
 	 * @api
 	 */
 	public function createPage($identifier, $typeName = 'TYPO3.Form:Page') {
@@ -365,7 +370,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * Get the page with the passed index. The first page has index zero.
 	 *
-	 * If index does not exist, returns NULL
+	 * If page at $index does not exist, returns NULL
 	 *
 	 * @param integer $index
 	 * @return Page the page, or NULL if none found.
@@ -485,7 +490,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * @param type $elementIdentifier
 	 * @todo This might be a property path later on!!
-	 * @todo Doc Comment
+	 * @todo This will be refined in Milestone P1.2 (Validation)
 	 * @return MappingRule
 	 */
 	public function getMappingRule($elementIdentifier) {
@@ -496,8 +501,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	}
 
 	/**
-	 * @return type
-	 * @todo Doc Comment
+	 * Get all mapping rules
+	 *
+	 * @return array<MappingRule>
+	 * @todo This will be refined in Milestone P1.2 (Validation)
 	 */
 	public function getMappingRules() {
 		return $this->mappingRules;

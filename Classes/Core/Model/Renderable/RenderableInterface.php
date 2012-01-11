@@ -7,12 +7,11 @@ namespace TYPO3\Form\Core\Model\Renderable;
  *                                                                        */
 
 /**
- * Base interface which all Form Elements, and also the FormDefinition and Page
- * must adhere to.
+ * Base interface which all Form Parts except the FormDefinition must adhere
+ * to (i.e. all elements which are NOT the root of a Form).
  *
  * **This interface should not be implemented by developers**, it is only
  * used for improving the internal code structure.
- *
  */
 interface RenderableInterface extends RootRenderableInterface {
 
@@ -25,13 +24,18 @@ interface RenderableInterface extends RootRenderableInterface {
 	public function getParentRenderable();
 
 	/**
+	 * Set the new parent renderable. You should not call this directly;
+	 * it is automatically called by addRenderable.
+	 *
+	 * This method should also register itself at the parent form, if possible.
+	 *
 	 * @param CompositeRenderableInterface $renderable
 	 * @internal
 	 */
 	public function setParentRenderable(CompositeRenderableInterface $renderable);
 
 	/**
-	 * Set the index in the parent renderable
+	 * Set the index of this renderable inside the parent renderable
 	 *
 	 * @param integer $index
 	 * @internal
@@ -42,6 +46,7 @@ interface RenderableInterface extends RootRenderableInterface {
 	 * Get the index inside the parent renderable
 	 *
 	 * @return integer
+	 * @api
 	 */
 	public function getIndex();
 

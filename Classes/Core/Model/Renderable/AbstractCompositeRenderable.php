@@ -10,7 +10,7 @@ namespace TYPO3\Form\Core\Model\Renderable;
  * Convenience base class which implements common functionality for most
  * classes which implement CompositeRenderableInterface, i.e. have **child renderable elements**.
  *
- * **This class should not be implemented by developers**, it is only
+ * **This class should not be subclassed by developers**, it is only
  * used for improving the internal code structure.
  */
 abstract class AbstractCompositeRenderable extends AbstractRenderable implements CompositeRenderableInterface {
@@ -19,9 +19,20 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	 * array of child renderables
 	 *
 	 * @var array<TYPO3\Form\Core\Model\RenderableInterface>
+	 * @api
 	 */
 	protected $renderables = array();
 
+	/**
+	 * Add a renderable to the list of child renderables.
+	 *
+	 * This function will be wrapped by the subclasses, f.e. with an "addPage"
+	 * or "addElement" method with the correct type hint.
+	 *
+	 * @param RenderableInterface $renderable
+	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 * @internal
+	 */
 	protected function addRenderable(RenderableInterface $renderable) {
 		if ($renderable->getParentRenderable() !== NULL) {
 			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The renderable with identifier "%s" is already added to another element (element identifier: "%s").', $renderable->getIdentifier(), $renderable->getParentRenderable()->getIdentifier()), 1325665144);
@@ -34,9 +45,12 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	/**
 	 * Move $renderableToMove before $referenceRenderable
 	 *
+	 * This function will be wrapped by the subclasses, f.e. with an "movePageBefore"
+	 * or "moveElementBefore" method with the correct type hint.
+	 *
 	 * @param RenderableInterface $renderableToMove
 	 * @param RenderableInterface $referenceRenderable
-	 * @api
+	 * @internal
 	 */
 	protected function moveRenderableBefore(RenderableInterface $renderableToMove, RenderableInterface $referenceRenderable) {
 		if ($renderableToMove->getParentRenderable() !== $referenceRenderable->getParentRenderable() || $renderableToMove->getParentRenderable() !== $this) {
@@ -63,9 +77,12 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	/**
 	 * Move $renderableToMove after $referenceRenderable
 	 *
+	 * This function will be wrapped by the subclasses, f.e. with an "movePageAfter"
+	 * or "moveElementAfter" method with the correct type hint.
+	 *
 	 * @param RenderableInterface $renderableToMove
 	 * @param RenderableInterface $referenceRenderable
-	 * @api
+	 * @internal
 	 */
 	protected function moveRenderableAfter(RenderableInterface $renderableToMove, RenderableInterface $referenceRenderable) {
 		if ($renderableToMove->getParentRenderable() !== $referenceRenderable->getParentRenderable() || $renderableToMove->getParentRenderable() !== $this) {
@@ -90,6 +107,16 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		$this->renderables = $reorderedRenderables;
 	}
 
+	/**
+	 * Remove a renderable from this renderable.
+	 *
+	 * This function will be wrapped by the subclasses, f.e. with an "removePage"
+	 * or "removeElement" method with the correct type hint.
+	 *
+	 * @param RenderableInterface $renderableToRemove
+	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
+	 * @internal
+	 */
 	protected function removeRenderable(RenderableInterface $renderableToRemove) {
 		if ($renderableToRemove->getParentRenderable() !== $this) {
 			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException('The renderable to be removed must be part of the calling parent renderable.', 1326090127);

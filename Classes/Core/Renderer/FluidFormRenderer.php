@@ -9,9 +9,79 @@ namespace TYPO3\Form\Core\Renderer;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * The renderer for the form
+ * Default form renderer which used *Fluid Templates* to render *Renderables*.
  *
- * @todo greatly expand documentation
+ * **This class is not intended to be subclassed by developers.**
+ *
+ * The Fluid Form Renderer is especially capable of rendering nested renderables
+ * as well, i.e a form with a page, with all FormElements.
+ *
+ * Options
+ * =======
+ *
+ * The FluidFormRenderer uses some rendering options which are of particular
+ * importance, as they determine how the form field is resolved to a path
+ * in the file system.
+ *
+ * All rendering options are retrieved from the renderable which shall be rendered,
+ * using the {@link \TYPO3\Form\Core\Model\Renderable\RenderableInterface::getRenderingOptions()}
+ * method.
+ *
+ * templatePathPattern
+ * -------------------
+ *
+ * File Path which is used to look up the template. Can contain the placeholders
+ * *{@package}* and *{@type}*, which are filled from the *type* of the Renderable.
+ *
+ * Examples of template path patterns:
+ *
+ * - *resource://TYPO3.Form/Private/Templates/MyTemplate.html* <br />
+ *   Path without any placeholders; is directly used as template.
+ * - *resource://{@package}/Privat/Templates/Form/{@type}.html* <br />
+ *   If the current renderable has the namespaced type *TYPO3.Form:FooBar*,
+ *   then this path is *{@package}* from above is replaced with *TYPO3.Form*
+ *   and *{@type}* is replaced with *FooBar*.
+ *
+ * The use of Template Path Patterns together with Form Element Inheritance
+ * is a very powerful way to configure the mapping from Form Element Types
+ * to Fluid Templates.
+ *
+ * layoutPathPattern
+ * -----------------
+ *
+ * This pattern is used to resolve the *layout* which is referenced inside a
+ * template. The same constraints as above apply, again *{@package}* and *{@type}*
+ * are replaced.
+ *
+ * renderableNameInTemplate
+ * ------------------------
+ *
+ * This is a mostly-internal setting which controls the name under which the current
+ * renderable is made available inside the template. For example, it controls that
+ * inside the template of a "Page", the Page object is available using the variable
+ * *page*.
+ *
+ * Rendering Child Renderables
+ * ===========================
+ *
+ * If a renderable wants to render child renderables, inside its template,
+ * it can do that using the <code><form:renderable></code> ViewHelper.
+ *
+ * A template example from Page shall demonstrate this:
+ *
+ * <pre>
+ * {namespace form=TYPO3\Form\ViewHelpers}
+ * <f:for each="{page.elements}" as="element">
+ *   <form:renderRenderable renderable="{element}" />
+ * </f:for>
+ * </pre>
+ *
+ * Rendering PHP Based Child Renderables
+ * =====================================
+ *
+ * If a child renderable has a *rendererClassName* set (i.e. {@link \TYPO3\Form\Core\Model\FormElementInterface::getRendererClassName()}
+ * returns a non-NULL string), this renderer is automatically instanciated
+ * and the rendering for this element is delegated to this Renderer.
  */
 class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements RendererInterface {
 
@@ -69,6 +139,18 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		return $output;
 	}
 
+	/**
+	 * Get full template path and filename for the given $renderableType.
+	 *
+	 * Reads the $renderingOptions['templatePathPattern'], replacing {@package} and {@type}
+	 * from the given $renderableType.
+	 *
+	 * @param string $renderableType
+	 * @param array $renderingOptions
+	 * @return string the full path to the template which shall be used.
+	 * @throws \TYPO3\Form\Exception\RenderingException
+	 * @internal
+	 */
 	protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions) {
 		if (!isset($renderingOptions['templatePathPattern'])) {
 			var_dump($renderingOptions);
@@ -82,6 +164,18 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		));
 	}
 
+	/**
+	 * Get full layout path and filename for the given $renderableType.
+	 *
+	 * Reads the $renderingOptions['layoutPathPattern'], replacing {@package} and {@type}
+	 * from the given $renderableType.
+	 *
+	 * @param string $renderableType
+	 * @param array $renderingOptions
+	 * @return string the full path to the layout which shall be used.
+	 * @throws \TYPO3\Form\Exception\RenderingException
+	 * @internal
+	 */
 	protected function getPathAndFilenameForRenderableLayout($renderableType, array $renderingOptions) {
 		if (!isset($renderingOptions['layoutPathPattern'])) {
 			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "layoutPathPattern" defined.', $renderableType), 1326094161);
@@ -94,8 +188,17 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		));
 	}
 
-
-
+	/**
+	 * Get the parsed renderable for $renderablePathAndFilename.
+	 *
+	 * Internally, uses the templateCompiler automatically.
+	 *
+	 * @param string $renderableType
+	 * @param string $renderablePathAndFilename
+	 * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
+	 * @throws \Exception
+	 * @internal
+	 */
 	protected function getParsedRenderable($renderableType, $renderablePathAndFilename) {
 		if (!file_exists($renderablePathAndFilename)) {
 			throw new \Exception('TODO (fix exception message): Path ' . $renderablePathAndFilename . ' not found');

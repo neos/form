@@ -17,11 +17,14 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * A *FormElement* is a part of a *Page*, which in turn is part of a FormDefinition.
  * See {@link FormDefinition} for an in-depth explanation.
  *
- * Often, you should rather subclass this class instead of directly
- * implementing {@link FormElementInterface}.
+ * Subclassing this class is a good starting-point for implementing custom PHP-based
+ * Form Elements.
+ *
+ * Most of the functionality and API is implemented in {@link \TYPO3\Form\Core\Model\Renderable\AbstractRenderable}, so
+ * make sure to check out this class as well.
  *
  * Still, it is quite rare that you need to subclass this class; often
- * you can just use the {@link GenericFormElement} and replace some templates.
+ * you can just use the {@link \TYPO3\Form\FormElements\GenericFormElement} and replace some templates.
  */
 abstract class AbstractFormElement extends Renderable\AbstractRenderable implements FormElementInterface {
 
@@ -63,6 +66,10 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		$this->defaultValue = $defaultValue;
 	}
 
+	/**
+	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
+	 * @todo this method might become part of the interface...
+	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
 		if ($this->conjunctionValidator === NULL) {
 			$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
@@ -70,6 +77,10 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		$this->conjunctionValidator->addValidator($validator);
 	}
 
+	/**
+	 * @return \TYPO3\FLOW3\Validation\Validator\ValidatorInterface
+	 * @todo this method might become part of the interface...
+	 */
 	public function getValidator() {
 		if ($this->conjunctionValidator === NULL) {
 			$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
@@ -77,18 +88,10 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		return $this->conjunctionValidator;
 	}
 
-	/**
-	 * @param string $key
-	 * @param mixed $value
-	 * @return void
-	 */
 	public function setProperty($key, $value) {
 		$this->properties[$key] = $value;
 	}
 
-	/**
-	 * @return array
-	 */
 	public function getProperties() {
 		return $this->properties;
 	}

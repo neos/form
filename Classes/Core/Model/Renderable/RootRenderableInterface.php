@@ -7,12 +7,10 @@ namespace TYPO3\Form\Core\Model\Renderable;
  *                                                                        */
 
 /**
- * Base interface which all Form Elements, and also the FormDefinition and Page
- * must adhere to.
+ * Base interface which all parts of a form must adhere to.
  *
  * **This interface should not be implemented by developers**, it is only
  * used for improving the internal code structure.
- *
  */
 interface RootRenderableInterface {
 
@@ -51,6 +49,7 @@ interface RootRenderableInterface {
 	 * of the renderer itself.
 	 *
 	 * @return string the renderer class name
+	 * @api
 	 */
 	public function getRendererClassName();
 

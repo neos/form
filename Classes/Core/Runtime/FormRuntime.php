@@ -15,7 +15,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *
  * **This class is not meant to be subclassed by developers.**
  *
- * You generally receive an instance of this class by calling {@link FormDefinition::bind}.
+ * You generally receive an instance of this class by calling {@link \TYPO3\Form\Core\Model\FormDefinition::bind}.
  *
  * Rendering a Form
  * ================
@@ -35,6 +35,15 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * exists, you can do **$form['firstName']** to retrieve its current value.
  *
  * You can also set values in the same way.
+ *
+ * Rendering Internals
+ * ===================
+ *
+ * The FormRuntime asks the FormDefinition about the configured Renderer
+ * which should be used ({@link \TYPO3\Form\Core\Model\FormDefinition::getRendererClassName}),
+ * and then trigger render() on this element.
+ *
+ * This makes it possible to declaratively define how a form should be rendered.
  *
  * @api
  */
@@ -176,7 +185,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * @return string
+	 * @return string The identifier of underlying form
 	 * @api
 	 */
 	public function getIdentifier() {
@@ -239,7 +248,12 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\MVC\Web\Request
+	 * Get the request this object is bound to.
+	 *
+	 * This is mostly relevant inside Finishers, where you f.e. want to redirect
+	 * the user to another page.
+	 *
+	 * @return \TYPO3\FLOW3\MVC\Web\Request the request this object is bound to
 	 * @api
 	 */
 	public function getRequest() {
