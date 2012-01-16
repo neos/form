@@ -64,8 +64,9 @@ TYPO3:
                 type: 'string'
 
     ############ CUSTOM PRESET #############
-      facebook:
+      Facebook:
         parentPreset: 'Default'
         formElementTypes:
           'TYPO3.Form:Base':
-            implementationClassName: 'SomethingElse'
+            renderingOptions:
+              partialPathPattern: 'resource://TYPO3.FormExample/Private/Form/Partials/{@type}.html'
