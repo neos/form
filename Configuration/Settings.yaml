@@ -2,13 +2,14 @@ TYPO3:
   Form:
     Presets:
       Default:
-        ########### DEFAULT###########
+        ########### DEFAULT ###########
         formElementTypes:
 
           # NAMING: base class for everything is RENDERABLE
           'TYPO3.Form:Base':
             renderingOptions:
               templatePathPattern: 'resource://{@package}/Private/Form/{@type}.html'
+              partialPathPattern: 'resource://{@package}/Private/Form/Partials/{@type}.html'
               layoutPathPattern: 'resource://{@package}/Private/Form/Layout/{@type}.html'
 
           'TYPO3.Form:Form':

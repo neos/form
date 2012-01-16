@@ -114,6 +114,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		} else {
 			$renderingContext = clone $this->getCurrentRenderingContext();
 		}
+		$renderingContext->getViewHelperVariableContainer()->addOrUpdate('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable', $renderable);
 
 		if (!isset($renderingOptions['renderableNameInTemplate'])) {
 			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "renderableNameInTemplate" defined.', $renderableType), 1326094948);
@@ -153,7 +154,6 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	 */
 	protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions) {
 		if (!isset($renderingOptions['templatePathPattern'])) {
-			var_dump($renderingOptions);
 			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templatePathPattern" defined.', $renderableType), 1326094041);
 		}
 		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
@@ -186,6 +186,32 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 			'{@package}' => $packageKey,
 			'{@type}' => $shortRenderableType
 		));
+	}
+
+	/**
+	 * Resolve the partial path and filename based on $this->partialPathAndFilenamePattern.
+	 *
+	 * @param string $renderableType The name of the partial
+	 * @return string the full path which should be used. The path definitely exists.
+	 */
+	protected function getPartialPathAndFilename($renderableType) {
+		//list($packageKey, $shortRenderableType) = explode(':', $renderableType);
+		$renderingContext = $this->getCurrentRenderingContext();
+		$currentRenderable = $renderingContext->getViewHelperVariableContainer()->get('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable');
+		$renderingOptions = $currentRenderable->getRenderingOptions();
+		if (!isset($renderingOptions['partialPathPattern'])) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "partialPathPattern" defined.', $renderableType), 1326713352);
+		}
+		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
+
+		$partialPath = strtr($renderingOptions['partialPathPattern'], array(
+			'{@package}' => $packageKey,
+			'{@type}' => $shortRenderableType
+		));
+		if (file_exists($partialPath)) {
+			return $partialPath;
+		}
+		throw new \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException('The template file "' . $partialPath . '" could not be loaded.', 1326713418);
 	}
 
 	/**

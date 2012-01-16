@@ -264,7 +264,8 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Constructor. Creates a new FormDefinition with the given identifier.
 	 *
 	 * @param string $identifier The Form Definition's identifier, must be a non-empty string.
-	 * @return void
+	 * @param array $formDefaults overrides form defaults of this definition
+	 * @param string $type element type of this form in the format Package:Type
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was not valid
 	 * @api
 	 */
