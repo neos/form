@@ -91,32 +91,9 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 		}
 		$implementationClassName = $typeDefinition['implementationClassName'];
 		$element = new $implementationClassName($identifier, $typeName);
+		unset($typeDefinition['implementationClassName']);
 
-		if (isset($typeDefinition['label'])) {
-			$element->setLabel($typeDefinition['label']);
-		}
-
-		if (isset($typeDefinition['defaultValue'])) {
-			$element->setDefaultValue($typeDefinition['defaultValue']);
-		}
-
-		if (isset($typeDefinition['properties'])) {
-			foreach ($typeDefinition['properties'] as $key => $value) {
-				$element->setProperty($key, $value);
-			}
-		}
-
-		if (isset($typeDefinition['rendererClassName'])) {
-			$element->setRendererClassName($typeDefinition['rendererClassName']);
-		}
-
-		if (isset($typeDefinition['renderingOptions'])) {
-			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
-				$element->setRenderingOption($key, $value);
-			}
-		}
-
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions'));
+		$element->setOptions($typeDefinition);
 
 		$this->addElement($element);
 		return $element;

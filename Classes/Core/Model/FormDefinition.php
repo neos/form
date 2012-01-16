@@ -288,16 +288,28 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 */
 	protected function initializeFromFormDefaults() {
 		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($this->type);
-		if (isset($typeDefinition['rendererClassName'])) {
-			$this->setRendererClassName($typeDefinition['rendererClassName']);
+		$this->setOptions($typeDefinition);
+	}
+
+	/**
+	 * Set multiple properties of this object at once.
+	 * Every property which has a corresponding set* method can be set using
+	 * the passed $options array.
+	 *
+	 * @param array $options
+	 * @internal
+	 */
+	public function setOptions(array $options) {
+		if (isset($options['rendererClassName'])) {
+			$this->setRendererClassName($options['rendererClassName']);
 		}
-		if (isset($typeDefinition['renderingOptions'])) {
-			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
+		if (isset($options['renderingOptions'])) {
+			foreach ($options['renderingOptions'] as $key => $value) {
 				$this->setRenderingOption($key, $value);
 			}
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('rendererClassName', 'renderingOptions'));
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('rendererClassName', 'renderingOptions'));
 	}
 
 	/**

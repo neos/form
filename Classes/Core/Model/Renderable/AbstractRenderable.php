@@ -79,6 +79,42 @@ abstract class AbstractRenderable implements RenderableInterface {
 	}
 
 	/**
+	 * Set multiple properties of this object at once.
+	 * Every property which has a corresponding set* method can be set using
+	 * the passed $options array.
+	 *
+	 * @param array $options
+	 * @internal
+	 */
+	public function setOptions(array $options) {
+		if (isset($options['label'])) {
+			$this->setLabel($options['label']);
+		}
+
+		if (isset($options['defaultValue'])) {
+			$this->setDefaultValue($options['defaultValue']);
+		}
+
+		if (isset($options['properties'])) {
+			foreach ($options['properties'] as $key => $value) {
+				$this->setProperty($key, $value);
+			}
+		}
+
+		if (isset($options['rendererClassName'])) {
+			$this->setRendererClassName($options['rendererClassName']);
+		}
+
+		if (isset($options['renderingOptions'])) {
+			foreach ($options['renderingOptions'] as $key => $value) {
+				$this->setRenderingOption($key, $value);
+			}
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions'));
+	}
+
+	/**
 	 * Set the renderer class name
 	 *
 	 * @param string $rendererClassName
