@@ -89,7 +89,13 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @var \TYPO3\Form\Core\Model\Page
 	 * @internal
 	 */
-	protected $currentPage = NULL;
+	protected $currentPage;
+
+	/**
+	 * @var \TYPO3\Form\Core\Model\Page
+	 * @internal
+	 */
+	protected $lastDisplayedPage;
 
 	/**
 	 * @var \TYPO3\Form\Core\Runtime\FormState
@@ -127,18 +133,27 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 */
 	public function initializeObject() {
 		$this->request = $this->subRequestBuilder->build($this->request, $this->formDefinition->getIdentifier());
-		$this->initializeCurrentPageFromRequest();
 		$this->initializeFormStateFromRequest();
+		$this->initializeCurrentPageFromRequest();
 	}
 
 	/**
 	 * @internal
 	 */
 	protected function initializeCurrentPageFromRequest() {
+		if ($this->formState->getLastDisplayedPageIndex() !== FormState::NOPAGE) {
+			$this->lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
+		}
 		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
 		if ($currentPageIndex === count($this->formDefinition->getPages())) {
 			// last page
-			$this->invokeFinishers();
+			$result = $this->mapAndValidatePage($this->lastDisplayedPage);
+			if ($result->hasErrors()) {
+				$this->currentPage = $this->lastDisplayedPage;
+				$this->request->setOriginalRequestMappingResults($result);
+			} else {
+				$this->invokeFinishers();
+			}
 		} else {
 			$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
 			if ($this->currentPage === NULL) {
@@ -196,33 +211,10 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	protected function updateFormState() {
-		if ($this->formState->isFormSubmitted()) {
-			$lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
-
-			$result = new \TYPO3\FLOW3\Error\Result();
-			$mappingRules = $this->formDefinition->getMappingRules();
-			foreach ($lastDisplayedPage->getElements() as $element) {
-				$value = NULL;
-				if ($this->request->hasArgument($element->getIdentifier())) {
-					$value = $this->request->getArgument($element->getIdentifier());
-					if (isset($mappingRules[$element->getIdentifier()])) {
-						$mappingRule = $mappingRules[$element->getIdentifier()];
-						$value = $this->propertyMapper->convert($value, $mappingRule->getDataType(), $mappingRule->getPropertyMappingConfiguration());
-						$result->forProperty($element->getIdentifier())->merge($this->propertyMapper->getMessages());
-					}
-				}
-
-					// TODO: support "." syntax (property paths, maybe through the Property Mapper)
-					// TODO: Sections are not supported yet (elements inside sections are not validated!)
-				$validator = $element->getValidator();
-
-				$validationResult = $validator->validate($value);
-				$result->forProperty($element->getIdentifier())->merge($validationResult);
-
-				$this->formState->setFormValue($element->getIdentifier(), $value);
-			}
+		if ($this->formState->isFormSubmitted() && $this->formState->getLastDisplayedPageIndex() < $this->currentPage->getIndex()) {
+			$result = $this->mapAndValidatePage($this->lastDisplayedPage);
 			if ($result->hasErrors()) {
-				$this->currentPage = $lastDisplayedPage;
+				$this->currentPage = $this->lastDisplayedPage;
 				$this->request->setOriginalRequestMappingResults($result);
 			}
 			// TODO: Map arguments through property mapper
@@ -230,6 +222,37 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 		// Update currently shown page in FormState
 		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
+	}
+
+	/**
+	 * @param \TYPO3\Form\Core\Model\Page $page
+	 * @return \TYPO3\FLOW3\Error\Result
+	 * @internal
+	 */
+	protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page) {
+		$result = new \TYPO3\FLOW3\Error\Result();
+		$mappingRules = $this->formDefinition->getMappingRules();
+		foreach ($page->getElements() as $element) {
+			$value = NULL;
+			if ($this->request->hasArgument($element->getIdentifier())) {
+				$value = $this->request->getArgument($element->getIdentifier());
+				if (isset($mappingRules[$element->getIdentifier()])) {
+					$mappingRule = $mappingRules[$element->getIdentifier()];
+					$value = $this->propertyMapper->convert($value, $mappingRule->getDataType(), $mappingRule->getPropertyMappingConfiguration());
+					$result->forProperty($element->getIdentifier())->merge($this->propertyMapper->getMessages());
+				}
+			}
+
+				// TODO: support "." syntax (property paths, maybe through the Property Mapper)
+				// TODO: Sections are not supported yet (elements inside sections are not validated!)
+			$validator = $element->getValidator();
+
+			$validationResult = $validator->validate($value);
+			$result->forProperty($element->getIdentifier())->merge($validationResult);
+
+			$this->formState->setFormValue($element->getIdentifier(), $value);
+		}
+		return $result;
 	}
 
 	/**
