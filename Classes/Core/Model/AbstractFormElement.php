@@ -39,11 +39,6 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	protected $properties = array();
 
 	/**
-	 * @var \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
-	 */
-	protected $conjunctionValidator;
-
-	/**
 	 * Constructor. Needs this FormElement's identifier and the FormElement type
 	 *
 	 * @param string $identifier The FormElement's identifier
@@ -71,10 +66,12 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	 * @todo this method might become part of the interface...
 	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
-		if ($this->conjunctionValidator === NULL) {
-			$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
+		$formDefinition = $this->getRootForm();
+		if ($formDefinition !== NULL) {
+			$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
+		} else {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form, thus addValidator() cannot be called.', $this->identifier), 1326803371);
 		}
-		$this->conjunctionValidator->addValidator($validator);
 	}
 
 	/**
@@ -82,10 +79,12 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	 * @todo this method might become part of the interface...
 	 */
 	public function getValidator() {
-		if ($this->conjunctionValidator === NULL) {
-			$this->conjunctionValidator = new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
+		$formDefinition = $this->getRootForm();
+		if ($formDefinition !== NULL) {
+			return $formDefinition->getProcessingRule($this->getIdentifier())->getValidator();
+		} else {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form, thus getValidator() cannot be called.', $this->identifier), 1326803398);
 		}
-		return $this->conjunctionValidator;
 	}
 
 	public function setProperty($key, $value) {

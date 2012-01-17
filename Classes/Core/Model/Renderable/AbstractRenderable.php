@@ -154,26 +154,33 @@ abstract class AbstractRenderable implements RenderableInterface {
 	}
 
 	/**
+	 * @internal
+	 * @return \TYPO3\Form\Core\Model\FormDefinition
+	 */
+	protected function getRootForm() {
+		$rootRenderable = $this->parentRenderable;
+		while ($rootRenderable !== NULL && !($rootRenderable instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
+			$rootRenderable = $rootRenderable->getParentRenderable();
+		}
+
+		return $rootRenderable;
+	}
+
+	/**
 	 * Register this element at the parent form, if there is a connection to the parent form.
 	 *
 	 * @internal
 	 */
 	public function registerInFormIfPossible() {
-		$rootRenderable = $this->parentRenderable;
-		while ($rootRenderable !== NULL && !($rootRenderable instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
-			$rootRenderable = $rootRenderable->getParentRenderable();
-		}
-		if ($rootRenderable !== NULL) {
-			$rootRenderable->registerRenderable($this);
+		$rootForm = $this->getRootForm();
+		if ($rootForm !== NULL) {
+			$rootForm->registerRenderable($this);
 		}
 	}
 
 
 	public function onRemoveFromParentRenderable() {
-		$rootForm = $this->parentRenderable;
-		while ($rootForm !== NULL && !($rootForm instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
-			$rootForm = $rootForm->getParentRenderable();
-		}
+		$rootForm = $this->getRootForm();
 		if ($rootForm !== NULL) {
 			$rootForm->unregisterRenderable($this);
 		}

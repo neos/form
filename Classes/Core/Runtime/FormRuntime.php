@@ -112,13 +112,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected $hashService;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Property\PropertyMapper
-	 * @internal
-	 */
-	protected $propertyMapper;
-
-	/**
 	 * Workaround...
 	 *
 	 * @FLOW3\Inject
@@ -211,30 +204,45 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page) {
-
-		// TODO: Map arguments through property mapper
 		$result = new \TYPO3\FLOW3\Error\Result();
-		$mappingRules = $this->formDefinition->getMappingRules();
-		foreach ($page->getElementsRecursively() as $element) {
-			$value = NULL;
-			if ($this->request->hasArgument($element->getIdentifier())) {
-				$value = $this->request->getArgument($element->getIdentifier());
-				if (isset($mappingRules[$element->getIdentifier()])) {
-					$mappingRule = $mappingRules[$element->getIdentifier()];
-					$value = $this->propertyMapper->convert($value, $mappingRule->getDataType(), $mappingRule->getPropertyMappingConfiguration());
-					$result->forProperty($element->getIdentifier())->merge($this->propertyMapper->getMessages());
-				}
+		$processingRules = $this->formDefinition->getProcessingRules();
+
+		$requestArguments = $this->request->getArguments();
+
+		$propertyPathsForWhichPropertyMappingShouldHappen = array();
+		$registerPropertyPaths = function($propertyPath) use (&$propertyPathsForWhichPropertyMappingShouldHappen) {
+			$propertyPathParts = explode ('.', $propertyPath);
+			$accumulatedPropertyPathParts = array();
+			foreach ($propertyPathParts as $propertyPathPart) {
+				$accumulatedPropertyPathParts[] = $propertyPathPart;
+				$temporaryPropertyPath = implode('.', $accumulatedPropertyPathParts);
+				$propertyPathsForWhichPropertyMappingShouldHappen[$temporaryPropertyPath] = $temporaryPropertyPath;
 			}
+		};
 
-				// TODO: support "." syntax (property paths, maybe through the Property Mapper)
-				// TODO: Sections are not supported yet (elements inside sections are not validated!)
-			$validator = $element->getValidator();
+		foreach ($page->getElementsRecursively() as $element) {
+			$value = \TYPO3\FLOW3\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
 
-			$validationResult = $validator->validate($value);
-			$result->forProperty($element->getIdentifier())->merge($validationResult);
-
+			// TODO: should this be set on FormState or not??
 			$this->formState->setFormValue($element->getIdentifier(), $value);
+			$registerPropertyPaths($element->getIdentifier());
 		}
+
+		// The more parts the path has, the more early it is processed
+		usort($propertyPathsForWhichPropertyMappingShouldHappen, function($a, $b) {
+			return substr_count($b, '.') - substr_count($a, '.');
+		});
+
+		foreach ($propertyPathsForWhichPropertyMappingShouldHappen as $propertyPath) {
+			if (isset($processingRules[$propertyPath])) {
+				$processingRule = $processingRules[$propertyPath];
+				$value = $this->formState->getFormValue($propertyPath);
+				$value = $processingRule->process($value);
+				$result->forProperty($propertyPath)->merge($processingRule->getProcessingMessages());
+				$this->formState->setFormValue($propertyPath, $value);
+			}
+		}
+
 		return $result;
 	}
 

@@ -239,11 +239,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * Property Mapping Rules, indexed by element identifier
 	 *
-	 * @todo should this happen on page-level?
-	 * @var array<TYPO3\Form\Core\Model\MappingRule>
+	 * @var array<TYPO3\Form\Core\Model\ProcessingRule>
 	 * @internal
 	 */
-	protected $mappingRules = array();
+	protected $processingRules = array();
 
 	/**
 	 * Contains all elements of the form, indexed by identifier.
@@ -502,26 +501,25 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	}
 
 	/**
-	 * @param type $elementIdentifier
-	 * @todo This might be a property path later on!!
-	 * @todo This will be refined in Milestone P1.2 (Validation)
-	 * @return MappingRule
+	 * @param string $propertyPath
+	 * @return ProcessingRule
+	 * @api
 	 */
-	public function getMappingRule($elementIdentifier) {
-		if (!isset($this->mappingRules[$elementIdentifier])) {
-			$this->mappingRules[$elementIdentifier] = new MappingRule();
+	public function getProcessingRule($propertyPath) {
+		if (!isset($this->processingRules[$propertyPath])) {
+			$this->processingRules[$propertyPath] = new ProcessingRule();
 		}
-		return $this->mappingRules[$elementIdentifier];
+		return $this->processingRules[$propertyPath];
 	}
 
 	/**
 	 * Get all mapping rules
 	 *
 	 * @return array<MappingRule>
-	 * @todo This will be refined in Milestone P1.2 (Validation)
+	 * @internal
 	 */
-	public function getMappingRules() {
-		return $this->mappingRules;
+	public function getProcessingRules() {
+		return $this->processingRules;
 	}
 
 	/**

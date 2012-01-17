@@ -34,7 +34,7 @@ class FormState {
 	/**
 	 * @var array
 	 */
-	protected $formValues;
+	protected $formValues = array();
 
 	/**
 	 * @return boolean FALSE if the form has never been submitted before, TRUE otherwise
@@ -68,16 +68,16 @@ class FormState {
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	public function setFormValue($key, $value) {
-		$this->formValues[$key] = $value;
+	public function setFormValue($propertyPath, $value) {
+		\TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
 	}
 
 	/**
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function getFormValue($key) {
-		return isset($this->formValues[$key]) ? $this->formValues[$key] : NULL;
+	public function getFormValue($propertyPath) {
+		return \TYPO3\FLOW3\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
 	}
 }
 ?>
