@@ -107,6 +107,17 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		$this->renderables = $reorderedRenderables;
 	}
 
+	public function getRenderablesRecursively() {
+		$renderables = array();
+		foreach ($this->renderables as $renderable) {
+			$renderables[] = $renderable;
+			if ($renderable instanceof CompositeRenderableInterface) {
+				$renderables = array_merge($renderables, $renderable->getRenderablesRecursively());
+			}
+		}
+		return $renderables;
+	}
+
 	/**
 	 * Remove a renderable from this renderable.
 	 *

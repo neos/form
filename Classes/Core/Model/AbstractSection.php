@@ -49,6 +49,16 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	}
 
 	/**
+	 * Get the child Form Elements
+	 *
+	 * @return array<\TYPO3\Form\Domain\Model\FormElementInterface> The Page's elements
+	 * @api
+	 */
+	public function getElementsRecursively() {
+		return $this->getRenderablesRecursively();
+	}
+
+	/**
 	 * Add a new form element at the end of the section
 	 *
 	 * @param FormElementInterface $formElement The form element to add

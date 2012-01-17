@@ -390,6 +390,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @api
 	 */
 	public function getPageByIndex($index) {
+		// TODO: throw exception if not found
 		return isset($this->renderables[$index]) ? $this->renderables[$index] : NULL;
 	}
 

@@ -16,5 +16,9 @@ namespace TYPO3\Form\Core\Model\Renderable;
  */
 interface CompositeRenderableInterface extends RenderableInterface {
 
+	/**
+	 * @internal
+	 */
+	public function getRenderablesRecursively();
 }
 ?>

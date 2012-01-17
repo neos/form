@@ -70,38 +70,39 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected $response;
 
 	/**
+	 * @var \TYPO3\Form\Core\Runtime\FormState
+	 * @internal
+	 */
+	protected $formState;
+
+	/**
+	 * The current page is the page which will be displayed to the user
+	 * during rendering.
+	 *
+	 * If $currentPage is NULL, the *last* page has been submitted and
+	 * finishing actions need to take place. You should use $this->isAfterLastPage()
+	 * instead of explicitely checking for NULL.
+	 *
+	 * @var \TYPO3\Form\Core\Model\Page
+	 * @internal
+	 */
+	protected $currentPage = NULL;
+
+	/**
+	 * Reference to the page which has been shown on the last request (i.e.
+	 * we have to handle the submitted data from lastDisplayedPage)
+	 *
+	 * @var \TYPO3\Form\Core\Model\Page
+	 * @internal
+	 */
+	protected $lastDisplayedPage = NULL;
+
+	/**
 	 * @FLOW3\Inject
 	 * @var \TYPO3\FLOW3\MVC\Web\SubRequestBuilder
 	 * @internal
 	 */
 	protected $subRequestBuilder;
-
-	/**
-	 * Workaround...
-	 *
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\MVC\FlashMessageContainer
-	 * @internal
-	 */
-	protected $flashMessageContainer;
-
-	/**
-	 * @var \TYPO3\Form\Core\Model\Page
-	 * @internal
-	 */
-	protected $currentPage;
-
-	/**
-	 * @var \TYPO3\Form\Core\Model\Page
-	 * @internal
-	 */
-	protected $lastDisplayedPage;
-
-	/**
-	 * @var \TYPO3\Form\Core\Runtime\FormState
-	 * @internal
-	 */
-	protected $formState;
 
 	/**
 	 * @FLOW3\Inject
@@ -116,6 +117,15 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	protected $propertyMapper;
+
+	/**
+	 * Workaround...
+	 *
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\MVC\FlashMessageContainer
+	 * @internal
+	 */
+	protected $flashMessageContainer;
 
 	/**
 	 * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
@@ -135,32 +145,8 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$this->request = $this->subRequestBuilder->build($this->request, $this->formDefinition->getIdentifier());
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
-	}
 
-	/**
-	 * @internal
-	 */
-	protected function initializeCurrentPageFromRequest() {
-		if ($this->formState->getLastDisplayedPageIndex() !== FormState::NOPAGE) {
-			$this->lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
-		}
-		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
-		if ($currentPageIndex === count($this->formDefinition->getPages())) {
-			// last page
-			$result = $this->mapAndValidatePage($this->lastDisplayedPage);
-			if ($result->hasErrors()) {
-				$this->currentPage = $this->lastDisplayedPage;
-				$this->request->setOriginalRequestMappingResults($result);
-			} else {
-				$this->invokeFinishers();
-			}
-		} else {
-			$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
-			if ($this->currentPage === NULL) {
-				$this->currentPage = $this->formDefinition->getPageByIndex(0);
-			}
-			// TODO: Exception if no page
-		}
+		$this->processSubmittedFormValues();
 	}
 
 	/**
@@ -177,51 +163,46 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * Render this form.
-	 *
-	 * @return string rendered form
-	 * @api
+	 * @internal
 	 */
-	public function render() {
-		if ($this->formDefinition->getRendererClassName() === NULL) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have a rendererClassName set.', $this->formDefinition->getIdentifier()), 1326095912);
+	protected function initializeCurrentPageFromRequest() {
+		if (!$this->formState->isFormSubmitted()) {
+			$this->currentPage = $this->formDefinition->getPageByIndex(0);
+			return;
 		}
-		$rendererClassName = $this->formDefinition->getRendererClassName();
+		$this->lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
 
-		$this->updateFormState();
-		$controllerContext = $this->getControllerContext();
-		$renderer = new $rendererClassName();
-		if (!($renderer instanceof \TYPO3\Form\Core\Renderer\RendererInterface)) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer "%s" des not implement RendererInterface', $rendererClassName), 1326096024);
+		// We know now that lastDisplayedPage is filled
+		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
+		if ($currentPageIndex > $this->lastDisplayedPage->getIndex() + 1) {
+				// We only allow jumps to following pages
+			$currentPageIndex = $this->lastDisplayedPage->getIndex() + 1;
 		}
 
-		$renderer->setControllerContext($controllerContext);
-		return $renderer->renderRenderable($this);
+		// We now know that the user did not try to skip a page
+		if ($currentPageIndex === count($this->formDefinition->getPages())) {
+				// Last Page
+			$this->currentPage = NULL;
+		} else {
+			$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
+		}
 	}
 
-	/**
-	 * @return string The identifier of underlying form
-	 * @api
-	 */
-	public function getIdentifier() {
-		return $this->formDefinition->getIdentifier();
+	protected function isAfterLastPage() {
+		return ($this->currentPage === NULL);
 	}
 
 	/**
 	 * @internal
 	 */
-	protected function updateFormState() {
-		if ($this->formState->isFormSubmitted() && $this->formState->getLastDisplayedPageIndex() < $this->currentPage->getIndex()) {
+	protected function processSubmittedFormValues() {
+		if ($this->lastDisplayedPage !== NULL) {
 			$result = $this->mapAndValidatePage($this->lastDisplayedPage);
 			if ($result->hasErrors()) {
 				$this->currentPage = $this->lastDisplayedPage;
 				$this->request->setOriginalRequestMappingResults($result);
 			}
-			// TODO: Map arguments through property mapper
 		}
-
-		// Update currently shown page in FormState
-		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
 	}
 
 	/**
@@ -230,9 +211,11 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page) {
+
+		// TODO: Map arguments through property mapper
 		$result = new \TYPO3\FLOW3\Error\Result();
 		$mappingRules = $this->formDefinition->getMappingRules();
-		foreach ($page->getElements() as $element) {
+		foreach ($page->getElementsRecursively() as $element) {
 			$value = NULL;
 			if ($this->request->hasArgument($element->getIdentifier())) {
 				$value = $this->request->getArgument($element->getIdentifier());
@@ -256,6 +239,36 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * Render this form.
+	 *
+	 * @return string rendered form
+	 * @api
+	 */
+	public function render() {
+		if ($this->isAfterLastPage()) {
+			$this->invokeFinishers();
+			// TODO: use request / response properly
+			return;
+		}
+
+		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
+
+		if ($this->formDefinition->getRendererClassName() === NULL) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have a rendererClassName set.', $this->formDefinition->getIdentifier()), 1326095912);
+		}
+		$rendererClassName = $this->formDefinition->getRendererClassName();
+		$renderer = new $rendererClassName();
+		if (!($renderer instanceof \TYPO3\Form\Core\Renderer\RendererInterface)) {
+			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer "%s" des not implement RendererInterface', $rendererClassName), 1326096024);
+		}
+
+		$controllerContext = $this->getControllerContext();
+		$renderer->setControllerContext($controllerContext);
+		// TODO: use request / response properly
+		return $renderer->renderRenderable($this);
+	}
+
+	/**
 	 * Executes all finishers of this form
 	 *
 	 * @return void
@@ -264,11 +277,21 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected function invokeFinishers() {
 		foreach ($this->formDefinition->getFinishers() as $finisher) {
 			$finisherResult = $finisher->execute($this);
+			// TODO: clean up, introduce event object or so...
 			if ($finisherResult !== TRUE) {
 				break;
 			}
 		}
 	}
+
+	/**
+	 * @return string The identifier of underlying form
+	 * @api
+	 */
+	public function getIdentifier() {
+		return $this->formDefinition->getIdentifier();
+	}
+
 
 	/**
 	 * Get the request this object is bound to.
