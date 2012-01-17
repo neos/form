@@ -65,7 +65,7 @@ class FormState {
 	}
 
 	/**
-	 * @param string $key
+	 * @param string $propertyPath
 	 * @param mixed $value
 	 */
 	public function setFormValue($propertyPath, $value) {
@@ -73,7 +73,7 @@ class FormState {
 	}
 
 	/**
-	 * @param string $key
+	 * @param string $propertyPath
 	 * @return mixed
 	 */
 	public function getFormValue($propertyPath) {

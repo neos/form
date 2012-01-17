@@ -139,7 +139,9 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
 
-		$this->processSubmittedFormValues();
+		if ($this->lastDisplayedPage !== NULL && $this->lastDisplayedPage->getIndex() < $this->currentPage->getIndex()) {
+			$this->processSubmittedFormValues();
+		}
 	}
 
 	/**
@@ -189,12 +191,10 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	protected function processSubmittedFormValues() {
-		if ($this->lastDisplayedPage !== NULL) {
-			$result = $this->mapAndValidatePage($this->lastDisplayedPage);
-			if ($result->hasErrors()) {
-				$this->currentPage = $this->lastDisplayedPage;
-				$this->request->setOriginalRequestMappingResults($result);
-			}
+		$result = $this->mapAndValidatePage($this->lastDisplayedPage);
+		if ($result->hasErrors()) {
+			$this->currentPage = $this->lastDisplayedPage;
+			$this->request->setOriginalRequestMappingResults($result);
 		}
 	}
 
