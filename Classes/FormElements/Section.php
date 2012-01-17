@@ -36,8 +36,22 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	}
 
 	public function getValidator() {
-		// TODO!
-		return new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator();
+		$formDefinition = $this->getRootForm();
+		if ($formDefinition !== NULL) {
+			return $formDefinition->getProcessingRule($this->getIdentifier())->getValidator();
+		} else {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form, thus getValidator() cannot be called.', $this->identifier), 1326824120);
+		}
+	}
+
+	public function isRequired() {
+		$conjunctionValidator = $this->getValidator();
+		foreach ($conjunctionValidator->getValidators() as $validator) {
+			if ($validator instanceof \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator) {
+				return TRUE;
+			}
+		}
+		return FALSE;
 	}
 }
 ?>

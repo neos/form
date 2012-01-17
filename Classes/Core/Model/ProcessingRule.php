@@ -71,14 +71,25 @@ class ProcessingRule {
 		$this->dataType = $dataType;
 	}
 
+	/**
+	 * @return \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
+	 */
 	public function getValidator() {
 		return $this->validator;
 	}
 
+	/**
+	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
+	 * @return void
+	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
 		$this->validator->addValidator($validator);
 	}
 
+	/**
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	public function process($value) {
 		if ($this->dataType !== NULL) {
 			$value = $this->propertyMapper->convert($value, $this->dataType, $this->propertyMappingConfiguration);
@@ -94,6 +105,9 @@ class ProcessingRule {
 		return $value;
 	}
 
+	/**
+	 * @return \TYPO3\FLOW3\Error\Result
+	 */
 	public function getProcessingMessages() {
 		return $this->processingMessages;
 	}

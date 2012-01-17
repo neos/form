@@ -75,8 +75,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Validation\Validator\ValidatorInterface
-	 * @todo this method might become part of the interface...
+	 * @return \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
 	 */
 	public function getValidator() {
 		$formDefinition = $this->getRootForm();
@@ -85,6 +84,16 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		} else {
 			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form, thus getValidator() cannot be called.', $this->identifier), 1326803398);
 		}
+	}
+
+	public function isRequired() {
+		$conjunctionValidator = $this->getValidator();
+		foreach ($conjunctionValidator->getValidators() as $validator) {
+			if ($validator instanceof \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator) {
+				return TRUE;
+			}
+		}
+		return FALSE;
 	}
 
 	public function setProperty($key, $value) {
