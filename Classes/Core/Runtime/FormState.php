@@ -69,7 +69,7 @@ class FormState {
 	 * @param mixed $value
 	 */
 	public function setFormValue($propertyPath, $value) {
-		\TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
+		$this->formValues = \TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
 	}
 
 	/**
