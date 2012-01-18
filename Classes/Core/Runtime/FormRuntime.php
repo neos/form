@@ -139,7 +139,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
 
-		if ($this->lastDisplayedPage !== NULL && $this->lastDisplayedPage->getIndex() < $this->currentPage->getIndex()) {
+		if ($this->formPageHasBeenSubmitted()) {
 			$this->processSubmittedFormValues();
 		}
 	}
@@ -183,8 +183,38 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		}
 	}
 
+	/**
+	 * Returns TRUE if the last page of the form has been submitted, otherwise FALSE
+	 *
+	 * @return boolean
+	 */
 	protected function isAfterLastPage() {
 		return ($this->currentPage === NULL);
+	}
+
+	/**
+	 * Returns TRUE if no previous page is stored in the FormState, otherwise FALSE
+	 *
+	 * @return boolean
+	 */
+	protected function isFirstRequest() {
+		return ($this->lastDisplayedPage === NULL);
+	}
+
+	/**
+	 * Returns TRUE if a previous form page has been submitted, otherwise FALSE
+	 *
+	 * @return boolean
+	 * @todo find a better name?
+	 */
+	protected function formPageHasBeenSubmitted() {
+		if ($this->isFirstRequest()) {
+			return FALSE;
+		}
+		if ($this->isAfterLastPage()) {
+			return TRUE;
+		}
+		return $this->lastDisplayedPage->getIndex() < $this->currentPage->getIndex();
 	}
 
 	/**
