@@ -72,10 +72,13 @@ class ProcessingRule {
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
+	 * Returns the child validators of the ConjunctionValidator that is bound to this processing rule
+	 *
+	 * @internal
+	 * @return \SplObjectStorage<\TYPO3\FLOW3\Validation\Validator\ValidatorInterface>
 	 */
-	public function getValidator() {
-		return $this->validator;
+	public function getValidators() {
+		return $this->validator->getValidators();
 	}
 
 	/**

@@ -64,12 +64,12 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	public function setRenderingOption($key, $value);
 
 	/**
-	 * Returns the ConjunctionValidator that is registered for this element
+	 * Returns the child validators of the ConjunctionValidator that is registered for this element
 	 *
 	 * @internal
-	 * @return \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
+	 * @return \SplObjectStorage<\TYPO3\FLOW3\Validation\Validator\ValidatorInterface>
 	 */
-	public function getValidator();
+	public function getValidators();
 
 	/**
 	 * Whether or not this element is required
