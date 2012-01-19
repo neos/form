@@ -82,7 +82,7 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function getPresetConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected) {
 		$abstractFormFactory = $this->getAbstractFormFactory();
-		$abstractFormFactory->_set('settings', array(
+		$abstractFormFactory->_set('formSettings', array(
 			'Presets' => $presets
 		));
 
@@ -113,7 +113,7 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
 		$abstractFormFactory->_call('initializeObject');
-		$this->assertSame('MyConfig', $abstractFormFactory->_get('settings'));
+		$this->assertSame('MyConfig', $abstractFormFactory->_get('formSettings'));
 	}
 
 	/**

@@ -94,7 +94,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 * @var array
 	 * @api
 	 */
-	protected $settings;
+	protected $formSettings;
 
 	/**
 	 * @FLOW3\Inject
@@ -107,7 +107,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 * @internal
 	 */
 	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
+		$this->formSettings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
 	}
 
 	/**
@@ -120,10 +120,10 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 * @api
 	 */
 	protected function getPresetConfiguration($presetName) {
-		if (!isset($this->settings['Presets'][$presetName])) {
+		if (!isset($this->formSettings['Presets'][$presetName])) {
 			throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: Presets.', $presetName), 1325685498);
 		}
-		$preset = $this->settings['Presets'][$presetName];
+		$preset = $this->formSettings['Presets'][$presetName];
 		if (isset($preset['parentPreset'])) {
 			$parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
 			unset($preset['parentPreset']);
