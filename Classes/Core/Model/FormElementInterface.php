@@ -19,6 +19,16 @@ namespace TYPO3\Form\Core\Model;
 interface FormElementInterface extends Renderable\RenderableInterface {
 
 	/**
+	 * Returns a unique identifier of this element.
+	 * While element identifiers are only unique within one form,
+	 * this includes the identifier of the form itself, making it "globally" unique
+	 *
+	 * @return string the "globally" unique identifier of this element
+	 * @api
+	 */
+	public function getUniqueIdentifier();
+
+	/**
 	 * Get the default value with which the Form Element should be initialized
 	 * during display.
 	 *

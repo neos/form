@@ -1,6 +1,6 @@
 <f:form.validationResults for="{element.identifier}">
 	<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}">
-		<label for="{element.identifier}">{element.label}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
+		<label for="{element.uniqueIdentifier}">{element.label}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
 		<div class="input">
 			<f:render section="field" />
 			<f:if condition="{validationResults.flattenedErrors}">

@@ -20,7 +20,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\Form\Core\Model\FormElementInterface {
 
 	public function getUniqueIdentifier() {
-		// TODO: Implement getUniqueIdentifier() method.
+		$formDefinition = $this->getRootForm();
+		return sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
 	}
 
 	public function getDefaultValue() {
