@@ -1,5 +1,5 @@
 {namespace form=TYPO3\Form\ViewHelpers}
-<form:form object="{form}" method="get" id="{form.identifier}">
+<form:form object="{form}" action="index" method="post" id="{form.identifier}" enctype="multipart/form-data">
 	<fieldset>
 		<form:renderRenderable renderable="{form.currentPage}" />
 	</fieldset>
