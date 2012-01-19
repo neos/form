@@ -63,11 +63,10 @@ TYPO3:
               sender:
                 type: 'string'
 
-    ############ CUSTOM PRESET #############
-      Facebook:
-        parentPreset: 'Default'
-        formElementTypes:
-          'TYPO3.Form:Form':
-            renderingOptions:
-              partialPathPattern: 'resource://TYPO3.FormExample/Private/Form/Partials/{@type}.html'
-              templatePathPattern: 'resource://TYPO3.FormExample/Private/Form/{@type}.html'
+        ########### CUSTOM PRESET ###########
+#      SomePresetName:
+#        parentPreset: 'Default'
+#        formElementTypes:
+#          'TYPO3.Form:Base':
+#            renderingOptions:
+#              templatePathPattern: 'resource://TYPO3.SomePackage/Private/Form/{@type}.html'

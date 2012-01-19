@@ -6,20 +6,6 @@
 				<form:form.button name="__currentPage" value="{form.previousPage.index}" formnovalidate="formnovalidate" class="btn">Previous page</form:form.button>
 			</li>
 		</f:if>
-		<f:for each="{form.pages}" as="page" iteration="iteration">
-			<f:if condition="{page} == {form.currentPage}">
-				<f:then>
-					<li class="current">
-						{iteration.cycle}
-					</li>
-				</f:then>
-				<f:else>
-					<li>
-						<form:form.button name="__currentPage" value="{iteration.index}" class="btn">{iteration.cycle}</form:form.button>
-					</li>
-				</f:else>
-			</f:if>
-		</f:for>
 		<f:if condition="{form.nextPage}">
 			<f:then>
 				<li class="next">
