@@ -1,11 +1,10 @@
-{namespace form=TYPO3\Form\ViewHelpers}
 <f:layout name="TYPO3.Form:Field" />
 <f:section name="field">
 	<ul class="inputs-list" id="{element.identifier}">
 		<f:for each="{element.properties.options}" as="label" key="value">
 			<li>
 				<label>
-					<form:form.checkbox property="{element.identifier}" multiple="1" value="{value}" errorClass="error" />
+					<f:form.checkbox property="{element.identifier}" multiple="1" value="{value}" errorClass="error" />
 					<span>{label}</span>
 				</label>
 			</li>
