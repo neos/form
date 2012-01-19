@@ -162,6 +162,9 @@ abstract class AbstractRenderable implements RenderableInterface {
 		while ($rootRenderable !== NULL && !($rootRenderable instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
 			$rootRenderable = $rootRenderable->getParentRenderable();
 		}
+		if ($rootRenderable === NULL) {
+			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form.', $this->identifier), 1326803398);
+		}
 
 		return $rootRenderable;
 	}
@@ -172,17 +175,19 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * @internal
 	 */
 	public function registerInFormIfPossible() {
-		$rootForm = $this->getRootForm();
-		if ($rootForm !== NULL) {
+		try {
+			$rootForm = $this->getRootForm();
 			$rootForm->registerRenderable($this);
+		} catch (\TYPO3\Form\Exception\FormDefinitionConsistencyException $exception) {
 		}
 	}
 
 
 	public function onRemoveFromParentRenderable() {
-		$rootForm = $this->getRootForm();
-		if ($rootForm !== NULL) {
+		try {
+			$rootForm = $this->getRootForm();
 			$rootForm->unregisterRenderable($this);
+		} catch (\TYPO3\Form\Exception\FormDefinitionConsistencyException $exception) {
 		}
 		$this->parentRenderable = NULL;
 	}

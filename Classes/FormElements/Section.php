@@ -19,6 +19,10 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  */
 class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\Form\Core\Model\FormElementInterface {
 
+	public function getUniqueIdentifier() {
+		// TODO: Implement getUniqueIdentifier() method.
+	}
+
 	public function getDefaultValue() {
 		return NULL;
 	}
@@ -36,13 +40,8 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	}
 
 	public function getValidators() {
-		// TODO get rid of code duplication
 		$formDefinition = $this->getRootForm();
-		if ($formDefinition !== NULL) {
-			return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
-		} else {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The section "%s" is not attached to a parent form, thus getValidators() cannot be called.', $this->identifier), 1326824120);
-		}
+		return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
 	}
 
 	public function isRequired() {

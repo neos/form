@@ -67,20 +67,12 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
 		$formDefinition = $this->getRootForm();
-		if ($formDefinition !== NULL) {
-			$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
-		} else {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form, thus addValidator() cannot be called.', $this->identifier), 1326803371);
-		}
+		$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
 	}
 
 	public function getValidators() {
 		$formDefinition = $this->getRootForm();
-		if ($formDefinition !== NULL) {
-			return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
-		} else {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form, thus getValidators() cannot be called.', $this->identifier), 1326803398);
-		}
+		return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
 	}
 
 	public function isRequired() {
