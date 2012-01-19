@@ -5,6 +5,8 @@ TYPO3:
         ########### DEFAULT ###########
         formElementTypes:
 
+          ### BASE ELEMENTS ###
+
           # NAMING: base class for everything is RENDERABLE
           'TYPO3.Form:Base':
             renderingOptions:
@@ -24,25 +26,24 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'page'
 
-          'TYPO3.Form:FormElement':
-            superTypes: ['TYPO3.Form:Base']
-            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
-            renderingOptions:
-              renderableNameInTemplate: 'element'
-
           'TYPO3.Form:Section':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\Section'
             renderingOptions:
               renderableNameInTemplate: 'section'
 
-          'TYPO3.Form:Textfield':
-            superTypes: ['TYPO3.Form:FormElement']
-          'TYPO3.Form:Select':
-            superTypes: ['TYPO3.Form:FormElement']
-          'TYPO3.Form:Date':
+          'TYPO3.Form:FormElement':
+            superTypes: ['TYPO3.Form:Base']
+            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
+            renderingOptions:
+              renderableNameInTemplate: 'element'
+
+           ### FORM ELEMENTS ###
+          'TYPO3.Form:Checkbox':
             superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Checkboxes':
+            superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:Date':
             superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Radiobuttons':
             superTypes: ['TYPO3.Form:FormElement']
@@ -56,6 +57,14 @@ TYPO3:
 #                targetType: '\DateTime'
 #                options:
 #                  dateFormat: 'Y-m-d'
+          'TYPO3.Form:Select':
+            superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:Textarea':
+            superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:Textfield':
+            superTypes: ['TYPO3.Form:FormElement']
+
+           ### FINISHERS ###
         finisherTypes:
           'TYPO3.Form:Redirect':
             implementationClassName: 'TYPO3\Form\Finishers\RedirectFinisher'
@@ -63,7 +72,7 @@ TYPO3:
               sender:
                 type: 'string'
 
-        ########### CUSTOM PRESET ###########
+        ########### CUSTOM PRESETS ###########
 #      SomePresetName:
 #        parentPreset: 'Default'
 #        formElementTypes:
