@@ -1,5 +1,7 @@
 TYPO3:
   Form:
+    supertypeResolver:
+      hiddenProperties: []
     Presets:
       Default:
         ########### DEFAULT ###########
@@ -38,13 +40,18 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'element'
 
-           ### FORM ELEMENTS ###
+
+
+          ### FORM ELEMENTS: Basics ###
+          'TYPO3.Form:TextMixin': []
+          'TYPO3.Form:Textarea':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+          'TYPO3.Form:Textfield':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
           'TYPO3.Form:Checkbox':
             superTypes: ['TYPO3.Form:FormElement']
-          'TYPO3.Form:Checkboxes':
-            superTypes: ['TYPO3.Form:FormElement']
           'TYPO3.Form:Date':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
           'TYPO3.Form:ImageUpload':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
@@ -53,8 +60,18 @@ TYPO3:
 #                targetType: '\TYPO3\Media\Domain\Model\Image'
             properties:
               allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp']
+
+          ### FORM ELEMENTS: Single / Multi Select ###
+          'TYPO3.Form:SelectionMixin': []
+          'TYPO3.Form:SingleSelectionMixin':
+            superTypes: ['TYPO3.Form:SelectionMixin']
+          'TYPO3.Form:MultiSelectionMixin':
+            superTypes: ['TYPO3.Form:SelectionMixin']
+
+          'TYPO3.Form:Checkboxes':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:MultiSelectionMixin']
           'TYPO3.Form:Radiobuttons':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SingleSelectionMixin']
 #            processingRule:
 #              mapping:
 #                availableOptions:
@@ -66,11 +83,8 @@ TYPO3:
 #                options:
 #                  dateFormat: 'Y-m-d'
           'TYPO3.Form:Select':
-            superTypes: ['TYPO3.Form:FormElement']
-          'TYPO3.Form:Textarea':
-            superTypes: ['TYPO3.Form:FormElement']
-          'TYPO3.Form:Textfield':
-            superTypes: ['TYPO3.Form:FormElement']
+            # TODO: We need to split this into single and multiple select
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SelectionMixin']
 
            ### FINISHERS ###
         finisherTypes:
