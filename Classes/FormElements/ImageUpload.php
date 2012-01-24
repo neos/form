@@ -16,11 +16,12 @@ class ImageUpload extends \TYPO3\Form\Core\Model\AbstractFormElement {
 	/**
 	 * @return void
 	 */
-	public function registerInFormIfPossible() {
-		// TODO this should be done through the form element definition
+	public function initializeFormElement() {
 		$formDefinition = $this->getRootForm();
 		$processingRule = $formDefinition->getProcessingRule($this->identifier);
-		$processingRule->setDataType('\TYPO3\Media\Domain\Model\Image');
+		$objectTypeConverter = new \TYPO3\FLOW3\Property\TypeConverter\ObjectConverter();
+		$processingRule->getPropertyMappingConfiguration()->setTypeConverter($objectTypeConverter);
+		$processingRule->setDataType('TYPO3\Media\Domain\Model\Image');
 	}
 }
 ?>

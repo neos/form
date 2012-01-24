@@ -1,36 +1,38 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 <f:layout name="TYPO3.Form:Field" />
 <f:section name="field">
-	<form:form.uploadedResource property="{element.identifier}.originalResource" as="resourceObj">
-		{resourceObj -> f:debug()}
-		<div id="{property}-uploadfields" class="b-form-inputs"{f:if(condition:resourceObj, then: ' style="display:none"')}>
-			<f:form.upload property="{property}.originalResource" id="{property}" />
-			<f:if condition="{resourceObj}">
-				<a href="#" onclick="return !disableUpload()">Cancel</a>
+	<form:form.uploadedImage property="{element.identifier}" as="image">
+		<div id="{element.uniqueIdentifier}-uploadfields"{f:if(condition:image, then: ' style="display:none"')}>
+			<f:form.upload property="{element.identifier}.resource" id="{element.uniqueIdentifier}" />
+			<f:if condition="{image}">
+				<div class="clearfix">
+					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')">Cancel</a>
+				</div>
 			</f:if>
 		</div>
-		<f:if condition="{resourceObj}">
-			<div id="{property}-preview" class="b-form-inputs">
-				<a href="{f:uri.resource(resource: resourceObj)}" rel="lytebox">
-					<img src="{f:uri.resource(resource: resourceObj)}" alt="{label}" style="width: 150px;" />
+		<f:if condition="{image}">
+			<div id="{element.uniqueIdentifier}-preview">
+				<a href="{f:uri.resource(resource: image.resource)}">
+					<!--<![CDATA[ Does not work because image is not persisted yet <form:image image="{image}" maxWidth="100" alt="{image.title}" />]]>-->
+					<img src="{f:uri.resource(resource: image.resource)}" style="width: 100px" />
 				</a>
-				<a href="#" onclick="return !enableUpload()">Replace Image</a>
+				<div class="clearfix">
+					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')">Replace Image</a>
+				</div>
 			</div>
 		</f:if>
 		<script type="text/javascript">
-			var hasResource = {f:if(condition: resourceObj, then: 'true', else: 'false')};
-			var property = '{property}';
 		//<![CDATA[
-			function enableUpload() {
+			function enableUpload(property) {
 				document.getElementById(property + '-preview').style.display = 'none';
 				document.getElementById(property + '-uploadfields').style.display = 'block';
 				return true;
 			}
-			function disableUpload() {
+			function disableUpload(property) {
 				document.getElementById(property + '-preview').style.display = 'block';
 				document.getElementById(property + '-uploadfields').style.display = 'none';
 				return true;
 			}
 		//]]></script>
-		</form:form.uploadedResource>
+	</form:form.uploadedImage>
 </f:section>
