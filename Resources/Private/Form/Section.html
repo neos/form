@@ -1,6 +1,8 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 <fieldset id="{section.uniqueIdentifier}">
-	<legend>{section.label}</legend>
+	<f:if condition="{section.label}">
+		<legend>{section.label}</legend>
+	</f:if>
 	<f:for each="{section.elements}" as="element">
 		<form:renderRenderable renderable="{element}" />
 	</f:for>
