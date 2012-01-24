@@ -53,6 +53,12 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		$this->type = $type;
 	}
 
+	/**
+	 * Override this method in your custom FormElements if needed
+	 */
+	public function initializeFormElement() {
+	}
+
 	public function getUniqueIdentifier() {
 		$formDefinition = $this->getRootForm();
 		return sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);

@@ -101,11 +101,15 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 		}
 		$implementationClassName = $typeDefinition['implementationClassName'];
 		$element = new $implementationClassName($identifier, $typeName);
+		if (!$element instanceof \TYPO3\Form\Core\Model\FormElementInterface) {
+			throw new \TYPO3\Form\Exception\TypeDefinitionNotValidException(sprintf('The "implementationClassName" for element "%s" ("%s") does not implement the FormElementInterface.', $identifier, $implementationClassName), 1327318156);
+		}
 		unset($typeDefinition['implementationClassName']);
 
 		$element->setOptions($typeDefinition);
 
 		$this->addElement($element);
+		$element->initializeFormElement();
 		return $element;
 	}
 

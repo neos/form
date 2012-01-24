@@ -19,6 +19,9 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  */
 class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\Form\Core\Model\FormElementInterface {
 
+	public function initializeFormElement() {
+	}
+
 	public function getUniqueIdentifier() {
 		$formDefinition = $this->getRootForm();
 		return sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
