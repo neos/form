@@ -19,8 +19,8 @@ class ImageUpload extends \TYPO3\Form\Core\Model\AbstractFormElement {
 	public function initializeFormElement() {
 		$formDefinition = $this->getRootForm();
 		$processingRule = $formDefinition->getProcessingRule($this->identifier);
-		$objectTypeConverter = new \TYPO3\FLOW3\Property\TypeConverter\ObjectConverter();
-		$processingRule->getPropertyMappingConfiguration()->setTypeConverter($objectTypeConverter);
+		$imageConverter = new \TYPO3\Media\TypeConverter\ImageConverter();
+		$processingRule->getPropertyMappingConfiguration()->setTypeConverter($imageConverter);
 		$processingRule->setDataType('TYPO3\Media\Domain\Model\Image');
 	}
 }
