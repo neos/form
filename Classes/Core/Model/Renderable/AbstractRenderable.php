@@ -157,7 +157,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * @internal
 	 * @return \TYPO3\Form\Core\Model\FormDefinition
 	 */
-	protected function getRootForm() {
+	public function getRootForm() {
 		$rootRenderable = $this->parentRenderable;
 		while ($rootRenderable !== NULL && !($rootRenderable instanceof \TYPO3\Form\Core\Model\FormDefinition)) {
 			$rootRenderable = $rootRenderable->getParentRenderable();

@@ -1,5 +1,6 @@
+{namespace form=TYPO3\Form\ViewHelpers}
 <f:form.validationResults for="{element.identifier}">
-	<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}">
+	<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"<f:if condition="{element.rootForm.renderingOptions.previewMode}"> data-element="{form:form.formElementRootlinePath(renderable:element)}"</f:if>>
 		<label for="{element.uniqueIdentifier}">{element.label}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
 		<div class="input">
 			<f:render section="field" />
