@@ -316,6 +316,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$controllerContext = $this->getControllerContext();
 		$renderer->setControllerContext($controllerContext);
 		// TODO: use request / response properly
+		$renderer->setFormRuntime($this);
 		return $renderer->renderRenderable($this);
 	}
 

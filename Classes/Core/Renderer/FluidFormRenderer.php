@@ -85,11 +85,25 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  */
 class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements RendererInterface {
 
+	/**
+	 * @var \TYPO3\Form\Core\Runtime\FormRuntime
+	 */
+	protected $formRuntime;
+
 	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
 	}
 
+	public function setFormRuntime(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
+		$this->formRuntime = $formRuntime;
+	}
+
+	public function getFormRuntime() {
+		return $this->formRuntime;
+	}
+
 	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
+		$this->templateParser->setConfiguration($this->buildParserConfiguration());
 		$renderableType = $renderable->getType();
 
 		if ($renderable->getRendererClassName() !== NULL && $renderable->getRendererClassName() !== get_class($this)) {
@@ -99,6 +113,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 				throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement RendererInterface.', $rendererClassName, $renderableType), 1326098022);
 			}
 			$renderer->setControllerContext($this->controllerContext);
+			$renderer->setFormRuntime($this->formRuntime);
 			return $renderer->renderRenderable($renderable);
 		}
 
@@ -242,5 +257,6 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		}
 		return $parsedRenderable;
 	}
+
 }
 ?>

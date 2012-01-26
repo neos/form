@@ -32,5 +32,18 @@ interface RendererInterface {
 	 * @api
 	 */
 	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable);
+
+	/**
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @return void
+	 * @api
+	 */
+	public function setFormRuntime(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime);
+
+	/**
+	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
+	 * @api
+	 */
+	public function getFormRuntime();
 }
 ?>
