@@ -48,7 +48,7 @@ class ImageViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewH
 	 */
 	public function render(\TYPO3\Media\Domain\Model\Image $image = NULL, $maxWidth = NULL, $maxHeight = NULL) {
 		$thumbnail = $image->getThumbnail($maxWidth, $maxHeight);
-		$thumbnailUri = $this->resourcePublisher->getPersistentResourceWebUri($image->getResource());
+		$thumbnailUri = $this->resourcePublisher->getPersistentResourceWebUri($thumbnail->getResource());
 		$this->tag->addAttribute('src', $thumbnailUri);
 		$this->tag->addAttribute('width', $thumbnail->getWidth());
 		$this->tag->addAttribute('height', $thumbnail->getHeight());
