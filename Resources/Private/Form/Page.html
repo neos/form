@@ -1,4 +1,9 @@
 {namespace form=TYPO3\Form\ViewHelpers}
-<f:for each="{page.elements}" as="element">
-	<form:renderRenderable renderable="{element}" />
-</f:for>
+<fieldset>
+	<f:if condition="{page.label}">
+		<legend>{page.label}</legend>
+	</f:if>
+	<f:for each="{page.elements}" as="element">
+		<form:renderRenderable renderable="{element}" />
+	</f:for>
+</fieldset>
