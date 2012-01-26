@@ -277,6 +277,19 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * Override the current page taken from the request, rendering the page with index $pageIndex instead.
+	 *
+	 * This is typically not needed in production code, but it is very helpful when displaying
+	 * some kind of "preview" of the form.
+	 *
+	 * @param integer $pageIndex
+	 * @api
+	 */
+	public function overrideCurrentPage($pageIndex) {
+		$this->currentPage = $this->formDefinition->getPageByIndex($pageIndex);
+	}
+
+	/**
 	 * Render this form.
 	 *
 	 * @return string rendered form
