@@ -35,6 +35,9 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'page'
 
+          'TYPO3.Form:PreviewPage':
+            superTypes: ['TYPO3.Form:Page']
+
           'TYPO3.Form:Section':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\Section'
@@ -73,6 +76,7 @@ TYPO3:
           ### FORM ELEMENTS: CUSTOM ###
           'TYPO3.Form:DatePicker':
             superTypes: ['TYPO3.Form:FormElement']
+            implementationClassName: 'TYPO3\Form\FormElements\DatePicker'
           'TYPO3.Form:ImageUpload':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
