@@ -59,6 +59,8 @@ TYPO3:
 
           'TYPO3.Form:Checkbox':
             superTypes: ['TYPO3.Form:FormElement']
+            properties:
+              value: 1
           'TYPO3.Form:MultipleSelectCheckboxes':
             superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:MultiSelectionMixin']
           'TYPO3.Form:MultipleSelectDropdown':
