@@ -22,6 +22,13 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'form'
 
+          'TYPO3.Form:FormElement':
+            superTypes: ['TYPO3.Form:Base']
+            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
+            renderingOptions:
+              renderableNameInTemplate: 'element'
+
+          ### FORM ELEMENTS: CONTAINER ###
           'TYPO3.Form:Page':
             superTypes: ['TYPO3.Form:Base']
             implementationClassName: 'TYPO3\Form\Core\Model\Page'
@@ -34,57 +41,43 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'section'
 
-          'TYPO3.Form:FormElement':
-            superTypes: ['TYPO3.Form:Base']
-            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
-            renderingOptions:
-              renderableNameInTemplate: 'element'
 
-
-
-          ### FORM ELEMENTS: Basics ###
+          ### FORM ELEMENTS: INPUT ###
           'TYPO3.Form:TextMixin': []
-          'TYPO3.Form:Textarea':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
-          'TYPO3.Form:Textfield':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
-          'TYPO3.Form:Checkbox':
-            superTypes: ['TYPO3.Form:FormElement']
-          'TYPO3.Form:Date':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
-          'TYPO3.Form:ImageUpload':
-            superTypes: ['TYPO3.Form:FormElement']
-            implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
-#            processingRule:
-#              mapping:
-#                targetType: '\TYPO3\Media\Domain\Model\Image'
-            properties:
-              allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp']
 
-          ### FORM ELEMENTS: Single / Multi Select ###
+          'TYPO3.Form:SingleLineText':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+          'TYPO3.Form:MultiLineText':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+
+          ### FORM ELEMENTS: SELECT ###
           'TYPO3.Form:SelectionMixin': []
           'TYPO3.Form:SingleSelectionMixin':
             superTypes: ['TYPO3.Form:SelectionMixin']
           'TYPO3.Form:MultiSelectionMixin':
             superTypes: ['TYPO3.Form:SelectionMixin']
 
-          'TYPO3.Form:Checkboxes':
+          'TYPO3.Form:Checkbox':
+            superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:MultipleSelectCheckboxes':
             superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:MultiSelectionMixin']
-          'TYPO3.Form:Radiobuttons':
+          'TYPO3.Form:MultipleSelectDropdown':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:MultiSelectionMixin']
+          'TYPO3.Form:SingleSelectRadiobuttons':
             superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SingleSelectionMixin']
-#            processingRule:
-#              mapping:
-#                availableOptions:
-#                  dateFormat:
-##                    type: string // boolean // .... # for graphical UI
-##                    label: '....' # for graphical UI
-#                    converterOptionName: 'TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter::format'
-#                targetType: '\DateTime'
-#                options:
-#                  dateFormat: 'Y-m-d'
-          'TYPO3.Form:Select':
-            # TODO: We need to split this into single and multiple select
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SelectionMixin']
+          'TYPO3.Form:SingleSelectDropdown':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SingleSelectionMixin']
+
+          ### FORM ELEMENTS: CUSTOM ###
+          'TYPO3.Form:DatePicker':
+            superTypes: ['TYPO3.Form:FormElement']
+          'TYPO3.Form:ImageUpload':
+            superTypes: ['TYPO3.Form:FormElement']
+            implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
+            properties:
+              allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp']
+
+
 
            ### FINISHERS ###
         finisherTypes:
