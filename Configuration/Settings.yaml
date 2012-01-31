@@ -77,6 +77,10 @@ TYPO3:
           'TYPO3.Form:DatePicker':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\DatePicker'
+            properties:
+              dateFormat: 'Y-m-d'
+              enableDatePicker: true
+              displayTimeSelector: false
           'TYPO3.Form:FileUpload':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\FileUpload'
