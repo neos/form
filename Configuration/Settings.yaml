@@ -77,6 +77,11 @@ TYPO3:
           'TYPO3.Form:DatePicker':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\DatePicker'
+          'TYPO3.Form:FileUpload':
+            superTypes: ['TYPO3.Form:FormElement']
+            implementationClassName: 'TYPO3\Form\FormElements\FileUpload'
+            properties:
+              allowedExtensions: ['pdf', 'doc']
           'TYPO3.Form:ImageUpload':
             superTypes: ['TYPO3.Form:FormElement']
             implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'

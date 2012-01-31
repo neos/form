@@ -60,25 +60,28 @@ class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractF
 	 * @api
 	 */
 	public function render($as = 'resource') {
-		if ($this->hasMappingErrorOccured()) {
-			$value = $this->getLastSubmittedFormData();
-		} else {
-			$value = $this->getValue();
-		}
-
-		$resourceObject = NULL;
-		if ($value) {
-			$resourceObject = $this->propertyMapper->convert($value, 'TYPO3\FLOW3\Resource\Resource');
-			if (!$resourceObject instanceof \TYPO3\FLOW3\Resource\Resource) {
-				$resourceObject = NULL;
-			}
-		}
-
-		$this->templateVariableContainer->add($as, $resourceObject);
+		$this->templateVariableContainer->add($as, $this->getUploadedResource());
 		$output = $this->renderChildren();
 		$this->templateVariableContainer->remove($as);
 
 		return $output;
+	}
+
+	/**
+	 * Returns a previously uploaded resource.
+	 * If errors occurred during property mapping for this property, NULL is returned
+	 *
+	 * @return \TYPO3\FLOW3\Resource\Resource
+	 */
+	protected function getUploadedResource() {
+		if ($this->getMappingResultsForProperty()->hasErrors()) {
+			return NULL;
+		}
+		$resourceObject = $this->getValue(FALSE);
+		if ($resourceObject instanceof \TYPO3\FLOW3\Resource\Resource) {
+			return $resourceObject;
+		}
+		return $this->propertyMapper->convert($resourceObject, 'TYPO3\FLOW3\Resource\Resource');
 	}
 }
 
