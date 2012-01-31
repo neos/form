@@ -7,7 +7,8 @@
 			<f:if condition="{validationResults.flattenedErrors}">
 				<span class="help-inline">
 					<f:for each="{validationResults.errors}" as="error">
-						{error}<br />
+						{error -> f:translate(key: error.code, arguments: error.arguments, package: 'TYPO3.Form', source: 'ValidationErrors')}
+						<br />
 					</f:for>
 				</span>
 			</f:if>
