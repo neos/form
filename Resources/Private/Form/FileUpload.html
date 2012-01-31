@@ -1,0 +1,41 @@
+{namespace form=TYPO3\Form\ViewHelpers}
+<f:layout name="TYPO3.Form:Field" />
+<f:section name="field">
+	<form:form.uploadedResource property="{element.identifier}" as="resource">
+		<div id="{element.uniqueIdentifier}-uploadfields"{f:if(condition:resource, then: ' style="display:none"')}>
+			<f:form.upload property="{element.identifier}" id="{element.uniqueIdentifier}" />
+			<f:if condition="{resource}">
+				<div class="clearfix">
+					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')">Cancel</a>
+				</div>
+			</f:if>
+		</div>
+		<f:if condition="{resource}">
+			<div id="{element.uniqueIdentifier}-preview">
+				<a href="{f:uri.resource(resource: resource)}">
+					{resource.filename}
+				</a>
+				<div class="clearfix">
+					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')">Replace File</a>
+				</div>
+			</div>
+		</f:if>
+		<script type="text/javascript">
+		//<![CDATA[
+			var resourcePointers = [];
+			function enableUpload(property) {
+				document.getElementById(property + '-preview').style.display = 'none';
+				document.getElementById(property + '-uploadfields').style.display = 'block';
+				resourcePointers[property] = document.getElementById(property + '-resourcePointer').value;
+				document.getElementById(property + '-resourcePointer').value = '';
+				return true;
+			}
+			function disableUpload(property) {
+				document.getElementById(property + '-preview').style.display = 'block';
+				document.getElementById(property + '-uploadfields').style.display = 'none';
+				document.getElementById(property + '-resourcePointer').value = resourcePointers[property];
+				return true;
+			}
+		//]]></script>
+	</form:form.uploadedResource>
+</f:section>
