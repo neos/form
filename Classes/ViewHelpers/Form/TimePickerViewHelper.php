@@ -89,8 +89,8 @@ class TimePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 	 * @param \DateTime $date
 	 * @return string
 	 */
-	protected function buildHourSelector(\DateTime $date) {
-		$value = $date->format('H');
+	protected function buildHourSelector(\DateTime $date = NULL) {
+		$value = $date !== NULL ? $date->format('H') : NULL;
 		$hourSelector = clone $this->tag;
 		$hourSelector->addAttribute('name', sprintf('%s[hour]', $this->getName()));
 		$options = '';
@@ -107,8 +107,8 @@ class TimePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 	 * @param \DateTime $date
 	 * @return string
 	 */
-	protected function buildMinuteSelector(\DateTime $date) {
-		$value = $date->format('i');
+	protected function buildMinuteSelector(\DateTime $date = NULL) {
+		$value = $date !== NULL ? $date->format('i') : NULL;
 		$minuteSelector = clone $this->tag;
 		if ($this->hasArgument('id')) {
 			$minuteSelector->addAttribute('id', $this->arguments['id'] . '-minute');
