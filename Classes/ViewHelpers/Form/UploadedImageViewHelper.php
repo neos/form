@@ -57,25 +57,28 @@ class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractForm
 	 * @api
 	 */
 	public function render($as = 'image') {
-		if ($this->hasMappingErrorOccured()) {
-			$value = $this->getLastSubmittedFormData();
-		} else {
-			$value = $this->getValue();
-		}
-
-		$image = NULL;
-		if ($value) {
-			$image = $this->propertyMapper->convert($value, 'TYPO3\Media\Domain\Model\Image');
-			if (!$image instanceof \TYPO3\Media\Domain\Model\Image) {
-				$image = NULL;
-			}
-		}
-
-		$this->templateVariableContainer->add($as, $image);
+		$this->templateVariableContainer->add($as, $this->getUploadedImage());
 		$output = $this->renderChildren();
 		$this->templateVariableContainer->remove($as);
 
 		return $output;
+	}
+
+	/**
+	 * Returns a previously uploaded image.
+	 * If errors occurred during property mapping for this property, NULL is returned
+	 *
+	 * @return \TYPO3\Media\Domain\Model\Image
+	 */
+	protected function getUploadedImage() {
+		if ($this->getMappingResultsForProperty()->hasErrors()) {
+			return NULL;
+		}
+		$image = $this->getValue(FALSE);
+		if ($image instanceof \TYPO3\Media\Domain\Model\Image) {
+			return $image;
+		}
+		return $this->propertyMapper->convert($image, 'TYPO3\Media\Domain\Model\Image');
 	}
 }
 

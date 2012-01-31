@@ -22,6 +22,8 @@ class ImageUpload extends \TYPO3\Form\Core\Model\AbstractFormElement {
 		$imageConverter = new \TYPO3\Media\TypeConverter\ImageConverter();
 		$processingRule->getPropertyMappingConfiguration()->setTypeConverter($imageConverter);
 		$processingRule->setDataType('TYPO3\Media\Domain\Model\Image');
+		$imageTypeValidator = new \TYPO3\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
+		$processingRule->addValidator($imageTypeValidator);
 	}
 }
 ?>
