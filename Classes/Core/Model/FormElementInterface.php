@@ -91,6 +91,14 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	public function getValidators();
 
 	/**
+	 * Registers a validator for this element
+	 *
+	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
+	 * @return void
+	 */
+	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator);
+
+	/**
 	 * Whether or not this element is required
 	 *
 	 * @internal

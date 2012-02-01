@@ -72,10 +72,6 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		$this->defaultValue = $defaultValue;
 	}
 
-	/**
-	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
-	 * @todo this method might become part of the interface...
-	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
 		$formDefinition = $this->getRootForm();
 		$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);

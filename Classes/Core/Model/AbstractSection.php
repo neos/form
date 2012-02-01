@@ -41,7 +41,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * Get the child Form Elements
 	 *
-	 * @return array<\TYPO3\Form\Domain\Model\FormElementInterface> The Page's elements
+	 * @return array<\TYPO3\Form\Core\Model\FormElementInterface> The Page's elements
 	 * @api
 	 */
 	public function getElements() {
@@ -51,7 +51,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * Get the child Form Elements
 	 *
-	 * @return array<\TYPO3\Form\Domain\Model\FormElementInterface> The Page's elements
+	 * @return array<\TYPO3\Form\Core\Model\FormElementInterface> The Page's elements
 	 * @api
 	 */
 	public function getElementsRecursively() {
@@ -80,7 +80,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param string $identifier Identifier of the new form element
 	 * @param string $typeName type of the new form element
-	 * @return \TYPO3\Form\Domain\Model\FormElementInterface the newly created form element
+	 * @return \TYPO3\Form\Core\Model\FormElementInterface the newly created form element
 	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotValidException
 	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if this section is not connected to a parent form.
 	 * @api

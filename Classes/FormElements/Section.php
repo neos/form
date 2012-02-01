@@ -48,6 +48,11 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 		return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
 	}
 
+	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
+		$formDefinition = $this->getRootForm();
+		$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
+	}
+
 	public function isRequired() {
 		// TODO get rid of code duplication
 		foreach ($this->getValidators() as $validator) {
