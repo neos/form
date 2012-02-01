@@ -28,9 +28,13 @@ use TYPO3\Form\Core\Runtime\FormRuntime;
  * - senderAddress (mandatory): Email address of the sender
  * - senderName: Human-readable name of the sender
  * - replyToAddress: Email address of to be used as reply-to email
- * - sendAsPlaintext: if TRUE (boolean), then the email is sent as plain-text. by default it is sent as HTML.
+ * - format: format of the email (one of the FORMAT_* constants). By default mails are sent as HTML
+ * - testMode: if TRUE the email is not actually sent but outputted for debugging purposes. Defaults to FALSE
  */
 class EmailFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
+
+	const FORMAT_PLAINTEXT = 'plaintext';
+	const FORMAT_HTML = 'html';
 
 	/**
 	 * @var array
@@ -54,7 +58,8 @@ class EmailFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 		$senderAddress = $this->parseOption('senderAddress', $formRuntime);
 		$senderName = $this->parseOption('senderName', $formRuntime, '');
 		$replyToAddress = $this->parseOption('replyToAddress', $formRuntime);
-		$sendAsPlaintext = $this->parseOption('sendAsPlaintext', $formRuntime, FALSE);
+		$format = $this->parseOption('format', $formRuntime, self::FORMAT_HTML);
+		$testMode = $this->parseOption('testMode', $formRuntime, FALSE);
 
 		if ($subject === NULL) {
 			throw new \TYPO3\Form\Exception\FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
@@ -77,13 +82,26 @@ class EmailFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 			$mail->setReplyTo($replyToAddress);
 		}
 
-		if ($sendAsPlaintext === TRUE) {
+		if ($format === self::FORMAT_PLAINTEXT) {
 			$mail->setBody($message, 'text/plain');
 		} else {
 			$mail->setBody($message, 'text/html');
 		}
 
-		$mail->send();
+		if ($testMode === TRUE) {
+			\TYPO3\FLOW3\var_dump(
+				array(
+					'sender' => array($senderAddress => $senderName),
+					'recipient' => array($recipientAddress => $recipientName),
+					'replyToAddress' => $replyToAddress,
+					'message' => $message,
+					'format' => $format,
+				),
+				'E-Mail "' . $subject . '"'
+			);
+		} else {
+			$mail->send();
+		}
 	}
 
 	/**
