@@ -28,6 +28,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 	}
 
 	public function load($persistenceIdentifier) {
+		$persistenceIdentifier = \TYPO3\FLOW3\Utility\Files::getUnixStylePath($persistenceIdentifier);
 		if ($this->isDirectoryAllowed($persistenceIdentifier)) {
 			return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($persistenceIdentifier));
 		} else {
