@@ -34,10 +34,10 @@ interface FormPersistenceManagerInterface {
 	 * List all form definitions which can be loaded through this form persistence
 	 * manager.
 	 *
-	 * Returns an associative array, where the key is the $persistenceIdentifier
-	 * and the label is the human-readable name of the form.
+	 * Returns an associative array with each item containing the keys 'name' (the human-readable name of the form)
+	 * and 'persistenceIdentifier' (the unique identifier for the Form Persistence Manager e.g. the path to the saved form definition).
 	 *
-	 * @return array
+	 * @return array in the format array(array('name' => 'Form 01', 'persistenceIdentifier' => 'path1'), array( .... ))
 	 */
 	public function listForms();
 }
