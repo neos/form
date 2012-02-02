@@ -1,5 +1,8 @@
 TYPO3:
   Form:
+    #yamlPersistenceManager:
+      #allowedDirectories:
+        # list of allowed directories
     supertypeResolver:
       hiddenProperties: []
     Presets:
