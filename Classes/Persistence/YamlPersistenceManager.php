@@ -37,6 +37,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 	}
 
 	public function save($persistenceIdentifier, array $formDefinition) {
+		$persistenceIdentifier = \TYPO3\FLOW3\Utility\Files::getUnixStylePath($persistenceIdentifier);
 		if ($this->isDirectoryAllowed($persistenceIdentifier)) {
 			file_put_contents($persistenceIdentifier, \Symfony\Component\Yaml\Yaml::dump($formDefinition, 99));
 		} else {
@@ -51,7 +52,10 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 			$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
 			foreach ($iterator as $fileObject) {
 				$form = $this->load($fileObject->getPathname());
-				$forms[$fileObject->getPathname()] = $form['identifier'];
+				$forms[] = array(
+					'name' => $form['identifier'],
+					'persistenceIdentifier' => $fileObject->getPathname()
+				);
 			}
 		}
 		return $forms;
