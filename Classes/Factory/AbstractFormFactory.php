@@ -119,7 +119,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 * @throws \TYPO3\Form\Exception\PresetNotFoundException if preset with the name $presetName was not found
 	 * @api
 	 */
-	protected function getPresetConfiguration($presetName) {
+	public function getPresetConfiguration($presetName) {
 		if (!isset($this->formSettings['Presets'][$presetName])) {
 			throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: Presets.', $presetName), 1325685498);
 		}

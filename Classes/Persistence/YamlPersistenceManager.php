@@ -27,8 +27,8 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 		$this->allowedDirectories = (isset($settings['yamlPersistenceManager']['allowedDirectories']) && is_array($settings['yamlPersistenceManager']['allowedDirectories']) ? $settings['yamlPersistenceManager']['allowedDirectories'] : array());
 	}
 
-	public function load($persistenceIdentifier, $enableAccessChecks = TRUE) {
-		if ($this->isDirectoryAllowed($persistenceIdentifier) || $enableAccessChecks === FALSE) {
+	public function load($persistenceIdentifier) {
+		if ($this->isDirectoryAllowed($persistenceIdentifier)) {
 			return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($persistenceIdentifier));
 		} else {
 			throw new Exception(sprintf('The form identified by "%s" was not allowed to be loaded.', $persistenceIdentifier), 1328160893);

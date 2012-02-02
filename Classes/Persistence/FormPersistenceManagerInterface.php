@@ -18,10 +18,9 @@ interface FormPersistenceManagerInterface {
 	 * Load the array form representation identified by $persistenceIdentifier, and return it
 	 *
 	 * @param string $persistenceIdentifier
-	 * @param boolean $enableAccessChecks if FALSE, no permission checks should be performed.
 	 * @return array
 	 */
-	public function load($persistenceIdentifier, $enableAccessChecks = TRUE);
+	public function load($persistenceIdentifier);
 
 	/**
 	 * Save the array form representation identified by $persistenceIdentifier
