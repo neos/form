@@ -25,7 +25,14 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = ['sphinx.ext.extlinks']
+
+extlinks = {
+	'api-core-model': ('../../../api/class-TYPO3.Form.Core.Model.%s.html', ''),
+	'api-factory': ('../../../api/class-TYPO3.Form.Factory.%s.html', ''),
+	'api-viewhelpers': ('../../../api/class-TYPO3.Form.ViewHelpers.%sViewHelper.html', ''),
+	'api-finishers': ('../../../api/class-TYPO3.Form.Finishers.%s.html', '')
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -91,7 +98,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'agogo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -239,3 +246,13 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+
+# Configure PHP syntax highlighting
+# all textsnippets will be PHP by default
+highlight_language = 'php'
+
+# ... and we do not want to include <?php ... ?> in the PHP code snippets.
+from sphinx.highlighting import lexers
+from pygments.lexers.web import PhpLexer
+lexers['php'] = PhpLexer(startinline=True)
