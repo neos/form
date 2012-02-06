@@ -46,15 +46,16 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * definition.
  *
  * The AbstractFormFactory loads the presets from the package settings, from the
- * YAML key *TYPO3: Form: Presets: [PresetName]*.
+ * YAML key *TYPO3: Form: presets: [presetName]*.
  *
  * The YAML preset definition has the following structure:
  *
  * <pre>
  * TYPO3:
  *   Form:
- *     Presets:
- *       Default:
+ *     presets:
+ *       default:
+ *         title: 'Default Preset'
  *         formElementTypes:
  *           # ... definition of form element types,
  *           #     see {@link TYPO3\Form\Core\Model\FormDefinition}
@@ -62,22 +63,23 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  *         finisherTypes:
  *           # definition of the available finishers inside this preset
  *
- *       SimpleHtml:
- *         parentPreset: 'Default'
+ *       simpleHtml:
+ *         parentPreset: 'default'
+ *         title: 'Simple HTML Preset'
  *         # here follows configuration specific to SimpleHtml
  * </pre>
  *
- * In the above example, two presets are defined: The *Default* preset and
- * the *SimpleHtml* Preset.
+ * In the above example, two presets are defined: The *default* preset and
+ * the *simpleHtml* Preset.
  *
  * Preset Hierarchy
  * ================
  *
  * Each preset can have a *parentPreset*, so you can structure the presets hierarchically.
- * In the above example, *SimpleHtml* has the parent preset *Default*, thus it only needs
+ * In the above example, *simpleHtml* has the parent preset *default*, thus it only needs
  * to specify the *modifications* to the parent preset.
  *
- * **HINT: The "Default" preset is already part of this package, so we suggest
+ * **HINT: The "default" preset is already part of this package, so we suggest
  * that you extend this preset to create your own adjustments. This saves you
  * a lot of configuration**
  *
@@ -120,10 +122,10 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 * @api
 	 */
 	public function getPresetConfiguration($presetName) {
-		if (!isset($this->formSettings['Presets'][$presetName])) {
-			throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: Presets.', $presetName), 1325685498);
+		if (!isset($this->formSettings['presets'][$presetName])) {
+			throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: presets.', $presetName), 1325685498);
 		}
-		$preset = $this->formSettings['Presets'][$presetName];
+		$preset = $this->formSettings['presets'][$presetName];
 		if (isset($preset['parentPreset'])) {
 			$parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
 			unset($preset['parentPreset']);

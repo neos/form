@@ -5,9 +5,16 @@ TYPO3:
         # list of allowed directories
     supertypeResolver:
       hiddenProperties: []
-    Presets:
-      Default:
-        ########### DEFAULT ###########
+    presets:
+      default:
+        title: 'Default'
+
+        ########### Required CSS / JavaScripts ###########
+
+        stylesheets: []
+        javaScripts: []
+
+        ########### DEFAULT FORM ELEMENT DEFINITIONS ###########
         formElementTypes:
 
           ### BASE ELEMENTS ###
@@ -106,8 +113,16 @@ TYPO3:
                 type: 'string'
 
         ########### CUSTOM PRESETS ###########
-#      SomePresetName:
+#      somePresetName:
 #        parentPreset: 'Default'
+#        title: 'Some Preset'
+#        stylesheets:
+#          css1:
+#            source: 'resource://SomePackage/Public/Css/File1.css'
+#        javaScripts:
+#          js1:
+#            source: 'resource://SomePackage/Public/JavaScript/File1.js'
+#            skipInFormBuilder: true
 #        formElementTypes:
 #          'TYPO3.Form:Base':
 #            renderingOptions:

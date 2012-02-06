@@ -29,31 +29,34 @@ class RenderHeadViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelp
 	 * @param string $presetName name of the preset to use
 	 * @return string the rendered form head
 	 */
-	public function render($presetName = 'Default') {
+	public function render($presetName = 'default') {
 		$content = '';
 		$presetConfiguration = $this->formBuilderFactory->getPresetConfiguration($presetName);
-		$cssFiles = isset($presetConfiguration['cssFiles']) ? $this->resolveCssFiles($presetConfiguration['cssFiles']) : array();
-		foreach ($cssFiles as $cssFile) {
-			$content .= sprintf('<link href="%s" rel="stylesheet">', $cssFile);
+		$stylesheets = isset($presetConfiguration['stylesheets']) ? $presetConfiguration['stylesheets'] : array();
+		foreach ($stylesheets as $stylesheet) {
+			$content .= sprintf('<link href="%s" rel="stylesheet">', $this->resolveResourcePath($stylesheet['source']));
+		}
+		$javaScripts = isset($presetConfiguration['javaScripts']) ? $presetConfiguration['javaScripts'] : array();
+		foreach ($javaScripts as $javaScript) {
+			$content .= sprintf('<script src="%s"></script>', $this->resolveResourcePath($javaScript['source']));
 		}
 		return $content;
 	}
 
-	protected function resolveCssFiles(array $cssFiles) {
-		$processedCssFiles = array();
-		foreach ($cssFiles as $cssFile) {
-			// TODO: This method should be somewhere in the resource manager probably?
-			if (preg_match('#resource://([^/]*)/Public/(.*)#', $cssFile, $matches) > 0) {
-				$package = $matches[1];
-				$path = $matches[2];
-
-				$processedCssFiles[] = $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/' . $package . '/' . $path;
-
-			} else {
-				$processedCssFiles[] = $cssFile;
-			}
+	/**
+	 * @param string $resourcePath
+	 * @return string
+	 */
+	protected function resolveResourcePath($resourcePath) {
+		// TODO: This method should be somewhere in the resource manager probably?
+		$matches = array();
+		preg_match('#resource://([^/]*)/Public/(.*)#', $resourcePath, $matches);
+		if ($matches === array()) {
+			throw new \TYPO3\Fluid\Core\ViewHelper\Exception('Resource path "' . $resourcePath . '" can\'t be resolved.', 1328543327);
 		}
-		return $processedCssFiles;
+		$package = $matches[1];
+		$path = $matches[2];
+		return $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/' . $package . '/' . $path;
 	}
 }
 ?>

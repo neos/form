@@ -16,20 +16,20 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	public function dataProviderForConfigurationMerging() {
 		$presets = array(
-			'Default' => array(
+			'default' => array(
 				'formElementTypes' => array(
 					'TYPO3.Form:Base' => array()
 				)
 			),
-			'Special' => array(
-				'parentPreset' => 'Default',
+			'special' => array(
+				'parentPreset' => 'default',
 				'foo' => 'bar',
 				'baz' => array(
 					'test' => 'yeah'
 				)
 			),
-			'SpecialSub' => array(
-				'parentPreset' => 'Special',
+			'specialSub' => array(
+				'parentPreset' => 'special',
 				'baz' => array(
 					'test' => 42
 				)
@@ -38,7 +38,7 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		return array(
 			'preset without parent present' => array(
 				'presets' => $presets,
-				'presetName' => 'Default',
+				'presetName' => 'default',
 				'expected' => array(
 					'formElementTypes' => array(
 						'TYPO3.Form:Base' => array()
@@ -48,7 +48,7 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 			'preset with one parent preset' => array(
 				'presets' => $presets,
-				'presetName' => 'Special',
+				'presetName' => 'special',
 				'expected' => array(
 					'formElementTypes' => array(
 						'TYPO3.Form:Base' => array()
@@ -62,7 +62,7 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 			'preset with two parent presets' => array(
 				'presets' => $presets,
-				'presetName' => 'SpecialSub',
+				'presetName' => 'specialSub',
 				'expected' => array(
 					'formElementTypes' => array(
 						'TYPO3.Form:Base' => array()
@@ -83,7 +83,7 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function getPresetConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected) {
 		$abstractFormFactory = $this->getAbstractFormFactory();
 		$abstractFormFactory->_set('formSettings', array(
-			'Presets' => $presets
+			'presets' => $presets
 		));
 
 		$actual = $abstractFormFactory->_call('getPresetConfiguration', $presetName);
