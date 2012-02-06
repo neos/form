@@ -51,11 +51,13 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 		foreach ($this->allowedDirectories as $directory) {
 			$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
 			foreach ($iterator as $fileObject) {
-				$form = $this->load($fileObject->getPathname());
-				$forms[] = array(
-					'name' => $form['identifier'],
-					'persistenceIdentifier' => $fileObject->getPathname()
-				);
+				if ($fileObject->isFile()) {
+					$form = $this->load($fileObject->getPathname());
+					$forms[] = array(
+						'name' => $form['identifier'],
+						'persistenceIdentifier' => $fileObject->getPathname()
+					);
+				}
 			}
 		}
 		return $forms;
