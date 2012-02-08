@@ -20,6 +20,16 @@ class ArrayFormFactory extends AbstractFormFactory {
 		foreach ($configuration['renderables'] as $pageConfiguration) {
 			$this->addNestedRenderable($pageConfiguration, $form);
 		}
+		if (isset($configuration['finishers']) && is_array($configuration['finishers'])) {
+			foreach ($configuration['finishers'] as $finisherConfiguration) {
+				$finisherClassName = $finisherConfiguration['name'];
+				$finisherOptions = (isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : array());
+				$finisher = new $finisherClassName();
+				$finisher->setOptions($finisherOptions);
+				$form->addFinisher($finisher);
+			}
+		}
+
 		return $form;
 	}
 

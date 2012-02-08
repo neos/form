@@ -147,6 +147,9 @@ class EmailFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 		if (!is_string($this->options[$optionName])) {
 			return $this->options[$optionName];
 		}
+		if ($this->options[$optionName] === '') {
+			return NULL;
+		}
 		return preg_replace_callback('/{([^}]+)}/', function($match) use ($formRuntime) {
 			return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
 		}, $this->options[$optionName]);
