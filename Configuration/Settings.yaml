@@ -32,15 +32,17 @@ TYPO3:
             renderingOptions:
               renderableNameInTemplate: 'form'
 
+          'TYPO3.Form:RemovableMixin': {} # empty "removable" mixin for all form elements which can be removed (i.e. everything except the root form object)
+
           'TYPO3.Form:FormElement':
-            superTypes: ['TYPO3.Form:Base']
+            superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
             implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
             renderingOptions:
               renderableNameInTemplate: 'element'
 
           ### FORM ELEMENTS: CONTAINER ###
           'TYPO3.Form:Page':
-            superTypes: ['TYPO3.Form:Base']
+            superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
             implementationClassName: 'TYPO3\Form\Core\Model\Page'
             renderingOptions:
               renderableNameInTemplate: 'page'
