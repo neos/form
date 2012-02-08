@@ -106,13 +106,38 @@ TYPO3:
 
 
 
-           ### FINISHERS ###
-        finisherTypes:
+        ### FINISHERS ###
+        finisherPresets:
           'TYPO3.Form:Redirect':
             implementationClassName: 'TYPO3\Form\Finishers\RedirectFinisher'
-            availableOptions:
-              sender:
-                type: 'string'
+            options: {}
+          'TYPO3.Form:Email':
+            implementationClassName: 'TYPO3\Form\Finishers\EmailFinisher'
+            options: {}
+        ### VALIDATORS ###
+        validatorPresets:
+          'TYPO3.FLOW3:NotEmpty':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\NotEmptyValidator'
+          'TYPO3.FLOW3:DateTimeRange':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\DateTimeRangeValidator'
+          'TYPO3.FLOW3:Alphanumeric':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\AlphanumericValidator'
+          'TYPO3.FLOW3:Text':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\TextValidator'
+          'TYPO3.FLOW3:StringLength':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\StringLengthValidator'
+          'TYPO3.FLOW3:EmailAddress':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\EmailAddressValidator'
+          'TYPO3.FLOW3:Integer':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\IntegerValidator'
+          'TYPO3.FLOW3:Float':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\FloatValidator'
+          'TYPO3.FLOW3:NumberRange':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\NumberRangeValidator'
+          'TYPO3.FLOW3:RegularExpression':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\RegularExpressionValidator'
+          'TYPO3.FLOW3:Count':
+            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\CountValidator'
 
         ########### CUSTOM PRESETS ###########
 #      somePresetName:

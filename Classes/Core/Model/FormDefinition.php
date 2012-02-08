@@ -260,6 +260,18 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	protected $formFieldTypeManager;
 
 	/**
+	 * @var array
+	 * @internal
+	 */
+	protected $validatorPresets;
+
+	/**
+	 * @var array
+	 * @internal
+	 */
+	protected $finisherPresets;
+
+	/**
 	 * Constructor. Creates a new FormDefinition with the given identifier.
 	 *
 	 * @param string $identifier The Form Definition's identifier, must be a non-empty string.
@@ -270,6 +282,9 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 */
 	public function __construct($identifier, $formDefaults = array(), $type = 'TYPO3.Form:Form') {
 		$this->formFieldTypeManager = new \TYPO3\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : array());
+		$this->validatorPresets = isset($formDefaults['validatorPresets']) ? $formDefaults['validatorPresets'] : array();
+		$this->finisherPresets = isset($formDefaults['finisherPresets']) ? $formDefaults['finisherPresets'] : array();
+
 		if (!is_string($identifier) || strlen($identifier) === 0) {
 			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
 		}
@@ -308,8 +323,13 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 				$this->setRenderingOption($key, $value);
 			}
 		}
+		if (isset($options['finishers'])) {
+			foreach ($options['finishers'] as $finisherConfiguration) {
+				$this->createFinisher($finisherConfiguration['identifier'], isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : array());
+			}
+		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('rendererClassName', 'renderingOptions'));
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('rendererClassName', 'renderingOptions', 'finishers'));
 	}
 
 	/**
@@ -402,6 +422,27 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 */
 	public function addFinisher(FinisherInterface $finisher) {
 		$this->finishers[] = $finisher;
+	}
+
+	/**
+	 * @param string $finisherIdentifier
+	 * @param array $options
+	 * @api
+	 */
+	public function createFinisher($finisherIdentifier, array $options = array()) {
+		if (isset($this->finisherPresets[$finisherIdentifier]) && is_array($this->finisherPresets[$finisherIdentifier]) && isset($this->finisherPresets[$finisherIdentifier]['implementationClassName'])) {
+			$implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
+			$defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
+
+			$options = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+
+			$finisher = new $implementationClassName;
+			$finisher->setOptions($options);
+			$this->addFinisher($finisher);
+			return $finisher;
+		} else {
+			throw new \TYPO3\Form\Exception\FinisherPresetNotFoundException('The finisher preset identified by "' . $finisherIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328709784);
+		}
 	}
 
 	/**
@@ -528,6 +569,14 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 */
 	public function getFormFieldTypeManager() {
 		return $this->formFieldTypeManager;
+	}
+
+	/**
+	 * @return array
+	 * @internal
+	 */
+	public function getValidatorPresets() {
+		return $this->validatorPresets;
 	}
 }
 ?>

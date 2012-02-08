@@ -111,7 +111,41 @@ abstract class AbstractRenderable implements RenderableInterface {
 			}
 		}
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions'));
+		if (isset($options['validators'])) {
+			foreach ($options['validators'] as $validatorConfiguration) {
+				$this->createValidator($validatorConfiguration['identifier'], isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array());
+			}
+		}
+
+		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions', 'validators'));
+	}
+
+
+	public function createValidator($validatorIdentifier, array $options = array()) {
+		$validatorPresets = $this->getRootForm()->getValidatorPresets();
+		if (isset($validatorPresets[$validatorIdentifier]) && is_array($validatorPresets[$validatorIdentifier]) && isset($validatorPresets[$validatorIdentifier]['implementationClassName'])) {
+			$implementationClassName = $validatorPresets[$validatorIdentifier]['implementationClassName'];
+			$defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : array();
+
+			$options = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+
+			$validator = new $implementationClassName($options);
+			$this->addValidator($validator);
+			return $validator;
+		} else {
+			throw new \TYPO3\Form\Exception\ValidatorPresetNotFoundException('The validator preset identified by "' . $validatorIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328710202);
+		}
+
+	}
+
+	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
+		$formDefinition = $this->getRootForm();
+		$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
+	}
+
+	public function getValidators() {
+		$formDefinition = $this->getRootForm();
+		return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
 	}
 
 	/**

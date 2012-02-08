@@ -20,18 +20,8 @@ class ArrayFormFactory extends AbstractFormFactory {
 		foreach ($configuration['renderables'] as $pageConfiguration) {
 			$this->addNestedRenderable($pageConfiguration, $form);
 		}
-		if (isset($configuration['finishers']) && is_array($configuration['finishers'])) {
-			foreach ($configuration['finishers'] as $finisherConfiguration) {
-				$finisherClassName = $finisherConfiguration['name'];
-				$finisherOptions = (isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : array());
-				$finisher = new $finisherClassName();
-				$finisher->setOptions($finisherOptions);
-				$form->addFinisher($finisher);
-			}
-		}
 
 		unset($configuration['renderables']);
-		unset($configuration['finishers']);
 		unset($configuration['type']);
 		unset($configuration['identifier']);
 		unset($configuration['label']);
@@ -56,18 +46,9 @@ class ArrayFormFactory extends AbstractFormFactory {
 			$childRenderables = array();
 		}
 
-		if (isset($nestedRenderableConfiguration['validators']) && is_array($nestedRenderableConfiguration['validators'])) {
-			foreach ($nestedRenderableConfiguration['validators'] as $validatorConfiguration) {
-				$validatorClassName = $validatorConfiguration['name'];
-				$validatorOptions = (isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array());
-				$renderable->addValidator(new $validatorClassName($validatorOptions));
-			}
-		}
-
 		unset($nestedRenderableConfiguration['type']);
 		unset($nestedRenderableConfiguration['identifier']);
 		unset($nestedRenderableConfiguration['renderables']);
-		unset($nestedRenderableConfiguration['validators']);
 
 		$nestedRenderableConfiguration = $this->convertJsonArrayToAssociativeArray($nestedRenderableConfiguration);
 		$renderable->setOptions($nestedRenderableConfiguration);
