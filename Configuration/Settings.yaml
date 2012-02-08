@@ -103,7 +103,10 @@ TYPO3:
             implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
             properties:
               allowedTypes: ['jpeg', 'png', 'bmp']
-
+          'TYPO3.Form:StaticText':
+            superTypes: ['TYPO3.Form:FormElement']
+            properties:
+              text: ''
 
 
         ### FINISHERS ###
