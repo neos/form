@@ -30,6 +30,13 @@ class ArrayFormFactory extends AbstractFormFactory {
 			}
 		}
 
+		unset($configuration['renderables']);
+		unset($configuration['finishers']);
+		unset($configuration['type']);
+		unset($configuration['identifier']);
+		unset($configuration['label']);
+		$form->setOptions($configuration);
+
 		return $form;
 	}
 
