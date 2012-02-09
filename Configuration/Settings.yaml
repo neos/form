@@ -34,6 +34,12 @@ TYPO3:
 
           'TYPO3.Form:RemovableMixin': {} # empty "removable" mixin for all form elements which can be removed (i.e. everything except the root form object)
 
+          'TYPO3.Form:ReadOnlyFormElement':
+            superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
+            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
+            renderingOptions:
+              renderableNameInTemplate: 'element'
+
           'TYPO3.Form:FormElement':
             superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
             implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
@@ -104,7 +110,7 @@ TYPO3:
             properties:
               allowedTypes: ['jpeg', 'png', 'bmp']
           'TYPO3.Form:StaticText':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes: ['TYPO3.Form:ReadOnlyFormElement']
             properties:
               text: ''
 
