@@ -133,5 +133,14 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 		}
 		return $preset;
 	}
+
+	/**
+	 * Get the available preset names
+	 *
+	 * @return array
+	 */
+	public function getPresetNames() {
+		return array_keys($this->formSettings['presets']);
+	}
 }
 ?>
