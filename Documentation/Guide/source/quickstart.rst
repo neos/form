@@ -25,10 +25,10 @@ As an example, let's take a basic contact form with the following structure:
         * Email *(Single-line Text)*
         * Message *(Multi-line Text)*
 
-Our form just has a single page, and then again has three input fields: Name, Email
+Our form just has a single page that contains three input fields: Name, Email
 and Message.
 
-.. note:: Every form needs to have at least one page, else it cannot be rendered.
+.. note:: Every form needs to have at least one page.
 
 .. role:: further-information(admonition)
 
@@ -97,6 +97,8 @@ to create the form elements and set some options on them.
 The ``$identifier`` is used to identify a form element, thus it needs to be unique
 across the whole form. ``$type`` references an **Element Type**.
 
+.. note:: By default the ``$identifier`` is part of the `id` attribute of the rendered Form Element so it should be lowerCamelCased and must not contain special characters.
+
 .. tip:: As you will learn in the next guide, you can define your own **Element Types** easily.
    The element types referenced above (``TYPO3.Form:SingleLineText`` and ``TYPO3.Form:MultiLineText``)
    are just element types which are delivered by default by the framework.
@@ -135,9 +137,9 @@ which provides a convenient way to work with FLOW3 validators::
 
 With the ``addValidator($validator)`` method you can attach one or more validators to a form element.
 If you save the changes and reload the page where you embedded the form, you can see that
-all text fields are required now, that the email address is verified and that you need
-to write a message of at least 3 characters. If you try to submit the form with invalid
-data, validation errors are displayed next to each erroneous field.
+all text fields are required now, that the email address is syntactically verified and that
+you need to write a message of at least 3 characters. If you try to submit the form with
+invalid data, validation errors are displayed next to each erroneous field.
 
 If you do enter name, a valid email address and a message you can submit the
 form - and see a blank page. That's where so called **Finishers** come into play.

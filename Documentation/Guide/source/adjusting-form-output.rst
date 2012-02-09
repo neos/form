@@ -27,7 +27,7 @@ Let's again look at the boilerplate code inside the form factory::
 	}
 
 You see that the second parameter is a ``$presetName`` which is passed to
-``getPresetConfiguration()``. So, let me introduce the concept of *presets* now.
+``getPresetConfiguration()``. So, let's introduce the concept of *presets* now.
 
 A **Preset** is a container for pre-defined form configuration, and is the basic
 way to adjust the form's output. Presets are defined inside the ``Settings.yaml``
