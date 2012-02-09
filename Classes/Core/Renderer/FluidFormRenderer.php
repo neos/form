@@ -102,6 +102,18 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		return $this->formRuntime;
 	}
 
+	/**
+	 * Overridden parser configuration, which always enables the escape interceptor
+	 *
+	 * @return \TYPO3\Fluid\Core\Parser\Configuration
+	 */
+	protected function buildParserConfiguration() {
+		$parserConfiguration = new \TYPO3\Fluid\Core\Parser\Configuration();
+		$parserConfiguration->addInterceptor($this->objectManager->get('TYPO3\Fluid\Core\Parser\Interceptor\Escape'));
+
+		return $parserConfiguration;
+	}
+
 	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
 		$this->templateParser->setConfiguration($this->buildParserConfiguration());
 		$renderableType = $renderable->getType();
