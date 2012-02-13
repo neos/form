@@ -11,6 +11,18 @@ After working through this guide, you will have learned:
 * adding validation rules
 * invoking actions after the form is finished
 
+API Overview
+------------
+
+The image below shows the high-level API overview of the this package.
+
+First, we will dive into the API part *defining a form*, and then go over to
+*rendering a form*. In later chapters, we will also show how loading / saving
+a form definition works.
+
+.. image:: ../../../structure.png
+	:width: 100%
+
 Anatomy of a Form
 -----------------
 
@@ -30,14 +42,10 @@ and Message.
 
 .. note:: Every form needs to have at least one page.
 
-.. role:: further-information(admonition)
-
 .. admonition:: Further Information
 
 	In-depth information about the form structure can be found in the
 	:api-core-model:`FormDefinition` API Documentation.
-
-* TODO: Simplified Class Diagramm
 
 Create your first form
 ----------------------
