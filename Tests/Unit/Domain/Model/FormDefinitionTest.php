@@ -61,6 +61,40 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
+	public function constructorSetsFinishers() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'finisherPresets' => array(
+				'myFinisher' => array(
+					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Finishers\EmailFinisher'),
+					'options' => array(
+						'foo' => 'bar',
+						'test' => 'asdf'
+					)
+				)
+			),
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array(
+					'finishers' => array(
+						array(
+							'identifier' => 'myFinisher',
+							'options' => array(
+								'foo' => 'baz'
+							)
+						)
+					)
+				)
+			)
+		));
+		$finishers = $formDefinition->getFinishers();
+		$this->assertSame(1, count($finishers));
+		$finisher = $finishers[0];
+		$this->assertInstanceOf('TYPO3\Form\Finishers\EmailFinisher', $finisher);
+		$this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
+	}
+
+	/**
+	 * @test
+	 */
 	public function constructorSetsRenderingOptions() {
 		$formDefinition = new FormDefinition('myForm', array(
 			'formElementTypes' => array(
@@ -73,6 +107,21 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			)
 		));
 		$this->assertSame(array('foo' => 'bar', 'baz' => 'test'), $formDefinition->getRenderingOptions());
+	}
+
+	/**
+	 * @test
+	 */
+	public function constructorMakesValidatorPresetsAvailable() {
+		$formDefinition = new FormDefinition('myForm', array(
+			'validatorPresets' => array(
+				'foo' => 'bar'
+			),
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array()
+			)
+		));
+		$this->assertSame(array('foo' => 'bar'), $formDefinition->getValidatorPresets());
 	}
 
 	/**
@@ -451,6 +500,20 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
+	public function getProcessingRuleCreatesProcessingRuleIfItDoesNotExistYet() {
+		$formDefinition = new FormDefinition('foo1');
+		$processingRule1 = $formDefinition->getProcessingRule('foo');
+		$processingRule2 = $formDefinition->getProcessingRule('foo');
+
+		$this->assertInstanceOf('TYPO3\Form\Core\Model\ProcessingRule', $processingRule1);
+		$this->assertSame($processingRule1, $processingRule2);
+
+		$this->assertSame(array('foo' => $processingRule1), $formDefinition->getProcessingRules());
+	}
+
+	/**
+	 * @test
+	 */
 	public function addFinisherAddsFinishersToList() {
 		$formDefinition = new FormDefinition('foo1');
 		$this->assertSame(array(), $formDefinition->getFinishers());
@@ -484,6 +547,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
 		$finisher = $formDefinition->createFinisher('email');
 		$this->assertInstanceOf('TYPO3\Form\Finishers\EmailFinisher', $finisher);
+		$this->assertSame(array($finisher), $formDefinition->getFinishers());
 	}
 
 	/**

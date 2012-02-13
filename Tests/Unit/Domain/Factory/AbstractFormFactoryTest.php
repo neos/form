@@ -122,5 +122,19 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	protected function getAbstractFormFactory() {
 		return $this->getAccessibleMock('TYPO3\Form\Factory\AbstractFormFactory', array('build'));
 	}
+
+	/**
+	 * @dataProvider dataProviderForConfigurationMerging
+	 * @test
+	 */
+	public function getPresetsWorks($presets, $presetName, $expected) {
+		$abstractFormFactory = $this->getAbstractFormFactory();
+		$abstractFormFactory->_set('formSettings', array(
+			'presets' => $presets
+		));
+
+		$actual = $abstractFormFactory->getPresetNames();
+		$this->assertSame(array('default', 'special', 'specialSub'), $actual);
+	}
 }
 ?>
