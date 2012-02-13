@@ -449,6 +449,97 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function addFinisherAddsFinishersToList() {
+		$formDefinition = new FormDefinition('foo1');
+		$this->assertSame(array(), $formDefinition->getFinishers());
+		$finisher = $this->getMockFinisher();
+		$formDefinition->addFinisher($finisher);
+		$this->assertSame(array($finisher), $formDefinition->getFinishers());
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\Form\Exception\FinisherPresetNotFoundException
+	 */
+	public function createFinisherThrowsExceptionIfFinisherPresetNotFound() {
+		$formDefinition = new FormDefinition('foo1');
+		$formDefinition->createFinisher('asdf');
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\Form\Exception\FinisherPresetNotFoundException
+	 */
+	public function createFinisherThrowsExceptionIfImplementationClassNameIsEmpty() {
+		$formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
+		$formDefinition->createFinisher('asdf');
+	}
+
+	/**
+	 * @test
+	 */
+	public function createFinisherCreatesFinisherCorrectly() {
+		$formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
+		$finisher = $formDefinition->createFinisher('email');
+		$this->assertInstanceOf('TYPO3\Form\Finishers\EmailFinisher', $finisher);
+	}
+
+	/**
+	 * @test
+	 */
+	public function createFinisherSetsOptionsCorrectly() {
+		$formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
+		$finisher = $formDefinition->createFinisher('emailWithOptions');
+		$this->assertSame(array('foo' => 'bar', 'name' => 'asdf'), $finisher->_get('options'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function createFinisherSetsOptionsCorrectlyAndMergesThemWithPassedOptions() {
+		$formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
+		$finisher = $formDefinition->createFinisher('emailWithOptions', array('foo' => 'baz'));
+		$this->assertSame(array('foo' => 'baz', 'name' => 'asdf'), $finisher->_get('options'));
+	}
+
+
+	/**
+	 * @return \TYPO3\Form\Core\Model\FormDefinition
+	 */
+	protected function getFormDefinitionWithFinisherConfiguration() {
+		$formDefinition = new FormDefinition('foo1', array(
+			'finisherPresets' => array(
+				'asdf' => array(
+					'assd' => 'as'
+				),
+				'email' => array(
+					'implementationClassName' => 'TYPO3\Form\Finishers\EmailFinisher'
+				),
+				'emailWithOptions' => array(
+					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Finishers\EmailFinisher'),
+					'options' => array(
+						'foo' => 'bar',
+						'name' => 'asdf'
+					)
+				)
+			),
+			'formElementTypes' => array(
+				'TYPO3.Form:Form' => array()
+			)
+		));
+		return $formDefinition;
+	}
+
+	/**
+	 * @return \TYPO3\Form\Core\Model\FinisherInterface
+	 */
+	protected function getMockFinisher() {
+		return $this->getMock('TYPO3\Form\Core\Model\FinisherInterface');
+	}
+
+	/**
 	 * @param string $identifier
 	 * @return \TYPO3\Form\Core\Model\FormElementInterface
 	 */

@@ -289,7 +289,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function validatorKeyCorrectlyAddsValdiator() {
+	public function validatorKeyCorrectlyAddsValidator() {
 		$formDefinition = $this->getDummyFormDefinition();
 
 		$mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
@@ -298,7 +298,23 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$page1 = $formDefinition->createPage('myPage1');
 		$el = $page1->createElement('asdf', 'TYPO3.Form:MyElementWithValidator');
-		// TODO: this test is still buggy
+		$this->assertTrue($el->isRequired());
+		$validators = $el->getValidators();
+		$validators = iterator_to_array($validators);
+		$this->assertSame(2, count($validators));
+		$this->assertInstanceOf('TYPO3\FLOW3\Validation\Validator\StringLengthValidator', $validators[0]);
+		$this->assertSame(array('minimum' => 10), $validators[0]->getOptions());
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\Form\Exception\ValidatorPresetNotFoundException
+	 */
+	public function validatorKeyThrowsExceptionIfValidatorPresetIsNotFound() {
+		$formDefinition = $this->getDummyFormDefinition();
+
+		$page1 = $formDefinition->createPage('myPage1');
+		$el = $page1->createElement('asdf', 'TYPO3.Form:MyElementWithBrokenValidator');
 	}
 
 	protected function getDummyFormDefinition() {
@@ -351,6 +367,14 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 						array(
 							'identifier' => 'MyOtherValidatorIdentifier'
 						),
+					)
+				),
+				'TYPO3.Form:MyElementWithBrokenValidator' => array(
+					'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement',
+					'validators' => array(
+						array(
+							'identifier' => 'nonExisting',
+						)
 					)
 				)
 

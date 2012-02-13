@@ -28,7 +28,9 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		return array(
 			'Null Identifier' => array(NULL),
 			'Integer Identifier' => array(42),
-			'Empty String Identifier' => array('')
+			'Empty String Identifier' => array(''),
+			'UpperCamelCase Identifier' => array('Asdf'),
+			'identifier which starts with number' => array('4a')
 		);
 	}
 
