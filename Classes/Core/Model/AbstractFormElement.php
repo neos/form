@@ -49,6 +49,9 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		if (!is_string($identifier) || strlen($identifier) === 0) {
 			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
 		}
+		if (preg_match(\TYPO3\Form\Core\Model\FormElementInterface::PATTERN_IDENTIFIER, $identifier) !== 1) {
+			throw new \TYPO3\Form\Exception\IdentifierNotValidException(sprintf('The given identifier "%s" is not valid. It has to be lowerCamelCased.', $identifier), 1329131480);
+		}
 		$this->identifier = $identifier;
 		$this->type = $type;
 	}

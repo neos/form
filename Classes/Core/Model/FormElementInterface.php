@@ -18,6 +18,8 @@ namespace TYPO3\Form\Core\Model;
  */
 interface FormElementInterface extends Renderable\RenderableInterface {
 
+	const PATTERN_IDENTIFIER = '/^[a-z][a-zA-Z0-9-_]+$/';
+
 	/**
 	 * Will be called as soon as the element is (tried to be) added to a form
 	 * @see registerInFormIfPossible()
