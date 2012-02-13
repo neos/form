@@ -18,7 +18,7 @@ In the :ref:`quickstart` guide, you have seen how a basic form can be built. We
 will now dissect the form element creation a little more, and explain the lines
 which you might not have understood yet.
 
-Let's again look at the boilerplate code inside the form factory::
+Let's have a look at the boilerplate code inside the form factory again::
 
 	public function build(array $factorySpecificConfiguration, $presetName) {
 		$formConfiguration = $this->getPresetConfiguration($presetName);
@@ -39,12 +39,12 @@ file, like in the following example:
 	  Form:
 	    Presets:
 	      preset1:
-	        name: 'My First Preset'
+	        title: 'My First Preset'
 	        formElementTypes:
 	          'TYPO3.Form:SingleLineTextfield':
 	            # configuration for the single line textfield
 	      preset2:
-	        name: 'My Second Preset'
+	        title: 'My Second Preset'
 	        parentPreset: 'preset1'
 	        # because preset2 *inherits* from preset1, only the changes between
 	        # preset1 and preset2 need to be defined here.
@@ -128,7 +128,7 @@ Creating a Custom Preset
 ------------------------
 
 First, we create a sub-preset inheriting from the ``default`` preset. For that,
-open up ``Your.Package\Configuration\Settings.yaml`` and insert the following
+open up ``Your.Package/Configuration/Settings.yaml`` and insert the following
 contents:
 
 .. code-block:: yaml
@@ -137,6 +137,7 @@ contents:
 	  Form:
 	    Presets:
 	      myCustom:
+	        title: 'Custom Elements'
 	        parentPreset: 'default'
 
 You now created a sub preset named ``myCustom`` which behaves exactly the same as
@@ -152,17 +153,207 @@ Now we are set up to modify the custom preset, and can adjust the form output.
 Adjusting a Form Element Template
 ---------------------------------
 
-We can now override the fluid template path for a text field as follows:
+Templates of the provided Form Elements are located in ``TYPO3.Form/Resources/Private/Form/``.
+They are standard Fluid templates and most of them are really simple. Open up the
+``Single-Line Text`` template for example:
 
-TODO Continue here
+.. code-block:: xml
 
-#* Override Fluid Template Paths for a specific form element (like Textbox)
+	<f:layout name="TYPO3.Form:Field" />
+	<f:section name="field">
+		<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" placeholder="{element.properties.placeholder}" errorClass="error" />
+	</f:section>
+
+As you can see the Form Element templates use layouts in order to reduce duplicated markup.
+
+.. tip:: The Fluid Form Renderer expects layout and partial names in the format ``<PackageKey>:<Name>``.
+   That makes it possible to reference layouts and partials from other packages!
+
+We'll see how to change the layout in the next section. For now lets try to simply change the
+class attribute of the SingleLineText element.
+For that adjust the template as follows:
+
+.. code-block:: xml
+
+	<f:layout name="TYPO3.Form:Field" />
+	<f:section name="field">
+		<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" placeholder="{element.properties.placeholder}" errorClass="error" class="customClass" />
+	</f:section>
+
+...and save it as ``Your.Package/Private/Resources/CustomElements/SingleLineText.html``.
+Now you only have to override the ``templatePathPattern`` of the SingleLineText definition accordingly:
+
+.. code-block:: yaml
+
+	TYPO3:
+	  Form:
+	    Presets:
+	      myCustom:
+	        title: 'Custom Elements'
+	        parentPreset: 'default'
+	        formElementTypes:
+	          'TYPO3.Form:SingleLineText':
+	            renderingOptions:
+	              templatePathPattern: 'resource://Your.Package/Private/CustomElements/SingleLineText.html'
+
+And all ``Single-Line Text`` elements will have a class attribute of ``customClass`` when using the ``myCustom`` preset.
+
+A more realistic use-case would be to change the arrangement of form elements. Read on to see how you can easily change the
+layout of a form.
+
+Changing The Form Layout
+------------------------
+
+By default, validation errors are rendered next to each Form Element. Imagine you want to render validation errors of the
+current page *above* the form instead. For this you need to adjust the previously mentioned field layout.
+The provided default field layout located in ``TYPO3.Form/Resources/Private/Form/Layout/Field.html`` is a bit more verbose
+as it renders the label, validation errors and an asterisk if the element is required:
+
+.. code-block:: xml
+
+	{namespace form=TYPO3\Form\ViewHelpers}
+	<f:form.validationResults for="{element.identifier}">
+		<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"<f:if condition="{element.rootForm.renderingOptions.previewMode}"> data-element="{form:form.formElementRootlinePath(renderable:element)}"</f:if>>
+			<label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
+			<div class="input">
+				<f:render section="field" />
+				<f:if condition="{validationResults.flattenedErrors}">
+					<span class="help-inline">
+						<f:for each="{validationResults.errors}" as="error">
+							{error -> f:translate(key: error.code, arguments: error.arguments, package: 'TYPO3.Form', source: 'ValidationErrors')}
+							<br />
+						</f:for>
+					</span>
+				</f:if>
+			</div>
+		</div>
+	</f:form.validationResults>
+
+Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/Field.html`` and remove the validation related lines:
+
+.. code-block:: xml
+
+	{namespace form=TYPO3\Form\ViewHelpers}
+	<f:form.validationResults for="{element.identifier}">
+		<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"<f:if condition="{element.rootForm.renderingOptions.previewMode}"> data-element="{form:form.formElementRootlinePath(renderable:element)}"</f:if>>
+		<label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
+			<div class="input">
+				<f:render section="field" />
+			</div>
+		</div>
+	</f:form.validationResults>
+
+Additionally you need to adjust the default form template located in ``TYPO3.Form/Resources/Private/Form/Form.html``:
+
+.. code-block:: xml
+
+	{namespace form=TYPO3\Form\ViewHelpers}
+	<form:form object="{form}" action="index" method="post" id="{form.identifier}" enctype="multipart/form-data">
+		<form:renderRenderable renderable="{form.currentPage}" />
+		<div class="actions">
+			<f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
+		</div>
+	</form:form>
+
+Copy this template file to ``Your.Package/Private/Resources/CustomElements/Form.html`` and add the validation result
+rendering:
+
+.. code-block:: xml
+
+	{namespace form=TYPO3\Form\ViewHelpers}
+	<form:form object="{form}" action="index" method="post" id="{form.identifier}" enctype="multipart/form-data">
+		<f:form.validationResults>
+			<f:if condition="{validationResults.flattenedErrors}">
+				<ul class="error">
+					<f:for each="{validationResults.flattenedErrors}" as="elementErrors" key="elementIdentifier" reverse="true">
+						<li>
+							{elementIdentifier}:
+							<ul>
+								<f:for each="{elementErrors}" as="error">
+									<li>{error}</li>
+								</f:for>
+							</ul>
+						</li>
+					</f:for>
+				</ul>
+			</f:if>
+		</f:form.validationResults>
+		<form:renderRenderable renderable="{form.currentPage}" />
+		<div class="actions">
+			<f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
+		</div>
+	</form:form>
+
+Now, you only need to adjust the form definition in order to use the new templates:
+
+.. code-block:: yaml
+
+	TYPO3:
+	  Form:
+	  presets:
+	    ########### CUSTOM PRESETS ###########
+
+	    myCustom:
+	      title: 'Custom Elements'
+	      parentPreset: 'default'
+	      formElementTypes:
+
+	         # ...
+
+	         ### override template path of TYPO3.Form:Form ###
+	        'TYPO3.Form:Form':
+	          renderingOptions:
+	            templatePathPattern: 'resource://TYPO3.FormExample/Private/CustomElements/Form.html'
+
+	         ### override default layout path ###
+	        'TYPO3.Form:Base':
+	          renderingOptions:
+	            layoutPathPattern: 'resource://TYPO3.FormExample/Private/CustomElements/Layouts/{@type}.html'
+
+.. tip:: You can use **placeholders** in ``templatePathPattern``, ``partialPathPattern`` and ``layoutPathPattern``:
+   ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type or
+   partial/layout name respectively.
+
+.. TODO: Rephrase last tip and explain path placeholders with an example.
 
 Creating a New Form Element
 ---------------------------
 
-#* Using supertypes for creating new form element
+With the Form Framework it is really easy to create additional Form Element types.
+Lets say you want to create a specialized version of the ``TYPO3.Form:SingleSelectRadiobuttons`` that already provides
+two radio buttons for ``Female`` and ``Male``. That's just a matter of a few lines of yaml:
 
-Changing The Form Layout
-------------------------
-#* Change global partial path or global layout path
+.. code-block:: yaml
+
+	TYPO3:
+	  Form:
+	    presets:
+	       ########### CUSTOM PRESETS ###########
+
+	      myCustom:
+	        title: 'Custom Elements'
+	        parentPreset: 'default'
+	        formElementTypes:
+
+	           # ...
+
+	          'Your.Package:GenderSelect':
+	            superTypes: ['TYPO3.Form:SingleSelectRadiobuttons']
+	            renderingOptions:
+	              templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleSelectRadiobuttons.html'
+	            properties:
+	              options:
+	                f: 'Female'
+	                m: 'Male'
+
+As you can see, you can easily extend existing Form Element Definitions by specifying the ``superTypes``.
+
+.. tip:: We have to specify the ``templatePathPattern`` because according to the default path pattern
+   the template would be expected at ``Your.Package/Private/Resources/Form/GenderSelect.html`` otherwise.
+
+
+.. note:: Form Elements will only be available in the preset they're defined (and in it's sub-presets).
+   Therefore you should consider adding Form Elements in the ``default`` preset to make them available for all
+   Form Definitions extending the default preset.
+
+
