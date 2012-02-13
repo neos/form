@@ -327,13 +327,14 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	protected function invokeFinishers() {
+		$finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this);
 		foreach ($this->formDefinition->getFinishers() as $finisher) {
-			$finisherResult = $finisher->execute($this);
-			// TODO: clean up, introduce event object or so...
-			if ($finisherResult !== TRUE) {
+			$finisher->execute($finisherContext);
+			if ($finisherContext->isCancelled()) {
 				break;
 			}
 		}
+		$finisherContext->getResponse()->send();
 	}
 
 	/**

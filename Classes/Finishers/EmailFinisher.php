@@ -6,8 +6,6 @@ namespace TYPO3\Form\Finishers;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Form\Core\Runtime\FormRuntime;
-
 /**
  * This finisher sends an email to one recipient
  *
@@ -31,35 +29,32 @@ use TYPO3\Form\Core\Runtime\FormRuntime;
  * - format: format of the email (one of the FORMAT_* constants). By default mails are sent as HTML
  * - testMode: if TRUE the email is not actually sent but outputted for debugging purposes. Defaults to FALSE
  */
-class EmailFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
+class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
 	const FORMAT_PLAINTEXT = 'plaintext';
 	const FORMAT_HTML = 'html';
 
-	/**
-	 * @var array
-	 */
-	protected $options = array();
+	protected $defaultOptions = array(
+		'recipientName' => '',
+		'senderName' => '',
+		'format' => self::FORMAT_HTML,
+		'testMode' => FALSE,
+	);
 
-	/**
-	 * Executes the finisher for the
-	 *
-	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime The Form runtime that invokes this finisher
-	 * @return boolean TRUE by default, FALSE if invocation chain should be canceled
-	 */
-	public function execute(FormRuntime $formRuntime) {
+	protected function executeInternal() {
+		$formRuntime = $this->finisherContext->getFormRuntime();
 		$standaloneView = $this->initializeStandaloneView();
 		$standaloneView->assign('form', $formRuntime);
 		$message = $standaloneView->render();
 
-		$subject = $this->parseOption('subject', $formRuntime);
-		$recipientAddress = $this->parseOption('recipientAddress', $formRuntime);
-		$recipientName = $this->parseOption('recipientName', $formRuntime, '');
-		$senderAddress = $this->parseOption('senderAddress', $formRuntime);
-		$senderName = $this->parseOption('senderName', $formRuntime, '');
-		$replyToAddress = $this->parseOption('replyToAddress', $formRuntime);
-		$format = $this->parseOption('format', $formRuntime, self::FORMAT_HTML);
-		$testMode = $this->parseOption('testMode', $formRuntime, FALSE);
+		$subject = $this->parseOption('subject');
+		$recipientAddress = $this->parseOption('recipientAddress');
+		$recipientName = $this->parseOption('recipientName');
+		$senderAddress = $this->parseOption('senderAddress');
+		$senderName = $this->parseOption('senderName');
+		$replyToAddress = $this->parseOption('replyToAddress');
+		$format = $this->parseOption('format');
+		$testMode = $this->parseOption('testMode');
 
 		if ($subject === NULL) {
 			throw new \TYPO3\Form\Exception\FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
@@ -127,41 +122,6 @@ class EmailFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 			$standaloneView->assignMultiple($this->options['variables']);
 		}
 		return $standaloneView;
-	}
-
-	/**
-	 * Read the option called $optionName from $this->options, and parse {...}
-	 * as object accessors.
-	 *
-	 * if $optionName was not found, the $defaultValue is returned.
-	 *
-	 * @param string $optionName
-	 * @param FormRuntime $formRuntime
-	 * @param mixed $defaultValue
-	 * @return mixed
-	 */
-	protected function parseOption($optionName, FormRuntime $formRuntime, $defaultValue = NULL) {
-		if (!isset($this->options[$optionName])) {
-			return $defaultValue;
-		}
-		if (!is_string($this->options[$optionName])) {
-			return $this->options[$optionName];
-		}
-		if ($this->options[$optionName] === '') {
-			return NULL;
-		}
-		return preg_replace_callback('/{([^}]+)}/', function($match) use ($formRuntime) {
-			return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
-		}, $this->options[$optionName]);
-	}
-
-	/**
-	 * @param array $options configuration options in the format array('@action' => 'foo', '@controller' => 'bar', '@package' => 'baz')
-	 * @return void
-	 * @api
-	 */
-	public function setOptions(array $options) {
-		$this->options = $options;
 	}
 }
 ?>
