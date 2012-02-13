@@ -6,39 +6,34 @@ namespace TYPO3\Form\Finishers;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Form\Core\Runtime\FormRuntime;
-
 /**
  * This finisher redirects to another Controller.
  */
-class RedirectFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
+class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
-	/**
-	 * @var array
-	 */
-	protected $options = array();
+	protected $defaultOptions = array(
+		'package' => NULL,
+		'controller' => NULL,
+		'action' => '',
+		'arguments' => array(),
+		'delay' => 0,
+		'statusCode' => 303,
+	);
 
-	/**
-	 * Executes the finisher for the
-	 *
-	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime The Form runtime that invokes this finisher
-	 * @return boolean TRUE by default, FALSE if invocation chain should be canceled
-	 */
-	public function execute(FormRuntime $formRuntime) {
+	public function executeInternal() {
+		$formRuntime = $this->finisherContext->getFormRuntime();
 		$request = $formRuntime->getRequest()->getRootRequest();
 
-		// TODO convenience function to merge options with "default options"
-		$packageKey = isset($this->options['package']) ? $this->options['package'] : NULL;
-		$actionName = isset($this->options['action']) ? $this->options['action'] : NULL;
-		$arguments = isset($this->options['arguments']) ? $this->options['arguments'] : array();
-		$controllerName = isset($this->options['controller']) ? $this->options['controller'] : NULL;
-		$delay = isset($this->options['delay']) ? (integer)$this->options['delay'] : 0;
-		$statusCode = isset($this->options['statusCode']) ? $this->options['statusCode'] : 303;
+		$packageKey = $this->parseOption('package');
+		$controllerName = $this->parseOption('controller');
+		$actionName = $this->parseOption('action');
+		$arguments = $this->parseOption('arguments');
+		$delay = (integer)$this->parseOption('delay');
+		$statusCode = $this->parseOption('statusCode');
 
+		$subpackageKey = NULL;
 		if ($packageKey !== NULL && strpos($packageKey, '\\') !== FALSE) {
 			list($packageKey, $subpackageKey) = explode('\\', $packageKey, 2);
-		} else {
-			$subpackageKey = NULL;
 		}
 		$uriBuilder = new \TYPO3\FLOW3\MVC\Web\Routing\UriBuilder();
 		$uriBuilder->setRequest($request);
@@ -48,13 +43,13 @@ class RedirectFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 		$uri = $request->getBaseUri() . $uri;
 		$escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
-		// TODO use response object
-		echo '<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>';
-		header('HTTP/1.1 ' . $statusCode);
+		$response = $this->finisherContext->getResponse();
+		$response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
+		$response->setStatus($statusCode);
 		if ($delay === 0) {
-			header('Location: ' . (string)$uri);
+			$response->setHeader('Location', (string)$uri);
 		}
-		exit;
+		$this->finisherContext->cancel();
 	}
 
 	/**

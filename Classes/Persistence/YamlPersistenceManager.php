@@ -54,7 +54,8 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 				if ($fileObject->isFile()) {
 					$form = $this->load($fileObject->getPathname());
 					$forms[] = array(
-						'name' => $form['identifier'],
+						'identifier' => $form['identifier'],
+						'name' => isset($form['label']) ? $form['label'] : $form['identifier'],
 						'persistenceIdentifier' => $fileObject->getPathname()
 					);
 				}
