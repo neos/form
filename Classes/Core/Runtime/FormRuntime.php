@@ -23,7 +23,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * That's easy, just call render() on the FormRuntime:
  *
  * /---code php
- * $form = $formDefinition->bind($request);
+ * $form = $formDefinition->bind($request, $response);
  * $renderedForm = $form->render();
  * \---
  *
@@ -50,7 +50,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface, \ArrayAccess {
 
 	/**
-	 * @var FormDefinition
+	 * @var \TYPO3\Form\Core\Model\FormDefinition
 	 * @internal
 	 */
 	protected $formDefinition;
@@ -62,9 +62,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected $request;
 
 	/**
-	 * @FLOW3\Inject
 	 * @var \TYPO3\FLOW3\MVC\Web\Response
-	 * @todo should be custom response class (tailored to forms) lateron
 	 * @internal
 	 */
 	protected $response;
@@ -123,12 +121,14 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	/**
 	 * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
+	 * @param \TYPO3\FLOW3\MVC\Web\Response $response
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
 	 * @internal
 	 */
-	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request) {
+	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request, \TYPO3\FLOW3\MVC\Web\Response $response) {
 		$this->formDefinition = $formDefinition;
 		$this->request = $request;
+		$this->response = $response;
 	}
 
 	/**
@@ -298,8 +298,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	public function render() {
 		if ($this->isAfterLastPage()) {
 			$this->invokeFinishers();
-			// TODO: use request / response properly
-			return;
+			return $this->response->getContent();
 		}
 
 		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
@@ -334,7 +333,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 				break;
 			}
 		}
-		$finisherContext->getResponse()->send();
 	}
 
 	/**
@@ -344,7 +342,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	public function getIdentifier() {
 		return $this->formDefinition->getIdentifier();
 	}
-
 
 	/**
 	 * Get the request this object is bound to.
@@ -357,6 +354,19 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 */
 	public function getRequest() {
 		return $this->request;
+	}
+
+	/**
+	 * Get the response this object is bound to.
+	 *
+	 * This is mostly relevant inside Finishers, where you f.e. want to set response
+	 * headers or output content.
+	 *
+	 * @return \TYPO3\FLOW3\MVC\Web\Response the response this object is bound to
+	 * @api
+	 */
+	public function getResponse() {
+		return $this->response;
 	}
 
 	/**
@@ -415,8 +425,8 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * @param type $identifier
-	 * @return type
+	 * @param string $identifier
+	 * @return mixed
 	 * @api
 	 */
 	public function offsetExists($identifier) {
@@ -437,9 +447,8 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 *
-	 * @param type $identifier
-	 * @return type
+	 * @param string $identifier
+	 * @return mixed
 	 * @api
 	 */
 	public function offsetGet($identifier) {
@@ -447,6 +456,9 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * @param string $identifier
+	 * @param mixed $value
+	 * @return void
 	 * @api
 	 */
 	public function offsetSet($identifier, $value) {
@@ -455,12 +467,15 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 	/**
 	 * @api
+	 * @param string $identifier
+	 * @return void
 	 */
 	public function offsetUnset($identifier) {
 		$this->formState->setFormValue($identifier, NULL);
 	}
 
 	/**
+	 * @return array<TYPO3\Form\Core\Model\Page> The Form's pages in the correct order
 	 * @api
 	 */
 	public function getPages() {
@@ -468,6 +483,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * @return \TYPO3\Form\Core\Runtime\FormState
 	 * @internal
 	 */
 	public function getFormState() {

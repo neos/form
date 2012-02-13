@@ -45,7 +45,8 @@ class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 		$factory = $this->objectManager->get($factoryClass);
 		$formDefinition = $factory->build($overrideConfiguration, $presetName);
-		$form = $formDefinition->bind($this->controllerContext->getRequest());
+		$response = new \TYPO3\FLOW3\MVC\Web\SubResponse($this->controllerContext->getResponse());
+		$form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
 		return $form->render();
 	}
 }

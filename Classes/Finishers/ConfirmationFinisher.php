@@ -12,11 +12,12 @@ namespace TYPO3\Form\Finishers;
 class ConfirmationFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
 	protected $defaultOptions = array(
-		'message' => 'The form has been submitted.'
+		'message' => '<p>The form has been submitted.</p>'
 	);
 
 	protected function executeInternal() {
-		$response = $this->finisherContext->getResponse();
+		$formRuntime = $this->finisherContext->getFormRuntime();
+		$response = $formRuntime->getResponse();
 		$response->setContent($this->parseOption('message'));
 	}
 }

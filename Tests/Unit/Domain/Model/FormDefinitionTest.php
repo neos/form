@@ -212,8 +212,9 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = new FormDefinition('foo');
 
 		$mockRequest = $this->getMockBuilder('TYPO3\FLOW3\MVC\Web\Request')->getMock();
+		$mockResponse = $this->getMockBuilder('TYPO3\FLOW3\MVC\Web\Response')->getMock();
 
-		$form = $formDefinition->bind($mockRequest);
+		$form = $formDefinition->bind($mockRequest, $mockResponse);
 		$this->assertInstanceOf('TYPO3\Form\Core\Runtime\FormRuntime', $form);
 	}
 

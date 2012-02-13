@@ -22,13 +22,6 @@ class FinisherContext {
 	protected $cancelled = FALSE;
 
 	/**
-	 * The response that is passed to every finisher and outputted after the last finisher has been invoked
-	 *
-	 * @var \TYPO3\FLOW3\MVC\Web\Response
-	 */
-	protected $response;
-
-	/**
 	 * A reference to the Form Runtime that the finisher belongs to
 	 *
 	 * @var \TYPO3\Form\Core\Runtime\FormRuntime
@@ -40,7 +33,6 @@ class FinisherContext {
 	 */
 	public function __construct(FormRuntime $formRuntime) {
 		$this->formRuntime = $formRuntime;
-		$this->response = new \TYPO3\FLOW3\MVC\Web\Response();
 	}
 
 	/**
@@ -68,15 +60,6 @@ class FinisherContext {
 	 */
 	public function getFormRuntime() {
 		return $this->formRuntime;
-	}
-
-	/**
-	 * The response object to be used in order to append/set content and/or headers
-	 *
-	 * @return \TYPO3\FLOW3\MVC\Web\Response
-	 */
-	public function getResponse() {
-		return $this->response;
 	}
 }
 ?>

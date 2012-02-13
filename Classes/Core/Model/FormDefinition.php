@@ -216,9 +216,10 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * (such as the currently inserted values).
  *
  * /---code php
- * # $currentRequest needs to be available, f.e. inside a controller you would
- * # use $this->request; inside a ViewHelper you would use $this->controllerContext->getRequest()
- * $form = $formDefinition->bind($currentRequest);
+ * # $currentRequest and $currentResponse need to be available, f.e. inside a controller you would
+ * # use $this->request and $this->response; inside a ViewHelper you would use $this->controllerContext->getRequest()
+ * # and $this->controllerContext->getResponse()
+ * $form = $formDefinition->bind($currentRequest, $currentResponse);
  *
  * # now, you can use the $form object to get information about the currently
  * # entered values into the form, etc.
@@ -530,15 +531,16 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	}
 
 	/**
-	 * Bind the current request to this form instance, effectively creating
+	 * Bind the current request & response to this form instance, effectively creating
 	 * a new "instance" of the Form.
 	 *
 	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
+	 * @param \TYPO3\FLOW3\MVC\Web\Response $response
 	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
 	 * @api
 	 */
-	public function bind(\TYPO3\FLOW3\MVC\Web\Request $request) {
-		return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request);
+	public function bind(\TYPO3\FLOW3\MVC\Web\Request $request, \TYPO3\FLOW3\MVC\Web\Response $response) {
+		return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request, $response);
 	}
 
 	/**
