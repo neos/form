@@ -84,11 +84,67 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	}
 
 	/**
+	 * @test
+	 */
+	public function getUniqueIdentifierBuildsIdentifierFromRootFormAndElementIdentifier() {
+		$formDefinition = new FormDefinition('foo');
+		$myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
+		$page = new Page('asdf');
+		$formDefinition->addPage($page);
+
+		$page->addElement($myFormElement);
+		$this->assertSame('foo-bar', $myFormElement->getUniqueIdentifier());
+	}
+
+	/**
+	 * @test
+	 */
+	public function isRequiredReturnsFalseByDefault() {
+		$formDefinition = $this->getFormDefinitionWithProcessingRule('bar');
+		$page = new Page('asdf');
+		$formDefinition->addPage($page);
+
+		$myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
+		$page->addElement($myFormElement);
+
+		$this->assertFalse($myFormElement->isRequired());
+	}
+
+	/**
+	 * @test
+	 */
+	public function isRequiredReturnsTrueIfNotEmptyValidatorIsAdded() {
+		$formDefinition = $this->getFormDefinitionWithProcessingRule('bar');
+		$page = new Page('asdf');
+		$formDefinition->addPage($page);
+
+		$myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
+		$page->addElement($myFormElement);
+
+		$myFormElement->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+		$this->assertTrue($myFormElement->isRequired());
+	}
+
+	/**
 	 * @param array $constructorArguments
 	 * @return \TYPO3\Form\Core\Model\AbstractFormElement
 	 */
 	protected function getFormElement(array $constructorArguments) {
 		return $this->getMock('TYPO3\Form\Core\Model\AbstractFormElement', array('dummy'), $constructorArguments);
+	}
+
+	/**
+	 * @param string $formElementIdentifier
+	 * @return FormDefinition
+	 */
+	protected function getFormDefinitionWithProcessingRule($formElementIdentifier) {
+		$mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
+		$mockProcessingRule->_set('validator', new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator());
+
+		$formDefinition = $this->getMock('TYPO3\Form\Core\Model\FormDefinition', array('getProcessingRule'), array('foo'));
+		$formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
+
+		return $formDefinition;
 	}
 }
 ?>

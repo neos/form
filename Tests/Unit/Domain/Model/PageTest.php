@@ -70,6 +70,45 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @test
+	 */
+	public function getElementsRecursivelyReturnsEmptyArrayByDefault() {
+		$page = new Page('foo');
+		$this->assertSame(array(), $page->getElementsRecursively());
+	}
+
+	/**
+	 * @test
+	 */
+	public function getElementsRecursivelyReturnsFirstLevelFormElements() {
+		$page = new Page('foo');
+		$element1 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element2 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$page->addElement($element1);
+		$page->addElement($element2);
+		$this->assertSame(array($element1, $element2), $page->getElementsRecursively());
+	}
+
+	/**
+	 * @test
+	 */
+	public function getElementsRecursivelyReturnsRecursiveFormElementsInCorrectOrder() {
+		$page = new Page('foo');
+		$element1 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element2 = $this->getMockBuilder('TYPO3\Form\FormElements\Section')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element21 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element22 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+		$element2->addElement($element21);
+		$element2->addElement($element22);
+		$element3 = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+
+		$page->addElement($element1);
+		$page->addElement($element2);
+		$page->addElement($element3);
+		$this->assertSame(array($element1, $element2, $element21, $element22, $element3), $page->getElementsRecursively());
+	}
+
+	/**
+	 * @test
 	 * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 */
 	public function aFormElementCanOnlyBeAttachedToASinglePage() {
@@ -139,6 +178,16 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = $this->getDummyFormDefinition();
 		$page = $formDefinition->createPage('myPage');
 		$element = $page->createElement('myElement', 'TYPO3.Form:MyElementTypeWithoutImplementationClassName');
+	}
+
+	/**
+	 * @test
+	 * @expectedException TYPO3\Form\Exception\TypeDefinitionNotValidException
+	 */
+	public function createElementThrowsExceptionIfImplementationClassNameDoesNotImplementFormElementInterface() {
+		$formDefinition = $this->getDummyFormDefinition();
+		$page = $formDefinition->createPage('myPage');
+		$element = $page->createElement('myElement', 'TYPO3.Form:MyElementTypeWhichDoesNotImplementFormElementInterface');
 	}
 
 	/**
@@ -237,8 +286,31 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$page1->removeElement($element1);
 	}
 
+	/**
+	 * @test
+	 */
+	public function validatorKeyCorrectlyAddsValdiator() {
+		$formDefinition = $this->getDummyFormDefinition();
+
+		$mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
+		$mockProcessingRule->_set('validator', new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator());
+		$formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->will($this->returnValue($mockProcessingRule));
+
+		$page1 = $formDefinition->createPage('myPage1');
+		$el = $page1->createElement('asdf', 'TYPO3.Form:MyElementWithValidator');
+		// TODO: this test is still buggy
+	}
+
 	protected function getDummyFormDefinition() {
-		return new FormDefinition('myForm', array(
+		$formDefinitionConstructorArguments = array('myForm', array(
+			'validatorPresets' => array(
+				'MyValidatorIdentifier' => array(
+					'implementationClassName' => 'TYPO3\FLOW3\Validation\Validator\StringLengthValidator'
+				),
+				'MyOtherValidatorIdentifier' => array(
+					'implementationClassName' => 'TYPO3\FLOW3\Validation\Validator\NotEmptyValidator'
+				),
+			),
 			'formElementTypes' => array(
 				'TYPO3.Form:Form' => array(),
 				'TYPO3.Form:Page' => array(
@@ -266,9 +338,27 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 					'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement',
 					'unknownProperty' => 'foo'
 				),
+				'TYPO3.Form:MyElementTypeWhichDoesNotImplementFormElementInterface' => array(
+					'implementationClassName' => 'TYPO3\Form\Factory\ArrayFormFactory',
+				),
+				'TYPO3.Form:MyElementWithValidator' => array(
+					'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement',
+					'validators' => array(
+						array(
+							'identifier' => 'MyValidatorIdentifier',
+							'options' => array('minimum' => 10)
+						),
+						array(
+							'identifier' => 'MyOtherValidatorIdentifier'
+						),
+					)
+				)
 
 			)
 		));
+
+		$formDefinition = $this->getMock('TYPO3\Form\Core\Model\FormDefinition', array('getProcessingRule'), $formDefinitionConstructorArguments);
+		return $formDefinition;
 	}
 }
 ?>

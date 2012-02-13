@@ -86,13 +86,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 * @api
 	 */
 	public function createElement($identifier, $typeName) {
-		$formDefinition = $this->parentRenderable;
-		while($formDefinition !== NULL && !($formDefinition instanceof FormDefinition)) {
-			$formDefinition = $formDefinition->getParentRenderable();
-		}
-		if ($formDefinition === NULL) {
-			throw new \TYPO3\Form\Exception\FormDefinitionConsistencyException(sprintf('The page "%s" is not attached to a parent form, thus createElement() cannot be called.', $this->identifier), 1325742259);
-		}
+		$formDefinition = $this->getRootForm();
 
 		$typeDefinition = $formDefinition->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
 
@@ -106,9 +100,9 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 		}
 		unset($typeDefinition['implementationClassName']);
 
+		$this->addElement($element);
 		$element->setOptions($typeDefinition);
 
-		$this->addElement($element);
 		$element->initializeFormElement();
 		return $element;
 	}
