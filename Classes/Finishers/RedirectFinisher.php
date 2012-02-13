@@ -49,7 +49,6 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		if ($delay === 0) {
 			$response->setHeader('Location', (string)$uri);
 		}
-		$this->finisherContext->cancel();
 	}
 
 	/**
