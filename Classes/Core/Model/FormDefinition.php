@@ -42,7 +42,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * /---code php
  * $formDefinition = new FormDefinition('myForm');
  *
- * $page1 = new Page('myPage');
+ * $page1 = new Page('page1');
  * $formDefinition->addPage($page);
  *
  * $element1 = new GenericFormElement('title', 'TYPO3.Form:Textfield'); # the second argument is the type of the form element
@@ -65,7 +65,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * $formDefaults = array(); // We'll talk about this later
  *
  * $formDefinition = new FormDefinition('myForm', $formDefaults);
- * $page1 = $formDefinition->createPage('myPage');
+ * $page1 = $formDefinition->createPage('page1');
  * $element1 = $page1->addElement('title', 'TYPO3.Form:Textfield');
  * \---
  *
