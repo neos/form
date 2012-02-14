@@ -1,4 +1,4 @@
-.. _adjusting-form-output:
+﻿.. _adjusting-form-output:
 
 Adjusting Form Output
 =====================
@@ -22,7 +22,7 @@ Let's have a look at the boilerplate code inside the form factory again::
 
 	public function build(array $factorySpecificConfiguration, $presetName) {
 		$formConfiguration = $this->getPresetConfiguration($presetName);
-		$form = new FormDefinition('ContactForm', $formConfiguration);
+		$form = new FormDefinition('contactForm', $formConfiguration);
 		// ...
 	}
 
@@ -96,6 +96,16 @@ So ``$page->createElement($identifier, $formElementType)`` is essentially a very
 specialized *factory method*, which automatically applies the default values from
 the *form element definition* on the newly created form object before returning it.
 
+.. tip:: The defaults are not only applied on single form elements, but also
+   on the FormDefinition and Page objects. The FormDefinition object has, by
+   convention, the *form element type* ``TYPO3.Form:Form``, but you can also
+   override it by passing the to-be-used type as third parameter to the
+   constructor of :api-core-model:`FormDefinition`.
+
+   A *page* has, by default, the *form element type* ``TYPO3.Form:Page``, and you can
+   override it by supplying a second parameter to the ``createPage()`` method of
+   :api-core-model:`FormDefinition`.
+
 Supertypes
 ----------
 
@@ -123,6 +133,9 @@ and only overrides the default value.
 Together, presets (with parent presets) and form element types (with supertypes)
 form a very flexible foundation to customize the rendering in any imaginable way,
 as we will explore in the remainder of this guide.
+
+.. note:: If multiple super types are specified, they are evaluated from *left to right*, i.e.
+   later super types override previous definitions.
 
 Creating a Custom Preset
 ------------------------
@@ -153,7 +166,7 @@ Now we are set up to modify the custom preset, and can adjust the form output.
 Adjusting a Form Element Template
 ---------------------------------
 
-Templates of the provided Form Elements are located in ``TYPO3.Form/Resources/Private/Form/``.
+The templates of the default Form Elements are located in ``TYPO3.Form/Resources/Private/Form/``.
 They are standard Fluid templates and most of them are really simple. Open up the
 ``Single-Line Text`` template for example:
 
@@ -161,27 +174,36 @@ They are standard Fluid templates and most of them are really simple. Open up th
 
 	<f:layout name="TYPO3.Form:Field" />
 	<f:section name="field">
-		<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" placeholder="{element.properties.placeholder}" errorClass="error" />
+	   <f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}"
+	                     placeholder="{element.properties.placeholder}" errorClass="error" />
 	</f:section>
 
-As you can see the Form Element templates use layouts in order to reduce duplicated markup.
+As you can see, the Form Element templates use layouts in order to reduce duplicated markup.
 
 .. tip:: The Fluid Form Renderer expects layout and partial names in the format ``<PackageKey>:<Name>``.
    That makes it possible to reference layouts and partials from other packages!
 
-We'll see how to change the layout in the next section. For now lets try to simply change the
-class attribute of the SingleLineText element.
-For that adjust the template as follows:
+We'll see how to change the layout in the next section. For now let's try to simply change the
+``class`` attribute of the *SingleLineText* element.
+
+For that, copy the default template to ``Your.Package/Private/Resources/CustomElements/SingleLineText.html``
+and adjust it as follows:
 
 .. code-block:: xml
 
 	<f:layout name="TYPO3.Form:Field" />
 	<f:section name="field">
-		<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" placeholder="{element.properties.placeholder}" errorClass="error" class="customClass" />
+	   <f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}"
+	                     placeholder="{element.properties.placeholder}" errorClass="error"
+                           class="customClass" />
 	</f:section>
 
-...and save it as ``Your.Package/Private/Resources/CustomElements/SingleLineText.html``.
-Now you only have to override the ``templatePathPattern`` of the SingleLineText definition accordingly:
+
+Now, you only need to tell the framework to use your newly created template instead of the default one.
+This can be archieved by overriding the rendering option ``templatePathPattern`` in the *form element
+type definition*.
+
+Adjust ``Your.Package/Configuration/Settings.yaml`` accordingly:
 
 .. code-block:: yaml
 
@@ -196,7 +218,8 @@ Now you only have to override the ``templatePathPattern`` of the SingleLineText 
 	            renderingOptions:
 	              templatePathPattern: 'resource://Your.Package/Private/CustomElements/SingleLineText.html'
 
-And all ``Single-Line Text`` elements will have a class attribute of ``customClass`` when using the ``myCustom`` preset.
+Now, all ``Single-Line Text`` elements will have a class attribute of ``customClass``
+when using the ``myCustom`` preset.
 
 A more realistic use-case would be to change the arrangement of form elements. Read on to see how you can easily change the
 layout of a form.
@@ -204,29 +227,47 @@ layout of a form.
 Changing The Form Layout
 ------------------------
 
-By default, validation errors are rendered next to each Form Element. Imagine you want to render validation errors of the
-current page *above* the form instead. For this you need to adjust the previously mentioned field layout.
-The provided default field layout located in ``TYPO3.Form/Resources/Private/Form/Layout/Field.html`` is a bit more verbose
-as it renders the label, validation errors and an asterisk if the element is required:
+By default, validation errors are rendered next to each form element. Imagine you want to render validation errors of the
+current page *above* the form instead. For this you need to adjust the previously mentioned **field layout**.
+
+The provided default field layout located in ``TYPO3.Form/Resources/Private/Form/Layouts/Field.html`` is a bit more verbose
+as it renders the label, validation errors and an asterisk if the element is required (we slightly reformatted the template
+here to improve readability):
 
 .. code-block:: xml
 
 	{namespace form=TYPO3\Form\ViewHelpers}
 	<f:form.validationResults for="{element.identifier}">
-		<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"<f:if condition="{element.rootForm.renderingOptions.previewMode}"> data-element="{form:form.formElementRootlinePath(renderable:element)}"</f:if>>
-			<label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
-			<div class="input">
-				<f:render section="field" />
-				<f:if condition="{validationResults.flattenedErrors}">
-					<span class="help-inline">
-						<f:for each="{validationResults.errors}" as="error">
-							{error -> f:translate(key: error.code, arguments: error.arguments, package: 'TYPO3.Form', source: 'ValidationErrors')}
-							<br />
-						</f:for>
-					</span>
-				</f:if>
-			</div>
-		</div>
+	   <!-- wrapping div for the form element; contains an identifier for the form element if we are
+              in preview mode -->
+	   <div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"
+	        <f:if condition="{element.rootForm.renderingOptions.previewMode}">
+	           data-element="{form:form.formElementRootlinePath(renderable:element)}"
+	        </f:if>
+	   >
+	      <!-- Label for the form element, and required indicator -->
+	      <label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}
+	         <f:if condition="{element.required}">
+	            <f:render partial="TYPO3.Form:Field/Required" />
+	         </f:if>
+	       </label>
+
+	      <!-- the actual form element -->
+	      <div class="input">
+	         <f:render section="field" />
+
+	         <!-- validation errors -->
+	         <f:if condition="{validationResults.flattenedErrors}">
+	            <span class="help-inline">
+	               <f:for each="{validationResults.errors}" as="error">
+	                  {error -> f:translate(key: error.code, arguments: error.arguments,
+	                                        package: 'TYPO3.Form', source: 'ValidationErrors')}
+	                  <br />
+	               </f:for>
+	            </span>
+	         </f:if>
+	      </div>
+	   </div>
 	</f:form.validationResults>
 
 Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/Field.html`` and remove the validation related lines:
@@ -235,24 +276,40 @@ Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/
 
 	{namespace form=TYPO3\Form\ViewHelpers}
 	<f:form.validationResults for="{element.identifier}">
-		<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"<f:if condition="{element.rootForm.renderingOptions.previewMode}"> data-element="{form:form.formElementRootlinePath(renderable:element)}"</f:if>>
-		<label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
-			<div class="input">
-				<f:render section="field" />
-			</div>
-		</div>
+	   <!-- wrapping div for the form element; contains an identifier for the form element if we are
+              in preview mode -->
+	   <div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"
+	        <f:if condition="{element.rootForm.renderingOptions.previewMode}">
+	           data-element="{form:form.formElementRootlinePath(renderable:element)}"
+	        </f:if>
+	   >
+	      <!-- Label for the form element, and required indicator -->
+	      <label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}
+	         <f:if condition="{element.required}">
+	            <f:render partial="TYPO3.Form:Field/Required" />
+	         </f:if>
+	       </label>
+
+	      <!-- the actual form element -->
+	      <div class="input">
+	         <f:render section="field" />
+	      </div>
+	   </div>
 	</f:form.validationResults>
 
-Additionally you need to adjust the default form template located in ``TYPO3.Form/Resources/Private/Form/Form.html``:
+Additionally you need to adjust the default form template located in ``TYPO3.Form/Resources/Private/Form/Form.html`` (remember
+that a :api-core-model:`FormDefinition` also has a form element type, by default of ``TYPO3.Form:Form``), which looks
+as follows by default:
 
 .. code-block:: xml
 
 	{namespace form=TYPO3\Form\ViewHelpers}
-	<form:form object="{form}" action="index" method="post" id="{form.identifier}" enctype="multipart/form-data">
-		<form:renderRenderable renderable="{form.currentPage}" />
-		<div class="actions">
-			<f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
-		</div>
+	<form:form object="{form}" action="index" method="post" id="{form.identifier}"
+	           enctype="multipart/form-data">
+	   <form:renderRenderable renderable="{form.currentPage}" />
+	   <div class="actions">
+	      <f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
+	   </div>
 	</form:form>
 
 Copy this template file to ``Your.Package/Private/Resources/CustomElements/Form.html`` and add the validation result
@@ -261,27 +318,29 @@ rendering:
 .. code-block:: xml
 
 	{namespace form=TYPO3\Form\ViewHelpers}
-	<form:form object="{form}" action="index" method="post" id="{form.identifier}" enctype="multipart/form-data">
-		<f:form.validationResults>
-			<f:if condition="{validationResults.flattenedErrors}">
-				<ul class="error">
-					<f:for each="{validationResults.flattenedErrors}" as="elementErrors" key="elementIdentifier" reverse="true">
-						<li>
-							{elementIdentifier}:
-							<ul>
-								<f:for each="{elementErrors}" as="error">
-									<li>{error}</li>
-								</f:for>
-							</ul>
-						</li>
-					</f:for>
-				</ul>
-			</f:if>
-		</f:form.validationResults>
-		<form:renderRenderable renderable="{form.currentPage}" />
-		<div class="actions">
-			<f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
-		</div>
+	<form:form object="{form}" action="index" method="post" id="{form.identifier}"
+	           enctype="multipart/form-data">
+	   <f:form.validationResults>
+	      <f:if condition="{validationResults.flattenedErrors}">
+	         <ul class="error">
+	            <f:for each="{validationResults.flattenedErrors}" as="elementErrors"
+	                   key="elementIdentifier" reverse="true">
+	               <li>
+	                  {elementIdentifier}:
+	                  <ul>
+	                     <f:for each="{elementErrors}" as="error">
+	                        <li>{error}</li>
+	                     </f:for>
+	                  </ul>
+	               </li>
+	            </f:for>
+	         </ul>
+	      </f:if>
+	   </f:form.validationResults>
+	   <form:renderRenderable renderable="{form.currentPage}" />
+	   <div class="actions">
+	      <f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
+	   </div>
 	</form:form>
 
 Now, you only need to adjust the form definition in order to use the new templates:
@@ -311,10 +370,12 @@ Now, you only need to adjust the form definition in order to use the new templat
 	            layoutPathPattern: 'resource://TYPO3.FormExample/Private/CustomElements/Layouts/{@type}.html'
 
 .. tip:: You can use **placeholders** in ``templatePathPattern``, ``partialPathPattern`` and ``layoutPathPattern``:
-   ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type or
-   partial/layout name respectively.
+   ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type 
+   without namespace. A small example shall illustrate this:
 
-.. TODO: Rephrase last tip and explain path placeholders with an example.
+   If the form element type is ``Your.Package:FooBar``, then ``{@package}`` is replaced by ``Your.Package``,
+   and ``{@type}`` is replaced by ``FooBar``. As partials and layouts inside form elements are also specified
+   using the ``Package:Type`` notation, this replacement also works for partials and layouts.
 
 Creating a New Form Element
 ---------------------------
@@ -350,7 +411,6 @@ As you can see, you can easily extend existing Form Element Definitions by speci
 
 .. tip:: We have to specify the ``templatePathPattern`` because according to the default path pattern
    the template would be expected at ``Your.Package/Private/Resources/Form/GenderSelect.html`` otherwise.
-
 
 .. note:: Form Elements will only be available in the preset they're defined (and in it's sub-presets).
    Therefore you should consider adding Form Elements in the ``default`` preset to make them available for all

@@ -1,4 +1,4 @@
-.. _quickstart:
+﻿.. _quickstart:
 
 Quickstart
 ==========
@@ -69,7 +69,7 @@ looks as follows::
 		 */
 		public function build(array $factorySpecificConfiguration, $presetName) {
 			$formConfiguration = $this->getPresetConfiguration($presetName);
-			$form = new FormDefinition('YourFormIdentifier', $formConfiguration);
+			$form = new FormDefinition('yourFormIdentifier', $formConfiguration);
 			// Now, build your form here
 			return $form;
 		}
@@ -82,7 +82,7 @@ Lets add the one page and input fields for *name*, *email* and *message* of our 
 
 	public function build(array $factorySpecificConfiguration, $presetName) {
 		$formConfiguration = $this->getPresetConfiguration($presetName);
-		$form = new FormDefinition('ContactForm', $formConfiguration);
+		$form = new FormDefinition('contactForm', $formConfiguration);
 
 		$page1 = $form->createPage('page1');
 
@@ -208,7 +208,7 @@ That's it for the quickstart. The complete code of your form factory should look
 		 */
 		public function build(array $factorySpecificConfiguration, $presetName) {
 			$formConfiguration = $this->getPresetConfiguration($presetName);
-			$form = new FormDefinition('ContactForm', $formConfiguration);
+			$form = new FormDefinition('contactForm', $formConfiguration);
 
 			$page1 = $form->createPage('page1');
 
