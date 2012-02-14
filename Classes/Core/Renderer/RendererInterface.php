@@ -26,8 +26,9 @@ interface RendererInterface {
 
 	/**
 	 * Render the passed $renderable and return the rendered Renderable.
+	 * Note: This method is expected to invoke the beforeRendering() callback on the $renderable
 	 *
-	 * @param \TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable
+	 * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
 	 * @return string the rendered $renderable
 	 * @api
 	 */

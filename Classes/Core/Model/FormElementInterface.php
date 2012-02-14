@@ -107,5 +107,15 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	 * @return boolean
 	 */
 	public function isRequired();
+
+	/**
+	 * This callback is invoked by the FormRuntime whenever values are mapped and validated
+	 * (after a form page was submitted)
+	 * @see \TYPO3\Form\Core\Runtime\FormRuntime::mapAndValidate()
+	 *
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @param mixed $elementValue submitted value of the element *before post processing*
+	 */
+	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue);
 }
 ?>

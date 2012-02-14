@@ -91,5 +91,11 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	public function getProperties() {
 		return $this->properties;
 	}
+
+	/**
+	 * Override this method in your custom FormElements if needed
+	 */
+	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
+	}
 }
 ?>
