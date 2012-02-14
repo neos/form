@@ -132,6 +132,7 @@ class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition->addPage($page3);
 
 		$formRuntime = $this->createFormRuntime($formDefinition);
+		$this->assertSame(array($page1, $page2, $page3), $formRuntime->getPages());
 
 		$formRuntime->overrideCurrentPage(0);
 		$this->assertSame(NULL, $formRuntime->getPreviousPage());
@@ -147,6 +148,37 @@ class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$this->assertSame($page2, $formRuntime->getPreviousPage());
 		$this->assertSame($page3, $formRuntime->getCurrentPage());
 		$this->assertSame(NULL, $formRuntime->getNextPage());
+	}
+
+	/**
+	 * @test
+	 */
+	public function arrayAccessReturnsDefaultValuesIfSet() {
+		$formDefinition = new FormDefinition('foo');
+		$page1 = new Page('p1');
+		$formDefinition->addPage($page1);
+		$element1 = new \TYPO3\Form\FormElements\GenericFormElement('foo', 'Bar');
+		$page1->addElement($element1);
+
+		$element1->setDefaultValue('My Default');
+		$formRuntime = $this->createFormRuntime($formDefinition);
+		$formState = new \TYPO3\Form\Core\Runtime\FormState();
+		$formRuntime->_set('formState', $formState);
+		$this->assertSame($formState, $formRuntime->getFormState());
+
+		$this->assertSame('My Default', $formRuntime['foo']);
+		$formRuntime['foo'] = 'Overridden';
+		$this->assertSame('Overridden', $formRuntime['foo']);
+		$formRuntime['foo'] = NULL;
+		$this->assertSame('My Default', $formRuntime['foo']);
+
+		$formRuntime['foo'] = 'Overridden2';
+		$this->assertSame('Overridden2', $formRuntime['foo']);
+
+		unset($formRuntime['foo']);
+		$this->assertSame('My Default', $formRuntime['foo']);
+
+		$this->assertSame(NULL, $formRuntime['nonExisting']);
 	}
 
 	/**
