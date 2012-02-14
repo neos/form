@@ -248,7 +248,11 @@ abstract class AbstractRenderable implements RenderableInterface {
 		$this->label = $label;
 	}
 
-
+	/**
+	 * Override this method in your custom Renderable if needed
+	 */
+	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
+	}
 
 }
 ?>

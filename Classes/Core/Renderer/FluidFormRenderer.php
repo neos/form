@@ -115,6 +115,8 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	}
 
 	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
+		$renderable->beforeRendering($this->formRuntime);
+
 		$this->templateParser->setConfiguration($this->buildParserConfiguration());
 		$renderableType = $renderable->getType();
 

@@ -41,6 +41,17 @@ interface RootRenderableInterface {
 	public function getLabel();
 
 	/**
+	 * This is a callback that is invoked by the Renderer before the corresponding element is rendered.
+	 * Use this to access previously submitted values and/or modify the $formRuntime before an element
+	 * is outputted to the browser.
+	 *
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @return void
+	 * @api
+	 */
+	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime);
+
+	/**
 	 * Get the renderer class name to be used to display this renderable;
 	 * must implement RendererInterface
 	 *

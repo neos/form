@@ -252,6 +252,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 		foreach ($page->getElementsRecursively() as $element) {
 			$value = \TYPO3\FLOW3\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
+			$element->onSubmit($this, $value);
 
 			// TODO: should this be set on FormState or not??
 			$this->formState->setFormValue($element->getIdentifier(), $value);
@@ -500,6 +501,9 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 	public function getLabel() {
 		$this->formDefinition->getLabel();
+	}
+
+	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 	}
 }
 ?>
