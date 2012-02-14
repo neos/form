@@ -24,8 +24,8 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * Constructor. Needs the identifier and type of this element
 	 *
-	 * @param string $identifier The Page's identifier
-	 * @param string $type The Page's type
+	 * @param string $identifier The Section identifier
+	 * @param string $type The Section type
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
 	 * @api
 	 */
