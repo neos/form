@@ -115,6 +115,7 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	 *
 	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
 	 * @param mixed $elementValue submitted value of the element *before post processing*
+	 * @api
 	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue);
 }
