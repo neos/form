@@ -499,7 +499,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	public function getLabel() {
-		$this->formDefinition->getLabel();
+		return $this->formDefinition->getLabel();
 	}
 }
 ?>
