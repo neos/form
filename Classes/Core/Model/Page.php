@@ -38,7 +38,7 @@ class Page extends AbstractSection {
 
 	public function setParentRenderable(Renderable\CompositeRenderableInterface $parentRenderable) {
 		if (!($parentRenderable instanceof FormDefinition)) {
-			throw new \Exception('TODO: parent renderable ....');
+			throw new \TYPO3\Form\Exception(sprintf('The specified parentRenderable must be a FormDefinition, got "%s"', is_object($parentRenderable) ? get_class($parentRenderable) : gettype($parentRenderable)), 1329233747);
 		}
 		parent::setParentRenderable($parentRenderable);
 	}

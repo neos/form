@@ -410,8 +410,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @api
 	 */
 	public function getPageByIndex($index) {
-		// TODO: throw exception if not found
-		return isset($this->renderables[$index]) ? $this->renderables[$index] : NULL;
+		if (!isset($this->renderables[$index])) {
+			throw new \TYPO3\Form\Exception(sprintf('There is no page with an index of %d', $index), 1329233627);
+		}
+		return $this->renderables[$index];
 	}
 
 	/**
