@@ -9,7 +9,7 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document
+ * @todo document / replace with core Image VH if available
  */
 class ImageViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
 
