@@ -11,6 +11,8 @@ use \TYPO3\Form\Core\Runtime\FormRuntime;
 /**
  * The context that is passed to each finisher when executed.
  * It acts like an EventObject that is able to stop propagation.
+ *
+ * **This class is not meant to be subclassed by developers.**
  */
 class FinisherContext {
 
@@ -18,6 +20,7 @@ class FinisherContext {
 	 * If TRUE further finishers won't be invoked
 	 *
 	 * @var boolean
+	 * @internal
 	 */
 	protected $cancelled = FALSE;
 
@@ -25,11 +28,13 @@ class FinisherContext {
 	 * A reference to the Form Runtime that the finisher belongs to
 	 *
 	 * @var \TYPO3\Form\Core\Runtime\FormRuntime
+	 * @internal
 	 */
 	protected $formRuntime;
 
 	/**
 	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @internal
 	 */
 	public function __construct(FormRuntime $formRuntime) {
 		$this->formRuntime = $formRuntime;
@@ -39,6 +44,7 @@ class FinisherContext {
 	 * Cancels the finisher invocation after the current finisher
 	 *
 	 * @return void
+	 * @api
 	 */
 	public function cancel() {
 		$this->cancelled = TRUE;
@@ -48,6 +54,7 @@ class FinisherContext {
 	 * TRUE if no futher finishers should be invoked. Defaults to FALSE
 	 *
 	 * @return boolean
+	 * @internal
 	 */
 	public function isCancelled() {
 		return $this->cancelled;
@@ -57,6 +64,7 @@ class FinisherContext {
 	 * The Form Runtime that is associated with the current finisher
 	 *
 	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
+	 * @api
 	 */
 	public function getFormRuntime() {
 		return $this->formRuntime;

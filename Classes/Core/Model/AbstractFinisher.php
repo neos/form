@@ -9,12 +9,18 @@ namespace TYPO3\Form\Core\Model;
 use TYPO3\Form\Core\Model\FinisherContext;
 
 /**
- * Finisher base class
+ * Finisher base class.
+ *
+ * **This class is meant to be subclassed by developers**
  */
 abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 
 	/**
+	 * The options which have been set from the outside. Instead of directly
+	 * accessing them, you should rather use parseOption().
+	 *
 	 * @var array
+	 * @internal
 	 */
 	protected $options = array();
 
@@ -24,11 +30,13 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 	 * Default options should not be changed from "outside"
 	 *
 	 * @var array
+	 * @api
 	 */
 	protected $defaultOptions = array();
 
 	/**
 	 * @var \TYPO3\Form\Core\Model\FinisherContext
+	 * @api
 	 */
 	protected $finisherContext;
 
@@ -44,7 +52,10 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 	/**
 	 * This method is called in the concrete finisher whenever self::execute() is called.
 	 *
+	 * Override and fill with your own implementation!
+	 *
 	 * @return void
+	 * @api
 	 */
 	abstract protected function executeInternal();
 
@@ -56,21 +67,25 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 	 *
 	 * @param string $optionName
 	 * @return mixed
+	 * @api
 	 */
 	protected function parseOption($optionName) {
 		if (!isset($this->options[$optionName]) || $this->options[$optionName] === '') {
 			if (isset($this->defaultOptions[$optionName])) {
-				return $this->defaultOptions[$optionName];
+				$option = $this->defaultOptions[$optionName];
+			} else {
+				return NULL;
 			}
-			return NULL;
+		} else {
+			$option = $this->options[$optionName];
 		}
-		if (!is_string($this->options[$optionName])) {
-			return $this->options[$optionName];
+		if (!is_string($option)) {
+			return $option;
 		}
 		$formRuntime = $this->finisherContext->getFormRuntime();
 		return preg_replace_callback('/{([^}]+)}/', function($match) use ($formRuntime) {
 			return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
-		}, $this->options[$optionName]);
+		}, $option);
 	}
 
 
