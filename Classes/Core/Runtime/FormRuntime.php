@@ -387,8 +387,10 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @api
 	 */
 	public function getPreviousPage() {
-		$currentPageIndex = $this->currentPage->getIndex();
-		return $this->formDefinition->getPageByIndex($currentPageIndex - 1);
+		$previousPageIndex = $this->currentPage->getIndex() - 1;
+		if ($this->formDefinition->hasPageWithIndex($previousPageIndex)) {
+			return $this->formDefinition->getPageByIndex($previousPageIndex);
+		}
 	}
 
 	/**
@@ -398,8 +400,10 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @api
 	 */
 	public function getNextPage() {
-		$currentPageIndex = $this->currentPage->getIndex();
-		return $this->formDefinition->getPageByIndex($currentPageIndex + 1);
+		$nextPageIndex = $this->currentPage->getIndex() + 1;
+		if ($this->formDefinition->hasPageWithIndex($nextPageIndex)) {
+			return $this->formDefinition->getPageByIndex($nextPageIndex);
+		}
 	}
 
 	/**

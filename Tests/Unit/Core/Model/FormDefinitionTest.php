@@ -144,8 +144,36 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function getPagesReturnsEmptyArrayByDefault() {
 		$formDefinition = new FormDefinition('foo');
 		$this->assertSame(array(), $formDefinition->getPages());
-		$this->assertNull($formDefinition->getPageByIndex(0));
-		$this->assertNull($formDefinition->getPageByIndex(1));
+	}
+
+	/**
+	 * @test
+	 * @expectedException \TYPO3\Form\Exception
+	 */
+	public function getPageByIndexThrowsExceptionIfSpecifiedIndexDoesNotExist() {
+		$formDefinition = new FormDefinition('foo');
+		$formDefinition->getPageByIndex(0);
+	}
+
+	/**
+	 * @test
+	 */
+	public function hasPageWithIndexReturnsTrueIfTheSpecifiedIndexExists() {
+		$formDefinition = new FormDefinition('foo');
+		$page = new Page('bar');
+		$formDefinition->addPage($page);
+		$this->assertTrue($formDefinition->hasPageWithIndex(0));
+	}
+
+	/**
+	 * @test
+	 */
+	public function hasPageWithIndexReturnsFalseIfTheSpecifiedIndexDoesNotExist() {
+		$formDefinition = new FormDefinition('foo');
+		$this->assertFalse($formDefinition->hasPageWithIndex(0));
+		$page = new Page('bar');
+		$formDefinition->addPage($page);
+		$this->assertFalse($formDefinition->hasPageWithIndex(1));
 	}
 
 	/**
@@ -159,7 +187,6 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$this->assertSame($formDefinition, $page->getParentRenderable());
 
 		$this->assertSame($page, $formDefinition->getPageByIndex(0));
-		$this->assertNull($formDefinition->getPageByIndex(1));
 	}
 
 	/**

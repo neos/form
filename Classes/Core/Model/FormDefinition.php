@@ -401,16 +401,28 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	}
 
 	/**
+	 * Check whether a page with the given $index exists
+	 *
+	 * @param integer $index
+	 * @return boolean TRUE if a page with the given $index exists, otherwise FALSE
+	 * @api
+	 */
+	public function hasPageWithIndex($index) {
+		return isset($this->renderables[$index]);
+	}
+
+	/**
 	 * Get the page with the passed index. The first page has index zero.
 	 *
-	 * If page at $index does not exist, returns NULL
+	 * If page at $index does not exist, an exception is thrown. @see hasPageWithIndex()
 	 *
 	 * @param integer $index
 	 * @return Page the page, or NULL if none found.
+	 * @throws \TYPO3\Form\Exception if the specified index does not exist
 	 * @api
 	 */
 	public function getPageByIndex($index) {
-		if (!isset($this->renderables[$index])) {
+		if (!$this->hasPageWithIndex($index)) {
 			throw new \TYPO3\Form\Exception(sprintf('There is no page with an index of %d', $index), 1329233627);
 		}
 		return $this->renderables[$index];
