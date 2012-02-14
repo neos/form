@@ -3,5 +3,6 @@ Configuring Form Builder
 
 **Configure Form Builder through settings**
 
-* "Create Elements" umgruppieren
-* Create Sub-element of text with Required Validator
+* element bei "Create Elements" einbauen
+* (Programming Lang Select example)
+* mandatory validators or finishers (required: true)
