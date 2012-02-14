@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Factory;
+namespace TYPO3\Form\Tests\Unit\Factory;
 
 /*                                                                        *
  * This script belongs to the FLOW3 package "TYPO3.Form".                 *
