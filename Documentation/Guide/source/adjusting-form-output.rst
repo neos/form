@@ -370,12 +370,14 @@ Now, you only need to adjust the form definition in order to use the new templat
 	            layoutPathPattern: 'resource://TYPO3.FormExample/Private/CustomElements/Layouts/{@type}.html'
 
 .. tip:: You can use **placeholders** in ``templatePathPattern``, ``partialPathPattern`` and ``layoutPathPattern``:
-   ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type 
+   ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type
    without namespace. A small example shall illustrate this:
 
    If the form element type is ``Your.Package:FooBar``, then ``{@package}`` is replaced by ``Your.Package``,
    and ``{@type}`` is replaced by ``FooBar``. As partials and layouts inside form elements are also specified
    using the ``Package:Type`` notation, this replacement also works for partials and layouts.
+
+.. _creating-a-new-form-element:
 
 Creating a New Form Element
 ---------------------------
