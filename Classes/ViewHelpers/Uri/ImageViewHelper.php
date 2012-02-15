@@ -9,7 +9,7 @@ namespace TYPO3\Form\ViewHelpers\Uri;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document
+ * Return an URI to a (possibly resized) image.
  */
 class ImageViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 

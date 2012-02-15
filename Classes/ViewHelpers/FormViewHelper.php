@@ -9,10 +9,7 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * Custom form ViewHelper that renders custom referrer fields
- *
- * @todo document
- * @todo add this functionality to Fluid Form ViewHelper (ability to override/disable referrer fields)
+ * Custom form ViewHelper that renders the form state instead of referrer fields
  */
 class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 

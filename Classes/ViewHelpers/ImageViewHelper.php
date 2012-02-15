@@ -9,7 +9,7 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document / replace with core Image VH if available
+ * Render a simple <img src...> tag. Resizes the image if required.
  */
 class ImageViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
 

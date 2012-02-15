@@ -7,7 +7,8 @@ namespace TYPO3\Form\Utility;
  *                                                                        */
 
 /**
- * @todo document
+ * Merges configuration based on the "superTypes" property of a so-called "type definition".
+ *
  * @internal
  */
 class SupertypeResolver {

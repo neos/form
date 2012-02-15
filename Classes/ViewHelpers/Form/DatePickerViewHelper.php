@@ -14,7 +14,9 @@ namespace TYPO3\Form\ViewHelpers\Form;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document
+ * Display a jQuery date picker.
+ *
+ * Note: Requires jQuery UI to be included on the page.
  */
 class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
 

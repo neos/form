@@ -9,7 +9,7 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document, rename?, move to TYPO3.FormBuilder?
+ * Output the configured stylesheets and JavaScript include tags for a given preset
  */
 class RenderHeadViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 

@@ -14,7 +14,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
 use TYPO3\FLOW3\Annotations as FLOW3;
 
 /**
- * @todo document
+ * Displays two select-boxes for hour and minute selection.
  */
 class TimePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
 

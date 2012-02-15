@@ -13,7 +13,8 @@ namespace TYPO3\Form\Validation;
 
 
 /**
- * @todo document
+ * The given $value is valid if it is an \TYPO3\FLOW3\Resource\Resource of the configured resolution
+ * Note: a value of NULL or empty string ('') is considered valid
  */
 class FileTypeValidator extends \TYPO3\FLOW3\Validation\Validator\AbstractValidator {
 
