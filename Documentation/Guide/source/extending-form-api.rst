@@ -33,13 +33,13 @@ which defines validation and property mapping instructions for an element.
 Lets have a look at the ``DatePicker`` Form Element located in ``TYPO3.Form/Classes/FormElements/DatePicker.php``::
 
 	class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement {
-		public function initializeFormElement() {
-			$formDefinition = $this->getRootForm();
-			$processingRule = $formDefinition->getProcessingRule($this->identifier);
-			$dateTimeConverter = new \TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter();
-			$processingRule->getPropertyMappingConfiguration()->setTypeConverter($dateTimeConverter);
-			$processingRule->setDataType('DateTime');
-		}
+	   public function initializeFormElement() {
+	      $formDefinition = $this->getRootForm();
+	      $processingRule = $formDefinition->getProcessingRule($this->identifier);
+	      $dateTimeConverter = new \TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter();
+	      $processingRule->getPropertyMappingConfiguration()->setTypeConverter($dateTimeConverter);
+	      $processingRule->setDataType('DateTime');
+	   }
 	}
 
 The method ``initializeFormElement()`` is called whenever a Form Element is **added to a form**.
@@ -59,42 +59,42 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 
 	class ConditionalRequired extends \TYPO3\Form\Core\Model\AbstractFormElement {
 
-		/**
-		 * Executed before the current element is outputted to the client
-		 *
-		 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-		 */
-		public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
-			$this->requireIfTriggerIsSet($formRuntime->getFormState());
-		}
+	   /**
+	    * Executed before the current element is outputted to the client
+	    *
+	    * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	    */
+	   public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
+	      $this->requireIfTriggerIsSet($formRuntime->getFormState());
+	   }
 
-		/**
-		 * Executed after the page containing the current element has been submitted
-		 *
-		 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-		 * @param $elementValue raw value of the submitted element
-		 */
-		public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
-			$this->requireIfTriggerIsSet($formRuntime->getFormState());
-		}
+	   /**
+	    * Executed after the page containing the current element has been submitted
+	    *
+	    * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	    * @param $elementValue raw value of the submitted element
+	    */
+	   public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
+	      $this->requireIfTriggerIsSet($formRuntime->getFormState());
+	   }
 
-		/**
-		 * Adds a NotEmptyValidator to the current element if the "trigger" value is not empty.
-		 * The trigger can be configured with $this->properties['triggerPropertyPath']
-		 *
-		 * @param \TYPO3\Form\Core\Runtime\FormState $formState
-		 * @return void
-		 */
-		protected function requireIfTriggerIsSet(\TYPO3\Form\Core\Runtime\FormState $formState) {
-			if (!isset($this->properties['triggerPropertyPath'])) {
-				return;
-			}
-			$triggerValue = $formState->getFormValue($this->properties['triggerPropertyPath']);
-			if ($triggerValue === NULL || $triggerValue === '') {
-				return;
-			}
-			$this->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-		}
+	   /**
+	    * Adds a NotEmptyValidator to the current element if the "trigger" value is not empty.
+	    * The trigger can be configured with $this->properties['triggerPropertyPath']
+	    *
+	    * @param \TYPO3\Form\Core\Runtime\FormState $formState
+	    * @return void
+	    */
+	   protected function requireIfTriggerIsSet(\TYPO3\Form\Core\Runtime\FormState $formState) {
+	      if (!isset($this->properties['triggerPropertyPath'])) {
+	         return;
+	      }
+	      $triggerValue = $formState->getFormValue($this->properties['triggerPropertyPath']);
+	      if ($triggerValue === NULL || $triggerValue === '') {
+	         return;
+	      }
+	      $this->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+	   }
 	}
 
 ``beforeRendering()`` is invoked just before a Form Element is actually outputted to the client.
@@ -162,26 +162,26 @@ list. A Form Element Renderer must implement the ``RendererInterface`` interface
 
 	class ListRenderer extends \TYPO3\Form\Core\Renderer\AbstractElementRenderer {
 
-		/**
-		 * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
-		 * @return string
-		 */
-		public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
-			$items = array();
-			if ($renderable instanceof \TYPO3\Form\Core\Model\FormElementInterface) {
-				$elementProperties = $renderable->getProperties();
-				if (isset($elementProperties['items'])) {
-					$items = $elementProperties['items'];
-				}
-			}
-			$content = sprintf('<h3>%s</h3>', htmlspecialchars($renderable->getLabel()));
-			$content .= '<ul>';
-			foreach ($items as $item) {
-				$content .= sprintf('<li>%s</li>', htmlspecialchars($item));
-			}
-			$content .= '</ul>';
-			return $content;
-		}
+	   /**
+	    * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
+	    * @return string
+	    */
+	   public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
+	      $items = array();
+	      if ($renderable instanceof \TYPO3\Form\Core\Model\FormElementInterface) {
+	         $elementProperties = $renderable->getProperties();
+	         if (isset($elementProperties['items'])) {
+	            $items = $elementProperties['items'];
+	         }
+	      }
+	      $content = sprintf('<h3>%s</h3>', htmlspecialchars($renderable->getLabel()));
+	      $content .= '<ul>';
+	      foreach ($items as $item) {
+	         $content .= sprintf('<li>%s</li>', htmlspecialchars($item));
+	      }
+	      $content .= '</ul>';
+	      return $content;
+	   }
 	}
 
 .. tip:: If you write your own Renderer make sure to sanitize values with ``htmlspecialchars()`` before outputting
