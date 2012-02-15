@@ -205,7 +205,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * Returns TRUE if a previous form page has been submitted, otherwise FALSE
 	 *
 	 * @return boolean
-	 * @todo find a better name?
 	 */
 	protected function formPageHasBeenSubmitted() {
 		if ($this->isFirstRequest()) {
@@ -254,7 +253,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 			$value = \TYPO3\FLOW3\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
 			$element->onSubmit($this, $value);
 
-			// TODO: should this be set on FormState or not??
 			$this->formState->setFormValue($element->getIdentifier(), $value);
 			$registerPropertyPaths($element->getIdentifier());
 		}
@@ -315,7 +313,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 		$controllerContext = $this->getControllerContext();
 		$renderer->setControllerContext($controllerContext);
-		// TODO: use request / response properly
+
 		$renderer->setFormRuntime($this);
 		return $renderer->renderRenderable($this);
 	}
@@ -407,12 +405,10 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 *
 	 * @return \TYPO3\FLOW3\MVC\Controller\ControllerContext
 	 * @internal
 	 */
 	protected function getControllerContext() {
-		// TODO: build contoller context and return the same one always
 		$uriBuilder = new \TYPO3\FLOW3\MVC\Web\Routing\UriBuilder();
 		$uriBuilder->setRequest($this->request);
 

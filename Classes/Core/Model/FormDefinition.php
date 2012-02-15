@@ -476,7 +476,6 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @param Renderable\RenderableInterface $renderable
 	 * @throws TYPO3\Form\Exception\DuplicateFormElementException
 	 * @internal
-	 * @todo rename to "registerElementInForm"
 	 */
 	public function registerRenderable(Renderable\RenderableInterface $renderable) {
 		if ($renderable instanceof FormElementInterface) {

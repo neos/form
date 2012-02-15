@@ -16,6 +16,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * This class contains multiple FormElements ({@link FormElementInterface}).
  *
  * Please see {@link FormDefinition} for an in-depth explanation.
+ *
+ * Once we support traits, the duplicated code between AbstractFormElement and Section could be extracted to a Trait.
  */
 class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\Form\Core\Model\FormElementInterface {
 
@@ -54,7 +56,6 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	}
 
 	public function isRequired() {
-		// TODO get rid of code duplication
 		foreach ($this->getValidators() as $validator) {
 			if ($validator instanceof \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator) {
 				return TRUE;
