@@ -17,8 +17,10 @@ class ArrayFormFactory extends AbstractFormFactory {
 		$formDefaults = $this->getPresetConfiguration($presetName);
 
 		$form = new FormDefinition($configuration['identifier'], $formDefaults);
-		foreach ($configuration['renderables'] as $pageConfiguration) {
-			$this->addNestedRenderable($pageConfiguration, $form);
+		if (isset($configuration['renderables'])) {
+			foreach ($configuration['renderables'] as $pageConfiguration) {
+				$this->addNestedRenderable($pageConfiguration, $form);
+			}
 		}
 
 		unset($configuration['renderables']);
@@ -32,7 +34,7 @@ class ArrayFormFactory extends AbstractFormFactory {
 
 	protected function addNestedRenderable($nestedRenderableConfiguration, \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable) {
 		if (!isset($nestedRenderableConfiguration['identifier'])) {
-			throw new \Exception('Identifier not set');
+			throw new \TYPO3\Form\Exception\IdentifierNotValidException('Identifier not set.', 1329289436);
 		}
 		if ($parentRenderable instanceof FormDefinition) {
 			$renderable = $parentRenderable->createPage($nestedRenderableConfiguration['identifier'], $nestedRenderableConfiguration['type']);

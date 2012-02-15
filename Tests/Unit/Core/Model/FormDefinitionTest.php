@@ -9,6 +9,8 @@ namespace TYPO3\Form\Tests\Unit\Core\Model;
 use TYPO3\Form\Core\Model\FormDefinition;
 use TYPO3\Form\Core\Model\Page;
 
+require_once(__DIR__ . '/Fixture/EmptyFinisher.php');
+
 /**
  * Test for FormDefinition Domain Model
  * @covers \TYPO3\Form\Core\Model\FormDefinition<extended>
@@ -65,7 +67,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = new FormDefinition('myForm', array(
 			'finisherPresets' => array(
 				'myFinisher' => array(
-					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Finishers\EmailFinisher'),
+					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher'),
 					'options' => array(
 						'foo' => 'bar',
 						'test' => 'asdf'
@@ -88,7 +90,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$finishers = $formDefinition->getFinishers();
 		$this->assertSame(1, count($finishers));
 		$finisher = $finishers[0];
-		$this->assertInstanceOf('TYPO3\Form\Finishers\EmailFinisher', $finisher);
+		$this->assertInstanceOf('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher', $finisher);
 		$this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
 	}
 
@@ -574,7 +576,7 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function createFinisherCreatesFinisherCorrectly() {
 		$formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
 		$finisher = $formDefinition->createFinisher('email');
-		$this->assertInstanceOf('TYPO3\Form\Finishers\EmailFinisher', $finisher);
+		$this->assertInstanceOf('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher', $finisher);
 		$this->assertSame(array($finisher), $formDefinition->getFinishers());
 	}
 
@@ -607,10 +609,10 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 					'assd' => 'as'
 				),
 				'email' => array(
-					'implementationClassName' => 'TYPO3\Form\Finishers\EmailFinisher'
+					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher')
 				),
 				'emailWithOptions' => array(
-					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Finishers\EmailFinisher'),
+					'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher'),
 					'options' => array(
 						'foo' => 'bar',
 						'name' => 'asdf'
