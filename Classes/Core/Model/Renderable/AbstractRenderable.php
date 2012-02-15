@@ -148,6 +148,11 @@ abstract class AbstractRenderable implements RenderableInterface {
 		return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
 	}
 
+	public function setDataType($dataType) {
+		$formDefinition = $this->getRootForm();
+		$formDefinition->getProcessingRule($this->getIdentifier())->setDataType($dataType);
+	}
+
 	/**
 	 * Set the renderer class name
 	 *

@@ -17,11 +17,7 @@ class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement {
 	 * @return void
 	 */
 	public function initializeFormElement() {
-		$formDefinition = $this->getRootForm();
-		$processingRule = $formDefinition->getProcessingRule($this->identifier);
-		$dateTimeConverter = new \TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter();
-		$processingRule->getPropertyMappingConfiguration()->setTypeConverter($dateTimeConverter);
-		$processingRule->setDataType('DateTime');
+		$this->setDataType('DateTime');
 	}
 }
 ?>

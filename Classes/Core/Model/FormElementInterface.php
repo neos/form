@@ -97,14 +97,25 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	 *
 	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
 	 * @return void
+	 * @api
 	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator);
+
+	/**
+	 * Set the target data type for this element
+	 *
+	 * @param string $dataType the target data type
+	 * @return void
+	 * @api
+	 */
+	public function setDataType($dataType);
 
 	/**
 	 * Whether or not this element is required
 	 *
 	 * @internal
 	 * @return boolean
+	 * @api
 	 */
 	public function isRequired();
 

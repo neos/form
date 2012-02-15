@@ -34,19 +34,13 @@ Lets have a look at the ``DatePicker`` Form Element located in ``TYPO3.Form/Clas
 
 	class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement {
 	   public function initializeFormElement() {
-	      $formDefinition = $this->getRootForm();
-	      $processingRule = $formDefinition->getProcessingRule($this->identifier);
-	      $dateTimeConverter = new \TYPO3\FLOW3\Property\TypeConverter\DateTimeConverter();
-	      $processingRule->getPropertyMappingConfiguration()->setTypeConverter($dateTimeConverter);
-	      $processingRule->setDataType('DateTime');
+	      $this->setDataType('DateTime');
 	   }
 	}
 
 The method ``initializeFormElement()`` is called whenever a Form Element is **added to a form**.
-With ``$this->getRootForm()`` you can access and modify the current ``FormDefinition``.
-In this example the ``Processing Rule`` for the current Form Element is retrieved with
-``$formDefinition->getProcessingRule($this->identifier)`` and the required DateTime-specific
-Property Mapping configuration is added.
+In this example, we only set the target data type to a DateTime object. This way, property
+mapping and type conversion using the registered TypeConverters is automatically triggered.
 
 Besides being able to modify the Form Element configuration during *initialization* you can also
 implement the callbacks ``beforeRendering()`` or/and ``onSubmit()`` in order to adjust the behavior
