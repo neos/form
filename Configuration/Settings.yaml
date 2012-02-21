@@ -1,8 +1,7 @@
 TYPO3:
   Form:
-    #yamlPersistenceManager:
-      #allowedDirectories:
-        # list of allowed directories
+    yamlPersistenceManager:
+      savePath: %FLOW3_PATH_DATA%Forms/
     supertypeResolver:
       hiddenProperties: []
     presets:
