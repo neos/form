@@ -31,6 +31,14 @@ interface FormPersistenceManagerInterface {
 	public function save($persistenceIdentifier, array $formDefinition);
 
 	/**
+	 * Check whether a form with the specified $persistenceIdentifier exists
+	 *
+	 * @param string $persistenceIdentifier
+	 * @return boolean TRUE if a form with the given $persistenceIdentifier can be loaded, otherwise FALSE
+	 */
+	public function exists($persistenceIdentifier);
+
+	/**
 	 * List all form definitions which can be loaded through this form persistence
 	 * manager.
 	 *

@@ -16,62 +16,72 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class YamlPersistenceManager implements FormPersistenceManagerInterface {
 
 	/**
-	 * @var array
+	 * @var string
 	 */
-	protected $allowedDirectories;
+	protected $savePath;
 
 	/**
 	 * @param array $settings
 	 */
 	public function injectSettings(array $settings) {
-		$this->allowedDirectories = (isset($settings['yamlPersistenceManager']['allowedDirectories']) && is_array($settings['yamlPersistenceManager']['allowedDirectories']) ? $settings['yamlPersistenceManager']['allowedDirectories'] : array());
+		if (isset($settings['yamlPersistenceManager']['savePath'])) {
+			$this->savePath = $settings['yamlPersistenceManager']['savePath'];
+			if (!is_dir($this->savePath)) {
+				\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($this->savePath);
+			}
+		}
 	}
 
 	public function load($persistenceIdentifier) {
-		$persistenceIdentifier = \TYPO3\FLOW3\Utility\Files::getUnixStylePath($persistenceIdentifier);
-		if ($this->isDirectoryAllowed($persistenceIdentifier)) {
-			return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($persistenceIdentifier));
-		} else {
-			throw new Exception(sprintf('The form identified by "%s" was not allowed to be loaded.', $persistenceIdentifier), 1328160893);
+		if (!$this->exists($persistenceIdentifier)) {
+			throw new \TYPO3\Form\Exception\PersistenceManagerException(sprintf('The form identified by "%s" could not be loaded.', $persistenceIdentifier), 1329307034);
 		}
+		$formPathAndFilename = $this->getFormPathAndFilename($persistenceIdentifier);
+		return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($formPathAndFilename));
 	}
 
 	public function save($persistenceIdentifier, array $formDefinition) {
-		$persistenceIdentifier = \TYPO3\FLOW3\Utility\Files::getUnixStylePath($persistenceIdentifier);
-		if ($this->isDirectoryAllowed($persistenceIdentifier)) {
-			file_put_contents($persistenceIdentifier, \Symfony\Component\Yaml\Yaml::dump($formDefinition, 99));
-		} else {
-			throw new Exception(sprintf('The form identified by "%s" was not allowed to be saved.', $persistenceIdentifier), 1328160897);
-		}
+		$formPathAndFilename = $this->getFormPathAndFilename($persistenceIdentifier);
+		file_put_contents($formPathAndFilename, \Symfony\Component\Yaml\Yaml::dump($formDefinition, 99));
+	}
+
+	public function exists($persistenceIdentifier) {
+		return is_file($this->getFormPathAndFilename($persistenceIdentifier));
 	}
 
 	public function listForms() {
 		$forms = array();
+		$directoryIterator = new \DirectoryIterator($this->savePath);
 
-		foreach ($this->allowedDirectories as $directory) {
-			$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
-			foreach ($iterator as $fileObject) {
-				if ($fileObject->isFile()) {
-					$form = $this->load($fileObject->getPathname());
-					$forms[] = array(
-						'identifier' => $form['identifier'],
-						'name' => isset($form['label']) ? $form['label'] : $form['identifier'],
-						'persistenceIdentifier' => $fileObject->getPathname()
-					);
-				}
+		foreach ($directoryIterator as $fileObject) {
+			if (!$fileObject->isFile()) {
+				continue;
 			}
+			$fileInfo = pathinfo($fileObject->getFilename());
+			if (strtolower($fileInfo['extension']) !== 'yaml') {
+				continue;
+			}
+			$persistenceIdentifier = $fileInfo['filename'];
+			$form = $this->load($persistenceIdentifier);
+			$forms[] = array(
+				'identifier' => $form['identifier'],
+				'name' => isset($form['label']) ? $form['label'] : $form['identifier'],
+				'persistenceIdentifier' => $persistenceIdentifier
+			);
 		}
 		return $forms;
 	}
 
-	protected function isDirectoryAllowed($persistenceIdentifier) {
-		foreach ($this->allowedDirectories as $directory) {
-			if (strpos($persistenceIdentifier, $directory) === 0) {
-					// the $persistence identifier starts with $directory
-				return TRUE;
-			}
-		}
-		return FALSE;
+	/**
+	 * Returns the absolute path and filename of the form with the specified $persistenceIdentifier
+	 * Note: This (intentionally) does not check whether the file actually exists
+	 *
+	 * @param string $persistenceIdentifier
+	 * @return string the absolute path and filename of the form with the specified $persistenceIdentifier
+	 */
+	protected function getFormPathAndFilename($persistenceIdentifier) {
+		$formFileName = sprintf('%s.yaml', $persistenceIdentifier);
+		return \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
 	}
 }
 ?>
