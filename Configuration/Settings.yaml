@@ -1,3 +1,10 @@
+Documentation:
+  bundles:
+    Form:
+      importRootNodePath: 'documentation/form'
+      documentationRootPath: %FLOW3_PATH_PACKAGES%Framework/TYPO3.Form/Documentation/Guide/source
+      renderedDocumentationRootPath: %FLOW3_PATH_DATA%Temporary/Documentation/Form
+
 TYPO3:
   Form:
     yamlPersistenceManager:
