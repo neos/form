@@ -83,7 +83,7 @@ Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which
 Contrasting Use Case: Gender Selection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Inside :ref:`creating-a-new-form-element`, we have implemented a special *Gender Select*. Let's think a second about the differences between the *Gender Select* and the *Programming Language Select* examples:
+Inside *Creating a new form element*, we have implemented a special *Gender Select*. Let's think a second about the differences between the *Gender Select* and the *Programming Language Select* examples:
 
 For a *Gender* select field, the integrator using the form builder does not need to set any options for this form element, as the available choices (``Female`` and ``Male``) are predefined inside the *form element template*.
 

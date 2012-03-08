@@ -14,7 +14,7 @@ Generally, this guide answers the question: **How can form output be modified wi
 Presets Explained
 -----------------
 
-In the :ref:`quickstart` guide, you have seen how a basic form can be built. We
+In the *Quickstart* guide, you have seen how a basic form can be built. We
 will now dissect the form element creation a little more, and explain the lines
 which you might not have understood yet.
 

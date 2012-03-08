@@ -253,6 +253,6 @@ Next Steps
 Now, you know how to build forms using the API. In the next tutorial, you will learn how to
 adjust the form output and create new form elements -- all without programming!
 
-Continue with: :ref:`adjusting-form-output`
+Continue with: *Adjusting Form Output*
 
 .. TODO: There are special *Section* Form Elements that can contain other elements themselves.
