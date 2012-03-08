@@ -1,6 +1,6 @@
-=========================
-Form API and Form Builder
-=========================
+=====================
+Form API and -Builder
+=====================
 
 The Form API is an extensible and flexible framework to **build web forms**.
 
@@ -17,15 +17,9 @@ It includes the following features:
 Furthermore, we built a **Form Builder** which is a web application for graphically
 assembling and modifying forms.
 
-Credits
-=======
+.. image:: ../Images/FormBuilder.png
 
-This work has been generously sponsored by `AKOM360 - Multi Channel Marketing <http://akom360.de>`_.
-
-It has been implemented by:
-
-* Sebastian Kurfürst, `sandstorm|media <http://sandstorm-media.de>`_
-* Bastian Waidelich, `wwwision <http://wwwision.de>`_
+.. image:: ../Images/FormExample.png
 
 About This Documentation
 ========================
@@ -43,10 +37,12 @@ reference, although there will be links to the in-depth API reference at various
    configuring-form-builder
    extending-form-builder
 
-Indices and tables
-==================
+Credits
+=======
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+This work has been generously sponsored by `AKOM360 - Multi Channel Marketing <http://akom360.de>`_.
 
+It has been implemented by:
+
+* Sebastian Kurfürst, `sandstorm|media <http://sandstorm-media.de>`_
+* Bastian Waidelich, `wwwision <http://wwwision.de>`_
