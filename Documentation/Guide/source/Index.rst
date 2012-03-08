@@ -1,6 +1,6 @@
-=====================
-Form API and -Builder
-=====================
+=====
+Forms
+=====
 
 The Form API is an extensible and flexible framework to **build web forms**.
 
