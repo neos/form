@@ -57,6 +57,7 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 	    * Executed before the current element is outputted to the client
 	    *
 	    * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	    * @return void
 	    */
 	   public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 	      $this->requireIfTriggerIsSet($formRuntime->getFormState());
@@ -66,7 +67,8 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 	    * Executed after the page containing the current element has been submitted
 	    *
 	    * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-	    * @param $elementValue raw value of the submitted element
+	    * @param mixed $elementValue raw value of the submitted element
+	    * @return void
 	    */
 	   public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
 	      $this->requireIfTriggerIsSet($formRuntime->getFormState());

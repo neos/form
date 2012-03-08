@@ -260,7 +260,7 @@ here to improve readability):
 	         <f:if condition="{validationResults.flattenedErrors}">
 	            <span class="help-inline">
 	               <f:for each="{validationResults.errors}" as="error">
-	                  {error -> f:translate(key: error.code, arguments: error.arguments,
+	                  {error -> f:translate(id: error.code, arguments: error.arguments,
 	                                        package: 'TYPO3.Form', source: 'ValidationErrors')}
 	                  <br />
 	               </f:for>

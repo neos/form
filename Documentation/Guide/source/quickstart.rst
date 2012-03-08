@@ -64,7 +64,7 @@ looks as follows::
 
 		/**
 		 * @param array $factorySpecificConfiguration
-		 * @param $presetName
+		 * @param string $presetName
 		 * @return \TYPO3\Form\Core\Model\FormDefinition
 		 */
 		public function build(array $factorySpecificConfiguration, $presetName) {
@@ -203,7 +203,7 @@ That's it for the quickstart. The complete code of your form factory should look
 
 		/**
 		 * @param array $factorySpecificConfiguration
-		 * @param $presetName
+		 * @param string $presetName
 		 * @return \TYPO3\Form\Core\Model\FormDefinition
 		 */
 		public function build(array $factorySpecificConfiguration, $presetName) {
