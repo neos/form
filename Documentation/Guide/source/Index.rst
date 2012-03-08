@@ -15,11 +15,9 @@ It includes the following features:
 * great integration into **FLOW3**
 
 Furthermore, we built a **Form Builder** which is a web application for graphically
-assembling and modifying forms.
+assembling and modifying forms, displayed below:
 
 .. image:: ../Images/FormBuilder.png
-
-.. image:: ../Images/FormExample.png
 
 About This Documentation
 ========================
