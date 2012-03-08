@@ -4,6 +4,8 @@ Documentation:
       importRootNodePath: 'documentation/form'
       documentationRootPath: %FLOW3_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source
       renderedDocumentationRootPath: %FLOW3_PATH_DATA%Temporary/Documentation/Form
+      configurationRootPath: %FLOW3_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source
+      imageRootPath: %FLOW3_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/Images/
 
 TYPO3:
   Form:

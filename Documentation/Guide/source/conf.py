@@ -28,10 +28,10 @@ import sys, os
 extensions = ['sphinx.ext.extlinks']
 
 extlinks = {
-	'api-core-model': ('../../../api/class-TYPO3.Form.Core.Model.%s.html', ''),
-	'api-factory': ('../../../api/class-TYPO3.Form.Factory.%s.html', ''),
-	'api-viewhelpers': ('../../../api/class-TYPO3.Form.ViewHelpers.%sViewHelper.html', ''),
-	'api-finishers': ('../../../api/class-TYPO3.Form.Finishers.%s.html', '')
+	'api-core-model': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.Core.Model.%s.html', ''),
+	'api-factory': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.Factory.%s.html', ''),
+	'api-viewhelpers': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.ViewHelpers.%sViewHelper.html', ''),
+	'api-finishers': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.Finishers.%s.html', '')
 }
 
 # Add any paths that contain templates here, relative to this directory.
