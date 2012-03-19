@@ -49,6 +49,10 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 		$this->options = $options;
 	}
 
+	public function setOption($optionName, $optionValue) {
+		$this->options[$optionName] = $optionValue;
+	}
+
 	final public function execute(FinisherContext $finisherContext) {
 		$this->finisherContext = $finisherContext;
 		$this->executeInternal();

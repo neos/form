@@ -35,5 +35,15 @@ interface FinisherInterface {
 	 */
 	public function setOptions(array $options);
 
+	/**
+	 * Sets a single finisher option (@see setOptions())
+	 *
+	 * @param string $optionName name of the option to be set
+	 * @param mixed $optionValue value of the option
+	 * @return void
+	 * @api
+	 */
+	public function setOption($optionName, $optionValue);
+
 }
 ?>
