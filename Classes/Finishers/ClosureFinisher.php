@@ -13,6 +13,16 @@ namespace TYPO3\Form\Finishers;
 
 /**
  * A simple finisher that invokes a closure when executed
+ *
+ * Usage:
+ * //...
+ * $closureFinisher = new \TYPO3\Form\Finishers\ClosureFinisher();
+ * $closureFinisher->setOption('closure', function($finisherContext) {
+ *   $formRuntime = $finisherContext->getFormRuntime();
+ *   // ...
+ * });
+ * $formDefinition->addFinisher($closureFinisher);
+ * // ...
  */
 class ClosureFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
@@ -29,8 +39,7 @@ class ClosureFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		if (!$closure instanceof \Closure) {
 			throw new \TYPO3\Form\Exception\FinisherException(sprintf('The option "closure" must be of type Closure, "%s" given.', gettype($closure)), 1332155239);
 		}
-		$formRuntime = $this->finisherContext->getFormRuntime();
-		$closure($formRuntime);
+		$closure($this->finisherContext);
 	}
 }
 ?>
