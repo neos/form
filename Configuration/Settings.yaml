@@ -67,6 +67,8 @@ TYPO3:
 
           'TYPO3.Form:SingleLineText':
             superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+          'TYPO3.Form:Password':
+            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
           'TYPO3.Form:MultiLineText':
             superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
 
