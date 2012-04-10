@@ -245,8 +245,8 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function bindReturnsBoundFormRuntime() {
 		$formDefinition = new FormDefinition('foo');
 
-		$mockRequest = $this->getMockBuilder('TYPO3\FLOW3\MVC\Web\Request')->getMock();
-		$mockResponse = $this->getMockBuilder('TYPO3\FLOW3\MVC\Web\Response')->getMock();
+		$mockRequest = $this->getMockBuilder('TYPO3\FLOW3\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
+		$mockResponse = $this->getMockBuilder('TYPO3\FLOW3\Http\Response')->getMock();
 
 		$form = $formDefinition->bind($mockRequest, $mockResponse);
 		$this->assertInstanceOf('TYPO3\Form\Core\Runtime\FormRuntime', $form);

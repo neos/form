@@ -95,7 +95,7 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	 */
 	protected $formRuntime;
 
-	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext) {
+	public function setControllerContext(\TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
 	}
 

@@ -24,10 +24,10 @@ interface RendererInterface {
 	/**
 	 * Set the controller context which should be used
 	 *
-	 * @param \TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext
+	 * @param \TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext
 	 * @api
 	 */
-	public function setControllerContext(\TYPO3\FLOW3\MVC\Controller\ControllerContext $controllerContext);
+	public function setControllerContext(\TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext);
 
 	/**
 	 * Render the passed $renderable and return the rendered Renderable.

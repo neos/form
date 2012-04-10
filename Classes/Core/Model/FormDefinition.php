@@ -216,7 +216,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * ==========================
  *
  * In order to trigger *rendering* on a FormDefinition,
- * the current {@link \TYPO3\FLOW3\MVC\Web\Request} needs to be bound to the FormDefinition,
+ * the current {@link \TYPO3\FLOW3\Mvc\ActionRequest} needs to be bound to the FormDefinition,
  * resulting in a {@link \TYPO3\Form\Core\Runtime\FormRuntime} object which contains the *Runtime State* of the form
  * (such as the currently inserted values).
  *
@@ -552,12 +552,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Bind the current request & response to this form instance, effectively creating
 	 * a new "instance" of the Form.
 	 *
-	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
-	 * @param \TYPO3\FLOW3\MVC\Web\Response $response
+	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $request
+	 * @param \TYPO3\FLOW3\Http\Response $response
 	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
 	 * @api
 	 */
-	public function bind(\TYPO3\FLOW3\MVC\Web\Request $request, \TYPO3\FLOW3\MVC\Web\Response $response) {
+	public function bind(\TYPO3\FLOW3\Mvc\ActionRequest $request, \TYPO3\FLOW3\Http\Response $response) {
 		return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request, $response);
 	}
 

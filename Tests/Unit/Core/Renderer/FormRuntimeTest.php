@@ -27,8 +27,10 @@ class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function valuesSetInConstructorCanBeReadAgain() {
 		$formDefinition = new FormDefinition('foo');
-		$request = new \TYPO3\FLOW3\MVC\Web\Request();
-		$response = new \TYPO3\FLOW3\MVC\Web\Response();
+
+		$httpRequest = \TYPO3\FLOW3\Http\Request::create(new \TYPO3\FLOW3\Http\Uri('foo'));
+		$request = $httpRequest->createActionRequest();
+		$response = new \TYPO3\FLOW3\Http\Response();
 
 		$formRuntime = $this->createFormRuntime($formDefinition, $request, $response);
 
@@ -188,16 +190,17 @@ class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @param FormDefinition $formDefinition
-	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
-	 * @param \TYPO3\FLOW3\MVC\Web\Response $response
+	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $request
+	 * @param \TYPO3\FLOW3\Http\Response $response
 	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
 	 */
-	protected function createFormRuntime(FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request = NULL, \TYPO3\FLOW3\MVC\Web\Response $response = NULL) {
+	protected function createFormRuntime(FormDefinition $formDefinition, \TYPO3\FLOW3\Mvc\ActionRequest $request = NULL, \TYPO3\FLOW3\Http\Response $response = NULL) {
 		if ($request === NULL) {
-			$request = new \TYPO3\FLOW3\MVC\Web\Request();
+			$httpRequest = \TYPO3\FLOW3\Http\Request::create(new \TYPO3\FLOW3\Http\Uri('foo'));
+			$request = $httpRequest->createActionRequest();
 		}
 		if ($response === NULL) {
-			$response = new \TYPO3\FLOW3\MVC\Web\Response();
+			$response = new \TYPO3\FLOW3\Http\Response();
 		}
 		return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', array('dummy'), array($formDefinition, $request, $response));
 	}

@@ -12,6 +12,7 @@ namespace TYPO3\Form\Core\Runtime;
  *                                                                        */
 
 use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\FLOW3\Mvc\ActionRequest;
 
 /**
  * This class implements the *runtime logic* of a form, i.e. deciding which
@@ -61,13 +62,13 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected $formDefinition;
 
 	/**
-	 * @var \TYPO3\FLOW3\MVC\Web\Request
+	 * @var \TYPO3\FLOW3\Mvc\ActionRequest
 	 * @internal
 	 */
 	protected $request;
 
 	/**
-	 * @var \TYPO3\FLOW3\MVC\Web\Response
+	 * @var \TYPO3\FLOW3\Http\Response
 	 * @internal
 	 */
 	protected $response;
@@ -102,13 +103,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 	/**
 	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\MVC\Web\SubRequestBuilder
-	 * @internal
-	 */
-	protected $subRequestBuilder;
-
-	/**
-	 * @FLOW3\Inject
 	 * @var \TYPO3\FLOW3\Security\Cryptography\HashService
 	 * @internal
 	 */
@@ -118,19 +112,19 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * Workaround...
 	 *
 	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\MVC\FlashMessageContainer
+	 * @var \TYPO3\FLOW3\Mvc\FlashMessageContainer
 	 * @internal
 	 */
 	protected $flashMessageContainer;
 
 	/**
 	 * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
-	 * @param \TYPO3\FLOW3\MVC\Web\Request $request
-	 * @param \TYPO3\FLOW3\MVC\Web\Response $response
+	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $request
+	 * @param \TYPO3\FLOW3\Http\Response $response
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
 	 * @internal
 	 */
-	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\MVC\Web\Request $request, \TYPO3\FLOW3\MVC\Web\Response $response) {
+	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\Mvc\ActionRequest $request, \TYPO3\FLOW3\Http\Response $response) {
 		$this->formDefinition = $formDefinition;
 		$this->request = $request;
 		$this->response = $response;
@@ -140,7 +134,9 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	public function initializeObject() {
-		$this->request = $this->subRequestBuilder->build($this->request, $this->formDefinition->getIdentifier());
+		$this->request = new ActionRequest($this->request);
+		$this->request->setArgumentNamespace($this->formDefinition->getIdentifier());
+
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
 
@@ -353,7 +349,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * This is mostly relevant inside Finishers, where you f.e. want to redirect
 	 * the user to another page.
 	 *
-	 * @return \TYPO3\FLOW3\MVC\Web\Request the request this object is bound to
+	 * @return \TYPO3\FLOW3\Mvc\ActionRequest the request this object is bound to
 	 * @api
 	 */
 	public function getRequest() {
@@ -366,7 +362,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * This is mostly relevant inside Finishers, where you f.e. want to set response
 	 * headers or output content.
 	 *
-	 * @return \TYPO3\FLOW3\MVC\Web\Response the response this object is bound to
+	 * @return \TYPO3\FLOW3\Http\Response the response this object is bound to
 	 * @api
 	 */
 	public function getResponse() {
@@ -410,17 +406,17 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\MVC\Controller\ControllerContext
+	 * @return \TYPO3\FLOW3\Mvc\Controller\ControllerContext
 	 * @internal
 	 */
 	protected function getControllerContext() {
-		$uriBuilder = new \TYPO3\FLOW3\MVC\Web\Routing\UriBuilder();
+		$uriBuilder = new \TYPO3\FLOW3\Mvc\Routing\UriBuilder();
 		$uriBuilder->setRequest($this->request);
 
-		return new \TYPO3\FLOW3\MVC\Controller\ControllerContext(
+		return new \TYPO3\FLOW3\Mvc\Controller\ControllerContext(
 			$this->request,
 			$this->response,
-			new \TYPO3\FLOW3\MVC\Controller\Arguments(array()),
+			new \TYPO3\FLOW3\Mvc\Controller\Arguments(array()),
 			$uriBuilder,
 			$this->flashMessageContainer
 		);

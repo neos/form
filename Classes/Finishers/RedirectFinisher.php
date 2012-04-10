@@ -27,7 +27,7 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
 	public function executeInternal() {
 		$formRuntime = $this->finisherContext->getFormRuntime();
-		$request = $formRuntime->getRequest()->getRootRequest();
+		$request = $formRuntime->getRequest()->getMainRequest();
 
 		$packageKey = $this->parseOption('package');
 		$controllerName = $this->parseOption('controller');
@@ -40,7 +40,7 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		if ($packageKey !== NULL && strpos($packageKey, '\\') !== FALSE) {
 			list($packageKey, $subpackageKey) = explode('\\', $packageKey, 2);
 		}
-		$uriBuilder = new \TYPO3\FLOW3\MVC\Web\Routing\UriBuilder();
+		$uriBuilder = new \TYPO3\FLOW3\Mvc\Routing\UriBuilder();
 		$uriBuilder->setRequest($request);
 		$uriBuilder->reset();
 
@@ -49,7 +49,7 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
 		$response = $formRuntime->getResponse();
-		while ($response instanceof \TYPO3\FLOW3\MVC\Web\SubResponse) {
+		while ($response instanceof \TYPO3\FLOW3\Mvc\Web\SubResponse) {
 			$response = $response->getParentResponse();
 		}
 		$response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
