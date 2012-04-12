@@ -136,6 +136,9 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	public function initializeObject() {
 		$this->request = new ActionRequest($this->request);
 		$this->request->setArgumentNamespace($this->formDefinition->getIdentifier());
+		if ($this->request->getParentRequest()->hasArgument($this->request->getArgumentNamespace()) === TRUE && is_array($this->request->getParentRequest()->getArgument($this->request->getArgumentNamespace()))) {
+			$this->request->setArguments($this->request->getParentRequest()->getArgument($this->request->getArgumentNamespace()));
+		}
 
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
@@ -224,7 +227,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$result = $this->mapAndValidatePage($this->lastDisplayedPage);
 		if ($result->hasErrors()) {
 			$this->currentPage = $this->lastDisplayedPage;
-			$this->request->setOriginalRequestMappingResults($result);
+			$this->request->setArgument('__submittedArgumentValidationResults', $result);
 		}
 	}
 
