@@ -227,6 +227,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$result = $this->mapAndValidatePage($this->lastDisplayedPage);
 		if ($result->hasErrors()) {
 			$this->currentPage = $this->lastDisplayedPage;
+			$this->request->setArgument('__submittedArguments', $this->request->getArguments());
 			$this->request->setArgument('__submittedArgumentValidationResults', $result);
 		}
 	}
