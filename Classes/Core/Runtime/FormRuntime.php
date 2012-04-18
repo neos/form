@@ -239,8 +239,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 */
 	protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page) {
 		$result = new \TYPO3\FLOW3\Error\Result();
-		$processingRules = $this->formDefinition->getProcessingRules();
-
 		$requestArguments = $this->request->getArguments();
 
 		$propertyPathsForWhichPropertyMappingShouldHappen = array();
@@ -267,6 +265,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 			return substr_count($b, '.') - substr_count($a, '.');
 		});
 
+		$processingRules = $this->formDefinition->getProcessingRules();
 		foreach ($propertyPathsForWhichPropertyMappingShouldHappen as $propertyPath) {
 			if (isset($processingRules[$propertyPath])) {
 				$processingRule = $processingRules[$propertyPath];

@@ -51,6 +51,10 @@ class ProcessingRule {
 	 */
 	protected $propertyMapper;
 
+	public function __construct() {
+		$this->processingMessages = new \TYPO3\FLOW3\Error\Result();
+	}
+
 	/**
 	 * @return \TYPO3\FLOW3\Property\PropertyMappingConfiguration
 	 */
@@ -105,7 +109,7 @@ class ProcessingRule {
 		$validationResult = $this->validator->validate($value);
 		$messages->merge($validationResult);
 
-		$this->processingMessages = $messages;
+		$this->processingMessages->merge($messages);
 		return $value;
 	}
 
