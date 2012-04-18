@@ -1,4 +1,5 @@
 {namespace form=TYPO3\Form\ViewHelpers}
+{namespace media=TYPO3\Media\ViewHelpers}
 <fieldset>
 	<f:if condition="{page.label}">
 		<legend>{page.label}</legend>
@@ -17,13 +18,14 @@
 							<f:then>
 								<f:if condition="{0: formValue.element.type} == {0: 'TYPO3.Form:ImageUpload'}">
 									<f:then>
-										<a href="{form:uri.image(image: formValue.value, maxWidth: 600)}" rel="lightbox">
-											<form:image image="{formValue.value}" maxWidth="100" alt="{formValue.processedValue}" />
+										<a href="{media:uri.image(image: formValue.value, maximumWidth: 600)}" rel="lightbox">
+											<media:image image="{formValue.value}" maximumWidth="100" alt="{formValue.processedValue}" />
 										</a>
 									</f:then>
 									<f:else>
 										<f:if condition="{formValue.isMultiValue}">
 											<f:then>
+												{formValue.processedValue -> f:debug()}
 												<ul>
 													<f:for each="{formValue.processedValue}" as="value">
 														<li>{value}</li>
