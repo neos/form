@@ -74,5 +74,15 @@ class FinisherContext {
 	public function getFormRuntime() {
 		return $this->formRuntime;
 	}
+
+	/**
+	 * The values of the submitted form (after validation and property mapping)
+	 *
+	 * @return array
+	 * @api
+	 */
+	public function getFormValues() {
+		return $this->formRuntime->getFormState()->getFormValues();
+	}
 }
 ?>
