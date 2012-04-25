@@ -75,10 +75,20 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 */
 	protected $index = 0;
 
+	/**
+	 * Get the type of the renderable
+	 *
+	 * @return string
+	 */
 	public function getType() {
 		return $this->type;
 	}
 
+	/**
+	 * Get the identifier of the element
+	 *
+	 * @return string
+	 */
 	public function getIdentifier() {
 		return $this->identifier;
 	}
@@ -125,7 +135,14 @@ abstract class AbstractRenderable implements RenderableInterface {
 		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions', 'validators'));
 	}
 
-
+	/**
+	 * Create a validator for the element
+	 *
+	 * @param string $validatorIdentifier
+	 * @param array $options
+	 * @return mixed
+	 * @throws \TYPO3\Form\Exception\ValidatorPresetNotFoundException
+	 */
 	public function createValidator($validatorIdentifier, array $options = array()) {
 		$validatorPresets = $this->getRootForm()->getValidatorPresets();
 		if (isset($validatorPresets[$validatorIdentifier]) && is_array($validatorPresets[$validatorIdentifier]) && isset($validatorPresets[$validatorIdentifier]['implementationClassName'])) {
@@ -143,16 +160,33 @@ abstract class AbstractRenderable implements RenderableInterface {
 
 	}
 
+	/**
+	 * Add a validator to the element
+	 *
+	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
+	 * @return void
+	 */
 	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
 		$formDefinition = $this->getRootForm();
 		$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
 	}
 
+	/**
+	 * Get all validators on the element
+	 *
+	 * @return \SplObjectStorage
+	 */
 	public function getValidators() {
 		$formDefinition = $this->getRootForm();
 		return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
 	}
 
+	/**
+	 * Set the datatype
+	 *
+	 * @param string $dataType
+	 * @return void
+	 */
 	public function setDataType($dataType) {
 		$formDefinition = $this->getRootForm();
 		$formDefinition->getProcessingRule($this->getIdentifier())->setDataType($dataType);
@@ -163,16 +197,26 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 *
 	 * @param string $rendererClassName
 	 * @api
+	 * @return void
 	 */
 	public function setRendererClassName($rendererClassName) {
 		$this->rendererClassName = $rendererClassName;
 	}
 
-
+	/**
+	 * Get the classname of the renderer
+	 *
+	 * @return string
+	 */
 	public function getRendererClassName() {
 		return $this->rendererClassName;
 	}
 
+	/**
+	 * Get all rendering options
+	 *
+	 * @return array
+	 */
 	public function getRenderingOptions() {
 		return $this->renderingOptions;
 	}
@@ -183,22 +227,38 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * @param string $key
 	 * @param mixed $value
 	 * @api
+	 * @return mixed
 	 */
 	public function setRenderingOption($key, $value) {
 		$this->renderingOptions[$key] = $value;
 	}
 
+	/**
+	 * Get the parent renderable
+	 *
+	 * @return CompositeRenderableInterface
+	 * @return void
+	 */
 	public function getParentRenderable() {
 		return $this->parentRenderable;
 	}
 
+	/**
+	 * Set the parent renderable
+	 *
+	 * @param CompositeRenderableInterface $parentRenderable
+	 * @return void
+	 */
 	public function setParentRenderable(CompositeRenderableInterface $parentRenderable) {
 		$this->parentRenderable = $parentRenderable;
 		$this->registerInFormIfPossible();
 	}
 
 	/**
+	 * Get the root form this element belongs to
+	 *
 	 * @internal
+	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 * @return \TYPO3\Form\Core\Model\FormDefinition
 	 */
 	public function getRootForm() {
@@ -217,6 +277,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * Register this element at the parent form, if there is a connection to the parent form.
 	 *
 	 * @internal
+	 * @return void
 	 */
 	public function registerInFormIfPossible() {
 		try {
@@ -226,7 +287,11 @@ abstract class AbstractRenderable implements RenderableInterface {
 		}
 	}
 
-
+	/**
+	 * Triggered when the renderable is removed from it's parent
+	 *
+	 * @return void
+	 */
 	public function onRemoveFromParentRenderable() {
 		try {
 			$rootForm = $this->getRootForm();
@@ -236,14 +301,29 @@ abstract class AbstractRenderable implements RenderableInterface {
 		$this->parentRenderable = NULL;
 	}
 
+	/**
+	 * Get the index of the renderable
+	 *
+	 * @return integer
+	 */
 	public function getIndex() {
 		return $this->index;
 	}
 
+	/**
+	 * Set the index of the renderable
+	 *
+	 * @param integer $index
+	 */
 	public function setIndex($index) {
 		$this->index = $index;
 	}
 
+	/**
+	 * Get the label of the renderable
+	 *
+	 * @return string
+	 */
 	public function getLabel() {
 		return $this->label;
 	}
@@ -253,6 +333,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 *
 	 * @param string $label
 	 * @api
+	 * @return void
 	 */
 	public function setLabel($label) {
 		$this->label = $label;
@@ -260,6 +341,9 @@ abstract class AbstractRenderable implements RenderableInterface {
 
 	/**
 	 * Override this method in your custom Renderable if needed
+	 *
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @return void
 	 */
 	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 	}

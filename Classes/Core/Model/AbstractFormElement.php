@@ -44,6 +44,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	 * @param string $identifier The FormElement's identifier
 	 * @param string $type The Form Element Type
 	 * @api
+	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
 	 */
 	public function __construct($identifier, $type) {
 		if (!is_string($identifier) || strlen($identifier) === 0) {
@@ -55,10 +56,17 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 
 	/**
 	 * Override this method in your custom FormElements if needed
+	 *
+	 * @return void
 	 */
 	public function initializeFormElement() {
 	}
 
+	/**
+	 * Get the global unique identifier of the element
+	 *
+	 * @return string
+	 */
 	public function getUniqueIdentifier() {
 		$formDefinition = $this->getRootForm();
 		$uniqueIdentifier = sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
@@ -66,16 +74,32 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		return lcfirst($uniqueIdentifier);
 	}
 
+	/**
+	 * Get the default value of the element
+	 *
+	 * @return mixed
+	 */
 	public function getDefaultValue() {
 		$formDefinition = $this->getRootForm();
 		return $formDefinition->getElementDefaultValueByIdentifier($this->identifier);
 	}
 
+	/**
+	 * Set the default vlaue of the element
+	 *
+	 * @param mixed $defaultValue
+	 * @return void
+	 */
 	public function setDefaultValue($defaultValue) {
 		$formDefinition = $this->getRootForm();
 		$formDefinition->addElementDefaultValue($this->identifier, $defaultValue);
 	}
 
+	/**
+	 * Check if the element is required
+	 *
+	 * @return boolean
+	 */
 	public function isRequired() {
 		foreach ($this->getValidators() as $validator) {
 			if ($validator instanceof \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator) {
@@ -85,16 +109,31 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 		return FALSE;
 	}
 
+	/**
+	 * Set a property of the element
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
 	public function setProperty($key, $value) {
 		$this->properties[$key] = $value;
 	}
 
+	/**
+	 * Get all properties
+	 *
+	 * @return array
+	 */
 	public function getProperties() {
 		return $this->properties;
 	}
 
 	/**
 	 * Override this method in your custom FormElements if needed
+	 *
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @param $elementValue
+	 * @return void
 	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
 	}
