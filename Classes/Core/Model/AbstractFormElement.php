@@ -66,9 +66,9 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 
 	public function getUniqueIdentifier() {
 		$formDefinition = $this->getRootForm();
-		$validFormIdentifier = preg_replace('/[^a-zA-Z0-9-_]/', '_', lcfirst($formDefinition->getIdentifier()));
-		$validElementIdentifier = preg_replace('/[^a-zA-Z0-9-_]/', '_', $this->identifier);
-		return sprintf('%s-%s', $validFormIdentifier, $validElementIdentifier);
+		$uniqueIdentifier = sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
+		$uniqueIdentifier = preg_replace('/[^a-zA-Z0-9-_]/', '_', $uniqueIdentifier);
+		return lcfirst($uniqueIdentifier);
 	}
 
 	public function getDefaultValue() {
