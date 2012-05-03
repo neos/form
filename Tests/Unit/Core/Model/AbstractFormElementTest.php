@@ -34,8 +34,6 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 			'Null Identifier' => array(NULL),
 			'Integer Identifier' => array(42),
 			'Empty String Identifier' => array(''),
-			'UpperCamelCase Identifier' => array('Asdf'),
-			'identifier which starts with number' => array('4a')
 		);
 	}
 
@@ -101,6 +99,32 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 		$page->addElement($myFormElement);
 		$this->assertSame('foo-bar', $myFormElement->getUniqueIdentifier());
+	}
+
+	public function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider() {
+		return array(
+			array('foo', 'bar', 'foo-bar'),
+			array('foo.bar', 'baz', 'foo_bar-baz'),
+			array('foo', 'bar?baz', 'foo-bar_baz'),
+			array('SomeForm', 'SomeElement', 'someForm-SomeElement'),
+		);
+	}
+
+	/**
+	 * @test
+	 * @dataProvider getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider
+	 * @param string $formIdentifier
+	 * @param string $elementIdentifier
+	 * @param string $expectedResult
+	 */
+	public function getUniqueIdentifierReplacesSpecialCharactersByUnderscores($formIdentifier, $elementIdentifier, $expectedResult) {
+		$formDefinition = new FormDefinition($formIdentifier);
+		$myFormElement = $this->getFormElement(array($elementIdentifier, 'TYPO3.Form:MyType'));
+		$page = new Page('somePage');
+		$formDefinition->addPage($page);
+
+		$page->addElement($myFormElement);
+		$this->assertSame($expectedResult, $myFormElement->getUniqueIdentifier());
 	}
 
 	/**
