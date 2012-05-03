@@ -60,7 +60,11 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function defaultValueCanBeSetAndGet() {
+		$formDefinition = new FormDefinition('foo');
 		$formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+		$page = new Page('page');
+		$formDefinition->addPage($page);
+		$page->addElement($formElement);
 		$this->assertNull($formElement->getDefaultValue());
 		$formElement->setDefaultValue('My Default Value');
 		$this->assertSame('My Default Value', $formElement->getDefaultValue());

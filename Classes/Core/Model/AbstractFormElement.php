@@ -34,11 +34,6 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 abstract class AbstractFormElement extends Renderable\AbstractRenderable implements FormElementInterface {
 
 	/**
-	 * @var mixed
-	 */
-	protected $defaultValue = NULL;
-
-	/**
 	 * @var array
 	 */
 	protected $properties = array();
@@ -72,11 +67,13 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	}
 
 	public function getDefaultValue() {
-		return $this->defaultValue;
+		$formDefinition = $this->getRootForm();
+		return $formDefinition->getElementDefaultValueByIdentifier($this->identifier);
 	}
 
 	public function setDefaultValue($defaultValue) {
-		$this->defaultValue = $defaultValue;
+		$formDefinition = $this->getRootForm();
+		$formDefinition->addElementDefaultValue($this->identifier, $defaultValue);
 	}
 
 	public function isRequired() {

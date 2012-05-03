@@ -260,6 +260,14 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	protected $elementsByIdentifier = array();
 
 	/**
+	 * Form element default values in the format array('elementIdentifier' => 'default value')
+	 *
+	 * @var array
+	 * @internal
+	 */
+	protected $elementDefaultValues = array();
+
+	/**
 	 * @var \TYPO3\Form\Utility\SupertypeResolver
 	 * @internal
 	 */
@@ -514,6 +522,30 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 */
 	public function getElementByIdentifier($elementIdentifier) {
 		return isset($this->elementsByIdentifier[$elementIdentifier]) ? $this->elementsByIdentifier[$elementIdentifier] : NULL;
+	}
+
+	/**
+	 * Sets the default value of a form element
+	 *
+	 * @param string $elementIdentifier identifier of the form element. This supports property paths!
+	 * @param mixed $defaultValue
+	 * @return void
+	 * @internal
+	 */
+	public function addElementDefaultValue($elementIdentifier, $defaultValue) {
+		$this->elementDefaultValues = \TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
+	}
+
+	/**
+	 * returns the default value of the specified form element
+	 * or NULL if no default value was set
+	 *
+	 * @param string $elementIdentifier identifier of the form element. This supports property paths!
+	 * @return mixed The elements default value
+	 * @internal
+	 */
+	public function getElementDefaultValueByIdentifier($elementIdentifier) {
+		return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
 	}
 
 	/**

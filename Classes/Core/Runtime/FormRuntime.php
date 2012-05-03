@@ -443,12 +443,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		if ($formValue !== NULL) {
 			return $formValue;
 		}
-		$formElement = $this->formDefinition->getElementByIdentifier($identifier);
-		if ($formElement !== NULL) {
-			return $formElement->getDefaultValue();
-		}
-		return NULL;
-
+		return $this->formDefinition->getElementDefaultValueByIdentifier($identifier);
 	}
 
 	/**
