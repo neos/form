@@ -85,14 +85,10 @@ class ProcessingRuleTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function processResetsProcessingMessages() {
-		$testProcessingMessages = new \TYPO3\FLOW3\Error\Result();
-		$testProcessingMessages->addError(new \TYPO3\FLOW3\Error\Error('Test'));
-		$this->processingRule->_set('processingMessages', $testProcessingMessages);
-
-		$this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
+	public function processingMessagesCanBeModifiedBeforeProcessing() {
+		$this->processingRule->getProcessingMessages()->addError(new \TYPO3\FLOW3\Error\Error('Test'));
 		$this->processingRule->process('Some Value');
-		$this->assertFalse($this->processingRule->getProcessingMessages()->hasErrors());
+		$this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
 	}
 
 	/**
