@@ -49,9 +49,6 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
 		$response = $formRuntime->getResponse();
-		while ($response instanceof \TYPO3\FLOW3\Http\Response) {
-			$response = $response->getParentResponse();
-		}
 		$response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
 		$response->setStatus($statusCode);
 		if ($delay === 0) {
