@@ -126,7 +126,11 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 */
 	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\Mvc\ActionRequest $request, \TYPO3\FLOW3\Http\Response $response) {
 		$this->formDefinition = $formDefinition;
-		$this->request = $request;
+		$this->request = new ActionRequest($request);
+		$this->request->setArgumentNamespace($this->formDefinition->getIdentifier());
+		if ($this->request->getParentRequest()->hasArgument($this->request->getArgumentNamespace()) === TRUE && is_array($this->request->getParentRequest()->getArgument($this->request->getArgumentNamespace()))) {
+			$this->request->setArguments($this->request->getParentRequest()->getArgument($this->request->getArgumentNamespace()));
+		}
 		$this->response = $response;
 	}
 
@@ -134,12 +138,6 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @internal
 	 */
 	public function initializeObject() {
-		$this->request = new ActionRequest($this->request);
-		$this->request->setArgumentNamespace($this->formDefinition->getIdentifier());
-		if ($this->request->getParentRequest()->hasArgument($this->request->getArgumentNamespace()) === TRUE && is_array($this->request->getParentRequest()->getArgument($this->request->getArgumentNamespace()))) {
-			$this->request->setArguments($this->request->getParentRequest()->getArgument($this->request->getArgumentNamespace()));
-		}
-
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
 
