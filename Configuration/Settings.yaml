@@ -123,15 +123,23 @@ TYPO3:
 
         ### FINISHERS ###
         finisherPresets:
-          'TYPO3.Form:Redirect':
-            implementationClassName: 'TYPO3\Form\Finishers\RedirectFinisher'
-            options: {}
-          'TYPO3.Form:Email':
-            implementationClassName: 'TYPO3\Form\Finishers\EmailFinisher'
+          'TYPO3.Form:Closure':
+            implementationClassName: 'TYPO3\Form\Finishers\ClosureFinisher'
             options: {}
           'TYPO3.Form:Confirmation':
             implementationClassName: 'TYPO3\Form\Finishers\ConfirmationFinisher'
             options: {}
+          'TYPO3.Form:Email':
+            implementationClassName: 'TYPO3\Form\Finishers\EmailFinisher'
+            options: {}
+          'TYPO3.Form:FlashMessage':
+            implementationClassName: 'TYPO3\Form\Finishers\FlashMessageFinisher'
+            options: {}
+          'TYPO3.Form:Redirect':
+            implementationClassName: 'TYPO3\Form\Finishers\RedirectFinisher'
+            options: {}
+
+
         ### VALIDATORS ###
         validatorPresets:
           'TYPO3.FLOW3:NotEmpty':
