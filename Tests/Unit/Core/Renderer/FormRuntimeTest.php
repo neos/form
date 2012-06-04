@@ -27,15 +27,13 @@ class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function valuesSetInConstructorCanBeReadAgain() {
 		$formDefinition = new FormDefinition('foo');
+		$mockActionRequest = $this->getMockBuilder('TYPO3\FLOW3\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
+		$mockHttpResponse = $this->getMockBuilder('TYPO3\FLOW3\Http\Response')->disableOriginalConstructor()->getMock();
 
-		$httpRequest = \TYPO3\FLOW3\Http\Request::create(new \TYPO3\FLOW3\Http\Uri('foo'));
-		$request = $httpRequest->createActionRequest();
-		$response = new \TYPO3\FLOW3\Http\Response();
+		$formRuntime = $this->createFormRuntime($formDefinition, $mockActionRequest, $mockHttpResponse);
 
-		$formRuntime = $this->createFormRuntime($formDefinition, $request, $response);
-
-		$this->assertSame($request, $formRuntime->getRequest());
-		$this->assertSame($response, $formRuntime->getResponse());
+		$this->assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
+		$this->assertSame($mockHttpResponse, $formRuntime->getResponse());
 		$this->assertSame($formDefinition, $formRuntime->_get('formDefinition'));
 	}
 
