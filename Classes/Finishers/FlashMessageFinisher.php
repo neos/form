@@ -51,6 +51,10 @@ class FlashMessageFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 	);
 
 	/**
+	 * Executes this finisher
+	 * @see AbstractFinisher::execute()
+	 *
+	 * @return void
 	 * @throws \TYPO3\Form\Exception\FinisherException
 	 */
 	protected function executeInternal() {

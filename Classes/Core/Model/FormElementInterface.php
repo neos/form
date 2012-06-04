@@ -90,8 +90,8 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	/**
 	 * Returns the child validators of the ConjunctionValidator that is registered for this element
 	 *
-	 * @internal
 	 * @return \SplObjectStorage<\TYPO3\FLOW3\Validation\Validator\ValidatorInterface>
+	 * @internal
 	 */
 	public function getValidators();
 
@@ -116,7 +116,6 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	/**
 	 * Whether or not this element is required
 	 *
-	 * @internal
 	 * @return boolean
 	 * @api
 	 */
@@ -129,6 +128,7 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	 *
 	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
 	 * @param mixed $elementValue submitted value of the element *before post processing*
+	 * @return void
 	 * @api
 	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue);

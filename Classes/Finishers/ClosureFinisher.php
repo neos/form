@@ -26,10 +26,20 @@ namespace TYPO3\Form\Finishers;
  */
 class ClosureFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
+	/**
+	 * @var array
+	 */
 	protected $defaultOptions = array(
 		'closure' => NULL
 	);
 
+	/**
+	 * Executes this finisher
+	 * @see AbstractFinisher::execute()
+	 *
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\FinisherException
+	 */
 	protected function executeInternal() {
 		/** @var $closure \Closure */
 		$closure = $this->parseOption('closure');

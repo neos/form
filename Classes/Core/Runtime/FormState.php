@@ -57,6 +57,7 @@ class FormState {
 
 	/**
 	 * @param integer $lastDisplayedPageIndex
+	 * @return void
 	 */
 	public function setLastDisplayedPageIndex($lastDisplayedPageIndex) {
 		$this->lastDisplayedPageIndex = $lastDisplayedPageIndex;

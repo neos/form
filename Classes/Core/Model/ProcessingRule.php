@@ -51,6 +51,9 @@ class ProcessingRule {
 	 */
 	protected $propertyMapper;
 
+	/**
+	 * Constructs this processing rule
+	 */
 	public function __construct() {
 		$this->processingMessages = new \TYPO3\FLOW3\Error\Result();
 	}
@@ -79,8 +82,8 @@ class ProcessingRule {
 	/**
 	 * Returns the child validators of the ConjunctionValidator that is bound to this processing rule
 	 *
-	 * @internal
 	 * @return \SplObjectStorage<\TYPO3\FLOW3\Validation\Validator\ValidatorInterface>
+	 * @internal
 	 */
 	public function getValidators() {
 		return $this->validator->getValidators();

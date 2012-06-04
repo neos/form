@@ -95,14 +95,30 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	 */
 	protected $formRuntime;
 
+	/**
+	 * Sets the current controller context
+	 *
+	 * @param \TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext Controller context which is available inside the view
+	 * @return void
+	 * @api
+	 */
 	public function setControllerContext(\TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
 	}
 
+	/**
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @return void
+	 * @api
+	 */
 	public function setFormRuntime(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 		$this->formRuntime = $formRuntime;
 	}
 
+	/**
+	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
+	 * @api
+	 */
 	public function getFormRuntime() {
 		return $this->formRuntime;
 	}
@@ -119,6 +135,14 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 		return $parserConfiguration;
 	}
 
+	/**
+	 * Render the passed $renderable and return the rendered Renderable.
+	 *
+	 * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
+	 * @return string the rendered $renderable
+	 * @throws \TYPO3\Form\Exception\RenderingException
+	 * @api
+	 */
 	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
 		$renderable->beforeRendering($this->formRuntime);
 
@@ -227,9 +251,10 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	 *
 	 * @param string $renderableType The name of the partial
 	 * @return string the full path which should be used. The path definitely exists.
+	 * @throws \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException
+	 * @throws \TYPO3\Form\Exception\RenderingException
 	 */
 	protected function getPartialPathAndFilename($renderableType) {
-		//list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 		$renderingContext = $this->getCurrentRenderingContext();
 		$currentRenderable = $renderingContext->getViewHelperVariableContainer()->get('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable');
 		$renderingOptions = $currentRenderable->getRenderingOptions();
@@ -256,7 +281,8 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	 * @param string $renderableType
 	 * @param string $renderablePathAndFilename
 	 * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
-	 * @throws \Exception
+	 * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
+	 * @throws \TYPO3\Form\Exception
 	 * @internal
 	 */
 	protected function getParsedRenderable($renderableType, $renderablePathAndFilename) {

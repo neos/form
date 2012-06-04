@@ -22,6 +22,7 @@ class Arrays {
 	 *
 	 * @param array $arrayToTest
 	 * @param array $allowedArrayKeys
+	 * @return void
 	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotValidException if an element in $arrayToTest is not in $allowedArrayKeys
 	 */
 	public static function assertAllArrayKeysAreValid(array $arrayToTest, array $allowedArrayKeys) {

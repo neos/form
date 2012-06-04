@@ -313,6 +313,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * Initialize the form defaults of the current type
 	 *
+	 * @return void
 	 * @internal
 	 */
 	protected function initializeFromFormDefaults() {
@@ -326,6 +327,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * the passed $options array.
 	 *
 	 * @param array $options
+	 * @return void
 	 * @internal
 	 */
 	public function setOptions(array $options) {
@@ -357,7 +359,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @param string $identifier Identifier of the new page
 	 * @param string $typeName Type of the new page
 	 * @return \TYPO3\Form\Core\Model\Page the newly created page
-	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotValidException
+	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotFoundException
 	 * @api
 	 */
 	public function createPage($identifier, $typeName = 'TYPO3.Form:Page') {
@@ -395,6 +397,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Instead of this method, you should often use {@link createPage} instead.
 	 *
 	 * @param Page $page
+	 * @return void
 	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if Page is already added to a FormDefinition
 	 * @see createPage
 	 * @api
@@ -453,8 +456,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	}
 
 	/**
-	 * @param string $finisherIdentifier
-	 * @param array $options
+	 * @param string $finisherIdentifier identifier of the finisher as registered in the current form preset (for example: "TYPO3.Form:Redirect")
+	 * @param array $options options for this finisher in the format array('option1' => 'value1', 'option2' => 'value2', ...)
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\FinisherPresetNotFoundException
 	 * @api
 	 */
 	public function createFinisher($finisherIdentifier, array $options = array()) {
@@ -487,7 +492,8 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Add an element to the ElementsByIdentifier Cache.
 	 *
 	 * @param Renderable\RenderableInterface $renderable
-	 * @throws TYPO3\Form\Exception\DuplicateFormElementException
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\DuplicateFormElementException
 	 * @internal
 	 */
 	public function registerRenderable(Renderable\RenderableInterface $renderable) {
@@ -503,6 +509,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Remove an element from the ElementsByIdentifier cache
 	 *
 	 * @param Renderable\RenderableInterface $renderable
+	 * @return void
 	 * @internal
 	 */
 	public function unregisterRenderable(Renderable\RenderableInterface $renderable) {
@@ -553,6 +560,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param Page $pageToMove
 	 * @param Page $referencePage
+	 * @return void
 	 * @api
 	 */
 	public function movePageBefore(Page $pageToMove, Page $referencePage) {
@@ -564,6 +572,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param Page $pageToMove
 	 * @param Page $referencePage
+	 * @return void
 	 * @api
 	 */
 	public function movePageAfter(Page $pageToMove, Page $referencePage) {
@@ -574,6 +583,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Remove $pageToRemove from form
 	 *
 	 * @param Page $pageToRemove
+	 * @return void
 	 * @api
 	 */
 	public function removePage(Page $pageToRemove) {

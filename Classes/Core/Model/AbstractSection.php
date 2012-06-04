@@ -67,6 +67,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 * Add a new form element at the end of the section
 	 *
 	 * @param FormElementInterface $formElement The form element to add
+	 * @return void
 	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if FormElement is already added to a section
 	 * @api
 	 */
@@ -85,9 +86,10 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param string $identifier Identifier of the new form element
 	 * @param string $typeName type of the new form element
+	 * @return void
 	 * @return \TYPO3\Form\Core\Model\FormElementInterface the newly created form element
+	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotFoundException
 	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotValidException
-	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if this section is not connected to a parent form.
 	 * @api
 	 */
 	public function createElement($identifier, $typeName) {
@@ -119,6 +121,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param FormElementInterface $elementToMove
 	 * @param FormElementInterface $referenceElement
+	 * @return void
 	 * @api
 	 */
 	public function moveElementBefore(FormElementInterface $elementToMove, FormElementInterface $referenceElement) {
@@ -132,6 +135,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param FormElementInterface $elementToMove
 	 * @param FormElementInterface $referenceElement
+	 * @return void
 	 * @api
 	 */
 	public function moveElementAfter(FormElementInterface $elementToMove, FormElementInterface $referenceElement) {
@@ -142,12 +146,23 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 * Remove $elementToRemove from this Section/Page
 	 *
 	 * @param FormElementInterface $elementToRemove
+	 * @return void
 	 * @api
 	 */
 	public function removeElement(FormElementInterface $elementToRemove) {
 		$this->removeRenderable($elementToRemove);
 	}
 
+	/**
+	 * This callback is invoked by the FormRuntime whenever values are mapped and validated
+	 * (after a form page was submitted)
+	 * @see \TYPO3\Form\Core\Runtime\FormRuntime::mapAndValidate()
+	 *
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @param mixed $elementValue submitted value of the element *before post processing*
+	 * @return void
+	 * @api
+	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
 	}
 }

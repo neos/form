@@ -18,6 +18,14 @@ use TYPO3\Form\Core\Model\FormDefinition;
  * @FLOW3\Scope("singleton")
  */
 class ArrayFormFactory extends AbstractFormFactory {
+
+	/**
+	 * Build a form definition, depending on some configuration and a "Preset Name".
+	 *
+	 * @param array $configuration
+	 * @param string $presetName
+	 * @return \TYPO3\Form\Core\Model\FormDefinition
+	 */
 	public function build(array $configuration, $presetName) {
 		$formDefaults = $this->getPresetConfiguration($presetName);
 
@@ -37,6 +45,12 @@ class ArrayFormFactory extends AbstractFormFactory {
 		return $form;
 	}
 
+	/**
+	 * @param array $nestedRenderableConfiguration
+	 * @param \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface CompositeRenderableInterface $parentRenderable
+	 * @return mixed
+	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
+	 */
 	protected function addNestedRenderable($nestedRenderableConfiguration, \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable) {
 		if (!isset($nestedRenderableConfiguration['identifier'])) {
 			throw new \TYPO3\Form\Exception\IdentifierNotValidException('Identifier not set.', 1329289436);
@@ -67,7 +81,10 @@ class ArrayFormFactory extends AbstractFormFactory {
 		return $renderable;
 	}
 
-
+	/**
+	 * @param array $input
+	 * @return array
+	 */
 	protected function convertJsonArrayToAssociativeArray($input) {
 		$output = array();
 		foreach ($input as $key => $value) {

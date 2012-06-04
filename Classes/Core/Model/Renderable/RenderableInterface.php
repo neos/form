@@ -35,6 +35,7 @@ interface RenderableInterface extends RootRenderableInterface {
 	 * This method should also register itself at the parent form, if possible.
 	 *
 	 * @param CompositeRenderableInterface $renderable
+	 * @return void
 	 * @internal
 	 */
 	public function setParentRenderable(CompositeRenderableInterface $renderable);
@@ -43,6 +44,7 @@ interface RenderableInterface extends RootRenderableInterface {
 	 * Set the index of this renderable inside the parent renderable
 	 *
 	 * @param integer $index
+	 * @return void
 	 * @internal
 	 */
 	public function setIndex($index);
@@ -61,6 +63,7 @@ interface RenderableInterface extends RootRenderableInterface {
 	 * like reseting $this->parentRenderable or deregistering the renderable
 	 * at the form.
 	 *
+	 * @return void
 	 * @internal
 	 */
 	public function onRemoveFromParentRenderable();

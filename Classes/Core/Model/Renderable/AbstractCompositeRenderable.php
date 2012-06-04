@@ -35,6 +35,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	 * or "addElement" method with the correct type hint.
 	 *
 	 * @param RenderableInterface $renderable
+	 * @return void
 	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 * @internal
 	 */
@@ -55,6 +56,8 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	 *
 	 * @param RenderableInterface $renderableToMove
 	 * @param RenderableInterface $referenceRenderable
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 * @internal
 	 */
 	protected function moveRenderableBefore(RenderableInterface $renderableToMove, RenderableInterface $referenceRenderable) {
@@ -87,6 +90,8 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	 *
 	 * @param RenderableInterface $renderableToMove
 	 * @param RenderableInterface $referenceRenderable
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 * @internal
 	 */
 	protected function moveRenderableAfter(RenderableInterface $renderableToMove, RenderableInterface $referenceRenderable) {
@@ -112,6 +117,12 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		$this->renderables = $reorderedRenderables;
 	}
 
+	/**
+	 * Returns all RenderableInterface instances of this composite renderable recursively
+	 *
+	 * @return array<TYPO3\Form\Core\Model\RenderableInterface>
+	 * @internal
+	 */
 	public function getRenderablesRecursively() {
 		$renderables = array();
 		foreach ($this->renderables as $renderable) {
@@ -130,6 +141,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 	 * or "removeElement" method with the correct type hint.
 	 *
 	 * @param RenderableInterface $renderableToRemove
+	 * @return void
 	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException
 	 * @internal
 	 */
@@ -149,6 +161,12 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		$renderableToRemove->onRemoveFromParentRenderable();
 	}
 
+	/**
+	 * Register this element at the parent form, if there is a connection to the parent form.
+	 *
+	 * @internal
+	 * @return void
+	 */
 	public function registerInFormIfPossible() {
 		parent::registerInFormIfPossible();
 		foreach ($this->renderables as $renderable) {
@@ -156,6 +174,14 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		}
 	}
 
+	/**
+	 * This function is called after a renderable has been removed from its parent
+	 * renderable.
+	 * This just passes the event down to all child renderables of this composite renderable.
+	 *
+	 * @return void
+	 * @internal
+	 */
 	public function onRemoveFromParentRenderable() {
 		foreach ($this->renderables as $renderable) {
 			$renderable->onRemoveFromParentRenderable();

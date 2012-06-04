@@ -45,14 +45,34 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 	 */
 	protected $finisherContext;
 
+	/**
+	 * @param array $options configuration options in the format array('option1' => 'value1', 'option2' => 'value2', ...)
+	 * @return void
+	 * @api
+	 */
 	public function setOptions(array $options) {
 		$this->options = $options;
 	}
 
+	/**
+	 * Sets a single finisher option (@see setOptions())
+	 *
+	 * @param string $optionName name of the option to be set
+	 * @param mixed $optionValue value of the option
+	 * @return void
+	 * @api
+	 */
 	public function setOption($optionName, $optionValue) {
 		$this->options[$optionName] = $optionValue;
 	}
 
+	/**
+	 * Executes the finisher
+	 *
+	 * @param \TYPO3\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
+	 * @return void
+	 * @api
+	 */
 	final public function execute(FinisherContext $finisherContext) {
 		$this->finisherContext = $finisherContext;
 		$this->executeInternal();

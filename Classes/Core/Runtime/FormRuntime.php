@@ -135,6 +135,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * @return void
 	 * @internal
 	 */
 	public function initializeObject() {
@@ -147,6 +148,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * @return void
 	 * @internal
 	 */
 	protected function initializeFormStateFromRequest() {
@@ -160,6 +162,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * @return void
 	 * @internal
 	 */
 	protected function initializeCurrentPageFromRequest() {
@@ -219,6 +222,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * @return void
 	 * @internal
 	 */
 	protected function processSubmittedFormValues() {
@@ -284,6 +288,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * some kind of "preview" of the form.
 	 *
 	 * @param integer $pageIndex
+	 * @return void
 	 * @api
 	 */
 	public function overrideCurrentPage($pageIndex) {
@@ -295,6 +300,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 *
 	 * @return string rendered form
 	 * @api
+	 * @throws \TYPO3\Form\Exception\RenderingException
 	 */
 	public function render() {
 		if ($this->isAfterLastPage()) {
@@ -423,6 +429,14 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		);
 	}
 
+	/**
+	 * Abstract "type" of this Renderable. Is used during the rendering process
+	 * to determine the template file or the View PHP class being used to render
+	 * the particular element.
+	 *
+	 * @return string
+	 * @api
+	 */
 	public function getType() {
 		return $this->formDefinition->getType();
 	}
@@ -436,6 +450,13 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		return ($this->getElementValue($identifier) !== NULL);
 	}
 
+	/**
+	 * Returns the value of the specified element
+	 *
+	 * @param string $identifier
+	 * @return mixed
+	 * @api
+	 */
 	protected function getElementValue($identifier) {
 		$formValue = $this->formState->getFormValue($identifier);
 		if ($formValue !== NULL) {
@@ -488,18 +509,46 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		return $this->formState;
 	}
 
+	/**
+	 * Get all rendering options
+	 *
+	 * @return array associative array of rendering options
+	 * @api
+	 */
 	public function getRenderingOptions() {
 		return $this->formDefinition->getRenderingOptions();
 	}
 
+	/**
+	 * Get the renderer class name to be used to display this renderable;
+	 * must implement RendererInterface
+	 *
+	 * @return string the renderer class name
+	 * @api
+	 */
 	public function getRendererClassName() {
 		return $this->formDefinition->getRendererClassName();
 	}
 
+	/**
+	 * Get the label which shall be displayed next to the form element
+	 *
+	 * @return string
+	 * @api
+	 */
 	public function getLabel() {
 		return $this->formDefinition->getLabel();
 	}
 
+	/**
+	 * This is a callback that is invoked by the Renderer before the corresponding element is rendered.
+	 * Use this to access previously submitted values and/or modify the $formRuntime before an element
+	 * is outputted to the browser.
+	 *
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @return void
+	 * @api
+	 */
 	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 	}
 }

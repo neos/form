@@ -37,6 +37,13 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 		}
 	}
 
+	/**
+	 * Load the array form representation identified by $persistenceIdentifier, and return it
+	 *
+	 * @param string $persistenceIdentifier
+	 * @return array
+	 * @throws \TYPO3\Form\Exception\PersistenceManagerException
+	 */
 	public function load($persistenceIdentifier) {
 		if (!$this->exists($persistenceIdentifier)) {
 			throw new \TYPO3\Form\Exception\PersistenceManagerException(sprintf('The form identified by "%s" could not be loaded.', $persistenceIdentifier), 1329307034);
@@ -45,15 +52,36 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 		return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($formPathAndFilename));
 	}
 
+	/**
+	 * Save the array form representation identified by $persistenceIdentifier
+	 *
+	 * @param string $persistenceIdentifier
+	 * @param array $formDefinition
+	 */
 	public function save($persistenceIdentifier, array $formDefinition) {
 		$formPathAndFilename = $this->getFormPathAndFilename($persistenceIdentifier);
 		file_put_contents($formPathAndFilename, \Symfony\Component\Yaml\Yaml::dump($formDefinition, 99));
 	}
 
+	/**
+	 * Check whether a form with the specified $persistenceIdentifier exists
+	 *
+	 * @param string $persistenceIdentifier
+	 * @return boolean TRUE if a form with the given $persistenceIdentifier can be loaded, otherwise FALSE
+	 */
 	public function exists($persistenceIdentifier) {
 		return is_file($this->getFormPathAndFilename($persistenceIdentifier));
 	}
 
+	/**
+	 * List all form definitions which can be loaded through this form persistence
+	 * manager.
+	 *
+	 * Returns an associative array with each item containing the keys 'name' (the human-readable name of the form)
+	 * and 'persistenceIdentifier' (the unique identifier for the Form Persistence Manager e.g. the path to the saved form definition).
+	 *
+	 * @return array in the format array(array('name' => 'Form 01', 'persistenceIdentifier' => 'path1'), array( .... ))
+	 */
 	public function listForms() {
 		$forms = array();
 		$directoryIterator = new \DirectoryIterator($this->savePath);

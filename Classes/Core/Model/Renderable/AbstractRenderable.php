@@ -99,6 +99,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * the passed $options array.
 	 *
 	 * @param array $options
+	 * @return void
 	 * @internal
 	 */
 	public function setOptions(array $options) {
@@ -314,6 +315,7 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * Set the index of the renderable
 	 *
 	 * @param integer $index
+	 * @return void
 	 */
 	public function setIndex($index) {
 		$this->index = $index;
@@ -332,8 +334,8 @@ abstract class AbstractRenderable implements RenderableInterface {
 	 * Set the label which shall be displayed next to the form element
 	 *
 	 * @param string $label
-	 * @api
 	 * @return void
+	 * @api
 	 */
 	public function setLabel($label) {
 		$this->label = $label;

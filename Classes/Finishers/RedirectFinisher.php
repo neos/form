@@ -16,6 +16,9 @@ namespace TYPO3\Form\Finishers;
  */
 class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
+	/**
+	 * @var array
+	 */
 	protected $defaultOptions = array(
 		'package' => NULL,
 		'controller' => NULL,
@@ -25,6 +28,13 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		'statusCode' => 303,
 	);
 
+	/**
+	 * Executes this finisher
+	 * @see AbstractFinisher::execute()
+	 *
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\FinisherException
+	 */
 	public function executeInternal() {
 		$formRuntime = $this->finisherContext->getFormRuntime();
 		$request = $formRuntime->getRequest()->getMainRequest();

@@ -39,6 +39,9 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 	const FORMAT_PLAINTEXT = 'plaintext';
 	const FORMAT_HTML = 'html';
 
+	/**
+	 * @var array
+	 */
 	protected $defaultOptions = array(
 		'recipientName' => '',
 		'senderName' => '',
@@ -46,6 +49,13 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		'testMode' => FALSE,
 	);
 
+	/**
+	 * Executes this finisher
+	 * @see AbstractFinisher::execute()
+	 *
+	 * @return void
+	 * @throws \TYPO3\Form\Exception\FinisherException
+	 */
 	protected function executeInternal() {
 		$formRuntime = $this->finisherContext->getFormRuntime();
 		$standaloneView = $this->initializeStandaloneView();

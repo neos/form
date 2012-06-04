@@ -41,6 +41,13 @@ class Page extends AbstractSection {
 		parent::__construct($identifier, $type);
 	}
 
+	/**
+	 * Set the parent renderable
+	 *
+	 * @param Renderable\CompositeRenderableInterface $parentRenderable
+	 * @return void
+	 * @throws \TYPO3\Form\Exception
+	 */
 	public function setParentRenderable(Renderable\CompositeRenderableInterface $parentRenderable) {
 		if (!($parentRenderable instanceof FormDefinition)) {
 			throw new \TYPO3\Form\Exception(sprintf('The specified parentRenderable must be a FormDefinition, got "%s"', is_object($parentRenderable) ? get_class($parentRenderable) : gettype($parentRenderable)), 1329233747);

@@ -29,7 +29,7 @@ interface FinisherInterface {
 	public function execute(FinisherContext $finisherContext);
 
 	/**
-	 * @param array $options configuration options in the format array('@action' => 'foo', '@controller' => 'bar', '@package' => 'baz')
+	 * @param array $options configuration options in the format array('option1' => 'value1', 'option2' => 'value2', ...)
 	 * @return void
 	 * @api
 	 */

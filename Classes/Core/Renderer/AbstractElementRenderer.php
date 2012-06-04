@@ -33,14 +33,29 @@ abstract class AbstractElementRenderer implements RendererInterface {
 	 */
 	protected $formRuntime;
 
+	/**
+	 * Set the controller context which should be used
+	 *
+	 * @param \TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext
+	 * @api
+	 */
 	public function setControllerContext(\TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
 	}
 
+	/**
+	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	 * @return void
+	 * @api
+	 */
 	public function setFormRuntime(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 		$this->formRuntime = $formRuntime;
 	}
 
+	/**
+	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
+	 * @api
+	 */
 	public function getFormRuntime() {
 		return $this->formRuntime;
 	}
