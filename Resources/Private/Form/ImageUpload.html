@@ -4,7 +4,7 @@
 <f:section name="field">
 	<form:form.uploadedImage property="{element.identifier}" as="image">
 		<div id="{element.uniqueIdentifier}-uploadfields"{f:if(condition:image, then: ' style="display:none"')}>
-			<f:form.upload property="{element.identifier}.resource" id="{element.uniqueIdentifier}" />
+			<f:form.upload property="{element.identifier}.resource" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" />
 			<f:if condition="{image}">
 				<div class="clearfix">
 					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')">Cancel</a>

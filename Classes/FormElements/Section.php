@@ -27,6 +27,11 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\Form\Core\Model\FormElementInterface {
 
 	/**
+	 * @var array
+	 */
+	protected $properties = array();
+
+	/**
 	 * Will be called as soon as the element is (tried to be) added to a form
 	 * @see registerInFormIfPossible()
 	 *
@@ -62,17 +67,6 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	}
 
 	/**
-	 * Get all element-specific configuration properties
-	 * Note: This returns an empty array currently for section elements
-	 *
-	 * @return array
-	 * @api
-	 */
-	public function getProperties() {
-		return array();
-	}
-
-	/**
 	 * Set the default value with which the Form Element should be initialized
 	 * during display.
 	 * Note: This is currently ignored for section elements
@@ -84,9 +78,19 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 
 	}
 
+
+	/**
+	 * Get all element-specific configuration properties
+	 *
+	 * @return array
+	 * @api
+	 */
+	public function getProperties() {
+		return $this->properties;
+	}
+
 	/**
 	 * Set an element-specific configuration property.
-	 * Note: This is currently ignored for section elements
 	 *
 	 * @param string $key
 	 * @param mixed $value
@@ -94,7 +98,7 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	 * @api
 	 */
 	public function setProperty($key, $value) {
-
+		$this->properties[$key] = $value;
 	}
 
 	/**
