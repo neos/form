@@ -86,7 +86,6 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	 *
 	 * @param string $identifier Identifier of the new form element
 	 * @param string $typeName type of the new form element
-	 * @return void
 	 * @return \TYPO3\Form\Core\Model\FormElementInterface the newly created form element
 	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotFoundException
 	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotValidException
