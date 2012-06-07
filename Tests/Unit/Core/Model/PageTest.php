@@ -308,7 +308,7 @@ class PageTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$validators = iterator_to_array($validators);
 		$this->assertSame(2, count($validators));
 		$this->assertInstanceOf('TYPO3\Flow\Validation\Validator\StringLengthValidator', $validators[0]);
-		$this->assertSame(array('minimum' => 10), $validators[0]->getOptions());
+		$this->assertSame(array('minimum' => 10, 'maximum' => PHP_INT_MAX), $validators[0]->getOptions());
 	}
 
 	/**
