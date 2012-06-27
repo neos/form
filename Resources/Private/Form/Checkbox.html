@@ -1,8 +1,6 @@
 <f:layout name="TYPO3.Form:Field" />
 <f:section name="field">
-	<div class="input-prepend">
-		<label class="add-on">
-			<f:form.checkbox property="{element.identifier}" id="{element.uniqueIdentifier}" value="{element.properties.value}" errorClass="error" />
-		</label>
-	</div>
+	<label class="{element.properties.elementClassAttribute}">
+		<f:form.checkbox property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" value="{element.properties.value}" errorClass="{element.properties.elementErrorClassAttribute}" />
+	</label>
 </f:section>
