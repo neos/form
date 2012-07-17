@@ -132,6 +132,8 @@ TYPO3:
             superTypes: ['TYPO3.Form:ReadOnlyFormElement']
             properties:
               text: ''
+          'TYPO3.Form:HiddenField':
+            superTypes: ['TYPO3.Form:FormElement']
 
 
         ### FINISHERS ###
