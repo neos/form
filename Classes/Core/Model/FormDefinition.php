@@ -458,7 +458,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	/**
 	 * @param string $finisherIdentifier identifier of the finisher as registered in the current form preset (for example: "TYPO3.Form:Redirect")
 	 * @param array $options options for this finisher in the format array('option1' => 'value1', 'option2' => 'value2', ...)
-	 * @return void
+	 * @return FinisherInterface
 	 * @throws \TYPO3\Form\Exception\FinisherPresetNotFoundException
 	 * @api
 	 */
