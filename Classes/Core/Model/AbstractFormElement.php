@@ -6,7 +6,7 @@ namespace TYPO3\Form\Core\Model;
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
- *  of the License, or (at your option) any later version.                *
+ * of the License, or (at your option) any later version.                 *
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
@@ -85,7 +85,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	}
 
 	/**
-	 * Set the default vlaue of the element
+	 * Set the default value of the element
 	 *
 	 * @param mixed $defaultValue
 	 * @return void
@@ -132,7 +132,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
 	 * Override this method in your custom FormElements if needed
 	 *
 	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-	 * @param $elementValue
+	 * @param mixed $elementValue
 	 * @return void
 	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {

@@ -6,7 +6,7 @@ namespace TYPO3\Form\Core\Model;
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
- *  of the License, or (at your option) any later version.                *
+ * of the License, or (at your option) any later version.                 *
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
@@ -124,11 +124,11 @@ interface FormElementInterface extends Renderable\RenderableInterface {
 	/**
 	 * This callback is invoked by the FormRuntime whenever values are mapped and validated
 	 * (after a form page was submitted)
-	 * @see \TYPO3\Form\Core\Runtime\FormRuntime::mapAndValidate()
 	 *
 	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
 	 * @param mixed $elementValue submitted value of the element *before post processing*
 	 * @return void
+	 * @see \TYPO3\Form\Core\Runtime\FormRuntime::mapAndValidate()
 	 * @api
 	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue);
