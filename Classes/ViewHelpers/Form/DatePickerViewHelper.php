@@ -84,7 +84,13 @@ class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 			$content .= '<script type="text/javascript">//<![CDATA[
 				$(function() {
 					$("#' . $id . '").datepicker({
-						dateFormat: "' . $datePickerDateFormat . '",
+						dateFormat: "' . $datePickerDateFormat . '"
+					}).keydown(function(e) {
+							// By using "backspace" or "delete", you can clear the datepicker again.
+						if(e.keyCode == 8 || e.keyCode == 46) {
+							e.preventDefault();
+							$.datepicker._clearDate(this);
+						}
 					});
 				});
 				//]]></script>';
