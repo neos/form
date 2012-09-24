@@ -1,0 +1,14 @@
+{
+    "name": "typo3/form",
+    "type": "flow3-package",
+    "description": "Extensible and flexible API for building web forms",
+    "version": "1.0.0",
+    "require": {
+        "typo3/flow3": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "TYPO3\\Form": "Classes"
+        }
+    }
+}
