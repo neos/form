@@ -11,6 +11,9 @@ namespace TYPO3\Form\Tests\Unit\Persistence;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamWrapper;
+
 /**
  * @covers \TYPO3\Form\Persistence\YamlPersistenceManager<extended>
  */
@@ -22,11 +25,11 @@ class YamlPersistenceManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	protected $yamlPersistenceManager;
 
 	public function setUp() {
-		\vfsStream::setup('someSavePath');
+		vfsStream::setup('someSavePath');
 		$this->yamlPersistenceManager = new \TYPO3\Form\Persistence\YamlPersistenceManager();
 		$this->yamlPersistenceManager->injectSettings(array(
 				'yamlPersistenceManager' =>
-					array('savePath' => \vfsStream::url('someSavePath')
+					array('savePath' => vfsStream::url('someSavePath')
 				)
 			)
 		);
@@ -36,15 +39,15 @@ class YamlPersistenceManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function injectSettingsCreatesSaveDirectoryIfItDoesntExist() {
-		$this->assertFalse(\vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
+		$this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
 		$yamlPersistenceManager = new \TYPO3\Form\Persistence\YamlPersistenceManager();
 		$settings = array(
 			'yamlPersistenceManager' =>
-				array('savePath' => \vfsStream::url('someSavePath/foo/bar')
+				array('savePath' => vfsStream::url('someSavePath/foo/bar')
 			)
 		);
 		$yamlPersistenceManager->injectSettings($settings);
-		$this->assertTrue(\vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
+		$this->assertTrue(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
 	}
 
 	/**
@@ -64,7 +67,7 @@ class YamlPersistenceManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 identifier: formFixture
 label: \'Form Fixture\'
 ';
-		file_put_contents(\vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
+		file_put_contents(vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
 
 		$actualResult = $this->yamlPersistenceManager->load('mockFormPersistenceIdentifier');
 		$expectedResult = array(
@@ -84,14 +87,14 @@ label: \'Form Fixture\'
 			'identifier' => 'formFixture',
 			'label' => 'Form Fixture'
 		);
-		$this->assertFalse(\vfsStreamWrapper::getRoot()->hasChild('mockFormPersistenceIdentifier.yaml'));
+		$this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('mockFormPersistenceIdentifier.yaml'));
 
 		$this->yamlPersistenceManager->save('mockFormPersistenceIdentifier', $mockArrayFormDefinition);
 		$expectedResult = 'type: \'TYPO3.Form:Form\'
 identifier: formFixture
 label: \'Form Fixture\'
 ';
-		$actualResult = file_get_contents(\vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'));
+		$actualResult = file_get_contents(vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'));
 		$this->assertEquals($expectedResult, $actualResult);
 	}
 
@@ -110,7 +113,7 @@ label: \'Form Fixture\'
 identifier: formFixture
 label: \'Form Fixture\'
 ';
-		file_put_contents(\vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
+		file_put_contents(vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
 		$this->assertTrue($this->yamlPersistenceManager->exists('mockFormPersistenceIdentifier'));
 	}
 
@@ -133,9 +136,9 @@ label: \'Form Fixture1\'
 identifier: formFixture2
 label: \'Form Fixture2\'
 ';
-		file_put_contents(\vfsStream::url('someSavePath/mockForm1.yaml'), $mockYamlFormDefinition1);
-		file_put_contents(\vfsStream::url('someSavePath/mockForm2.yaml'), $mockYamlFormDefinition2);
-		file_put_contents(\vfsStream::url('someSavePath/noForm.txt'), 'this should be skipped');
+		file_put_contents(vfsStream::url('someSavePath/mockForm1.yaml'), $mockYamlFormDefinition1);
+		file_put_contents(vfsStream::url('someSavePath/mockForm2.yaml'), $mockYamlFormDefinition2);
+		file_put_contents(vfsStream::url('someSavePath/noForm.txt'), 'this should be skipped');
 
 		$expectedResult = array(
 			array(
