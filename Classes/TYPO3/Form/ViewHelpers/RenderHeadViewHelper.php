@@ -2,7 +2,7 @@
 namespace TYPO3\Form\ViewHelpers;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Output the configured stylesheets and JavaScript include tags for a given preset
@@ -19,13 +19,13 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class RenderHeadViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Resource\Publishing\ResourcePublisher
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Resource\Publishing\ResourcePublisher
 	 */
 	protected $resourcePublisher;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Form\Factory\ArrayFormFactory
 	 */
 	protected $formBuilderFactory;

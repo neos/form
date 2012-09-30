@@ -119,7 +119,7 @@ Sometimes, you want to simplify the Form Builder User Interface and make certain
 
 This can be configured as follows:
 
-	
+
 .. code-block:: yaml
 
 	# we are now inside TYPO3:Form:presets:[presetName]
@@ -129,7 +129,7 @@ This can be configured as follows:
 	      editors:
 	        validation:
 	          availableValidators:
-	            'TYPO3.FLOW3:StringLength': # or any other validator
+	            'TYPO3.Flow:StringLength': # or any other validator
 	              # mark this validator required such that it is always shown.
 	              required: true
 

@@ -4,7 +4,7 @@ namespace TYPO3\Form\Core\Renderer;
 
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -24,10 +24,10 @@ interface RendererInterface {
 	/**
 	 * Set the controller context which should be used
 	 *
-	 * @param \TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext
+	 * @param \TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext
 	 * @api
 	 */
-	public function setControllerContext(\TYPO3\FLOW3\Mvc\Controller\ControllerContext $controllerContext);
+	public function setControllerContext(\TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext);
 
 	/**
 	 * Render the passed $renderable and return the rendered Renderable.

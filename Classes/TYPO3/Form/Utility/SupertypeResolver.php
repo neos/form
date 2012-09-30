@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Utility;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -54,10 +54,10 @@ class SupertypeResolver {
 			$mergedTypeDefinition = array();
 			if (isset($this->configuration[$type]['superTypes'])) {
 				foreach ($this->configuration[$type]['superTypes'] as $superType) {
-					$mergedTypeDefinition = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superType, $showHiddenProperties));
+					$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superType, $showHiddenProperties));
 				}
 			}
-			$mergedTypeDefinition = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
+			$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
 			unset($mergedTypeDefinition['superTypes']);
 
 			if ($showHiddenProperties === FALSE && isset($this->settings['supertypeResolver']['hiddenProperties']) && is_array($this->settings['supertypeResolver']['hiddenProperties'])) {

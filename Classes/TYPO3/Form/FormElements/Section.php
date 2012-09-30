@@ -2,7 +2,7 @@
 namespace TYPO3\Form\FormElements;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\FormElements;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A Section, being part of a bigger Page
@@ -126,10 +126,10 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	/**
 	 * Add a validator to the element
 	 *
-	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
+	 * @param \TYPO3\Flow\Validation\Validator\ValidatorInterface $validator
 	 * @return void
 	 */
-	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
+	public function addValidator(\TYPO3\Flow\Validation\Validator\ValidatorInterface $validator) {
 		$formDefinition = $this->getRootForm();
 		$formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
 	}
@@ -142,7 +142,7 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 	 */
 	public function isRequired() {
 		foreach ($this->getValidators() as $validator) {
-			if ($validator instanceof \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator) {
+			if ($validator instanceof \TYPO3\Flow\Validation\Validator\NotEmptyValidator) {
 				return TRUE;
 			}
 		}

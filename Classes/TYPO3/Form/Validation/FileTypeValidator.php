@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Validation;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -13,23 +13,23 @@ namespace TYPO3\Form\Validation;
 
 
 /**
- * The given $value is valid if it is an \TYPO3\FLOW3\Resource\Resource of the configured resolution
+ * The given $value is valid if it is an \TYPO3\Flow\Resource\Resource of the configured resolution
  * Note: a value of NULL or empty string ('') is considered valid
  */
-class FileTypeValidator extends \TYPO3\FLOW3\Validation\Validator\AbstractValidator {
+class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidator {
 
 	/**
-	 * The given $value is valid if it is an \TYPO3\FLOW3\Resource\Resource of the configured resolution
+	 * The given $value is valid if it is an \TYPO3\Flow\Resource\Resource of the configured resolution
 	 * Note: a value of NULL or empty string ('') is considered valid
 	 *
-	 * @param \TYPO3\FLOW3\Resource\Resource $resource The resource object that should be validated
+	 * @param \TYPO3\Flow\Resource\Resource $resource The resource object that should be validated
 	 * @return void
 	 * @api
 	 */
 	protected function isValid($resource) {
 		$this->validateOptions();
 
-		if (!$resource instanceof \TYPO3\FLOW3\Resource\Resource) {
+		if (!$resource instanceof \TYPO3\Flow\Resource\Resource) {
 			$this->addError('The given value was not a Resource instance.', 1327865587);
 			return;
 		}
@@ -46,13 +46,13 @@ class FileTypeValidator extends \TYPO3\FLOW3\Validation\Validator\AbstractValida
 
 	/**
 	 * @return void
-	 * @throws \TYPO3\FLOW3\Validation\Exception\InvalidValidationOptionsException if the configured validation options are incorrect
+	 * @throws \TYPO3\Flow\Validation\Exception\InvalidValidationOptionsException if the configured validation options are incorrect
 	 */
 	protected function validateOptions() {
 		if (!isset($this->options['allowedExtensions'])) {
-			throw new \TYPO3\FLOW3\Validation\Exception\InvalidValidationOptionsException('The option "allowedExtensions" was not specified.', 1327865682);
+			throw new \TYPO3\Flow\Validation\Exception\InvalidValidationOptionsException('The option "allowedExtensions" was not specified.', 1327865682);
 		} elseif (!is_array($this->options['allowedExtensions']) || $this->options['allowedExtensions'] === array()) {
-			throw new \TYPO3\FLOW3\Validation\Exception\InvalidValidationOptionsException('The option "allowedExtensions" must be an array with at least one item.', 1328032876);
+			throw new \TYPO3\Flow\Validation\Exception\InvalidValidationOptionsException('The option "allowedExtensions" must be an array with at least one item.', 1328032876);
 		}
 	}
 }

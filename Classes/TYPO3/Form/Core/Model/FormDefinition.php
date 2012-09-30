@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * This class encapsulates a complete *Form Definition*, with all of its pages,
@@ -216,7 +216,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * ==========================
  *
  * In order to trigger *rendering* on a FormDefinition,
- * the current {@link \TYPO3\FLOW3\Mvc\ActionRequest} needs to be bound to the FormDefinition,
+ * the current {@link \TYPO3\Flow\Mvc\ActionRequest} needs to be bound to the FormDefinition,
  * resulting in a {@link \TYPO3\Form\Core\Runtime\FormRuntime} object which contains the *Runtime State* of the form
  * (such as the currently inserted values).
  *
@@ -467,7 +467,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 			$implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
 			$defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
 
-			$options = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+			$options = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
 			$finisher = new $implementationClassName;
 			$finisher->setOptions($options);
@@ -540,7 +540,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @internal
 	 */
 	public function addElementDefaultValue($elementIdentifier, $defaultValue) {
-		$this->elementDefaultValues = \TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
+		$this->elementDefaultValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
 	}
 
 	/**
@@ -552,7 +552,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * @internal
 	 */
 	public function getElementDefaultValueByIdentifier($elementIdentifier) {
-		return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
+		return \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
 	}
 
 	/**
@@ -594,12 +594,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 	 * Bind the current request & response to this form instance, effectively creating
 	 * a new "instance" of the Form.
 	 *
-	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $request
-	 * @param \TYPO3\FLOW3\Http\Response $response
+	 * @param \TYPO3\Flow\Mvc\ActionRequest $request
+	 * @param \TYPO3\Flow\Http\Response $response
 	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
 	 * @api
 	 */
-	public function bind(\TYPO3\FLOW3\Mvc\ActionRequest $request, \TYPO3\FLOW3\Http\Response $response) {
+	public function bind(\TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response) {
 		return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request, $response);
 	}
 

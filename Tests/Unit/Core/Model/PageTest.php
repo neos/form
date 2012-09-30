@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -19,7 +19,7 @@ use TYPO3\Form\Core\Model\Page;
  * @covers \TYPO3\Form\Core\Model\Page<extended>
  * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
  */
-class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class PageTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
@@ -298,7 +298,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinition = $this->getDummyFormDefinition();
 
 		$mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
-		$mockProcessingRule->_set('validator', new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator());
+		$mockProcessingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
 		$formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->will($this->returnValue($mockProcessingRule));
 
 		$page1 = $formDefinition->createPage('myPage1');
@@ -307,7 +307,7 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$validators = $el->getValidators();
 		$validators = iterator_to_array($validators);
 		$this->assertSame(2, count($validators));
-		$this->assertInstanceOf('TYPO3\FLOW3\Validation\Validator\StringLengthValidator', $validators[0]);
+		$this->assertInstanceOf('TYPO3\Flow\Validation\Validator\StringLengthValidator', $validators[0]);
 		$this->assertSame(array('minimum' => 10), $validators[0]->getOptions());
 	}
 
@@ -326,10 +326,10 @@ class PageTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$formDefinitionConstructorArguments = array('myForm', array(
 			'validatorPresets' => array(
 				'MyValidatorIdentifier' => array(
-					'implementationClassName' => 'TYPO3\FLOW3\Validation\Validator\StringLengthValidator'
+					'implementationClassName' => 'TYPO3\Flow\Validation\Validator\StringLengthValidator'
 				),
 				'MyOtherValidatorIdentifier' => array(
-					'implementationClassName' => 'TYPO3\FLOW3\Validation\Validator\NotEmptyValidator'
+					'implementationClassName' => 'TYPO3\Flow\Validation\Validator\NotEmptyValidator'
 				),
 			),
 			'formElementTypes' => array(

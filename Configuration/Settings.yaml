@@ -1,7 +1,7 @@
 TYPO3:
   Form:
     yamlPersistenceManager:
-      savePath: %FLOW3_PATH_DATA%Forms/
+      savePath: %FLOW_PATH_DATA%Forms/
     supertypeResolver:
       hiddenProperties: []
     presets:
@@ -157,28 +157,28 @@ TYPO3:
 
         ### VALIDATORS ###
         validatorPresets:
-          'TYPO3.FLOW3:NotEmpty':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\NotEmptyValidator'
-          'TYPO3.FLOW3:DateTimeRange':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\DateTimeRangeValidator'
-          'TYPO3.FLOW3:Alphanumeric':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\AlphanumericValidator'
-          'TYPO3.FLOW3:Text':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\TextValidator'
-          'TYPO3.FLOW3:StringLength':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\StringLengthValidator'
-          'TYPO3.FLOW3:EmailAddress':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\EmailAddressValidator'
-          'TYPO3.FLOW3:Integer':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\IntegerValidator'
-          'TYPO3.FLOW3:Float':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\FloatValidator'
-          'TYPO3.FLOW3:NumberRange':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\NumberRangeValidator'
-          'TYPO3.FLOW3:RegularExpression':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\RegularExpressionValidator'
-          'TYPO3.FLOW3:Count':
-            implementationClassName: 'TYPO3\FLOW3\Validation\Validator\CountValidator'
+          'TYPO3.Flow:NotEmpty':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\NotEmptyValidator'
+          'TYPO3.Flow:DateTimeRange':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\DateTimeRangeValidator'
+          'TYPO3.Flow:Alphanumeric':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\AlphanumericValidator'
+          'TYPO3.Flow:Text':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\TextValidator'
+          'TYPO3.Flow:StringLength':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\StringLengthValidator'
+          'TYPO3.Flow:EmailAddress':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\EmailAddressValidator'
+          'TYPO3.Flow:Integer':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\IntegerValidator'
+          'TYPO3.Flow:Float':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\FloatValidator'
+          'TYPO3.Flow:NumberRange':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\NumberRangeValidator'
+          'TYPO3.Flow:RegularExpression':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\RegularExpressionValidator'
+          'TYPO3.Flow:Count':
+            implementationClassName: 'TYPO3\Flow\Validation\Validator\CountValidator'
 
         ########### CUSTOM PRESETS ###########
 #      somePresetName:
@@ -199,7 +199,7 @@ TYPO3:
   DocTools:
     bundles:
       Form:
-        documentationRootPath: %FLOW3_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source
-        renderedDocumentationRootPath: %FLOW3_PATH_DATA%Temporary/Documentation/Form
-        configurationRootPath: %FLOW3_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source
-        imageRootPath: %FLOW3_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/Images/
+        documentationRootPath: %FLOW_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source
+        renderedDocumentationRootPath: %FLOW_PATH_DATA%Temporary/Documentation/Form
+        configurationRootPath: %FLOW_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source
+        imageRootPath: %FLOW_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/Images/

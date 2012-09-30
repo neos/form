@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Core\Runtime;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,8 +11,8 @@ namespace TYPO3\Form\Core\Runtime;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
-use TYPO3\FLOW3\Mvc\ActionRequest;
+use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Mvc\ActionRequest;
 
 /**
  * This class implements the *runtime logic* of a form, i.e. deciding which
@@ -62,13 +62,13 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected $formDefinition;
 
 	/**
-	 * @var \TYPO3\FLOW3\Mvc\ActionRequest
+	 * @var \TYPO3\Flow\Mvc\ActionRequest
 	 * @internal
 	 */
 	protected $request;
 
 	/**
-	 * @var \TYPO3\FLOW3\Http\Response
+	 * @var \TYPO3\Flow\Http\Response
 	 * @internal
 	 */
 	protected $response;
@@ -102,8 +102,8 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	protected $lastDisplayedPage = NULL;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Security\Cryptography\HashService
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Security\Cryptography\HashService
 	 * @internal
 	 */
 	protected $hashService;
@@ -111,20 +111,20 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	/**
 	 * Workaround...
 	 *
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Mvc\FlashMessageContainer
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Mvc\FlashMessageContainer
 	 * @internal
 	 */
 	protected $flashMessageContainer;
 
 	/**
 	 * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
-	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $request
-	 * @param \TYPO3\FLOW3\Http\Response $response
+	 * @param \TYPO3\Flow\Mvc\ActionRequest $request
+	 * @param \TYPO3\Flow\Http\Response $response
 	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
 	 * @internal
 	 */
-	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\FLOW3\Mvc\ActionRequest $request, \TYPO3\FLOW3\Http\Response $response) {
+	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response) {
 		$this->formDefinition = $formDefinition;
 		$rootRequest = $request->getMainRequest() ?: $request;
 		$pluginArguments = $rootRequest->getPluginArguments();
@@ -240,11 +240,11 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 
 	/**
 	 * @param \TYPO3\Form\Core\Model\Page $page
-	 * @return \TYPO3\FLOW3\Error\Result
+	 * @return \TYPO3\Flow\Error\Result
 	 * @internal
 	 */
 	protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page) {
-		$result = new \TYPO3\FLOW3\Error\Result();
+		$result = new \TYPO3\Flow\Error\Result();
 		$requestArguments = $this->request->getArguments();
 
 		$propertyPathsForWhichPropertyMappingShouldHappen = array();
@@ -259,7 +259,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		};
 
 		foreach ($page->getElementsRecursively() as $element) {
-			$value = \TYPO3\FLOW3\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
+			$value = \TYPO3\Flow\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
 			$element->onSubmit($this, $value);
 
 			$this->formState->setFormValue($element->getIdentifier(), $value);
@@ -360,7 +360,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * This is mostly relevant inside Finishers, where you f.e. want to redirect
 	 * the user to another page.
 	 *
-	 * @return \TYPO3\FLOW3\Mvc\ActionRequest the request this object is bound to
+	 * @return \TYPO3\Flow\Mvc\ActionRequest the request this object is bound to
 	 * @api
 	 */
 	public function getRequest() {
@@ -373,7 +373,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * This is mostly relevant inside Finishers, where you f.e. want to set response
 	 * headers or output content.
 	 *
-	 * @return \TYPO3\FLOW3\Http\Response the response this object is bound to
+	 * @return \TYPO3\Flow\Http\Response the response this object is bound to
 	 * @api
 	 */
 	public function getResponse() {
@@ -417,17 +417,17 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Mvc\Controller\ControllerContext
+	 * @return \TYPO3\Flow\Mvc\Controller\ControllerContext
 	 * @internal
 	 */
 	protected function getControllerContext() {
-		$uriBuilder = new \TYPO3\FLOW3\Mvc\Routing\UriBuilder();
+		$uriBuilder = new \TYPO3\Flow\Mvc\Routing\UriBuilder();
 		$uriBuilder->setRequest($this->request);
 
-		return new \TYPO3\FLOW3\Mvc\Controller\ControllerContext(
+		return new \TYPO3\Flow\Mvc\Controller\ControllerContext(
 			$this->request,
 			$this->response,
-			new \TYPO3\FLOW3\Mvc\Controller\Arguments(array()),
+			new \TYPO3\Flow\Mvc\Controller\Arguments(array()),
 			$uriBuilder,
 			$this->flashMessageContainer
 		);

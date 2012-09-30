@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Finishers;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -50,7 +50,7 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		if ($packageKey !== NULL && strpos($packageKey, '\\') !== FALSE) {
 			list($packageKey, $subpackageKey) = explode('\\', $packageKey, 2);
 		}
-		$uriBuilder = new \TYPO3\FLOW3\Mvc\Routing\UriBuilder();
+		$uriBuilder = new \TYPO3\Flow\Mvc\Routing\UriBuilder();
 		$uriBuilder->setRequest($request);
 		$uriBuilder->reset();
 

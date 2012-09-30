@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Factory;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\Factory;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Base class for custom *Form Factories*. A Form Factory is responsible for building
@@ -104,8 +104,8 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	protected $formSettings;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Configuration\ConfigurationManager
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
 	 * @internal
 	 */
 	protected $configurationManager;
@@ -114,7 +114,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	 * @internal
 	 */
 	public function initializeObject() {
-		$this->formSettings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
+		$this->formSettings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
 	}
 
 	/**
@@ -134,7 +134,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 		if (isset($preset['parentPreset'])) {
 			$parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
 			unset($preset['parentPreset']);
-			$preset = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
+			$preset = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
 		}
 		return $preset;
 	}

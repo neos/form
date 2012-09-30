@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -21,7 +21,7 @@ require_once(__DIR__ . '/Fixture/EmptyFinisher.php');
  * @covers \TYPO3\Form\Core\Model\FormDefinition<extended>
  * @covers \TYPO3\Form\Core\Model\Page<extended>
  */
-class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
@@ -245,8 +245,8 @@ class FormDefinitionTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	public function bindReturnsBoundFormRuntime() {
 		$formDefinition = new FormDefinition('foo');
 
-		$mockRequest = $this->getMockBuilder('TYPO3\FLOW3\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-		$mockResponse = $this->getMockBuilder('TYPO3\FLOW3\Http\Response')->getMock();
+		$mockRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
+		$mockResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->getMock();
 
 		$form = $formDefinition->bind($mockRequest, $mockResponse);
 		$this->assertInstanceOf('TYPO3\Form\Core\Runtime\FormRuntime', $form);

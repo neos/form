@@ -2,7 +2,7 @@
 namespace TYPO3\Form\ViewHelpers;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Main Entry Point to render a Form into a Fluid Template
@@ -31,7 +31,7 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Form\Persistence\FormPersistenceManagerInterface
 	 */
 	protected $formPersistenceManager;
@@ -45,12 +45,12 @@ class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	 */
 	public function render($persistenceIdentifier = NULL, $factoryClass = 'TYPO3\Form\Factory\ArrayFormFactory', $presetName = 'default', array $overrideConfiguration = array()) {
 		if (isset($persistenceIdentifier)) {
-			$overrideConfiguration = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
+			$overrideConfiguration = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
 		}
 
 		$factory = $this->objectManager->get($factoryClass);
 		$formDefinition = $factory->build($overrideConfiguration, $presetName);
-		$response = new \TYPO3\FLOW3\Http\Response($this->controllerContext->getResponse());
+		$response = new \TYPO3\Flow\Http\Response($this->controllerContext->getResponse());
 		$form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
 		return $form->render();
 	}

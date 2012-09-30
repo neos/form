@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -18,7 +18,7 @@ use TYPO3\Form\Core\Model\Page;
  * Test for AbstractFormElement Domain Model
  * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
  */
-class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
@@ -156,7 +156,7 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 		$myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
 		$page->addElement($myFormElement);
 
-		$myFormElement->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+		$myFormElement->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
 		$this->assertTrue($myFormElement->isRequired());
 	}
 
@@ -174,7 +174,7 @@ class AbstractFormElementTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	protected function getFormDefinitionWithProcessingRule($formElementIdentifier) {
 		$mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
-		$mockProcessingRule->_set('validator', new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator());
+		$mockProcessingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
 
 		$formDefinition = $this->getMock('TYPO3\Form\Core\Model\FormDefinition', array('getProcessingRule'), array('foo'));
 		$formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));

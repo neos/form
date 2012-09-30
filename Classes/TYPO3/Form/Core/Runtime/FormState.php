@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Core\Runtime;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Runtime;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * The current state of the form which is attached to the {@link FormRuntime}
@@ -76,7 +76,7 @@ class FormState {
 	 * @return void
 	 */
 	public function setFormValue($propertyPath, $value) {
-		$this->formValues = \TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
+		$this->formValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
 	}
 
 	/**
@@ -84,7 +84,7 @@ class FormState {
 	 * @return mixed
 	 */
 	public function getFormValue($propertyPath) {
-		return \TYPO3\FLOW3\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
+		return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
 	}
 }
 ?>

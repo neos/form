@@ -12,7 +12,7 @@ It includes the following features:
 * highly **flexible rendering** of form elements, based on Fluid
 * **Extensible** with new form elements
 * robust, **object oriented API**
-* great integration into **FLOW3**
+* great integration into **TYPO3 Flow**
 
 Furthermore, we built a **Form Builder** which is a web application for graphically
 assembling and modifying forms, displayed below:

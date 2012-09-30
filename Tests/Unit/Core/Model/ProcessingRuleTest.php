@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -18,10 +18,10 @@ use TYPO3\Form\Core\Model\Page;
  * Test for ProcessingRule Domain Model
  * @covers \TYPO3\Form\Core\Model\ProcessingRule
  */
-class ProcessingRuleTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
-	 * @var \TYPO3\FLOW3\Property\PropertyMapper
+	 * @var \TYPO3\Flow\Property\PropertyMapper
 	 */
 	protected $mockPropertyMapper;
 
@@ -31,11 +31,11 @@ class ProcessingRuleTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	protected $processingRule;
 
 	public function setUp() {
-		$this->mockPropertyMapper = $this->getMockBuilder('TYPO3\FLOW3\Property\PropertyMapper')->getMock();
+		$this->mockPropertyMapper = $this->getMockBuilder('TYPO3\Flow\Property\PropertyMapper')->getMock();
 		$this->processingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
 		$this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
-		$this->processingRule->_set('validator', new \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator());
-		$this->processingRule->_set('processingMessages', new \TYPO3\FLOW3\Error\Result());
+		$this->processingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
+		$this->processingRule->_set('processingMessages', new \TYPO3\Flow\Error\Result());
 	}
 
 	/**
@@ -64,9 +64,9 @@ class ProcessingRuleTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function getValidatorsReturnsPreviouslyAddedValidators() {
-		$mockValidator1 = $this->getMock('TYPO3\FLOW3\Validation\Validator\ValidatorInterface');
+		$mockValidator1 = $this->getMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
 		$this->processingRule->addValidator($mockValidator1);
-		$mockValidator2 = $this->getMock('TYPO3\FLOW3\Validation\Validator\ValidatorInterface');
+		$mockValidator2 = $this->getMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
 		$this->processingRule->addValidator($mockValidator2);
 
 		$validators = $this->processingRule->getValidators();
@@ -86,7 +86,7 @@ class ProcessingRuleTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function processingMessagesCanBeModifiedBeforeProcessing() {
-		$this->processingRule->getProcessingMessages()->addError(new \TYPO3\FLOW3\Error\Error('Test'));
+		$this->processingRule->getProcessingMessages()->addError(new \TYPO3\Flow\Error\Error('Test'));
 		$this->processingRule->process('Some Value');
 		$this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
 	}
@@ -104,11 +104,11 @@ class ProcessingRuleTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function processConvertsValueIfDataTypeIsSpecified() {
 		$this->processingRule->setDataType('SomeDataType');
-		$mockPropertyMappingConfiguration = $this->getMockBuilder('TYPO3\FLOW3\Property\PropertyMappingConfiguration')->getMock();
+		$mockPropertyMappingConfiguration = $this->getMockBuilder('TYPO3\Flow\Property\PropertyMappingConfiguration')->getMock();
 		$this->processingRule->_set('propertyMappingConfiguration', $mockPropertyMappingConfiguration);
 
 		$this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));
-		$this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \TYPO3\FLOW3\Error\Result()));
+		$this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \TYPO3\Flow\Error\Result()));
 		$this->assertEquals('Converted Value', $this->processingRule->process('Some Value'));
 	}
 

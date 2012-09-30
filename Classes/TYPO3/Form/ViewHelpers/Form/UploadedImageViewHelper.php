@@ -2,7 +2,7 @@
 namespace TYPO3\Form\ViewHelpers\Form;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -12,7 +12,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * This ViewHelper makes the specified Image object available for its
@@ -35,8 +35,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
 
 	/**
-	 * @var TYPO3\FLOW3\Property\PropertyMapper
-	 * @FLOW3\Inject
+	 * @var TYPO3\Flow\Property\PropertyMapper
+	 * @Flow\Inject
 	 */
 	protected $propertyMapper;
 

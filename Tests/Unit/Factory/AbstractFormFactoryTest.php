@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Factory;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -17,7 +17,7 @@ use TYPO3\Form\Utility\SupertypeResolver;
  * Test for Supertype Resolver
  * @covers \TYPO3\Form\Factory\AbstractFormFactory<extended>
  */
-class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	public function dataProviderForConfigurationMerging() {
 		$presets = array(
@@ -109,11 +109,11 @@ class AbstractFormFactoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 	 */
 	public function initializeObjectLoadsSettings() {
 		$abstractFormFactory = $this->getAbstractFormFactory();
-		$mockConfigurationManager = $this->getMockBuilder('TYPO3\FLOW3\Configuration\ConfigurationManager')->disableOriginalConstructor()->getMock();
+		$mockConfigurationManager = $this->getMockBuilder('TYPO3\Flow\Configuration\ConfigurationManager')->disableOriginalConstructor()->getMock();
 		$mockConfigurationManager
 			->expects($this->once())
 			->method('getConfiguration')
-			->with(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
+			->with(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
 			->will($this->returnValue('MyConfig'));
 		$abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 

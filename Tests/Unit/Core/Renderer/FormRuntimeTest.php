@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Core\Runtime;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -20,15 +20,15 @@ require_once(__DIR__ . '/Fixture/DummyFinisher.php');
  * Test for Form Runtime
  * @covers \TYPO3\Form\Core\Runtime\FormRuntime<extended>
  */
-class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
 	 */
 	public function valuesSetInConstructorCanBeReadAgain() {
 		$formDefinition = new FormDefinition('foo');
-		$mockActionRequest = $this->getMockBuilder('TYPO3\FLOW3\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-		$mockHttpResponse = $this->getMockBuilder('TYPO3\FLOW3\Http\Response')->disableOriginalConstructor()->getMock();
+		$mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
+		$mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
 
 		$formRuntime = $this->createFormRuntime($formDefinition, $mockActionRequest, $mockHttpResponse);
 
@@ -188,17 +188,17 @@ class FormRuntimeTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
 
 	/**
 	 * @param FormDefinition $formDefinition
-	 * @param \TYPO3\FLOW3\Mvc\ActionRequest $request
-	 * @param \TYPO3\FLOW3\Http\Response $response
+	 * @param \TYPO3\Flow\Mvc\ActionRequest $request
+	 * @param \TYPO3\Flow\Http\Response $response
 	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
 	 */
-	protected function createFormRuntime(FormDefinition $formDefinition, \TYPO3\FLOW3\Mvc\ActionRequest $request = NULL, \TYPO3\FLOW3\Http\Response $response = NULL) {
+	protected function createFormRuntime(FormDefinition $formDefinition, \TYPO3\Flow\Mvc\ActionRequest $request = NULL, \TYPO3\Flow\Http\Response $response = NULL) {
 		if ($request === NULL) {
-			$httpRequest = \TYPO3\FLOW3\Http\Request::create(new \TYPO3\FLOW3\Http\Uri('foo'));
+			$httpRequest = \TYPO3\Flow\Http\Request::create(new \TYPO3\Flow\Http\Uri('foo'));
 			$request = $httpRequest->createActionRequest();
 		}
 		if ($response === NULL) {
-			$response = new \TYPO3\FLOW3\Http\Response();
+			$response = new \TYPO3\Flow\Http\Response();
 		}
 		return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', array('dummy'), array($formDefinition, $request, $response));
 	}

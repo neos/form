@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Persistence;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,12 +11,12 @@ namespace TYPO3\Form\Persistence;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * persistence identifier is some resource:// uri probably
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class YamlPersistenceManager implements FormPersistenceManagerInterface {
 
@@ -32,7 +32,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 		if (isset($settings['yamlPersistenceManager']['savePath'])) {
 			$this->savePath = $settings['yamlPersistenceManager']['savePath'];
 			if (!is_dir($this->savePath)) {
-				\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($this->savePath);
+				\TYPO3\Flow\Utility\Files::createDirectoryRecursively($this->savePath);
 			}
 		}
 	}
@@ -114,7 +114,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 	 */
 	protected function getFormPathAndFilename($persistenceIdentifier) {
 		$formFileName = sprintf('%s.yaml', $persistenceIdentifier);
-		return \TYPO3\FLOW3\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
+		return \TYPO3\Flow\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
 	}
 }
 ?>

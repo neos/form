@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A processing Rule contains information for property mapping and validation.
@@ -28,25 +28,25 @@ class ProcessingRule {
 	protected $dataType;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Property\PropertyMappingConfiguration
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Property\PropertyMappingConfiguration
 	 */
 	protected $propertyMappingConfiguration;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Validation\Validator\ConjunctionValidator
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Validation\Validator\ConjunctionValidator
 	 */
 	protected $validator;
 
 	/**
-	 * @var \TYPO3\FLOW3\Error\Result
+	 * @var \TYPO3\Flow\Error\Result
 	 */
 	protected $processingMessages;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Property\PropertyMapper
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Property\PropertyMapper
 	 * @internal
 	 */
 	protected $propertyMapper;
@@ -55,11 +55,11 @@ class ProcessingRule {
 	 * Constructs this processing rule
 	 */
 	public function __construct() {
-		$this->processingMessages = new \TYPO3\FLOW3\Error\Result();
+		$this->processingMessages = new \TYPO3\Flow\Error\Result();
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Property\PropertyMappingConfiguration
+	 * @return \TYPO3\Flow\Property\PropertyMappingConfiguration
 	 */
 	public function getPropertyMappingConfiguration() {
 		return $this->propertyMappingConfiguration;
@@ -82,7 +82,7 @@ class ProcessingRule {
 	/**
 	 * Returns the child validators of the ConjunctionValidator that is bound to this processing rule
 	 *
-	 * @return \SplObjectStorage<\TYPO3\FLOW3\Validation\Validator\ValidatorInterface>
+	 * @return \SplObjectStorage<\TYPO3\Flow\Validation\Validator\ValidatorInterface>
 	 * @internal
 	 */
 	public function getValidators() {
@@ -90,10 +90,10 @@ class ProcessingRule {
 	}
 
 	/**
-	 * @param \TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator
+	 * @param \TYPO3\Flow\Validation\Validator\ValidatorInterface $validator
 	 * @return void
 	 */
-	public function addValidator(\TYPO3\FLOW3\Validation\Validator\ValidatorInterface $validator) {
+	public function addValidator(\TYPO3\Flow\Validation\Validator\ValidatorInterface $validator) {
 		$this->validator->addValidator($validator);
 	}
 
@@ -106,7 +106,7 @@ class ProcessingRule {
 			$value = $this->propertyMapper->convert($value, $this->dataType, $this->propertyMappingConfiguration);
 			$messages = $this->propertyMapper->getMessages();
 		} else {
-			$messages = new \TYPO3\FLOW3\Error\Result();
+			$messages = new \TYPO3\Flow\Error\Result();
 		}
 
 		$validationResult = $this->validator->validate($value);
@@ -117,7 +117,7 @@ class ProcessingRule {
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Error\Result
+	 * @return \TYPO3\Flow\Error\Result
 	 */
 	public function getProcessingMessages() {
 		return $this->processingMessages;

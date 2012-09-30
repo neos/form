@@ -57,7 +57,7 @@ looks as follows::
 
 	namespace Your\Package;
 
-	use TYPO3\FLOW3\Annotations as FLOW3;
+	use TYPO3\Flow\Annotations as Flow;
 	use TYPO3\Form\Core\Model\FormDefinition;
 
 	class QuickstartFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
@@ -133,15 +133,15 @@ Validation
 ----------
 
 Every :api-core-model:`FormElement <AbstractFormElement>` implements the :api-core-model:`FormElementInterface`
-which provides a convenient way to work with FLOW3 validators::
+which provides a convenient way to work with TYPO3 Flow validators::
 
-	$name->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+	$name->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
 
-	$email->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-	$email->addValidator(new \TYPO3\FLOW3\Validation\Validator\EmailAddressValidator());
+	$email->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+	$email->addValidator(new \TYPO3\Flow\Validation\Validator\EmailAddressValidator());
 
-	$comments->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-	$comments->addValidator(new \TYPO3\FLOW3\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
+	$comments->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+	$comments->addValidator(new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
 With the ``addValidator($validator)`` method you can attach one or more validators to a form element.
 If you save the changes and reload the page where you embedded the form, you can see that
@@ -193,11 +193,11 @@ That's it for the quickstart. The complete code of your form factory should look
 
 	namespace Your\Package;
 
-	use TYPO3\FLOW3\Annotations as FLOW3;
+	use TYPO3\Flow\Annotations as Flow;
 	use TYPO3\Form\Core\Model\FormDefinition;
 
 	/**
-	 * FLOW3\Scope("singleton")
+	 * Flow\Scope("singleton")
 	 */
 	class QuickstartFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
 
@@ -214,17 +214,17 @@ That's it for the quickstart. The complete code of your form factory should look
 
 			$name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
 			$name->setLabel('Name');
-			$name->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+			$name->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
 
 			$email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
 			$email->setLabel('Email');
-			$email->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-			$email->addValidator(new \TYPO3\FLOW3\Validation\Validator\EmailAddressValidator());
+			$email->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+			$email->addValidator(new \TYPO3\Flow\Validation\Validator\EmailAddressValidator());
 
 			$comments = $page1->createElement('message', 'TYPO3.Form:MultiLineText');
 			$comments->setLabel('Message');
-			$comments->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-			$comments->addValidator(new \TYPO3\FLOW3\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
+			$comments->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+			$comments->addValidator(new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
 			$emailFinisher = new \TYPO3\Form\Finishers\EmailFinisher();
 			$emailFinisher->setOptions(array(

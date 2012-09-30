@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Core\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -113,7 +113,7 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 		}
 		$formRuntime = $this->finisherContext->getFormRuntime();
 		return preg_replace_callback('/{([^}]+)}/', function($match) use ($formRuntime) {
-			return \TYPO3\FLOW3\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
+			return \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
 		}, $option);
 	}
 

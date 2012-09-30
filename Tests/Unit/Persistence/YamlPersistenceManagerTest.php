@@ -2,7 +2,7 @@
 namespace TYPO3\Form\Tests\Unit\Persistence;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Form".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -17,7 +17,7 @@ use org\bovigo\vfs\vfsStreamWrapper;
 /**
  * @covers \TYPO3\Form\Persistence\YamlPersistenceManager<extended>
  */
-class YamlPersistenceManagerTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class YamlPersistenceManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @var \TYPO3\Form\Persistence\YamlPersistenceManager
