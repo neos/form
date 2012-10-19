@@ -78,6 +78,8 @@ TYPO3:
             implementationClassName: 'TYPO3\Form\FormElements\PasswordWithConfirmation'
             properties:
               elementClassAttribute: 'input-medium'
+              # Optional description (hint) for the first password input element
+              #   passwordDescription: 'Use at least 8 characters'
               confirmationLabel: 'Confirmation'
               confirmationClassAttribute: 'input-medium'
           'TYPO3.Form:MultiLineText':
