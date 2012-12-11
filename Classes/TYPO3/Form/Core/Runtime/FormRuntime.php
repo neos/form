@@ -276,7 +276,11 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 			if (isset($processingRules[$propertyPath])) {
 				$processingRule = $processingRules[$propertyPath];
 				$value = $this->formState->getFormValue($propertyPath);
-				$value = $processingRule->process($value);
+				try {
+					$value = $processingRule->process($value);
+				} catch (\TYPO3\Flow\Property\Exception $exception) {
+					throw new \TYPO3\Form\Exception\PropertyMappingException('Failed to process FormValue at "' . $propertyPath . '" from "' . gettype($value) . '" to "' . $processingRule->getDataType() . '"', 1355218921, $exception);
+				}
 				$result->forProperty($propertyPath)->merge($processingRule->getProcessingMessages());
 				$this->formState->setFormValue($propertyPath, $value);
 			}
