@@ -53,12 +53,11 @@ class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 	/**
 	 * Overrides the forms action URI to be the same as the currently requested URI
 	 *
-	 * @return void
+	 * @return string
 	 */
-	protected function setFormActionUri() {
+	protected function getFormActionUri() {
 		$httpRequest = $this->controllerContext->getRequest()->getHttpRequest();
-		$formActionUri = $httpRequest->getUri();
-		$this->tag->addAttribute('action', (string)$formActionUri);
+		return $httpRequest->getUri();
 	}
 }
 
