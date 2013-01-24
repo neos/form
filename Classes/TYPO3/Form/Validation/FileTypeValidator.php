@@ -19,6 +19,13 @@ namespace TYPO3\Form\Validation;
 class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidator {
 
 	/**
+	 * @var array
+	 */
+	protected $supportedOptions = array(
+		'allowedExtensions' => array(array(), 'Array of allowed file extensions', 'array', TRUE)
+	);
+
+	/**
 	 * The given $value is valid if it is an \TYPO3\Flow\Resource\Resource of the configured resolution
 	 * Note: a value of NULL or empty string ('') is considered valid
 	 *
@@ -27,8 +34,6 @@ class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidat
 	 * @api
 	 */
 	protected function isValid($resource) {
-		$this->validateOptions();
-
 		if (!$resource instanceof \TYPO3\Flow\Resource\Resource) {
 			$this->addError('The given value was not a Resource instance.', 1327865587);
 			return;
@@ -41,18 +46,6 @@ class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidat
 		if (!in_array($fileExtension, $this->options['allowedExtensions'])) {
 			$this->addError('The file extension "%s" is not allowed.', 1327865764, array($resource->getFileExtension()));
 			return;
-		}
-	}
-
-	/**
-	 * @return void
-	 * @throws \TYPO3\Flow\Validation\Exception\InvalidValidationOptionsException if the configured validation options are incorrect
-	 */
-	protected function validateOptions() {
-		if (!isset($this->options['allowedExtensions'])) {
-			throw new \TYPO3\Flow\Validation\Exception\InvalidValidationOptionsException('The option "allowedExtensions" was not specified.', 1327865682);
-		} elseif (!is_array($this->options['allowedExtensions']) || $this->options['allowedExtensions'] === array()) {
-			throw new \TYPO3\Flow\Validation\Exception\InvalidValidationOptionsException('The option "allowedExtensions" must be an array with at least one item.', 1328032876);
 		}
 	}
 }
