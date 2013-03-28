@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Form\Core\Runtime\FormRuntime;
+use TYPO3\Form\Core\Runtime\FormRuntime;
 
 /**
  * The context that is passed to each finisher when executed.

@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Form\Core\Model\FinisherContext;
+use TYPO3\Form\Core\Model\FinisherContext;
 
 /**
  * Finisher that can be attached to a form in order to be invoked
