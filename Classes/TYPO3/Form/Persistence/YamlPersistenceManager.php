@@ -46,7 +46,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 	 */
 	public function load($persistenceIdentifier) {
 		if (!$this->exists($persistenceIdentifier)) {
-			throw new \TYPO3\Form\Exception\PersistenceManagerException(sprintf('The form identified by "%s" could not be loaded.', $persistenceIdentifier), 1329307034);
+			throw new \TYPO3\Form\Exception\PersistenceManagerException(sprintf('The form identified by "%s" could not be loaded in "%s".', $persistenceIdentifier, $this->getFormPathAndFilename($persistenceIdentifier)), 1329307034);
 		}
 		$formPathAndFilename = $this->getFormPathAndFilename($persistenceIdentifier);
 		return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($formPathAndFilename));
