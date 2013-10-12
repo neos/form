@@ -18,4 +18,3 @@ namespace TYPO3\Form\Exception;
  */
 class PresetNotFoundException extends \TYPO3\Form\Exception {
 }
-?>

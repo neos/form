@@ -84,5 +84,3 @@ class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractF
 		return $this->propertyMapper->convert($resourceObject, 'TYPO3\Flow\Resource\Resource');
 	}
 }
-
-?>

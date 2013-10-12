@@ -304,4 +304,3 @@ class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements Render
 	}
 
 }
-?>

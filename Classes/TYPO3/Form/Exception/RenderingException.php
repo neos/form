@@ -18,4 +18,3 @@ namespace TYPO3\Form\Exception;
  */
 class RenderingException extends \TYPO3\Form\Exception {
 }
-?>

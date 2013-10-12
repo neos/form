@@ -58,4 +58,3 @@ class FinisherContextTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	}
 
 }
-?>

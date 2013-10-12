@@ -27,4 +27,3 @@ class PasswordWithConfirmation extends \TYPO3\Form\Core\Model\AbstractFormElemen
 	}
 
 }
-?>

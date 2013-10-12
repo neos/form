@@ -60,5 +60,3 @@ class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 		return $httpRequest->getUri();
 	}
 }
-
-?>

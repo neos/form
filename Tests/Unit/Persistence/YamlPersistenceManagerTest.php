@@ -156,4 +156,3 @@ label: \'Form Fixture2\'
 	}
 
 }
-?>

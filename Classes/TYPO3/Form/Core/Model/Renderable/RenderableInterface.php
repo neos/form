@@ -68,4 +68,3 @@ interface RenderableInterface extends RootRenderableInterface {
 	 */
 	public function onRemoveFromParentRenderable();
 }
-?>

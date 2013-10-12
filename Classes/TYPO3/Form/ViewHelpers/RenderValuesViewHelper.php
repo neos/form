@@ -132,4 +132,3 @@ class RenderValuesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHe
 		return 'Object [' . get_class($object) . ']';
 	}
 }
-?>

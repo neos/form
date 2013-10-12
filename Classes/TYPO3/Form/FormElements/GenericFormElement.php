@@ -19,4 +19,3 @@ use TYPO3\Flow\Annotations as Flow;
 class GenericFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
 
 }
-?>

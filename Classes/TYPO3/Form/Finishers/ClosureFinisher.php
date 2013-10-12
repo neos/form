@@ -52,4 +52,3 @@ class ClosureFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$closure($this->finisherContext);
 	}
 }
-?>

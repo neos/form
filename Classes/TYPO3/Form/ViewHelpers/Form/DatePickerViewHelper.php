@@ -141,5 +141,3 @@ class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 	}
 
 }
-
-?>

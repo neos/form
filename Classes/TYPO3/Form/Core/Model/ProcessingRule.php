@@ -123,4 +123,3 @@ class ProcessingRule {
 		return $this->processingMessages;
 	}
 }
-?>

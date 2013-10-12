@@ -165,4 +165,3 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
 	}
 }
-?>

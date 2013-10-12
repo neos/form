@@ -49,4 +49,3 @@ class DummyFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
 	 */
 	public function setOption($optionName, $optionValue) {}
 }
-?>

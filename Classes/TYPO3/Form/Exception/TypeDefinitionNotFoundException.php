@@ -19,4 +19,3 @@ namespace TYPO3\Form\Exception;
  */
 class TypeDefinitionNotFoundException extends \TYPO3\Form\Exception {
 }
-?>

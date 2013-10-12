@@ -81,5 +81,3 @@ class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractForm
 		return $this->propertyMapper->convert($image, 'TYPO3\Media\Domain\Model\Image');
 	}
 }
-
-?>

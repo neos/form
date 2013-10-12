@@ -142,4 +142,3 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$this->assertSame(array('default', 'special', 'specialSub'), $actual);
 	}
 }
-?>

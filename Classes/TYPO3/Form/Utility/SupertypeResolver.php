@@ -85,4 +85,3 @@ class SupertypeResolver {
 		return $configuration;
 	}
 }
-?>

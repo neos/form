@@ -19,4 +19,3 @@ namespace TYPO3\Form\Exception;
  */
 class ValidatorPresetNotFoundException extends \TYPO3\Form\Exception {
 }
-?>

@@ -26,4 +26,3 @@ class RenderRenderableViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractVi
 		return $this->viewHelperVariableContainer->getView()->renderRenderable($renderable);
 	}
 }
-?>

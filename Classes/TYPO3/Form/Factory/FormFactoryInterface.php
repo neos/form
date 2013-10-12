@@ -43,4 +43,3 @@ interface FormFactoryInterface {
 	 */
 	public function build(array $configuration, $presetName);
 }
-?>

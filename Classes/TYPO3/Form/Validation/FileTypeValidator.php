@@ -49,5 +49,3 @@ class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidat
 		}
 	}
 }
-
-?>

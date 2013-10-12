@@ -117,4 +117,3 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface {
 		return \TYPO3\Flow\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
 	}
 }
-?>

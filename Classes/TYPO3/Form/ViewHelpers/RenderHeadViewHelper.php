@@ -64,4 +64,3 @@ class RenderHeadViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelp
 		return $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/' . $package . '/' . $path;
 	}
 }
-?>

@@ -390,4 +390,3 @@ class PageTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		return $formDefinition;
 	}
 }
-?>

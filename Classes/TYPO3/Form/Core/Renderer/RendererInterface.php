@@ -52,4 +52,3 @@ interface RendererInterface {
 	 */
 	public function getFormRuntime();
 }
-?>

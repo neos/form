@@ -139,4 +139,3 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		return $standaloneView;
 	}
 }
-?>

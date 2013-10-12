@@ -54,4 +54,3 @@ interface FormPersistenceManagerInterface {
 	 */
 	public function listForms();
 }
-?>

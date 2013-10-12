@@ -83,4 +83,3 @@ class FlashMessageFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$this->flashMessageContainer->addMessage($message);
 	}
 }
-?>

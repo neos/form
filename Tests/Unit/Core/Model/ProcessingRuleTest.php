@@ -113,4 +113,3 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	}
 
 }
-?>

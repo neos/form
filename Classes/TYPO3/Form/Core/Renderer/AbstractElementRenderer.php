@@ -60,4 +60,3 @@ abstract class AbstractElementRenderer implements RendererInterface {
 		return $this->formRuntime;
 	}
 }
-?>

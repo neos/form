@@ -46,4 +46,3 @@ interface FinisherInterface {
 	public function setOption($optionName, $optionValue);
 
 }
-?>

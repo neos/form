@@ -31,5 +31,3 @@ class FormElementRootlinePathViewHelper extends \TYPO3\Fluid\Core\ViewHelper\Abs
 		return $path;
 	}
 }
-
-?>

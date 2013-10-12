@@ -203,4 +203,3 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', array('dummy'), array($formDefinition, $request, $response));
 	}
 }
-?>

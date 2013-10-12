@@ -649,4 +649,3 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		return $mockFormElement;
 	}
 }
-?>

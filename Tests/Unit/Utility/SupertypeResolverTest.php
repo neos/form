@@ -100,4 +100,3 @@ class SupertypeResolverTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$supertypeResolver->getMergedTypeDefinition('nonExistingType');
 	}
 }
-?>

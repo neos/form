@@ -87,4 +87,3 @@ class FormState {
 		return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
 	}
 }
-?>

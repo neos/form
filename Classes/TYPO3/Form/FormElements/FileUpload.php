@@ -27,4 +27,3 @@ class FileUpload extends \TYPO3\Form\Core\Model\AbstractFormElement {
 		$this->addValidator($fileTypeValidator);
 	}
 }
-?>

@@ -75,4 +75,3 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$this->options = $options;
 	}
 }
-?>

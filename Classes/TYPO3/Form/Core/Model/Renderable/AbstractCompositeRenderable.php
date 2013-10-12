@@ -189,4 +189,3 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		parent::onRemoveFromParentRenderable();
 	}
 }
-?>

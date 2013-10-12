@@ -114,4 +114,3 @@ class ArrayFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		return $factory;
 	}
 }
-?>

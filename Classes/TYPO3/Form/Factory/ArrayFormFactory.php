@@ -101,4 +101,3 @@ class ArrayFormFactory extends AbstractFormFactory {
 		return $output;
 	}
 }
-?>

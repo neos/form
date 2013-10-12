@@ -36,4 +36,3 @@ class ConfirmationFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$response->setContent($this->parseOption('message'));
 	}
 }
-?>

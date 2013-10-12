@@ -148,4 +148,3 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 		return array_keys($this->formSettings['presets']);
 	}
 }
-?>

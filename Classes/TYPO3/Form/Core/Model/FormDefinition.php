@@ -641,4 +641,3 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable {
 		return $this->validatorPresets;
 	}
 }
-?>

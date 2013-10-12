@@ -203,4 +203,3 @@ class AbstractFinisherTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		return new \TYPO3\Form\Core\Model\FinisherContext($this->formRuntime);
 	}
 }
-?>

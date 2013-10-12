@@ -25,4 +25,3 @@ class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement {
 		$this->setDataType('DateTime');
 	}
 }
-?>

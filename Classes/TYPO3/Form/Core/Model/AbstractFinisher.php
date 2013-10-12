@@ -119,4 +119,3 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
 
 
 }
-?>

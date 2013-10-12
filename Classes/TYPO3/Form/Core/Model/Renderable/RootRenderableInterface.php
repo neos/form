@@ -77,4 +77,3 @@ interface RootRenderableInterface {
 	 */
 	public function getRenderingOptions();
 }
-?>

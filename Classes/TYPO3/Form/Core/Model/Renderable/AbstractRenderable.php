@@ -351,4 +351,3 @@ abstract class AbstractRenderable implements RenderableInterface {
 	}
 
 }
-?>

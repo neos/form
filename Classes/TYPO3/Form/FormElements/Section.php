@@ -149,4 +149,3 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
 		return FALSE;
 	}
 }
-?>

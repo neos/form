@@ -29,4 +29,3 @@ interface CompositeRenderableInterface extends RenderableInterface {
 	 */
 	public function getRenderablesRecursively();
 }
-?>
