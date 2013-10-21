@@ -24,6 +24,8 @@ TYPO3:
               templatePathPattern: 'resource://{@package}/Private/Form/{@type}.html'
               partialPathPattern: 'resource://{@package}/Private/Form/Partials/{@type}.html'
               layoutPathPattern: 'resource://{@package}/Private/Form/Layouts/{@type}.html'
+              # set this to TRUE if you want to avoid exceptions for FormElements without definitions
+              skipUnknownElements: FALSE
 
           'TYPO3.Form:Form':
             superTypes: ['TYPO3.Form:Base']

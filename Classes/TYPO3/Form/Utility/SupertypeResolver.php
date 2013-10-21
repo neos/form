@@ -28,9 +28,11 @@ class SupertypeResolver {
 	 */
 	protected $settings;
 
-	public function __construct($configuration) {
+	/**
+	 * @param array $configuration
+	 */
+	public function __construct(array $configuration) {
 		$this->configuration = $configuration;
-
 	}
 
 	/**
@@ -50,26 +52,25 @@ class SupertypeResolver {
 	 * @internal
 	 */
 	public function getMergedTypeDefinition($type, $showHiddenProperties = FALSE) {
-		if (isset($this->configuration[$type])) {
-			$mergedTypeDefinition = array();
-			if (isset($this->configuration[$type]['superTypes'])) {
-				foreach ($this->configuration[$type]['superTypes'] as $superType) {
-					$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superType, $showHiddenProperties));
-				}
-			}
-			$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
-			unset($mergedTypeDefinition['superTypes']);
-
-			if ($showHiddenProperties === FALSE && isset($this->settings['supertypeResolver']['hiddenProperties']) && is_array($this->settings['supertypeResolver']['hiddenProperties'])) {
-				foreach ($this->settings['supertypeResolver']['hiddenProperties'] as $propertyName) {
-					unset($mergedTypeDefinition[$propertyName]);
-				}
-			}
-
-			return $mergedTypeDefinition;
-		} else {
+		if (!isset($this->configuration[$type])) {
 			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('Type "%s" not found. Probably some configuration is missing.', $type), 1325686909);
 		}
+		$mergedTypeDefinition = array();
+		if (isset($this->configuration[$type]['superTypes'])) {
+			foreach ($this->configuration[$type]['superTypes'] as $superType) {
+				$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superType, $showHiddenProperties));
+			}
+		}
+		$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
+		unset($mergedTypeDefinition['superTypes']);
+
+		if ($showHiddenProperties === FALSE && isset($this->settings['supertypeResolver']['hiddenProperties']) && is_array($this->settings['supertypeResolver']['hiddenProperties'])) {
+			foreach ($this->settings['supertypeResolver']['hiddenProperties'] as $propertyName) {
+				unset($mergedTypeDefinition[$propertyName]);
+			}
+		}
+
+		return $mergedTypeDefinition;
 	}
 
 	/**

@@ -94,8 +94,13 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable {
 	public function createElement($identifier, $typeName) {
 		$formDefinition = $this->getRootForm();
 
-		$typeDefinition = $formDefinition->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
-
+		try {
+			$typeDefinition = $formDefinition->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
+		} catch (\TYPO3\Form\Exception\TypeDefinitionNotFoundException $exception) {
+			$element = new UnknownFormElement($identifier, $typeName);
+			$this->addElement($element);
+			return $element;
+		}
 		if (!isset($typeDefinition['implementationClassName'])) {
 			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
 		}
