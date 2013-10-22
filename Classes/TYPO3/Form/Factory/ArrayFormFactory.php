@@ -42,6 +42,8 @@ class ArrayFormFactory extends AbstractFormFactory {
 		unset($configuration['label']);
 		$form->setOptions($configuration);
 
+		$this->triggerFormBuildingFinished($form);
+
 		return $form;
 	}
 

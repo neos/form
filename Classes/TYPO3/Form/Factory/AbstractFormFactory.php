@@ -140,6 +140,20 @@ abstract class AbstractFormFactory implements FormFactoryInterface {
 	}
 
 	/**
+	 * Helper to be called by every AbstractFormFactory after everything has been built to trigger the "onBuildingFinished"
+	 * template method on all form elements.
+	 *
+	 * @param \TYPO3\Form\Core\Model\FormDefinition $form
+	 * @return void
+	 * @api
+	 */
+	protected function triggerFormBuildingFinished(\TYPO3\Form\Core\Model\FormDefinition $form) {
+		foreach ($form->getRenderablesRecursively() as $renderable) {
+			$renderable->onBuildingFinished();
+		}
+	}
+
+	/**
 	 * Get the available preset names
 	 *
 	 * @return array

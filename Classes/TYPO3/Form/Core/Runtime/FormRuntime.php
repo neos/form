@@ -229,7 +229,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	 * @return boolean
 	 */
 	protected function userWentBackToPreviousStep() {
-		return $this->currentPage->getIndex() < $this->lastDisplayedPage->getIndex();
+		return !$this->isAfterLastPage() && !$this->isFirstRequest() && $this->currentPage->getIndex() < $this->lastDisplayedPage->getIndex();
 	}
 
 	/**

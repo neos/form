@@ -67,4 +67,13 @@ interface RenderableInterface extends RootRenderableInterface {
 	 * @internal
 	 */
 	public function onRemoveFromParentRenderable();
+
+	/**
+	 * This is a callback that is invoked by the Form Factory after the whole form has been built.
+	 * It can be used to add new form elements as children for complex form elements.
+	 *
+	 * @return void
+	 * @api
+	 */
+	public function onBuildingFinished();
 }

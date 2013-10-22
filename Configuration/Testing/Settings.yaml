@@ -1,0 +1,10 @@
+TYPO3:
+  Form:
+    presets:
+      default:
+        formElementTypes:
+          'TYPO3.Form:TestingFormElementWithSubElements':
+            implementationClassName: 'TYPO3\Form\Tests\Functional\Fixtures\TestingFormElementWithSubElements'
+            superTypes: ['TYPO3.Form:Section']
+            renderingOptions:
+              templatePathPattern: 'resource://{@package}/Private/Form/Section.html'

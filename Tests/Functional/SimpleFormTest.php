@@ -17,32 +17,7 @@ use Symfony\Component\DomCrawler\Field\InputFormField;
  *
  * @group large
  */
-class SimpleFormTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
-
-	/**
-	 * @var \TYPO3\Flow\Http\Client\Browser
-	 */
-	protected $browser;
-
-	/**
-	 * Initializer
-	 */
-	public function setUp() {
-		parent::setUp();
-
-		$route = new \TYPO3\Flow\Mvc\Routing\Route();
-		$route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
-		$route->setDefaults(array(
-			'@package' => 'TYPO3.Form',
-			'@subpackage' => 'Tests\Functional\Fixtures',
-			'@controller' => 'Form',
-			'@action' => 'index',
-			'@format' => 'html'
-		));
-		$route->setAppendExceedingArguments(TRUE);
-		$this->router->addRoute($route);
-	}
-
+class SimpleFormTest extends AbstractFunctionalTestCase {
 	/**
 	 * @test
 	 */
@@ -100,31 +75,4 @@ class SimpleFormTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 		$this->assertSame('', $form['--three-page-form-with-validation']['text3-1']->getValue());
 	}
 
-	/**
-	 * Go to the next form page
-	 *
-	 * @param \Symfony\Component\DomCrawler\Form $form
-	 * @return \TYPO3\Flow\Http\Response
-	 */
-	protected function gotoNextFormPage(\Symfony\Component\DomCrawler\Form $form) {
-		$nextButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[@class="next"]/button');
-		$nextButton->rewind();
-		$form->set(new InputFormField($nextButton->current()));
-
-		return $this->browser->submit($form);
-	}
-
-	/**
-	 * Go to the previous form page
-	 *
-	 * @param \Symfony\Component\DomCrawler\Form $form
-	 * @return \TYPO3\Flow\Http\Response
-	 */
-	protected function gotoPreviousFormPage(\Symfony\Component\DomCrawler\Form $form) {
-		$previousButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[@class="previous"]/button');
-		$previousButton->rewind();
-		$form->set(new InputFormField($previousButton->current()));
-
-		return $this->browser->submit($form);
-	}
 }

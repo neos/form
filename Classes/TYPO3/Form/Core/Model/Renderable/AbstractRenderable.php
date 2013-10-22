@@ -350,4 +350,16 @@ abstract class AbstractRenderable implements RenderableInterface {
 	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
 	}
 
+	/**
+	 * This is a callback that is invoked by the Form Factory after the whole form has been built.
+	 * It can be used to add new form elements as children for complex form elements.
+	 *
+	 * Override this method in your custom Renderable if needed.
+	 *
+	 * @return void
+	 * @api
+	 */
+	public function onBuildingFinished() {
+	}
+
 }
