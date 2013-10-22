@@ -146,7 +146,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
 
-		if ($this->formPageHasBeenSubmitted()) {
+		if (!$this->isFirstRequest()) {
 			$this->processSubmittedFormValues();
 		}
 	}
@@ -211,31 +211,25 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
-	 * Returns TRUE if a previous form page has been submitted, otherwise FALSE
-	 *
-	 * @return boolean
-	 */
-	protected function formPageHasBeenSubmitted() {
-		if ($this->isFirstRequest()) {
-			return FALSE;
-		}
-		if ($this->isAfterLastPage()) {
-			return TRUE;
-		}
-		return $this->lastDisplayedPage->getIndex() < $this->currentPage->getIndex();
-	}
-
-	/**
 	 * @return void
 	 * @internal
 	 */
 	protected function processSubmittedFormValues() {
 		$result = $this->mapAndValidatePage($this->lastDisplayedPage);
-		if ($result->hasErrors()) {
+		if ($result->hasErrors() && !$this->userWentBackToPreviousStep()) {
 			$this->currentPage = $this->lastDisplayedPage;
 			$this->request->setArgument('__submittedArguments', $this->request->getArguments());
 			$this->request->setArgument('__submittedArgumentValidationResults', $result);
 		}
+	}
+
+	/**
+	 * returns TRUE if the user went back to any previous step in the form.
+	 *
+	 * @return boolean
+	 */
+	protected function userWentBackToPreviousStep() {
+		return $this->currentPage->getIndex() < $this->lastDisplayedPage->getIndex();
 	}
 
 	/**
