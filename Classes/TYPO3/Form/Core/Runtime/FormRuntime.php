@@ -146,7 +146,7 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 		$this->initializeFormStateFromRequest();
 		$this->initializeCurrentPageFromRequest();
 
-		if (!$this->isFirstRequest()) {
+		if (!$this->isFirstRequest() && $this->getRequest()->getHttpRequest()->getMethod() === 'POST') {
 			$this->processSubmittedFormValues();
 		}
 	}
