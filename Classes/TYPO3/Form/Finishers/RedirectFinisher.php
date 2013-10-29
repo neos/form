@@ -59,10 +59,14 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
 		$response = $formRuntime->getResponse();
-		$response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
-		$response->setStatus($statusCode);
+		$mainResponse = $response;
+		while ($response = $response->getParentResponse()) {
+			$mainResponse = $response;
+		};
+		$mainResponse->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
+		$mainResponse->setStatus($statusCode);
 		if ($delay === 0) {
-			$response->setHeader('Location', (string)$uri);
+			$mainResponse->setHeader('Location', (string)$uri);
 		}
 	}
 
