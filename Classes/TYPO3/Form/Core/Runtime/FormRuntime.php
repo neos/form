@@ -543,6 +543,16 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 	}
 
 	/**
+	 * Get the underlying form definition from the runtime
+	 *
+	 * @return \TYPO3\Form\Core\Model\FormDefinition
+	 * @api
+	 */
+	public function getFormDefinition() {
+		return $this->formDefinition;
+	}
+
+	/**
 	 * This is a callback that is invoked by the Renderer before the corresponding element is rendered.
 	 * Use this to access previously submitted values and/or modify the $formRuntime before an element
 	 * is outputted to the browser.
