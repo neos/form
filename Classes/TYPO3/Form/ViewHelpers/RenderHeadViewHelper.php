@@ -12,21 +12,30 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Resource\Publishing\ResourcePublisher;
+use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\Fluid\Core\ViewHelper\Exception as ViewHelperException;
+use TYPO3\Form\Factory\ArrayFormFactory;
 
 /**
  * Output the configured stylesheets and JavaScript include tags for a given preset
  */
-class RenderHeadViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderHeadViewHelper extends AbstractViewHelper {
+
+	/**
+	 * @var boolean
+	 */
+	protected $escapeOutput = FALSE;
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Resource\Publishing\ResourcePublisher
+	 * @var ResourcePublisher
 	 */
 	protected $resourcePublisher;
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Form\Factory\ArrayFormFactory
+	 * @var ArrayFormFactory
 	 */
 	protected $formBuilderFactory;
 
@@ -51,13 +60,14 @@ class RenderHeadViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelp
 	/**
 	 * @param string $resourcePath
 	 * @return string
+	 * @throws ViewHelperException
 	 */
 	protected function resolveResourcePath($resourcePath) {
 		// TODO: This method should be somewhere in the resource manager probably?
 		$matches = array();
 		preg_match('#resource://([^/]*)/Public/(.*)#', $resourcePath, $matches);
 		if ($matches === array()) {
-			throw new \TYPO3\Fluid\Core\ViewHelper\Exception('Resource path "' . $resourcePath . '" can\'t be resolved.', 1328543327);
+			throw new ViewHelperException('Resource path "' . $resourcePath . '" can\'t be resolved.', 1328543327);
 		}
 		$package = $matches[1];
 		$path = $matches[2];
