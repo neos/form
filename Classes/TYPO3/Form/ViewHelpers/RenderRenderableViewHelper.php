@@ -12,17 +12,27 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\Form\Core\Model\Renderable\RenderableInterface;
+use TYPO3\Form\Core\Renderer\RendererInterface;
 
 /**
  * Render a renderable
  */
-class RenderRenderableViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderRenderableViewHelper extends AbstractViewHelper {
 
 	/**
-	 * @param \TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable
-	 * @return type
+	 * @var boolean
 	 */
-	public function render(\TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable) {
-		return $this->viewHelperVariableContainer->getView()->renderRenderable($renderable);
+	protected $escapeOutput = FALSE;
+
+	/**
+	 * @param RenderableInterface $renderable
+	 * @return string
+	 */
+	public function render(RenderableInterface $renderable) {
+		/** @var RendererInterface $view */
+		$view = $this->viewHelperVariableContainer->getView();
+		return $view->renderRenderable($renderable);
 	}
 }

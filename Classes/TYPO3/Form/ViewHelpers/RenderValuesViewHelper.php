@@ -12,30 +12,42 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\Form\Core\Model\FormElementInterface;
+use TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface;
+use TYPO3\Form\Core\Model\Renderable\RootRenderableInterface;
+use TYPO3\Form\Core\Renderer\RendererInterface;
+use TYPO3\Media\Domain\Model\Image;
 
 /**
  * Renders the values of a form
  */
-class RenderValuesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderValuesViewHelper extends AbstractViewHelper {
 
 	/**
-	 * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
+	 * @var boolean
+	 */
+	protected $escapeOutput = FALSE;
+
+	/**
+	 * @param RootRenderableInterface $renderable
 	 * @param string $as
 	 * @return string the rendered form values
 	 */
-	public function render(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable, $as = 'formValue') {
-		if ($renderable instanceof \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface) {
+	public function render(RootRenderableInterface $renderable, $as = 'formValue') {
+		if ($renderable instanceof CompositeRenderableInterface) {
 			$elements = $renderable->getRenderablesRecursively();
 		} else {
 			$elements = array($renderable);
 		}
 
+		/** @var RendererInterface $fluidFormRenderer */
 		$fluidFormRenderer = $this->viewHelperVariableContainer->getView();
 		$formRuntime = $fluidFormRenderer->getFormRuntime();
 		$formState = $formRuntime->getFormState();
 		$output = '';
 		foreach ($elements as $element) {
-			if (!$element instanceof \TYPO3\Form\Core\Model\FormElementInterface) {
+			if (!$element instanceof FormElementInterface) {
 				continue;
 			}
 			$value = $formState->getFormValue($element->getIdentifier());
@@ -56,11 +68,11 @@ class RenderValuesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHe
 	/**
 	 * Converts the given value to a simple type (string or array) considering the underlying FormElement definition
 	 *
-	 * @param \TYPO3\Form\Core\Model\FormElementInterface $element
+	 * @param FormElementInterface $element
 	 * @param mixed $value
-	 * @return void
+	 * @return string
 	 */
-	protected function processElementValue(\TYPO3\Form\Core\Model\FormElementInterface $element, $value) {
+	protected function processElementValue(FormElementInterface $element, $value) {
 		$properties = $element->getProperties();
 		if (isset($properties['options']) && is_array($properties['options'])) {
 			if (is_array($value)) {
@@ -106,11 +118,11 @@ class RenderValuesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHe
 	/**
 	 * Converts the given $object to a string representation considering the $element FormElement definition
 	 *
-	 * @param \TYPO3\Form\Core\Model\FormElementInterface $element
+	 * @param FormElementInterface $element
 	 * @param object $object
 	 * @return string
 	 */
-	protected function processObject(\TYPO3\Form\Core\Model\FormElementInterface $element, $object) {
+	protected function processObject(FormElementInterface $element, $object) {
 		$properties = $element->getProperties();
 		if ($object instanceof \DateTime) {
 			if (isset($properties['dateFormat'])) {
@@ -123,7 +135,7 @@ class RenderValuesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHe
 			}
 			return $object->format($dateFormat);
 		}
-		if ($object instanceof \TYPO3\Media\Domain\Model\Image) {
+		if ($object instanceof Image) {
 			return sprintf('%s Image (%d x %d)', $object->getFileExtension(), $object->getWidth(), $object->getHeight());
 		}
 		if (method_exists($object, '__toString')) {

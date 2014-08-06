@@ -12,6 +12,10 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Http\Response;
+use TYPO3\Flow\Utility\Arrays;
+use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\Form\Persistence\FormPersistenceManagerInterface;
 
 /**
  * Main Entry Point to render a Form into a Fluid Template
@@ -28,11 +32,16 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @api
  */
-class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderViewHelper extends AbstractViewHelper {
+
+	/**
+	 * @var boolean
+	 */
+	protected $escapeOutput = FALSE;
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Form\Persistence\FormPersistenceManagerInterface
+	 * @var FormPersistenceManagerInterface
 	 */
 	protected $formPersistenceManager;
 
@@ -45,12 +54,12 @@ class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	 */
 	public function render($persistenceIdentifier = NULL, $factoryClass = 'TYPO3\Form\Factory\ArrayFormFactory', $presetName = 'default', array $overrideConfiguration = array()) {
 		if (isset($persistenceIdentifier)) {
-			$overrideConfiguration = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
+			$overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
 		}
 
 		$factory = $this->objectManager->get($factoryClass);
 		$formDefinition = $factory->build($overrideConfiguration, $presetName);
-		$response = new \TYPO3\Flow\Http\Response($this->controllerContext->getResponse());
+		$response = new Response($this->controllerContext->getResponse());
 		$form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
 		return $form->render();
 	}

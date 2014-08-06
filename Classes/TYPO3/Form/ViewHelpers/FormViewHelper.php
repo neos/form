@@ -12,6 +12,7 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
  * Custom form ViewHelper that renders the form state instead of referrer fields
@@ -31,7 +32,7 @@ class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 	 * @return string Hidden fields with referrer information
 	 */
 	protected function renderHiddenReferrerFields() {
-		$tagBuilder = new \TYPO3\Fluid\Core\ViewHelper\TagBuilder('input');
+		$tagBuilder = new TagBuilder('input');
 		$tagBuilder->addAttribute('type', 'hidden');
 		$tagBuilder->addAttribute('name', $this->prefixFieldName('__state'));
 		$serializedFormState = base64_encode(serialize($this->arguments['object']->getFormState()));
