@@ -37,7 +37,7 @@ file, like in the following example:
 
 	TYPO3:
 	  Form:
-	    Presets:
+	    presets:
 	      preset1:
 	        title: 'My First Preset'
 	        formElementTypes:
@@ -148,7 +148,7 @@ contents:
 
 	TYPO3:
 	  Form:
-	    Presets:
+	    presets:
 	      myCustom:
 	        title: 'Custom Elements'
 	        parentPreset: 'default'
@@ -209,7 +209,7 @@ Adjust ``Your.Package/Configuration/Settings.yaml`` accordingly:
 
 	TYPO3:
 	  Form:
-	    Presets:
+	    presets:
 	      myCustom:
 	        title: 'Custom Elements'
 	        parentPreset: 'default'
