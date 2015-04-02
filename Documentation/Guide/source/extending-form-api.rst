@@ -108,7 +108,7 @@ In order to use the new Form Element type you first have to extend the Form Defi
 
 	TYPO3:
 	  Form:
-	    Presets:
+	    presets:
 	      somePreset:
 	        # ...
 	        formElementTypes:
