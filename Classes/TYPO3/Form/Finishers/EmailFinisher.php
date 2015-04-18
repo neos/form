@@ -30,7 +30,9 @@ namespace TYPO3\Form\Finishers;
  * - recipientName: Human-readable name of the recipient
  * - senderAddress (mandatory): Email address of the sender
  * - senderName: Human-readable name of the sender
- * - replyToAddress: Email address of to be used as reply-to email
+ * - replyToAddress: Email address of to be used as reply-to email (use multiple addresses with an array)
+ * - carbonCopyAddress: Email address of the copy recipient (use multiple addresses with an array)
+ * - blindCarbonCopyAddress: Email address of the blind copy recipient (use multiple addresses with an array)
  * - format: format of the email (one of the FORMAT_* constants). By default mails are sent as HTML
  * - testMode: if TRUE the email is not actually sent but outputted for debugging purposes. Defaults to FALSE
  */
@@ -68,6 +70,8 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 		$senderAddress = $this->parseOption('senderAddress');
 		$senderName = $this->parseOption('senderName');
 		$replyToAddress = $this->parseOption('replyToAddress');
+		$carbonCopyAddress = $this->parseOption('carbonCopyAddress');
+		$blindCarbonCopyAddress = $this->parseOption('blindCarbonCopyAddress');
 		$format = $this->parseOption('format');
 		$testMode = $this->parseOption('testMode');
 
@@ -92,6 +96,14 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 			$mail->setReplyTo($replyToAddress);
 		}
 
+		if ($carbonCopyAddress !== NULL) {
+			$mail->setCc($carbonCopyAddress);
+		}
+
+		if ($blindCarbonCopyAddress !== NULL) {
+			$mail->setBcc($blindCarbonCopyAddress);
+		}
+
 		if ($format === self::FORMAT_PLAINTEXT) {
 			$mail->setBody($message, 'text/plain');
 		} else {
@@ -104,6 +116,8 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 					'sender' => array($senderAddress => $senderName),
 					'recipient' => array($recipientAddress => $recipientName),
 					'replyToAddress' => $replyToAddress,
+					'carbonCopyAddress' => $carbonCopyAddress,
+					'blindCarbonCopyAddress' => $blindCarbonCopyAddress,
 					'message' => $message,
 					'format' => $format,
 				),
