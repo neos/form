@@ -25,7 +25,7 @@ use TYPO3\Flow\Annotations as Flow;
  * <code title="Example">
  * <f:form.upload property="image" />
  * <c:form.uploadedImage property="image" as="theImage">
- *	 <a href="{f:uri.resource(resource: theImage.resource)}">Link to image resource</a>
+ *   <a href="{f:uri.resource(resource: theImage.resource)}">Link to image resource</a>
  * </c:form.uploadedImage>
  * </code>
  * <output>
@@ -35,7 +35,7 @@ use TYPO3\Flow\Annotations as Flow;
 class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
 
 	/**
-	 * @var TYPO3\Flow\Property\PropertyMapper
+	 * @var \TYPO3\Flow\Property\PropertyMapper
 	 * @Flow\Inject
 	 */
 	protected $propertyMapper;

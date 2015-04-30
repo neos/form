@@ -24,7 +24,7 @@ class TimePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 	protected $tagName = 'select';
 
 	/**
-	 * @var TYPO3\Flow\Property\PropertyMapper
+	 * @var \TYPO3\Flow\Property\PropertyMapper
 	 * @Flow\Inject
 	 */
 	protected $propertyMapper;
@@ -94,10 +94,10 @@ class TimePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 		$hourSelector = clone $this->tag;
 		$hourSelector->addAttribute('name', sprintf('%s[hour]', $this->getName()));
 		$options = '';
-		foreach(range(0, 23) as $hour) {
+		foreach (range(0, 23) as $hour) {
 			$hour = str_pad($hour, 2, '0', STR_PAD_LEFT);
 			$selected = $hour === $value ? ' selected="selected"' : '';
-			$options .= '<option value="' . $hour . '"'.$selected.'>' . $hour . '</option>';
+			$options .= '<option value="' . $hour . '"' . $selected . '>' . $hour . '</option>';
 		}
 		$hourSelector->setContent($options);
 		return $hourSelector->render();
@@ -115,10 +115,10 @@ class TimePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
 		}
 		$minuteSelector->addAttribute('name', sprintf('%s[minute]', $this->getName()));
 		$options = '';
-		foreach(range(0, 59) as $minute) {
+		foreach (range(0, 59) as $minute) {
 			$minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
 			$selected = $minute === $value ? ' selected="selected"' : '';
-			$options .= '<option value="' . $minute . '"'.$selected.'>' . $minute . '</option>';
+			$options .= '<option value="' . $minute . '"' . $selected . '>' . $minute . '</option>';
 		}
 		$minuteSelector->setContent($options);
 		return $minuteSelector->render();

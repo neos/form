@@ -68,7 +68,9 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		$reorderedRenderables = array();
 		$i = 0;
 		foreach ($this->renderables as $renderable) {
-			if ($renderable === $renderableToMove) continue;
+			if ($renderable === $renderableToMove) {
+				continue;
+			}
 
 			if ($renderable === $referenceRenderable) {
 				$reorderedRenderables[] = $renderableToMove;
@@ -102,7 +104,9 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 		$reorderedRenderables = array();
 		$i = 0;
 		foreach ($this->renderables as $renderable) {
-			if ($renderable === $renderableToMove) continue;
+			if ($renderable === $renderableToMove) {
+				continue;
+			}
 
 			$reorderedRenderables[] = $renderable;
 			$renderable->setIndex($i);
@@ -152,7 +156,9 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 
 		$updatedRenderables = array();
 		foreach ($this->renderables as $renderable) {
-			if ($renderable === $renderableToRemove) continue;
+			if ($renderable === $renderableToRemove) {
+				continue;
+			}
 
 			$updatedRenderables[] = $renderable;
 		}
