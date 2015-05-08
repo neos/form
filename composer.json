@@ -4,7 +4,7 @@
     "license": "LGPL-3.0+",
     "description": "Extensible and flexible API for building web forms",
     "require": {
-        "typo3/flow": "*"
+        "typo3/flow": "~3.0"
     },
     "autoload": {
         "psr-0": {
