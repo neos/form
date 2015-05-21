@@ -32,15 +32,27 @@ class SupertypeResolverTest extends \TYPO3\Flow\Tests\UnitTestCase {
 				'config3' => 'val3a'
 			),
 			'typeWithSupertypes' => array(
-				'superTypes' => array('typeFoo', 'typeBar'),
+				'superTypes' => array('typeFoo' => TRUE, 'typeBar' => TRUE),
 				'config2' => 'val2'
 			),
 			'typeWithSupertypes2' => array(
-				'superTypes' => array('typeFoo', 'typeBar', 'typeBar2'),
+				'superTypes' => array('typeFoo' => TRUE, 'typeBar' => TRUE, 'typeBar2' => TRUE),
 				'config2' => 'val2'
 			),
 			'subTypeWithSupertypes2' => array(
-				'superTypes' => array('typeWithSupertypes2'),
+				'superTypes' => array('typeWithSupertypes2' => TRUE),
+				'config2' => 'val2a'
+			),
+			'typeWithSupertypesInArraySyntax' => array(
+				'superTypes' => array('typeFoo', 'typeBar'),
+				'config2' => 'val2'
+			),
+			'typeWithSupertypes2InArraySyntax' => array(
+				'superTypes' => array('typeFoo', 'typeBar', 'typeBar2'),
+				'config2' => 'val2'
+			),
+			'subTypeWithSupertypes2InArraySyntax' => array(
+				'superTypes' => array('typeWithSupertypes2InArraySyntax'),
 				'config2' => 'val2a'
 			),
 		);
@@ -73,6 +85,33 @@ class SupertypeResolverTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			'with recursive supertypes' => array(
 				'types' => $types,
 				'typeName' => 'subTypeWithSupertypes2',
+				'expected' => array(
+					'config1' => 'val1',
+					'config3' => 'val3a',
+					'config2' => 'val2a'
+				)
+			),
+			'with a list of supertypes' => array(
+				'types' => $types,
+				'typeName' => 'typeWithSupertypesInArraySyntax',
+				'expected' => array(
+					'config1' => 'val1',
+					'config3' => 'val3',
+					'config2' => 'val2'
+				)
+			),
+			'with a list of supertypes' => array(
+				'types' => $types,
+				'typeName' => 'typeWithSupertypes2InArraySyntax',
+				'expected' => array(
+					'config1' => 'val1',
+					'config3' => 'val3a',
+					'config2' => 'val2'
+				)
+			),
+			'with recursive supertypes' => array(
+				'types' => $types,
+				'typeName' => 'subTypeWithSupertypes2InArraySyntax',
 				'expected' => array(
 					'config1' => 'val1',
 					'config3' => 'val3a',

@@ -124,7 +124,8 @@ The following example demonstrates this:
 	  properties:
 	    placeholder: 'My Placeholder Text'
 	'TYPO3.Form:SpecialText':
-	  superTypes: ['TYPO3.Form:SingleLineText']
+	  superTypes:
+	    'TYPO3.Form:SingleLineText' : TRUE
 	  defaultValue: 'My special text'
 
 Here, the ``SpecialText`` inherits the ``placeholder`` property from the ``SingleLineText``
@@ -136,6 +137,19 @@ as we will explore in the remainder of this guide.
 
 .. note:: If multiple super types are specified, they are evaluated from *left to right*, i.e.
    later super types override previous definitions.
+
+
+Previously the superTypes configuration was just a simple list of strings:
+
+.. code-block:: yaml
+
+	'TYPO3.Form:SpecialText':
+	  superTypes:
+	    'TYPO3.Form:SingleLineText': TRUE
+	  defaultValue: 'My special text'
+
+But this made it impossible to *unset* a super type from a 3rd party package.
+The old syntax is still supported but is deprecated and might be removed in future versions.
 
 Creating a Custom Preset
 ------------------------
@@ -401,7 +415,8 @@ two radio buttons for ``Female`` and ``Male``. That's just a matter of a few lin
 	           # ...
 
 	          'Your.Package:GenderSelect':
-	            superTypes: ['TYPO3.Form:SingleSelectRadiobuttons']
+	            superTypes:
+	              'TYPO3.Form:SingleSelectRadiobuttons': TRUE
 	            renderingOptions:
 	              templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleSelectRadiobuttons.html'
 	            properties:

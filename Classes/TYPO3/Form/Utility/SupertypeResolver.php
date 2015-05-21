@@ -57,8 +57,18 @@ class SupertypeResolver {
 		}
 		$mergedTypeDefinition = array();
 		if (isset($this->configuration[$type]['superTypes'])) {
-			foreach ($this->configuration[$type]['superTypes'] as $superType) {
-				$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superType, $showHiddenProperties));
+			foreach ($this->configuration[$type]['superTypes'] as $superTypeName => $enabled) {
+				// Skip unset node types
+				if ($enabled === FALSE || $enabled === NULL) {
+					continue;
+				}
+
+				// Make this setting backwards compatible with old array schema (deprecated since 2.0)
+				if (!is_bool($enabled)) {
+					$superTypeName = $enabled;
+				}
+
+				$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superTypeName, $showHiddenProperties));
 			}
 		}
 		$mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
