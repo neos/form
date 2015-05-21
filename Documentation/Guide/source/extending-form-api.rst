@@ -113,7 +113,8 @@ In order to use the new Form Element type you first have to extend the Form Defi
 	        # ...
 	        formElementTypes:
 	          'TYPO3.FormExample:ConditionalRequired':
-	            superTypes: ['TYPO3.Form:FormElement']
+	            superTypes:
+	              'TYPO3.Form:FormElement': TRUE
 	            implementationClassName: 'TYPO3\FormExample\FormElements\ConditionalRequired'
 	            renderingOptions:
 	              templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleLineText.html'

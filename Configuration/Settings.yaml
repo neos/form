@@ -31,7 +31,8 @@ TYPO3:
               translationPackage: 'TYPO3.Flow'
 
           'TYPO3.Form:Form':
-            superTypes: ['TYPO3.Form:Base']
+            superTypes:
+              'TYPO3.Form:Base': TRUE
             rendererClassName: 'TYPO3\Form\Core\Renderer\FluidFormRenderer'
             renderingOptions:
               renderableNameInTemplate: 'form'
@@ -39,13 +40,17 @@ TYPO3:
           'TYPO3.Form:RemovableMixin': {} # empty "removable" mixin for all form elements which can be removed (i.e. everything except the root form object)
 
           'TYPO3.Form:ReadOnlyFormElement':
-            superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
+            superTypes:
+              'TYPO3.Form:Base': TRUE
+              'TYPO3.Form:RemovableMixin': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
             renderingOptions:
               renderableNameInTemplate: 'element'
 
           'TYPO3.Form:FormElement':
-            superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
+            superTypes:
+              'TYPO3.Form:Base': TRUE
+              'TYPO3.Form:RemovableMixin': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
             properties:
               containerClassAttribute: 'input'
@@ -56,16 +61,20 @@ TYPO3:
 
           ### FORM ELEMENTS: CONTAINER ###
           'TYPO3.Form:Page':
-            superTypes: ['TYPO3.Form:Base', 'TYPO3.Form:RemovableMixin']
+            superTypes:
+              'TYPO3.Form:Base': TRUE
+              'TYPO3.Form:RemovableMixin': TRUE
             implementationClassName: 'TYPO3\Form\Core\Model\Page'
             renderingOptions:
               renderableNameInTemplate: 'page'
 
           'TYPO3.Form:PreviewPage':
-            superTypes: ['TYPO3.Form:Page']
+            superTypes:
+              'TYPO3.Form:Page': TRUE
 
           'TYPO3.Form:Section':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\Section'
             renderingOptions:
               renderableNameInTemplate: 'section'
@@ -75,11 +84,16 @@ TYPO3:
           'TYPO3.Form:TextMixin': []
 
           'TYPO3.Form:SingleLineText':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:TextMixin': TRUE
           'TYPO3.Form:Password':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:TextMixin': TRUE
           'TYPO3.Form:PasswordWithConfirmation':
-            superTypes: ['TYPO3.Form:Password']
+            superTypes:
+              'TYPO3.Form:Password': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\PasswordWithConfirmation'
             properties:
               elementClassAttribute: 'input-medium'
@@ -88,36 +102,50 @@ TYPO3:
               confirmationLabel: 'Confirmation'
               confirmationClassAttribute: 'input-medium'
           'TYPO3.Form:MultiLineText':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:TextMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:TextMixin': TRUE
             properties:
               elementClassAttribute: 'xxlarge'
 
           ### FORM ELEMENTS: SELECT ###
           'TYPO3.Form:SelectionMixin': []
           'TYPO3.Form:SingleSelectionMixin':
-            superTypes: ['TYPO3.Form:SelectionMixin']
+            superTypes:
+              'TYPO3.Form:SelectionMixin': TRUE
           'TYPO3.Form:MultiSelectionMixin':
-            superTypes: ['TYPO3.Form:SelectionMixin']
+            superTypes:
+              'TYPO3.Form:SelectionMixin': TRUE
 
           'TYPO3.Form:Checkbox':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
             properties:
               elementClassAttribute: 'add-on'
               value: 1
           'TYPO3.Form:MultipleSelectCheckboxes':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:MultiSelectionMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:MultiSelectionMixin': TRUE
           'TYPO3.Form:MultipleSelectDropdown':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:MultiSelectionMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:MultiSelectionMixin': TRUE
             properties:
               elementClassAttribute: 'xlarge'
           'TYPO3.Form:SingleSelectRadiobuttons':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SingleSelectionMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:SingleSelectionMixin': TRUE
           'TYPO3.Form:SingleSelectDropdown':
-            superTypes: ['TYPO3.Form:FormElement', 'TYPO3.Form:SingleSelectionMixin']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
+              'TYPO3.Form:SingleSelectionMixin': TRUE
 
           ### FORM ELEMENTS: CUSTOM ###
           'TYPO3.Form:DatePicker':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\DatePicker'
             properties:
               elementClassAttribute: 'small'
@@ -126,21 +154,25 @@ TYPO3:
               enableDatePicker: true
               displayTimeSelector: false
           'TYPO3.Form:FileUpload':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\FileUpload'
             properties:
               allowedExtensions: ['pdf', 'doc']
           'TYPO3.Form:ImageUpload':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
             implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
             properties:
               allowedTypes: ['jpeg', 'png', 'bmp']
           'TYPO3.Form:StaticText':
-            superTypes: ['TYPO3.Form:ReadOnlyFormElement']
+            superTypes:
+              'TYPO3.Form:ReadOnlyFormElement': TRUE
             properties:
               text: ''
           'TYPO3.Form:HiddenField':
-            superTypes: ['TYPO3.Form:FormElement']
+            superTypes:
+              'TYPO3.Form:FormElement': TRUE
 
 
         ### FINISHERS ###

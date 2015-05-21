@@ -133,7 +133,7 @@ use TYPO3\Flow\Annotations as Flow;
  *       'label' = >'Default Label'
  *     ),
  *     'TYPO3.Form:Textfield' => array(
- *       'superTypes' => array('TYPO3.Form:Base'),
+ *       'superTypes' => array('TYPO3.Form:Base' => TRUE),
  *       'defaultValue' => 'Default form element value',
  *       'properties' => array(
  *         'placeholder' => 'Text which is shown if element is empty'

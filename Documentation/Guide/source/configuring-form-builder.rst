@@ -57,7 +57,8 @@ Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which
 	# we are now inside TYPO3:Form:presets:[presetName]
 	formElementTypes:
 	  'TYPO3.FormExample:ProgrammingLanguageSelect':
-	    superTypes: ['TYPO3.Form:SingleSelectRadiobuttons']
+	    superTypes:
+	      'TYPO3.Form:SingleSelectRadiobuttons': TRUE
 	    renderingOptions:
 	      templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleSelectRadiobuttons.html'
 
