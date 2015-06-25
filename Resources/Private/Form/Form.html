@@ -1,5 +1,5 @@
 {namespace form=TYPO3\Form\ViewHelpers}
-<form:form action="index" object="{form}" method="post" id="{form.identifier}" enctype="multipart/form-data">
+<form:form action="index" object="{form}" method="post" id="{form.identifier}" section="{form.identifier}" enctype="multipart/form-data">
 	<form:renderRenderable renderable="{form.currentPage}" />
 	<div class="actions">
 		<f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />

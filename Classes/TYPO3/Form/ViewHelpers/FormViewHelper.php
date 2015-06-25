@@ -12,6 +12,7 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Mvc\ActionRequest;
 use TYPO3\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
@@ -57,7 +58,12 @@ class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper {
 	 * @return string
 	 */
 	protected function getFormActionUri() {
-		$httpRequest = $this->controllerContext->getRequest()->getHttpRequest();
-		return $httpRequest->getUri();
+		/** @var ActionRequest $actionRequest */
+		$actionRequest = $this->controllerContext->getRequest();
+		$uri = $actionRequest->getHttpRequest()->getUri();
+		if ($this->hasArgument('section')) {
+			$uri = preg_replace('/#.*$/', '', $uri) . '#' . $this->arguments['section'];
+		}
+		return (string)$uri;
 	}
 }
