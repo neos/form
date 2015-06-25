@@ -170,6 +170,8 @@ the :api-finishers:`EmailFinisher` for that::
 		'recipientAddress' => 'your@example.com',
 		'senderAddress' => 'mailer@example.com',
 		'replyToAddress' => '{email}',
+		'carbonCopyAddress' => 'copy@example.com',
+		'blindCarbonCopyAddress' => 'blindcopy@example.com',
 		'subject' => 'Contact Request',
 		'format' => \TYPO3\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
 	));
@@ -232,6 +234,8 @@ That's it for the quickstart. The complete code of your form factory should look
 				'recipientAddress' => 'your@example.com',
 				'senderAddress' => 'mailer@example.com',
 				'replyToAddress' => '{email}',
+				'carbonCopyAddress' => 'copy@example.com',
+				'blindCarbonCopyAddress' => 'blindcopy@example.com',
 				'subject' => 'Contact Request',
 				'format' => \TYPO3\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
 			));
