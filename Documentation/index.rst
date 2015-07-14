@@ -1,4 +1,9 @@
-=====
+===========================================
+Flow Form Framework |version| Documentation
+===========================================
+
+This documentation covering version |release| has been rendered at: |today|
+
 Forms
 =====
 
@@ -17,7 +22,7 @@ It includes the following features:
 Furthermore, we built a **Form Builder** which is a web application for graphically
 assembling and modifying forms, displayed below:
 
-.. image:: ../Images/FormBuilder.png
+.. image:: Images/FormBuilder.png
 
 About This Documentation
 ========================
