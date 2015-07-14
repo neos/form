@@ -1,4 +1,4 @@
-﻿.. _quickstart:
+.. _quickstart:
 
 Quickstart
 ==========
@@ -20,7 +20,7 @@ First, we will dive into the API part *defining a form*, and then go over to
 *rendering a form*. In later chapters, we will also show how loading / saving
 a form definition works.
 
-.. image:: ../Images/structure.png
+.. image:: Images/structure.png
 	:width: 100%
 
 Anatomy of a Form
