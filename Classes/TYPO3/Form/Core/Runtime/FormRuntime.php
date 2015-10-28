@@ -257,7 +257,9 @@ class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInt
 			$element->onSubmit($this, $value);
 
 			$this->formState->setFormValue($element->getIdentifier(), $value);
-			$registerPropertyPaths($element->getIdentifier());
+			if ($value !== NULL) {
+				$registerPropertyPaths($element->getIdentifier());
+			}
 		}
 
 		// The more parts the path has, the more early it is processed
