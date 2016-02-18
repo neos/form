@@ -1,4 +1,6 @@
 <f:if condition="{element.label}">
 	<h2>{element.label}</h2>
 </f:if>
-<p{f:if(condition: element.properties.elementClassAttribute, then: ' class="{element.properties.elementClassAttribute}"')}>{element.properties.text -> f:format.nl2br()}</p>
+<f:if condition="{element.properties.text}">
+	<p{f:if(condition: element.properties.elementClassAttribute, then: ' class="{element.properties.elementClassAttribute}"')}>{element.properties.text -> f:format.nl2br()}</p>
+</f:if>
