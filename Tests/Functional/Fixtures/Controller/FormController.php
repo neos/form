@@ -16,21 +16,22 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Controller for rendering a form defined in
  */
-class FormController extends \TYPO3\Flow\Mvc\Controller\ActionController {
+class FormController extends \TYPO3\Flow\Mvc\Controller\ActionController
+{
+    /**
+     * render the form identified by $formFactoryClassName
+     *
+     * @param string $formFactoryClassName
+     */
+    public function indexAction($formFactoryClassName)
+    {
+        $formFactoryClassName = 'TYPO3\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
+        /* @var $formFactory \TYPO3\Form\Factory\FormFactoryInterface */
+        $formFactory = new $formFactoryClassName();
+        $formDefinition = $formFactory->build(array(), 'default');
 
-	/**
-	 * render the form identified by $formFactoryClassName
-	 *
-	 * @param string $formFactoryClassName
-	 */
-	public function indexAction($formFactoryClassName) {
-		$formFactoryClassName = 'TYPO3\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
-		/* @var $formFactory \TYPO3\Form\Factory\FormFactoryInterface */
-		$formFactory = new $formFactoryClassName();
-		$formDefinition = $formFactory->build(array(), 'default');
+        $formRuntime = $formDefinition->bind($this->request, $this->response);
 
-		$formRuntime = $formDefinition->bind($this->request, $this->response);
-
-		return $formRuntime->render();
-	}
+        return $formRuntime->render();
+    }
 }

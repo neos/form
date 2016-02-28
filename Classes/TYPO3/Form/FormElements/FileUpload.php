@@ -16,14 +16,15 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * A generic file upload form element
  */
-class FileUpload extends \TYPO3\Form\Core\Model\AbstractFormElement {
-
-	/**
-	 * @return void
-	 */
-	public function initializeFormElement() {
-		$this->setDataType('TYPO3\Flow\Resource\Resource');
-		$fileTypeValidator = new \TYPO3\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
-		$this->addValidator($fileTypeValidator);
-	}
+class FileUpload extends \TYPO3\Form\Core\Model\AbstractFormElement
+{
+    /**
+     * @return void
+     */
+    public function initializeFormElement()
+    {
+        $this->setDataType('TYPO3\Flow\Resource\Resource');
+        $fileTypeValidator = new \TYPO3\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
+        $this->addValidator($fileTypeValidator);
+    }
 }

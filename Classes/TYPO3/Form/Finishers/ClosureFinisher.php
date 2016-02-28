@@ -24,31 +24,32 @@ namespace TYPO3\Form\Finishers;
  * $formDefinition->addFinisher($closureFinisher);
  * // ...
  */
-class ClosureFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
+class ClosureFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
+{
+    /**
+     * @var array
+     */
+    protected $defaultOptions = array(
+        'closure' => null
+    );
 
-	/**
-	 * @var array
-	 */
-	protected $defaultOptions = array(
-		'closure' => NULL
-	);
-
-	/**
-	 * Executes this finisher
-	 * @see AbstractFinisher::execute()
-	 *
-	 * @return void
-	 * @throws \TYPO3\Form\Exception\FinisherException
-	 */
-	protected function executeInternal() {
-		/** @var $closure \Closure */
-		$closure = $this->parseOption('closure');
-		if ($closure === NULL) {
-			return;
-		}
-		if (!$closure instanceof \Closure) {
-			throw new \TYPO3\Form\Exception\FinisherException(sprintf('The option "closure" must be of type Closure, "%s" given.', gettype($closure)), 1332155239);
-		}
-		$closure($this->finisherContext);
-	}
+    /**
+     * Executes this finisher
+     * @see AbstractFinisher::execute()
+     *
+     * @return void
+     * @throws \TYPO3\Form\Exception\FinisherException
+     */
+    protected function executeInternal()
+    {
+        /** @var $closure \Closure */
+        $closure = $this->parseOption('closure');
+        if ($closure === null) {
+            return;
+        }
+        if (!$closure instanceof \Closure) {
+            throw new \TYPO3\Form\Exception\FinisherException(sprintf('The option "closure" must be of type Closure, "%s" given.', gettype($closure)), 1332155239);
+        }
+        $closure($this->finisherContext);
+    }
 }

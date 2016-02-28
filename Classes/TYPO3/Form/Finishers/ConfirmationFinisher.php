@@ -41,56 +41,57 @@ use TYPO3\Form\Exception\FinisherException;
  * $formDefinition->addFinisher($confirmationFinisher);
  * // ...
  */
-class ConfirmationFinisher extends AbstractFinisher {
+class ConfirmationFinisher extends AbstractFinisher
+{
+    /**
+     * @Flow\Inject
+     * @var Translator
+     */
+    protected $translator;
 
-	/**
-	 * @Flow\Inject
-	 * @var Translator
-	 */
-	protected $translator;
+    /**
+     * @var array
+     */
+    protected $defaultOptions = array(
+        'translation.id' => null,
+        'translation.locale' => null,
+        'translation.source' => 'Main',
+        'translation.package' => null,
+        'message' => '<p>The form has been submitted.</p>',
+    );
 
-	/**
-	 * @var array
-	 */
-	protected $defaultOptions = array(
-		'translation.id' => NULL,
-		'translation.locale' => NULL,
-		'translation.source' => 'Main',
-		'translation.package' => NULL,
-		'message' => '<p>The form has been submitted.</p>',
-	);
+    /**
+     * Executes this finisher
+     * @see AbstractFinisher::execute()
+     *
+     * @return void
+     * @throws FinisherException
+     */
+    protected function executeInternal()
+    {
+        $formRuntime = $this->finisherContext->getFormRuntime();
 
-	/**
-	 * Executes this finisher
-	 * @see AbstractFinisher::execute()
-	 *
-	 * @return void
-	 * @throws FinisherException
-	 */
-	protected function executeInternal() {
-		$formRuntime = $this->finisherContext->getFormRuntime();
+        $labelId = $this->parseOption('translation.id');
+        if ($labelId !== null) {
+            $locale = null;
+            $localeIdentifier = $this->parseOption('translation.locale');
+            if ($localeIdentifier !== null) {
+                try {
+                    $locale = new Locale($localeIdentifier);
+                } catch (InvalidLocaleIdentifierException $exception) {
+                    throw new FinisherException(sprintf('"%s" is not a valid locale identifier.', $locale), 1421325113, $exception);
+                }
+            }
+            $messagePackageKey = $this->parseOption('translation.package');
+            if ($messagePackageKey === null) {
+                $renderingOptions = $formRuntime->getRenderingOptions();
+                $messagePackageKey = $renderingOptions['translationPackage'];
+            }
+            $message = $this->translator->translateById($labelId, array(), null, $locale, $this->parseOption('translation.source'), $messagePackageKey);
+        } else {
+            $message = $this->parseOption('message');
+        }
 
-		$labelId = $this->parseOption('translation.id');
-		if ($labelId !== NULL) {
-			$locale = NULL;
-			$localeIdentifier = $this->parseOption('translation.locale');
-			if ($localeIdentifier !== NULL) {
-				try {
-					$locale = new Locale($localeIdentifier);
-				} catch (InvalidLocaleIdentifierException $exception) {
-					throw new FinisherException(sprintf('"%s" is not a valid locale identifier.', $locale), 1421325113, $exception);
-				}
-			}
-			$messagePackageKey = $this->parseOption('translation.package');
-			if ($messagePackageKey === NULL) {
-				$renderingOptions = $formRuntime->getRenderingOptions();
-				$messagePackageKey = $renderingOptions['translationPackage'];
-			}
-			$message = $this->translator->translateById($labelId, array(), NULL, $locale, $this->parseOption('translation.source'), $messagePackageKey);
-		} else {
-			$message = $this->parseOption('message');
-		}
-
-		$formRuntime->getResponse()->setContent($message);
-	}
+        $formRuntime->getResponse()->setContent($message);
+    }
 }

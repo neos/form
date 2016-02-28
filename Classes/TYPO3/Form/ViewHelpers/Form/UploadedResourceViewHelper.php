@@ -34,53 +34,56 @@ use TYPO3\Flow\Annotations as Flow;
  * <a href="...">Link to resource</a>
  * </output>
  */
-class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
+class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper
+{
+    /**
+     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @Flow\Inject
+     */
+    protected $propertyMapper;
 
-	/**
-	 * @var \TYPO3\Flow\Property\PropertyMapper
-	 * @Flow\Inject
-	 */
-	protected $propertyMapper;
+    /**
+     * Initialize the arguments.
+     *
+     * @return void
+     * @author Sebastian Kurfürst <sebastian@typo3.org>
+     * @api
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+    }
 
-	/**
-	 * Initialize the arguments.
-	 *
-	 * @return void
-	 * @author Sebastian Kurfürst <sebastian@typo3.org>
-	 * @api
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-	}
+    /**
+     * @param string $as
+     * @return string
+     * @author Sebastian Kurfürst <sebastian@typo3.org>
+     * @api
+     */
+    public function render($as = 'resource')
+    {
+        $this->templateVariableContainer->add($as, $this->getUploadedResource());
+        $output = $this->renderChildren();
+        $this->templateVariableContainer->remove($as);
 
-	/**
-	 * @param string $as
-	 * @return string
-	 * @author Sebastian Kurfürst <sebastian@typo3.org>
-	 * @api
-	 */
-	public function render($as = 'resource') {
-		$this->templateVariableContainer->add($as, $this->getUploadedResource());
-		$output = $this->renderChildren();
-		$this->templateVariableContainer->remove($as);
+        return $output;
+    }
 
-		return $output;
-	}
-
-	/**
-	 * Returns a previously uploaded resource.
-	 * If errors occurred during property mapping for this property, NULL is returned
-	 *
-	 * @return \TYPO3\Flow\Resource\Resource
-	 */
-	protected function getUploadedResource() {
-		if ($this->getMappingResultsForProperty()->hasErrors()) {
-			return NULL;
-		}
-		$resourceObject = $this->getValue(FALSE);
-		if ($resourceObject instanceof \TYPO3\Flow\Resource\Resource) {
-			return $resourceObject;
-		}
-		return $this->propertyMapper->convert($resourceObject, 'TYPO3\Flow\Resource\Resource');
-	}
+    /**
+     * Returns a previously uploaded resource.
+     * If errors occurred during property mapping for this property, NULL is returned
+     *
+     * @return \TYPO3\Flow\Resource\Resource
+     */
+    protected function getUploadedResource()
+    {
+        if ($this->getMappingResultsForProperty()->hasErrors()) {
+            return null;
+        }
+        $resourceObject = $this->getValue(false);
+        if ($resourceObject instanceof \TYPO3\Flow\Resource\Resource) {
+            return $resourceObject;
+        }
+        return $this->propertyMapper->convert($resourceObject, 'TYPO3\Flow\Resource\Resource');
+    }
 }

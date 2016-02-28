@@ -16,12 +16,13 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * A date picker form element
  */
-class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement {
-
-	/**
-	 * @return void
-	 */
-	public function initializeFormElement() {
-		$this->setDataType('DateTime');
-	}
+class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement
+{
+    /**
+     * @return void
+     */
+    public function initializeFormElement()
+    {
+        $this->setDataType('DateTime');
+    }
 }

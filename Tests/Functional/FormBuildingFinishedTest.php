@@ -17,21 +17,22 @@ use Symfony\Component\DomCrawler\Field\InputFormField;
  *
  * @group large
  */
-class FormBuildingFinishedTest extends AbstractFunctionalTestCase {
+class FormBuildingFinishedTest extends AbstractFunctionalTestCase
+{
+    /**
+     * @test
+     */
+    public function aFormElementCanAddNewSubelementsWithValidationApplied()
+    {
+        $this->browser->request('http://localhost/test/form/simpleform/TestingFormBuildingFinished');
 
-	/**
-	 * @test
-	 */
-	public function aFormElementCanAddNewSubelementsWithValidationApplied() {
-		$this->browser->request('http://localhost/test/form/simpleform/TestingFormBuildingFinished');
+        $form = $this->browser->getForm();
+        $form['--testing']['myInteger']->setValue('no int');
 
-		$form = $this->browser->getForm();
-		$form['--testing']['myInteger']->setValue('no int');
+        $this->gotoNextFormPage($form);
+        $this->assertSame('no int', $form['--testing']['myInteger']->getValue());
+        $this->assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="testing-myInteger"]')->attr('class'));
 
-		$this->gotoNextFormPage($form);
-		$this->assertSame('no int', $form['--testing']['myInteger']->getValue());
-		$this->assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="testing-myInteger"]')->attr('class'));
-
-		$this->browser->getForm();
-	}
+        $this->browser->getForm();
+    }
 }

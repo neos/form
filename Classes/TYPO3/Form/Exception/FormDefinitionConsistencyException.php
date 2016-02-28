@@ -19,5 +19,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class FormDefinitionConsistencyException extends \TYPO3\Form\Exception {
+class FormDefinitionConsistencyException extends \TYPO3\Form\Exception
+{
 }

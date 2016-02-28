@@ -19,20 +19,21 @@ use TYPO3\Form\Core\Renderer\RendererInterface;
 /**
  * Render a renderable
  */
-class RenderRenderableViewHelper extends AbstractViewHelper {
+class RenderRenderableViewHelper extends AbstractViewHelper
+{
+    /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
 
-	/**
-	 * @var boolean
-	 */
-	protected $escapeOutput = FALSE;
-
-	/**
-	 * @param RenderableInterface $renderable
-	 * @return string
-	 */
-	public function render(RenderableInterface $renderable) {
-		/** @var RendererInterface $view */
-		$view = $this->viewHelperVariableContainer->getView();
-		return $view->renderRenderable($renderable);
-	}
+    /**
+     * @param RenderableInterface $renderable
+     * @return string
+     */
+    public function render(RenderableInterface $renderable)
+    {
+        /** @var RendererInterface $view */
+        $view = $this->viewHelperVariableContainer->getView();
+        return $view->renderRenderable($renderable);
+    }
 }

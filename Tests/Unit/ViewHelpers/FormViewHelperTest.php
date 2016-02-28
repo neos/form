@@ -21,70 +21,71 @@ use TYPO3\Form\ViewHelpers\FormViewHelper;
 /**
  * Tests for the custom FormViewHelper
 */
-class FormViewHelperTest extends UnitTestCase {
+class FormViewHelperTest extends UnitTestCase
+{
+    /**
+     * @var FormViewHelper
+     */
+    protected $formViewHelper;
 
-	/**
-	 * @var FormViewHelper
-	 */
-	protected $formViewHelper;
+    /**
+     * @var ControllerContext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mockControllerContext;
 
-	/**
-	 * @var ControllerContext|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	protected $mockControllerContext;
+    public function setUp()
+    {
+        $this->formViewHelper = $this->getAccessibleMock(FormViewHelper::class, ['hasArgument']);
 
-	public function setUp() {
-		$this->formViewHelper = $this->getAccessibleMock(FormViewHelper::class, ['hasArgument']);
+        $this->mockControllerContext = $this->getMockBuilder(ControllerContext::class)->disableOriginalConstructor()->getMock();
 
-		$this->mockControllerContext = $this->getMockBuilder(ControllerContext::class)->disableOriginalConstructor()->getMock();
+        $this->inject($this->formViewHelper, 'controllerContext', $this->mockControllerContext);
+    }
 
-		$this->inject($this->formViewHelper, 'controllerContext', $this->mockControllerContext);
-	}
+    /**
+     * @return array
+     */
+    public function getFormActionUriDataProvider()
+    {
+        return [
+            ['requestUri' => '', 'sectionArgument' => null, 'expectedResult' => ''],
+            ['requestUri' => '#section', 'sectionArgument' => null, 'expectedResult' => '#section'],
+            ['requestUri' => '/foo', 'sectionArgument' => null, 'expectedResult' => '/foo'],
+            ['requestUri' => '/foo#section', 'sectionArgument' => null, 'expectedResult' => '/foo#section'],
+            ['requestUri' => 'http://absolute/uri', 'sectionArgument' => null, 'expectedResult' => 'http://absolute/uri'],
+            ['requestUri' => 'http://absolute/uri#section', 'sectionArgument' => null, 'expectedResult' => 'http://absolute/uri#section'],
 
-	/**
-	 * @return array
-	 */
-	public function getFormActionUriDataProvider() {
-		return [
-			['requestUri' => '', 'sectionArgument' => NULL, 'expectedResult' => ''],
-			['requestUri' => '#section', 'sectionArgument' => NULL, 'expectedResult' => '#section'],
-			['requestUri' => '/foo', 'sectionArgument' => NULL, 'expectedResult' => '/foo'],
-			['requestUri' => '/foo#section', 'sectionArgument' => NULL, 'expectedResult' => '/foo#section'],
-			['requestUri' => 'http://absolute/uri', 'sectionArgument' => NULL, 'expectedResult' => 'http://absolute/uri'],
-			['requestUri' => 'http://absolute/uri#section', 'sectionArgument' => NULL, 'expectedResult' => 'http://absolute/uri#section'],
+            ['requestUri' => '', 'sectionArgument' => 'newSection', 'expectedResult' => '#newSection'],
+            ['requestUri' => '#section', 'sectionArgument' => 'newSection', 'expectedResult' => '#newSection'],
+            ['requestUri' => '/foo', 'sectionArgument' => 'newSection', 'expectedResult' => '/foo#newSection'],
+            ['requestUri' => '/foo#section', 'sectionArgument' => 'newSection', 'expectedResult' => '/foo#newSection'],
+            ['requestUri' => 'http://absolute/uri', 'sectionArgument' => 'newSection', 'expectedResult' => 'http://absolute/uri#newSection'],
+            ['requestUri' => 'http://absolute/uri#section', 'sectionArgument' => 'newSection', 'expectedResult' => 'http://absolute/uri#newSection'],
+        ];
+    }
 
-			['requestUri' => '', 'sectionArgument' => 'newSection', 'expectedResult' => '#newSection'],
-			['requestUri' => '#section', 'sectionArgument' => 'newSection', 'expectedResult' => '#newSection'],
-			['requestUri' => '/foo', 'sectionArgument' => 'newSection', 'expectedResult' => '/foo#newSection'],
-			['requestUri' => '/foo#section', 'sectionArgument' => 'newSection', 'expectedResult' => '/foo#newSection'],
-			['requestUri' => 'http://absolute/uri', 'sectionArgument' => 'newSection', 'expectedResult' => 'http://absolute/uri#newSection'],
-			['requestUri' => 'http://absolute/uri#section', 'sectionArgument' => 'newSection', 'expectedResult' => 'http://absolute/uri#newSection'],
-		];
-	}
+    /**
+     * @test
+     * @param string $requestUri
+     * @param string $sectionArgument
+     * @param string $expectedResult
+     * @dataProvider getFormActionUriDataProvider
+     */
+    public function getFormActionUriTests($requestUri, $sectionArgument, $expectedResult)
+    {
+        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $this->mockControllerContext->expects($this->any())->method('getRequest')->will($this->returnValue($mockActionRequest));
 
-	/**
-	 * @test
-	 * @param string $requestUri
-	 * @param string $sectionArgument
-	 * @param string $expectedResult
-	 * @dataProvider getFormActionUriDataProvider
-	 */
-	public function getFormActionUriTests($requestUri, $sectionArgument, $expectedResult) {
-		$mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
-		$this->mockControllerContext->expects($this->any())->method('getRequest')->will($this->returnValue($mockActionRequest));
+        $mockHttpRequest = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+        $mockActionRequest->expects($this->any())->method('getHttpRequest')->will($this->returnValue($mockHttpRequest));
 
-		$mockHttpRequest = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
-		$mockActionRequest->expects($this->any())->method('getHttpRequest')->will($this->returnValue($mockHttpRequest));
+        $mockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();
+        $mockUri->expects($this->any())->method('__toString')->will($this->returnValue($requestUri));
+        $mockHttpRequest->expects($this->any())->method('getUri')->will($this->returnValue($mockUri));
 
-		$mockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();
-		$mockUri->expects($this->any())->method('__toString')->will($this->returnValue($requestUri));
-		$mockHttpRequest->expects($this->any())->method('getUri')->will($this->returnValue($mockUri));
+        $this->formViewHelper->expects($this->any())->method('hasArgument')->with('section')->will($this->returnValue($sectionArgument !== null));
+        $this->formViewHelper->_set('arguments', ['section' => $sectionArgument]);
 
-		$this->formViewHelper->expects($this->any())->method('hasArgument')->with('section')->will($this->returnValue($sectionArgument !== NULL));
-		$this->formViewHelper->_set('arguments', ['section' => $sectionArgument]);
-
-		$this->assertSame($expectedResult, $this->formViewHelper->_call('getFormActionUri'));
-	}
-
-
+        $this->assertSame($expectedResult, $this->formViewHelper->_call('getFormActionUri'));
+    }
 }

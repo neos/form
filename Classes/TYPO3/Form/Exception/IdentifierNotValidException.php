@@ -17,5 +17,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class IdentifierNotValidException extends \TYPO3\Form\Exception {
+class IdentifierNotValidException extends \TYPO3\Form\Exception
+{
 }

@@ -17,5 +17,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class FinisherPresetNotFoundException extends \TYPO3\Form\Exception {
+class FinisherPresetNotFoundException extends \TYPO3\Form\Exception
+{
 }

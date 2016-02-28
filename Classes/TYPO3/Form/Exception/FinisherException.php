@@ -16,5 +16,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class FinisherException extends \TYPO3\Form\Exception {
+class FinisherException extends \TYPO3\Form\Exception
+{
 }

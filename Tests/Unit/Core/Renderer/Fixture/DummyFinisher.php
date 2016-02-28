@@ -16,36 +16,41 @@ use TYPO3\Form\Core\Model\FinisherContext;
 /**
 * Dummy finisher for testing
 */
-class DummyFinisher implements \TYPO3\Form\Core\Model\FinisherInterface {
+class DummyFinisher implements \TYPO3\Form\Core\Model\FinisherInterface
+{
+    public $cb = null;
 
-	public $cb = NULL;
+    /**
+     * Executes the finisher
+     *
+     * @param \TYPO3\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
+     * @return void
+     * @api
+     */
+    public function execute(FinisherContext $finisherContext)
+    {
+        $cb = $this->cb;
+        $cb($finisherContext);
+    }
 
-	/**
-	 * Executes the finisher
-	 *
-	 * @param \TYPO3\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
-	 * @return void
-	 * @api
-	 */
-	public function execute(FinisherContext $finisherContext) {
-		$cb = $this->cb;
-		$cb($finisherContext);
-	}
+    /**
+     * @param array $options configuration options in the format array('@action' => 'foo', '@controller' => 'bar', '@package' => 'baz')
+     * @return void
+     * @api
+     */
+    public function setOptions(array $options)
+    {
+    }
 
-	/**
-	 * @param array $options configuration options in the format array('@action' => 'foo', '@controller' => 'bar', '@package' => 'baz')
-	 * @return void
-	 * @api
-	 */
-	public function setOptions(array $options) {}
-
-	/**
-	 * Sets a single finisher option (@see setOptions())
-	 *
-	 * @param string $optionName name of the option to be set
-	 * @param mixed $optionValue value of the option
-	 * @return void
-	 * @api
-	 */
-	public function setOption($optionName, $optionValue) {}
+    /**
+     * Sets a single finisher option (@see setOptions())
+     *
+     * @param string $optionName name of the option to be set
+     * @param mixed $optionValue value of the option
+     * @return void
+     * @api
+     */
+    public function setOption($optionName, $optionValue)
+    {
+    }
 }

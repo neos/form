@@ -19,13 +19,13 @@ namespace TYPO3\Form\Core\Model\Renderable;
  * used for improving the internal code structure.
  *
  */
-interface CompositeRenderableInterface extends RenderableInterface {
-
-	/**
-	 * Returns all RenderableInterface instances of this composite renderable recursively
-	 *
-	 * @return array<TYPO3\Form\Core\Model\RenderableInterface>
-	 * @internal
-	 */
-	public function getRenderablesRecursively();
+interface CompositeRenderableInterface extends RenderableInterface
+{
+    /**
+     * Returns all RenderableInterface instances of this composite renderable recursively
+     *
+     * @return array<TYPO3\Form\Core\Model\RenderableInterface>
+     * @internal
+     */
+    public function getRenderablesRecursively();
 }

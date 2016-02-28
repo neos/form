@@ -18,5 +18,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class PropertyMappingException extends \TYPO3\Form\Exception {
+class PropertyMappingException extends \TYPO3\Form\Exception
+{
 }
