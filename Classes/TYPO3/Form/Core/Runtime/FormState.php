@@ -21,69 +21,75 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @internal
  */
-class FormState {
+class FormState
+{
+    /**
+     * Constant which means that we are currently not on any page; i.e. the form
+     * has never rendered before.
+     */
+    const NOPAGE = -1;
 
-	/**
-	 * Constant which means that we are currently not on any page; i.e. the form
-	 * has never rendered before.
-	 */
-	const NOPAGE = -1;
+    /**
+     * The last displayed page index
+     *
+     * @var integer
+     */
+    protected $lastDisplayedPageIndex = self::NOPAGE;
 
-	/**
-	 * The last displayed page index
-	 *
-	 * @var integer
-	 */
-	protected $lastDisplayedPageIndex = self::NOPAGE;
+    /**
+     * @var array
+     */
+    protected $formValues = array();
 
-	/**
-	 * @var array
-	 */
-	protected $formValues = array();
+    /**
+     * @return boolean FALSE if the form has never been submitted before, TRUE otherwise
+     */
+    public function isFormSubmitted()
+    {
+        return ($this->lastDisplayedPageIndex !== self::NOPAGE);
+    }
 
-	/**
-	 * @return boolean FALSE if the form has never been submitted before, TRUE otherwise
-	 */
-	public function isFormSubmitted() {
-		return ($this->lastDisplayedPageIndex !== self::NOPAGE);
-	}
+    /**
+     * @return integer
+     */
+    public function getLastDisplayedPageIndex()
+    {
+        return $this->lastDisplayedPageIndex;
+    }
 
-	/**
-	 * @return integer
-	 */
-	public function getLastDisplayedPageIndex() {
-		return $this->lastDisplayedPageIndex;
-	}
+    /**
+     * @param integer $lastDisplayedPageIndex
+     * @return void
+     */
+    public function setLastDisplayedPageIndex($lastDisplayedPageIndex)
+    {
+        $this->lastDisplayedPageIndex = $lastDisplayedPageIndex;
+    }
 
-	/**
-	 * @param integer $lastDisplayedPageIndex
-	 * @return void
-	 */
-	public function setLastDisplayedPageIndex($lastDisplayedPageIndex) {
-		$this->lastDisplayedPageIndex = $lastDisplayedPageIndex;
-	}
+    /**
+     * @return array
+     */
+    public function getFormValues()
+    {
+        return $this->formValues;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getFormValues() {
-		return $this->formValues;
-	}
+    /**
+     * @param string $propertyPath
+     * @param mixed $value
+     * @return void
+     */
+    public function setFormValue($propertyPath, $value)
+    {
+        $this->formValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
+    }
 
-	/**
-	 * @param string $propertyPath
-	 * @param mixed $value
-	 * @return void
-	 */
-	public function setFormValue($propertyPath, $value) {
-		$this->formValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
-	}
-
-	/**
-	 * @param string $propertyPath
-	 * @return mixed
-	 */
-	public function getFormValue($propertyPath) {
-		return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
-	}
+    /**
+     * @param string $propertyPath
+     * @return mixed
+     */
+    public function getFormValue($propertyPath)
+    {
+        return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
+    }
 }

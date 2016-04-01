@@ -17,5 +17,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class DuplicateFormElementException extends \TYPO3\Form\Exception {
+class DuplicateFormElementException extends \TYPO3\Form\Exception
+{
 }

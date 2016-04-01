@@ -16,18 +16,18 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Form Element Rootline Path
  */
-class FormElementRootlinePathViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
-
-
-	/**
-	 * @param \TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable
-	 * @return string
-	 */
-	public function render(\TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable) {
-		$path = $renderable->getIdentifier();
-		while ($renderable = $renderable->getParentRenderable()) {
-			$path = $renderable->getIdentifier() . '/' . $path;
-		}
-		return $path;
-	}
+class FormElementRootlinePathViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+{
+    /**
+     * @param \TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable
+     * @return string
+     */
+    public function render(\TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable)
+    {
+        $path = $renderable->getIdentifier();
+        while ($renderable = $renderable->getParentRenderable()) {
+            $path = $renderable->getIdentifier() . '/' . $path;
+        }
+        return $path;
+    }
 }

@@ -88,207 +88,214 @@ use TYPO3\Flow\Annotations as Flow;
  * returns a non-NULL string), this renderer is automatically instanciated
  * and the rendering for this element is delegated to this Renderer.
  */
-class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements RendererInterface {
+class FluidFormRenderer extends \TYPO3\Fluid\View\TemplateView implements RendererInterface
+{
+    /**
+     * @var \TYPO3\Form\Core\Runtime\FormRuntime
+     */
+    protected $formRuntime;
 
-	/**
-	 * @var \TYPO3\Form\Core\Runtime\FormRuntime
-	 */
-	protected $formRuntime;
+    /**
+     * Sets the current controller context
+     *
+     * @param \TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext Controller context which is available inside the view
+     * @return void
+     * @api
+     */
+    public function setControllerContext(\TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext)
+    {
+        $this->controllerContext = $controllerContext;
+    }
 
-	/**
-	 * Sets the current controller context
-	 *
-	 * @param \TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext Controller context which is available inside the view
-	 * @return void
-	 * @api
-	 */
-	public function setControllerContext(\TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext) {
-		$this->controllerContext = $controllerContext;
-	}
+    /**
+     * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+     * @return void
+     * @api
+     */
+    public function setFormRuntime(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime)
+    {
+        $this->formRuntime = $formRuntime;
+    }
 
-	/**
-	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-	 * @return void
-	 * @api
-	 */
-	public function setFormRuntime(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
-		$this->formRuntime = $formRuntime;
-	}
+    /**
+     * @return \TYPO3\Form\Core\Runtime\FormRuntime
+     * @api
+     */
+    public function getFormRuntime()
+    {
+        return $this->formRuntime;
+    }
 
-	/**
-	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
-	 * @api
-	 */
-	public function getFormRuntime() {
-		return $this->formRuntime;
-	}
+    /**
+     * Render the passed $renderable and return the rendered Renderable.
+     *
+     * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
+     * @return string the rendered $renderable
+     * @throws \TYPO3\Form\Exception\RenderingException
+     * @api
+     */
+    public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable)
+    {
+        $renderable->beforeRendering($this->formRuntime);
 
-	/**
-	 * Render the passed $renderable and return the rendered Renderable.
-	 *
-	 * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
-	 * @return string the rendered $renderable
-	 * @throws \TYPO3\Form\Exception\RenderingException
-	 * @api
-	 */
-	public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
-		$renderable->beforeRendering($this->formRuntime);
+        $this->templateParser->setConfiguration($this->buildParserConfiguration());
+        $renderableType = $renderable->getType();
 
-		$this->templateParser->setConfiguration($this->buildParserConfiguration());
-		$renderableType = $renderable->getType();
+        if ($renderable->getRendererClassName() !== null && $renderable->getRendererClassName() !== get_class($this)) {
+            $rendererClassName = $renderable->getRendererClassName();
+            $renderer = new $rendererClassName;
+            if (!($renderer instanceof RendererInterface)) {
+                throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement RendererInterface.', $rendererClassName, $renderableType), 1326098022);
+            }
+            $renderer->setControllerContext($this->controllerContext);
+            $renderer->setFormRuntime($this->formRuntime);
+            return $renderer->renderRenderable($renderable);
+        }
 
-		if ($renderable->getRendererClassName() !== NULL && $renderable->getRendererClassName() !== get_class($this)) {
-			$rendererClassName = $renderable->getRendererClassName();
-			$renderer = new $rendererClassName;
-			if (!($renderer instanceof RendererInterface)) {
-				throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement RendererInterface.', $rendererClassName, $renderableType), 1326098022);
-			}
-			$renderer->setControllerContext($this->controllerContext);
-			$renderer->setFormRuntime($this->formRuntime);
-			return $renderer->renderRenderable($renderable);
-		}
+        $renderingOptions = $renderable->getRenderingOptions();
 
-		$renderingOptions = $renderable->getRenderingOptions();
+        $renderablePathAndFilename = $this->getPathAndFilenameForRenderable($renderableType, $renderingOptions);
+        $parsedRenderable = $this->getParsedRenderable($renderable->getType(), $renderablePathAndFilename);
 
-		$renderablePathAndFilename = $this->getPathAndFilenameForRenderable($renderableType, $renderingOptions);
-		$parsedRenderable = $this->getParsedRenderable($renderable->getType(), $renderablePathAndFilename);
+        if ($this->getCurrentRenderingContext() === null) {
+            // We do not have a "current" rendering context yet, so we use the base rendering context
+            $this->baseRenderingContext->setControllerContext($this->controllerContext);
+            $renderingContext = $this->baseRenderingContext;
+        } else {
+            $renderingContext = clone $this->getCurrentRenderingContext();
+        }
+        $renderingContext->getViewHelperVariableContainer()->addOrUpdate('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable', $renderable);
 
-		if ($this->getCurrentRenderingContext() === NULL) {
-				// We do not have a "current" rendering context yet, so we use the base rendering context
-			$this->baseRenderingContext->setControllerContext($this->controllerContext);
-			$renderingContext = $this->baseRenderingContext;
-		} else {
-			$renderingContext = clone $this->getCurrentRenderingContext();
-		}
-		$renderingContext->getViewHelperVariableContainer()->addOrUpdate('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable', $renderable);
+        if (!isset($renderingOptions['renderableNameInTemplate'])) {
+            throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "renderableNameInTemplate" defined.', $renderableType), 1326094948);
+        }
 
-		if (!isset($renderingOptions['renderableNameInTemplate'])) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "renderableNameInTemplate" defined.', $renderableType), 1326094948);
-		}
+        $templateVariableContainer = new \TYPO3\Fluid\Core\ViewHelper\TemplateVariableContainer(array($renderingOptions['renderableNameInTemplate'] => $renderable));
+        $renderingContext->injectTemplateVariableContainer($templateVariableContainer);
 
-		$templateVariableContainer = new \TYPO3\Fluid\Core\ViewHelper\TemplateVariableContainer(array($renderingOptions['renderableNameInTemplate'] => $renderable));
-		$renderingContext->injectTemplateVariableContainer($templateVariableContainer);
+        if ($parsedRenderable->hasLayout()) {
+            $renderableLayoutName = $parsedRenderable->getLayoutName($renderingContext);
+            $renderableLayoutPathAndFilename = $this->getPathAndFilenameForRenderableLayout($renderableLayoutName, $renderingOptions);
+            $parsedLayout = $this->getParsedRenderable($renderableLayoutName, $renderableLayoutPathAndFilename);
 
-		if ($parsedRenderable->hasLayout()) {
-			$renderableLayoutName = $parsedRenderable->getLayoutName($renderingContext);
-			$renderableLayoutPathAndFilename = $this->getPathAndFilenameForRenderableLayout($renderableLayoutName, $renderingOptions);
-			$parsedLayout = $this->getParsedRenderable($renderableLayoutName, $renderableLayoutPathAndFilename);
+            $this->startRendering(self::RENDERING_LAYOUT, $parsedRenderable, $renderingContext);
+            $output = $parsedLayout->render($renderingContext);
+            $this->stopRendering();
+        } else {
+            $this->startRendering(self::RENDERING_TEMPLATE, $parsedRenderable, $renderingContext);
+            $output = $parsedRenderable->render($renderingContext);
+            $this->stopRendering();
+        }
 
-			$this->startRendering(self::RENDERING_LAYOUT, $parsedRenderable, $renderingContext);
-			$output = $parsedLayout->render($renderingContext);
-			$this->stopRendering();
-		} else {
-			$this->startRendering(self::RENDERING_TEMPLATE, $parsedRenderable, $renderingContext);
-			$output = $parsedRenderable->render($renderingContext);
-			$this->stopRendering();
-		}
+        return $output;
+    }
 
-		return $output;
-	}
+    /**
+     * Get full template path and filename for the given $renderableType.
+     *
+     * Reads the $renderingOptions['templatePathPattern'], replacing {@package} and {@type}
+     * from the given $renderableType.
+     *
+     * @param string $renderableType
+     * @param array $renderingOptions
+     * @return string the full path to the template which shall be used.
+     * @throws \TYPO3\Form\Exception\RenderingException
+     * @internal
+     */
+    protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions)
+    {
+        if (!isset($renderingOptions['templatePathPattern'])) {
+            throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templatePathPattern" defined.', $renderableType), 1326094041);
+        }
+        list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 
-	/**
-	 * Get full template path and filename for the given $renderableType.
-	 *
-	 * Reads the $renderingOptions['templatePathPattern'], replacing {@package} and {@type}
-	 * from the given $renderableType.
-	 *
-	 * @param string $renderableType
-	 * @param array $renderingOptions
-	 * @return string the full path to the template which shall be used.
-	 * @throws \TYPO3\Form\Exception\RenderingException
-	 * @internal
-	 */
-	protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions) {
-		if (!isset($renderingOptions['templatePathPattern'])) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "templatePathPattern" defined.', $renderableType), 1326094041);
-		}
-		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
+        return strtr($renderingOptions['templatePathPattern'], array(
+            '{@package}' => $packageKey,
+            '{@type}' => $shortRenderableType
+        ));
+    }
 
-		return strtr($renderingOptions['templatePathPattern'], array(
-			'{@package}' => $packageKey,
-			'{@type}' => $shortRenderableType
-		));
-	}
+    /**
+     * Get full layout path and filename for the given $renderableType.
+     *
+     * Reads the $renderingOptions['layoutPathPattern'], replacing {@package} and {@type}
+     * from the given $renderableType.
+     *
+     * @param string $renderableType
+     * @param array $renderingOptions
+     * @return string the full path to the layout which shall be used.
+     * @throws \TYPO3\Form\Exception\RenderingException
+     * @internal
+     */
+    protected function getPathAndFilenameForRenderableLayout($renderableType, array $renderingOptions)
+    {
+        if (!isset($renderingOptions['layoutPathPattern'])) {
+            throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "layoutPathPattern" defined.', $renderableType), 1326094161);
+        }
+        list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 
-	/**
-	 * Get full layout path and filename for the given $renderableType.
-	 *
-	 * Reads the $renderingOptions['layoutPathPattern'], replacing {@package} and {@type}
-	 * from the given $renderableType.
-	 *
-	 * @param string $renderableType
-	 * @param array $renderingOptions
-	 * @return string the full path to the layout which shall be used.
-	 * @throws \TYPO3\Form\Exception\RenderingException
-	 * @internal
-	 */
-	protected function getPathAndFilenameForRenderableLayout($renderableType, array $renderingOptions) {
-		if (!isset($renderingOptions['layoutPathPattern'])) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "layoutPathPattern" defined.', $renderableType), 1326094161);
-		}
-		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
+        return strtr($renderingOptions['layoutPathPattern'], array(
+            '{@package}' => $packageKey,
+            '{@type}' => $shortRenderableType
+        ));
+    }
 
-		return strtr($renderingOptions['layoutPathPattern'], array(
-			'{@package}' => $packageKey,
-			'{@type}' => $shortRenderableType
-		));
-	}
+    /**
+     * Resolve the partial path and filename based on $this->partialPathAndFilenamePattern.
+     *
+     * @param string $renderableType The name of the partial
+     * @return string the full path which should be used. The path definitely exists.
+     * @throws \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3\Form\Exception\RenderingException
+     */
+    protected function getPartialPathAndFilename($renderableType)
+    {
+        $renderingContext = $this->getCurrentRenderingContext();
+        $currentRenderable = $renderingContext->getViewHelperVariableContainer()->get('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable');
+        $renderingOptions = $currentRenderable->getRenderingOptions();
+        if (!isset($renderingOptions['partialPathPattern'])) {
+            throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "partialPathPattern" defined.', $renderableType), 1326713352);
+        }
+        list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 
-	/**
-	 * Resolve the partial path and filename based on $this->partialPathAndFilenamePattern.
-	 *
-	 * @param string $renderableType The name of the partial
-	 * @return string the full path which should be used. The path definitely exists.
-	 * @throws \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException
-	 * @throws \TYPO3\Form\Exception\RenderingException
-	 */
-	protected function getPartialPathAndFilename($renderableType) {
-		$renderingContext = $this->getCurrentRenderingContext();
-		$currentRenderable = $renderingContext->getViewHelperVariableContainer()->get('TYPO3\Form\Core\Renderer\FluidFormRenderer', 'currentRenderable');
-		$renderingOptions = $currentRenderable->getRenderingOptions();
-		if (!isset($renderingOptions['partialPathPattern'])) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "partialPathPattern" defined.', $renderableType), 1326713352);
-		}
-		list($packageKey, $shortRenderableType) = explode(':', $renderableType);
+        $partialPath = strtr($renderingOptions['partialPathPattern'], array(
+            '{@package}' => $packageKey,
+            '{@type}' => $shortRenderableType
+        ));
+        if (file_exists($partialPath)) {
+            return $partialPath;
+        }
+        throw new \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException('The template file "' . $partialPath . '" could not be loaded.', 1326713418);
+    }
 
-		$partialPath = strtr($renderingOptions['partialPathPattern'], array(
-			'{@package}' => $packageKey,
-			'{@type}' => $shortRenderableType
-		));
-		if (file_exists($partialPath)) {
-			return $partialPath;
-		}
-		throw new \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException('The template file "' . $partialPath . '" could not be loaded.', 1326713418);
-	}
+    /**
+     * Get the parsed renderable for $renderablePathAndFilename.
+     *
+     * Internally, uses the templateCompiler automatically.
+     *
+     * @param string $renderableType
+     * @param string $renderablePathAndFilename
+     * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
+     * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
+     * @throws \TYPO3\Form\Exception
+     * @internal
+     */
+    protected function getParsedRenderable($renderableType, $renderablePathAndFilename)
+    {
+        if (!file_exists($renderablePathAndFilename)) {
+            throw new \TYPO3\Form\Exception(sprintf('The template "%s" does not exist', $renderablePathAndFilename), 1329233920);
+        }
+        $templateModifiedTimestamp = \filemtime($renderablePathAndFilename);
+        $renderableIdentifier = sprintf('renderable_%s_%s', str_replace(array('.', ':'), '_', $renderableType), sha1($renderablePathAndFilename . '|' . $templateModifiedTimestamp));
 
-	/**
-	 * Get the parsed renderable for $renderablePathAndFilename.
-	 *
-	 * Internally, uses the templateCompiler automatically.
-	 *
-	 * @param string $renderableType
-	 * @param string $renderablePathAndFilename
-	 * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
-	 * @return \TYPO3\Fluid\Core\Parser\ParsedTemplateInterface
-	 * @throws \TYPO3\Form\Exception
-	 * @internal
-	 */
-	protected function getParsedRenderable($renderableType, $renderablePathAndFilename) {
-		if (!file_exists($renderablePathAndFilename)) {
-			throw new \TYPO3\Form\Exception(sprintf('The template "%s" does not exist', $renderablePathAndFilename), 1329233920);
-		}
-		$templateModifiedTimestamp = \filemtime($renderablePathAndFilename);
-		$renderableIdentifier = sprintf('renderable_%s_%s', str_replace(array('.', ':'), '_', $renderableType), sha1($renderablePathAndFilename . '|' . $templateModifiedTimestamp));
-
-		if ($this->templateCompiler->has($renderableIdentifier)) {
-			$parsedRenderable = $this->templateCompiler->get($renderableIdentifier);
-		} else {
-			$parsedRenderable = $this->templateParser->parse(file_get_contents($renderablePathAndFilename));
-			if ($parsedRenderable->isCompilable()) {
-				$this->templateCompiler->store($renderableIdentifier, $parsedRenderable);
-			}
-		}
-		return $parsedRenderable;
-	}
-
+        if ($this->templateCompiler->has($renderableIdentifier)) {
+            $parsedRenderable = $this->templateCompiler->get($renderableIdentifier);
+        } else {
+            $parsedRenderable = $this->templateParser->parse(file_get_contents($renderablePathAndFilename));
+            if ($parsedRenderable->isCompilable()) {
+                $this->templateCompiler->store($renderableIdentifier, $parsedRenderable);
+            }
+        }
+        return $parsedRenderable;
+    }
 }

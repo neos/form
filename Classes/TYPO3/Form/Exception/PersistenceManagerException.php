@@ -16,5 +16,6 @@ namespace TYPO3\Form\Exception;
  *
  * @api
  */
-class PersistenceManagerException extends \TYPO3\Form\Exception {
+class PersistenceManagerException extends \TYPO3\Form\Exception
+{
 }

@@ -32,35 +32,36 @@ use TYPO3\Form\Persistence\FormPersistenceManagerInterface;
  *
  * @api
  */
-class RenderViewHelper extends AbstractViewHelper {
+class RenderViewHelper extends AbstractViewHelper
+{
+    /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
 
-	/**
-	 * @var boolean
-	 */
-	protected $escapeOutput = FALSE;
+    /**
+     * @Flow\Inject
+     * @var FormPersistenceManagerInterface
+     */
+    protected $formPersistenceManager;
 
-	/**
-	 * @Flow\Inject
-	 * @var FormPersistenceManagerInterface
-	 */
-	protected $formPersistenceManager;
+    /**
+     * @param string $persistenceIdentifier the persistence identifier for the form.
+     * @param string $factoryClass The fully qualified class name of the factory (which has to implement \TYPO3\Form\Factory\FormFactoryInterface)
+     * @param string $presetName name of the preset to use
+     * @param array $overrideConfiguration factory specific configuration
+     * @return string the rendered form
+     */
+    public function render($persistenceIdentifier = null, $factoryClass = 'TYPO3\Form\Factory\ArrayFormFactory', $presetName = 'default', array $overrideConfiguration = null)
+    {
+        if (isset($persistenceIdentifier)) {
+            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: array());
+        }
 
-	/**
-	 * @param string $persistenceIdentifier the persistence identifier for the form.
-	 * @param string $factoryClass The fully qualified class name of the factory (which has to implement \TYPO3\Form\Factory\FormFactoryInterface)
-	 * @param string $presetName name of the preset to use
-	 * @param array $overrideConfiguration factory specific configuration
-	 * @return string the rendered form
-	 */
-	public function render($persistenceIdentifier = NULL, $factoryClass = 'TYPO3\Form\Factory\ArrayFormFactory', $presetName = 'default', array $overrideConfiguration = NULL) {
-		if (isset($persistenceIdentifier)) {
-			$overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: array());
-		}
-
-		$factory = $this->objectManager->get($factoryClass);
-		$formDefinition = $factory->build($overrideConfiguration, $presetName);
-		$response = new Response($this->controllerContext->getResponse());
-		$form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
-		return $form->render();
-	}
+        $factory = $this->objectManager->get($factoryClass);
+        $formDefinition = $factory->build($overrideConfiguration, $presetName);
+        $response = new Response($this->controllerContext->getResponse());
+        $form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
+        return $form->render();
+    }
 }

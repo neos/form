@@ -31,55 +31,56 @@ use TYPO3\Flow\Error\Message;
  * $formDefinition->addFinisher($flashMessageFinisher);
  * // ...
  */
-class FlashMessageFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
+class FlashMessageFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
+{
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Mvc\FlashMessageContainer
+     */
+    protected $flashMessageContainer;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Mvc\FlashMessageContainer
-	 */
-	protected $flashMessageContainer;
+    /**
+     * @var array
+     */
+    protected $defaultOptions = array(
+        'messageBody' => null,
+        'messageTitle' => '',
+        'messageArguments' => array(),
+        'messageCode' => null,
+        'severity' => Message::SEVERITY_OK,
+    );
 
-	/**
-	 * @var array
-	 */
-	protected $defaultOptions = array(
-		'messageBody' => NULL,
-		'messageTitle' => '',
-		'messageArguments' => array(),
-		'messageCode' => NULL,
-		'severity' => Message::SEVERITY_OK,
-	);
-
-	/**
-	 * Executes this finisher
-	 * @see AbstractFinisher::execute()
-	 *
-	 * @return void
-	 * @throws \TYPO3\Form\Exception\FinisherException
-	 */
-	protected function executeInternal() {
-		$messageBody = $this->parseOption('messageBody');
-		if (!is_string($messageBody)) {
-			throw new \TYPO3\Form\Exception\FinisherException(sprintf('The message body must be of type string, "%s" given.', gettype($messageBody)), 1335980069);
-		}
-		$messageTitle = $this->parseOption('messageTitle');
-		$messageArguments = $this->parseOption('messageArguments');
-		$messageCode = $this->parseOption('messageCode');
-		$severity = $this->parseOption('severity');
-		switch ($severity) {
-			case Message::SEVERITY_NOTICE:
-				$message = new \TYPO3\Flow\Error\Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
-				break;
-			case Message::SEVERITY_WARNING:
-				$message = new \TYPO3\Flow\Error\Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
-				break;
-			case Message::SEVERITY_ERROR:
-				$message = new \TYPO3\Flow\Error\Error($messageBody, $messageCode, $messageArguments, $messageTitle);
-				break;
-			default:
-				$message = new Message($messageBody, $messageCode, $messageArguments, $messageTitle);
-				break;
-		}
-		$this->flashMessageContainer->addMessage($message);
-	}
+    /**
+     * Executes this finisher
+     * @see AbstractFinisher::execute()
+     *
+     * @return void
+     * @throws \TYPO3\Form\Exception\FinisherException
+     */
+    protected function executeInternal()
+    {
+        $messageBody = $this->parseOption('messageBody');
+        if (!is_string($messageBody)) {
+            throw new \TYPO3\Form\Exception\FinisherException(sprintf('The message body must be of type string, "%s" given.', gettype($messageBody)), 1335980069);
+        }
+        $messageTitle = $this->parseOption('messageTitle');
+        $messageArguments = $this->parseOption('messageArguments');
+        $messageCode = $this->parseOption('messageCode');
+        $severity = $this->parseOption('severity');
+        switch ($severity) {
+            case Message::SEVERITY_NOTICE:
+                $message = new \TYPO3\Flow\Error\Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
+                break;
+            case Message::SEVERITY_WARNING:
+                $message = new \TYPO3\Flow\Error\Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
+                break;
+            case Message::SEVERITY_ERROR:
+                $message = new \TYPO3\Flow\Error\Error($messageBody, $messageCode, $messageArguments, $messageTitle);
+                break;
+            default:
+                $message = new Message($messageBody, $messageCode, $messageArguments, $messageTitle);
+                break;
+        }
+        $this->flashMessageContainer->addMessage($message);
+    }
 }

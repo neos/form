@@ -93,72 +93,76 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @api
  */
-abstract class AbstractFormFactory implements FormFactoryInterface {
+abstract class AbstractFormFactory implements FormFactoryInterface
+{
+    /**
+     * The settings of the TYPO3.Form package
+     *
+     * @var array
+     * @api
+     */
+    protected $formSettings;
 
-	/**
-	 * The settings of the TYPO3.Form package
-	 *
-	 * @var array
-	 * @api
-	 */
-	protected $formSettings;
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Configuration\ConfigurationManager
+     * @internal
+     */
+    protected $configurationManager;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
-	 * @internal
-	 */
-	protected $configurationManager;
+    /**
+     * @internal
+     */
+    public function initializeObject()
+    {
+        $this->formSettings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
+    }
 
-	/**
-	 * @internal
-	 */
-	public function initializeObject() {
-		$this->formSettings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
-	}
+    /**
+     * Get the preset configuration by $presetName, taking the preset hierarchy
+     * (specified by *parentPreset*) into account.
+     *
+     * @param string $presetName name of the preset to get the configuration for
+     * @return array the preset configuration
+     * @throws \TYPO3\Form\Exception\PresetNotFoundException if preset with the name $presetName was not found
+     * @api
+     */
+    public function getPresetConfiguration($presetName)
+    {
+        if (!isset($this->formSettings['presets'][$presetName])) {
+            throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: presets.', $presetName), 1325685498);
+        }
+        $preset = $this->formSettings['presets'][$presetName];
+        if (isset($preset['parentPreset'])) {
+            $parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
+            unset($preset['parentPreset']);
+            $preset = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
+        }
+        return $preset;
+    }
 
-	/**
-	 * Get the preset configuration by $presetName, taking the preset hierarchy
-	 * (specified by *parentPreset*) into account.
-	 *
-	 * @param string $presetName name of the preset to get the configuration for
-	 * @return array the preset configuration
-	 * @throws \TYPO3\Form\Exception\PresetNotFoundException if preset with the name $presetName was not found
-	 * @api
-	 */
-	public function getPresetConfiguration($presetName) {
-		if (!isset($this->formSettings['presets'][$presetName])) {
-			throw new \TYPO3\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: presets.', $presetName), 1325685498);
-		}
-		$preset = $this->formSettings['presets'][$presetName];
-		if (isset($preset['parentPreset'])) {
-			$parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
-			unset($preset['parentPreset']);
-			$preset = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
-		}
-		return $preset;
-	}
+    /**
+     * Helper to be called by every AbstractFormFactory after everything has been built to trigger the "onBuildingFinished"
+     * template method on all form elements.
+     *
+     * @param \TYPO3\Form\Core\Model\FormDefinition $form
+     * @return void
+     * @api
+     */
+    protected function triggerFormBuildingFinished(\TYPO3\Form\Core\Model\FormDefinition $form)
+    {
+        foreach ($form->getRenderablesRecursively() as $renderable) {
+            $renderable->onBuildingFinished();
+        }
+    }
 
-	/**
-	 * Helper to be called by every AbstractFormFactory after everything has been built to trigger the "onBuildingFinished"
-	 * template method on all form elements.
-	 *
-	 * @param \TYPO3\Form\Core\Model\FormDefinition $form
-	 * @return void
-	 * @api
-	 */
-	protected function triggerFormBuildingFinished(\TYPO3\Form\Core\Model\FormDefinition $form) {
-		foreach ($form->getRenderablesRecursively() as $renderable) {
-			$renderable->onBuildingFinished();
-		}
-	}
-
-	/**
-	 * Get the available preset names
-	 *
-	 * @return array
-	 */
-	public function getPresetNames() {
-		return array_keys($this->formSettings['presets']);
-	}
+    /**
+     * Get the available preset names
+     *
+     * @return array
+     */
+    public function getPresetNames()
+    {
+        return array_keys($this->formSettings['presets']);
+    }
 }

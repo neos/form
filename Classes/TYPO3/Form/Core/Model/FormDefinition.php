@@ -232,412 +232,436 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * Refer to the {@link \TYPO3\Form\Core\Runtime\FormRuntime} API doc for further information.
  */
-class FormDefinition extends Renderable\AbstractCompositeRenderable {
+class FormDefinition extends Renderable\AbstractCompositeRenderable
+{
+    /**
+     * The finishers for this form
+     *
+     * @var array<TYPO3\Form\Core\Model\FinisherInterface>
+     * @internal
+     */
+    protected $finishers = array();
 
-	/**
-	 * The finishers for this form
-	 *
-	 * @var array<TYPO3\Form\Core\Model\FinisherInterface>
-	 * @internal
-	 */
-	protected $finishers = array();
+    /**
+     * Property Mapping Rules, indexed by element identifier
+     *
+     * @var array<TYPO3\Form\Core\Model\ProcessingRule>
+     * @internal
+     */
+    protected $processingRules = array();
 
-	/**
-	 * Property Mapping Rules, indexed by element identifier
-	 *
-	 * @var array<TYPO3\Form\Core\Model\ProcessingRule>
-	 * @internal
-	 */
-	protected $processingRules = array();
+    /**
+     * Contains all elements of the form, indexed by identifier.
+     * Is used as internal cache as we need this really often.
+     *
+     * @var array <TYPO3\Form\Core\Model\FormElementInterface>
+     * @internal
+     */
+    protected $elementsByIdentifier = array();
 
-	/**
-	 * Contains all elements of the form, indexed by identifier.
-	 * Is used as internal cache as we need this really often.
-	 *
-	 * @var array <TYPO3\Form\Core\Model\FormElementInterface>
-	 * @internal
-	 */
-	protected $elementsByIdentifier = array();
+    /**
+     * Form element default values in the format array('elementIdentifier' => 'default value')
+     *
+     * @var array
+     * @internal
+     */
+    protected $elementDefaultValues = array();
 
-	/**
-	 * Form element default values in the format array('elementIdentifier' => 'default value')
-	 *
-	 * @var array
-	 * @internal
-	 */
-	protected $elementDefaultValues = array();
+    /**
+     * @var \TYPO3\Form\Utility\SupertypeResolver
+     * @internal
+     */
+    protected $formFieldTypeManager;
 
-	/**
-	 * @var \TYPO3\Form\Utility\SupertypeResolver
-	 * @internal
-	 */
-	protected $formFieldTypeManager;
+    /**
+     * @var array
+     * @internal
+     */
+    protected $validatorPresets;
 
-	/**
-	 * @var array
-	 * @internal
-	 */
-	protected $validatorPresets;
+    /**
+     * @var array
+     * @internal
+     */
+    protected $finisherPresets;
 
-	/**
-	 * @var array
-	 * @internal
-	 */
-	protected $finisherPresets;
+    /**
+     * Constructor. Creates a new FormDefinition with the given identifier.
+     *
+     * @param string $identifier The Form Definition's identifier, must be a non-empty string.
+     * @param array $formDefaults overrides form defaults of this definition
+     * @param string $type element type of this form in the format Package:Type
+     * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was not valid
+     * @api
+     */
+    public function __construct($identifier, $formDefaults = array(), $type = 'TYPO3.Form:Form')
+    {
+        $this->formFieldTypeManager = new \TYPO3\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : array());
+        $this->validatorPresets = isset($formDefaults['validatorPresets']) ? $formDefaults['validatorPresets'] : array();
+        $this->finisherPresets = isset($formDefaults['finisherPresets']) ? $formDefaults['finisherPresets'] : array();
 
-	/**
-	 * Constructor. Creates a new FormDefinition with the given identifier.
-	 *
-	 * @param string $identifier The Form Definition's identifier, must be a non-empty string.
-	 * @param array $formDefaults overrides form defaults of this definition
-	 * @param string $type element type of this form in the format Package:Type
-	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException if the identifier was not valid
-	 * @api
-	 */
-	public function __construct($identifier, $formDefaults = array(), $type = 'TYPO3.Form:Form') {
-		$this->formFieldTypeManager = new \TYPO3\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : array());
-		$this->validatorPresets = isset($formDefaults['validatorPresets']) ? $formDefaults['validatorPresets'] : array();
-		$this->finisherPresets = isset($formDefaults['finisherPresets']) ? $formDefaults['finisherPresets'] : array();
+        if (!is_string($identifier) || strlen($identifier) === 0) {
+            throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
+        }
+        $this->identifier = $identifier;
+        $this->type = $type;
 
-		if (!is_string($identifier) || strlen($identifier) === 0) {
-			throw new \TYPO3\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
-		}
-		$this->identifier = $identifier;
-		$this->type = $type;
+        if ($formDefaults !== array()) {
+            $this->initializeFromFormDefaults();
+        }
+    }
 
-		if ($formDefaults !== array()) {
-			$this->initializeFromFormDefaults();
-		}
-	}
+    /**
+     * Initialize the form defaults of the current type
+     *
+     * @return void
+     * @internal
+     */
+    protected function initializeFromFormDefaults()
+    {
+        $typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($this->type);
+        $this->setOptions($typeDefinition);
+    }
 
-	/**
-	 * Initialize the form defaults of the current type
-	 *
-	 * @return void
-	 * @internal
-	 */
-	protected function initializeFromFormDefaults() {
-		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($this->type);
-		$this->setOptions($typeDefinition);
-	}
+    /**
+     * Set multiple properties of this object at once.
+     * Every property which has a corresponding set* method can be set using
+     * the passed $options array.
+     *
+     * @param array $options
+     * @return void
+     * @internal
+     */
+    public function setOptions(array $options)
+    {
+        if (isset($options['rendererClassName'])) {
+            $this->setRendererClassName($options['rendererClassName']);
+        }
+        if (isset($options['renderingOptions'])) {
+            foreach ($options['renderingOptions'] as $key => $value) {
+                $this->setRenderingOption($key, $value);
+            }
+        }
+        if (isset($options['finishers'])) {
+            foreach ($options['finishers'] as $finisherConfiguration) {
+                $this->createFinisher($finisherConfiguration['identifier'], isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : array());
+            }
+        }
 
-	/**
-	 * Set multiple properties of this object at once.
-	 * Every property which has a corresponding set* method can be set using
-	 * the passed $options array.
-	 *
-	 * @param array $options
-	 * @return void
-	 * @internal
-	 */
-	public function setOptions(array $options) {
-		if (isset($options['rendererClassName'])) {
-			$this->setRendererClassName($options['rendererClassName']);
-		}
-		if (isset($options['renderingOptions'])) {
-			foreach ($options['renderingOptions'] as $key => $value) {
-				$this->setRenderingOption($key, $value);
-			}
-		}
-		if (isset($options['finishers'])) {
-			foreach ($options['finishers'] as $finisherConfiguration) {
-				$this->createFinisher($finisherConfiguration['identifier'], isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : array());
-			}
-		}
+        \TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('rendererClassName', 'renderingOptions', 'finishers'));
+    }
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('rendererClassName', 'renderingOptions', 'finishers'));
-	}
+    /**
+     * Create a page with the given $identifier and attach this page to the form.
+     *
+     * - Create Page object based on the given $typeName
+     * - set defaults inside the Page object
+     * - attach Page object to this form
+     * - return the newly created Page object
+     *
+     * @param string $identifier Identifier of the new page
+     * @param string $typeName Type of the new page
+     * @return \TYPO3\Form\Core\Model\Page the newly created page
+     * @throws \TYPO3\Form\Exception\TypeDefinitionNotFoundException
+     * @api
+     */
+    public function createPage($identifier, $typeName = 'TYPO3.Form:Page')
+    {
+        $typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($typeName);
 
-	/**
-	 * Create a page with the given $identifier and attach this page to the form.
-	 *
-	 * - Create Page object based on the given $typeName
-	 * - set defaults inside the Page object
-	 * - attach Page object to this form
-	 * - return the newly created Page object
-	 *
-	 * @param string $identifier Identifier of the new page
-	 * @param string $typeName Type of the new page
-	 * @return \TYPO3\Form\Core\Model\Page the newly created page
-	 * @throws \TYPO3\Form\Exception\TypeDefinitionNotFoundException
-	 * @api
-	 */
-	public function createPage($identifier, $typeName = 'TYPO3.Form:Page') {
-		$typeDefinition = $this->formFieldTypeManager->getMergedTypeDefinition($typeName);
+        if (!isset($typeDefinition['implementationClassName'])) {
+            throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
+        }
+        $implementationClassName = $typeDefinition['implementationClassName'];
+        $page = new $implementationClassName($identifier, $typeName);
 
-		if (!isset($typeDefinition['implementationClassName'])) {
-			throw new \TYPO3\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
-		}
-		$implementationClassName = $typeDefinition['implementationClassName'];
-		$page = new $implementationClassName($identifier, $typeName);
+        if (isset($typeDefinition['label'])) {
+            $page->setLabel($typeDefinition['label']);
+        }
 
-		if (isset($typeDefinition['label'])) {
-			$page->setLabel($typeDefinition['label']);
-		}
+        if (isset($typeDefinition['rendererClassName'])) {
+            $page->setRendererClassName($typeDefinition['rendererClassName']);
+        }
 
-		if (isset($typeDefinition['rendererClassName'])) {
-			$page->setRendererClassName($typeDefinition['rendererClassName']);
-		}
+        if (isset($typeDefinition['renderingOptions'])) {
+            foreach ($typeDefinition['renderingOptions'] as $key => $value) {
+                $page->setRenderingOption($key, $value);
+            }
+        }
 
-		if (isset($typeDefinition['renderingOptions'])) {
-			foreach ($typeDefinition['renderingOptions'] as $key => $value) {
-				$page->setRenderingOption($key, $value);
-			}
-		}
+        \TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'rendererClassName', 'renderingOptions'));
 
-		\TYPO3\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'rendererClassName', 'renderingOptions'));
+        $this->addPage($page);
+        return $page;
+    }
 
-		$this->addPage($page);
-		return $page;
-	}
+    /**
+     * Add a new page at the end of the form.
+     *
+     * Instead of this method, you should often use {@link createPage} instead.
+     *
+     * @param Page $page
+     * @return void
+     * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if Page is already added to a FormDefinition
+     * @see createPage
+     * @api
+     */
+    public function addPage(Page $page)
+    {
+        $this->addRenderable($page);
+    }
 
-	/**
-	 * Add a new page at the end of the form.
-	 *
-	 * Instead of this method, you should often use {@link createPage} instead.
-	 *
-	 * @param Page $page
-	 * @return void
-	 * @throws \TYPO3\Form\Exception\FormDefinitionConsistencyException if Page is already added to a FormDefinition
-	 * @see createPage
-	 * @api
-	 */
-	public function addPage(Page $page) {
-		$this->addRenderable($page);
-	}
+    /**
+     * Get the Form's pages
+     *
+     * @return array<TYPO3\Form\Core\Model\Page> The Form's pages in the correct order
+     * @api
+     */
+    public function getPages()
+    {
+        return $this->renderables;
+    }
 
-	/**
-	 * Get the Form's pages
-	 *
-	 * @return array<TYPO3\Form\Core\Model\Page> The Form's pages in the correct order
-	 * @api
-	 */
-	public function getPages() {
-		return $this->renderables;
-	}
+    /**
+     * Check whether a page with the given $index exists
+     *
+     * @param integer $index
+     * @return boolean TRUE if a page with the given $index exists, otherwise FALSE
+     * @api
+     */
+    public function hasPageWithIndex($index)
+    {
+        return isset($this->renderables[$index]);
+    }
 
-	/**
-	 * Check whether a page with the given $index exists
-	 *
-	 * @param integer $index
-	 * @return boolean TRUE if a page with the given $index exists, otherwise FALSE
-	 * @api
-	 */
-	public function hasPageWithIndex($index) {
-		return isset($this->renderables[$index]);
-	}
+    /**
+     * Get the page with the passed index. The first page has index zero.
+     *
+     * If page at $index does not exist, an exception is thrown. @see hasPageWithIndex()
+     *
+     * @param integer $index
+     * @return Page the page, or NULL if none found.
+     * @throws \TYPO3\Form\Exception if the specified index does not exist
+     * @api
+     */
+    public function getPageByIndex($index)
+    {
+        if (!$this->hasPageWithIndex($index)) {
+            throw new \TYPO3\Form\Exception(sprintf('There is no page with an index of %d', $index), 1329233627);
+        }
+        return $this->renderables[$index];
+    }
 
-	/**
-	 * Get the page with the passed index. The first page has index zero.
-	 *
-	 * If page at $index does not exist, an exception is thrown. @see hasPageWithIndex()
-	 *
-	 * @param integer $index
-	 * @return Page the page, or NULL if none found.
-	 * @throws \TYPO3\Form\Exception if the specified index does not exist
-	 * @api
-	 */
-	public function getPageByIndex($index) {
-		if (!$this->hasPageWithIndex($index)) {
-			throw new \TYPO3\Form\Exception(sprintf('There is no page with an index of %d', $index), 1329233627);
-		}
-		return $this->renderables[$index];
-	}
+    /**
+     * Adds the specified finisher to this form
+     *
+     * @param \TYPO3\Form\Core\Model\FinisherInterface $finisher
+     * @return void
+     * @api
+     */
+    public function addFinisher(FinisherInterface $finisher)
+    {
+        $this->finishers[] = $finisher;
+    }
 
-	/**
-	 * Adds the specified finisher to this form
-	 *
-	 * @param \TYPO3\Form\Core\Model\FinisherInterface $finisher
-	 * @return void
-	 * @api
-	 */
-	public function addFinisher(FinisherInterface $finisher) {
-		$this->finishers[] = $finisher;
-	}
+    /**
+     * @param string $finisherIdentifier identifier of the finisher as registered in the current form preset (for example: "TYPO3.Form:Redirect")
+     * @param array $options options for this finisher in the format array('option1' => 'value1', 'option2' => 'value2', ...)
+     * @return FinisherInterface
+     * @throws \TYPO3\Form\Exception\FinisherPresetNotFoundException
+     * @api
+     */
+    public function createFinisher($finisherIdentifier, array $options = array())
+    {
+        if (isset($this->finisherPresets[$finisherIdentifier]) && is_array($this->finisherPresets[$finisherIdentifier]) && isset($this->finisherPresets[$finisherIdentifier]['implementationClassName'])) {
+            $implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
+            $defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
 
-	/**
-	 * @param string $finisherIdentifier identifier of the finisher as registered in the current form preset (for example: "TYPO3.Form:Redirect")
-	 * @param array $options options for this finisher in the format array('option1' => 'value1', 'option2' => 'value2', ...)
-	 * @return FinisherInterface
-	 * @throws \TYPO3\Form\Exception\FinisherPresetNotFoundException
-	 * @api
-	 */
-	public function createFinisher($finisherIdentifier, array $options = array()) {
-		if (isset($this->finisherPresets[$finisherIdentifier]) && is_array($this->finisherPresets[$finisherIdentifier]) && isset($this->finisherPresets[$finisherIdentifier]['implementationClassName'])) {
-			$implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
-			$defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
+            $options = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
-			$options = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+            $finisher = new $implementationClassName;
+            $finisher->setOptions($options);
+            $this->addFinisher($finisher);
+            return $finisher;
+        } else {
+            throw new \TYPO3\Form\Exception\FinisherPresetNotFoundException('The finisher preset identified by "' . $finisherIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328709784);
+        }
+    }
 
-			$finisher = new $implementationClassName;
-			$finisher->setOptions($options);
-			$this->addFinisher($finisher);
-			return $finisher;
-		} else {
-			throw new \TYPO3\Form\Exception\FinisherPresetNotFoundException('The finisher preset identified by "' . $finisherIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328709784);
-		}
-	}
+    /**
+     * Gets all finishers of this form
+     *
+     * @return array<\TYPO3\Form\Core\Model\FinisherInterface>
+     * @api
+     */
+    public function getFinishers()
+    {
+        return $this->finishers;
+    }
 
-	/**
-	 * Gets all finishers of this form
-	 *
-	 * @return array<\TYPO3\Form\Core\Model\FinisherInterface>
-	 * @api
-	 */
-	public function getFinishers() {
-		return $this->finishers;
-	}
+    /**
+     * Add an element to the ElementsByIdentifier Cache.
+     *
+     * @param Renderable\RenderableInterface $renderable
+     * @return void
+     * @throws \TYPO3\Form\Exception\DuplicateFormElementException
+     * @internal
+     */
+    public function registerRenderable(Renderable\RenderableInterface $renderable)
+    {
+        if ($renderable instanceof FormElementInterface) {
+            if (isset($this->elementsByIdentifier[$renderable->getIdentifier()])) {
+                throw new \TYPO3\Form\Exception\DuplicateFormElementException(sprintf('A form element with identifier "%s" is already part of the form.', $renderable->getIdentifier()), 1325663761);
+            }
+            $this->elementsByIdentifier[$renderable->getIdentifier()] = $renderable;
+        }
+    }
 
-	/**
-	 * Add an element to the ElementsByIdentifier Cache.
-	 *
-	 * @param Renderable\RenderableInterface $renderable
-	 * @return void
-	 * @throws \TYPO3\Form\Exception\DuplicateFormElementException
-	 * @internal
-	 */
-	public function registerRenderable(Renderable\RenderableInterface $renderable) {
-		if ($renderable instanceof FormElementInterface) {
-			if (isset($this->elementsByIdentifier[$renderable->getIdentifier()])) {
-				throw new \TYPO3\Form\Exception\DuplicateFormElementException(sprintf('A form element with identifier "%s" is already part of the form.', $renderable->getIdentifier()), 1325663761);
-			}
-			$this->elementsByIdentifier[$renderable->getIdentifier()] = $renderable;
-		}
-	}
+    /**
+     * Remove an element from the ElementsByIdentifier cache
+     *
+     * @param Renderable\RenderableInterface $renderable
+     * @return void
+     * @internal
+     */
+    public function unregisterRenderable(Renderable\RenderableInterface $renderable)
+    {
+        if ($renderable instanceof FormElementInterface) {
+            unset($this->elementsByIdentifier[$renderable->getIdentifier()]);
+        }
+    }
 
-	/**
-	 * Remove an element from the ElementsByIdentifier cache
-	 *
-	 * @param Renderable\RenderableInterface $renderable
-	 * @return void
-	 * @internal
-	 */
-	public function unregisterRenderable(Renderable\RenderableInterface $renderable) {
-		if ($renderable instanceof FormElementInterface) {
-			unset($this->elementsByIdentifier[$renderable->getIdentifier()]);
-		}
-	}
+    /**
+     * Get a Form Element by its identifier
+     *
+     * If identifier does not exist, returns NULL.
+     *
+     * @param string $elementIdentifier
+     * @return FormElementInterface The element with the given $elementIdentifier or NULL if none found
+     * @api
+     */
+    public function getElementByIdentifier($elementIdentifier)
+    {
+        return isset($this->elementsByIdentifier[$elementIdentifier]) ? $this->elementsByIdentifier[$elementIdentifier] : null;
+    }
 
-	/**
-	 * Get a Form Element by its identifier
-	 *
-	 * If identifier does not exist, returns NULL.
-	 *
-	 * @param string $elementIdentifier
-	 * @return FormElementInterface The element with the given $elementIdentifier or NULL if none found
-	 * @api
-	 */
-	public function getElementByIdentifier($elementIdentifier) {
-		return isset($this->elementsByIdentifier[$elementIdentifier]) ? $this->elementsByIdentifier[$elementIdentifier] : NULL;
-	}
+    /**
+     * Sets the default value of a form element
+     *
+     * @param string $elementIdentifier identifier of the form element. This supports property paths!
+     * @param mixed $defaultValue
+     * @return void
+     * @internal
+     */
+    public function addElementDefaultValue($elementIdentifier, $defaultValue)
+    {
+        $this->elementDefaultValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
+    }
 
-	/**
-	 * Sets the default value of a form element
-	 *
-	 * @param string $elementIdentifier identifier of the form element. This supports property paths!
-	 * @param mixed $defaultValue
-	 * @return void
-	 * @internal
-	 */
-	public function addElementDefaultValue($elementIdentifier, $defaultValue) {
-		$this->elementDefaultValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
-	}
+    /**
+     * returns the default value of the specified form element
+     * or NULL if no default value was set
+     *
+     * @param string $elementIdentifier identifier of the form element. This supports property paths!
+     * @return mixed The elements default value
+     * @internal
+     */
+    public function getElementDefaultValueByIdentifier($elementIdentifier)
+    {
+        return \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
+    }
 
-	/**
-	 * returns the default value of the specified form element
-	 * or NULL if no default value was set
-	 *
-	 * @param string $elementIdentifier identifier of the form element. This supports property paths!
-	 * @return mixed The elements default value
-	 * @internal
-	 */
-	public function getElementDefaultValueByIdentifier($elementIdentifier) {
-		return \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
-	}
+    /**
+     * Move $pageToMove before $referencePage
+     *
+     * @param Page $pageToMove
+     * @param Page $referencePage
+     * @return void
+     * @api
+     */
+    public function movePageBefore(Page $pageToMove, Page $referencePage)
+    {
+        $this->moveRenderableBefore($pageToMove, $referencePage);
+    }
 
-	/**
-	 * Move $pageToMove before $referencePage
-	 *
-	 * @param Page $pageToMove
-	 * @param Page $referencePage
-	 * @return void
-	 * @api
-	 */
-	public function movePageBefore(Page $pageToMove, Page $referencePage) {
-		$this->moveRenderableBefore($pageToMove, $referencePage);
-	}
+    /**
+     * Move $pageToMove after $referencePage
+     *
+     * @param Page $pageToMove
+     * @param Page $referencePage
+     * @return void
+     * @api
+     */
+    public function movePageAfter(Page $pageToMove, Page $referencePage)
+    {
+        $this->moveRenderableAfter($pageToMove, $referencePage);
+    }
 
-	/**
-	 * Move $pageToMove after $referencePage
-	 *
-	 * @param Page $pageToMove
-	 * @param Page $referencePage
-	 * @return void
-	 * @api
-	 */
-	public function movePageAfter(Page $pageToMove, Page $referencePage) {
-		$this->moveRenderableAfter($pageToMove, $referencePage);
-	}
+    /**
+     * Remove $pageToRemove from form
+     *
+     * @param Page $pageToRemove
+     * @return void
+     * @api
+     */
+    public function removePage(Page $pageToRemove)
+    {
+        $this->removeRenderable($pageToRemove);
+    }
 
-	/**
-	 * Remove $pageToRemove from form
-	 *
-	 * @param Page $pageToRemove
-	 * @return void
-	 * @api
-	 */
-	public function removePage(Page $pageToRemove) {
-		$this->removeRenderable($pageToRemove);
-	}
+    /**
+     * Bind the current request & response to this form instance, effectively creating
+     * a new "instance" of the Form.
+     *
+     * @param \TYPO3\Flow\Mvc\ActionRequest $request
+     * @param \TYPO3\Flow\Http\Response $response
+     * @return \TYPO3\Form\Core\Runtime\FormRuntime
+     * @api
+     */
+    public function bind(\TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response)
+    {
+        return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request, $response);
+    }
 
-	/**
-	 * Bind the current request & response to this form instance, effectively creating
-	 * a new "instance" of the Form.
-	 *
-	 * @param \TYPO3\Flow\Mvc\ActionRequest $request
-	 * @param \TYPO3\Flow\Http\Response $response
-	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
-	 * @api
-	 */
-	public function bind(\TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response) {
-		return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request, $response);
-	}
+    /**
+     * @param string $propertyPath
+     * @return ProcessingRule
+     * @api
+     */
+    public function getProcessingRule($propertyPath)
+    {
+        if (!isset($this->processingRules[$propertyPath])) {
+            $this->processingRules[$propertyPath] = new ProcessingRule();
+        }
+        return $this->processingRules[$propertyPath];
+    }
 
-	/**
-	 * @param string $propertyPath
-	 * @return ProcessingRule
-	 * @api
-	 */
-	public function getProcessingRule($propertyPath) {
-		if (!isset($this->processingRules[$propertyPath])) {
-			$this->processingRules[$propertyPath] = new ProcessingRule();
-		}
-		return $this->processingRules[$propertyPath];
-	}
+    /**
+     * Get all mapping rules
+     *
+     * @return array<MappingRule>
+     * @internal
+     */
+    public function getProcessingRules()
+    {
+        return $this->processingRules;
+    }
 
-	/**
-	 * Get all mapping rules
-	 *
-	 * @return array<MappingRule>
-	 * @internal
-	 */
-	public function getProcessingRules() {
-		return $this->processingRules;
-	}
+    /**
+     * @return \TYPO3\Form\Utility\SupertypeResolver
+     * @internal
+     */
+    public function getFormFieldTypeManager()
+    {
+        return $this->formFieldTypeManager;
+    }
 
-	/**
-	 * @return \TYPO3\Form\Utility\SupertypeResolver
-	 * @internal
-	 */
-	public function getFormFieldTypeManager() {
-		return $this->formFieldTypeManager;
-	}
-
-	/**
-	 * @return array
-	 * @internal
-	 */
-	public function getValidatorPresets() {
-		return $this->validatorPresets;
-	}
+    /**
+     * @return array
+     * @internal
+     */
+    public function getValidatorPresets()
+    {
+        return $this->validatorPresets;
+    }
 }

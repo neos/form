@@ -53,514 +53,546 @@ use TYPO3\Flow\Mvc\ActionRequest;
  *
  * @api
  */
-class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface, \ArrayAccess {
+class FormRuntime implements \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface, \ArrayAccess
+{
+    /**
+     * @var \TYPO3\Form\Core\Model\FormDefinition
+     * @internal
+     */
+    protected $formDefinition;
 
-	/**
-	 * @var \TYPO3\Form\Core\Model\FormDefinition
-	 * @internal
-	 */
-	protected $formDefinition;
+    /**
+     * @var \TYPO3\Flow\Mvc\ActionRequest
+     * @internal
+     */
+    protected $request;
 
-	/**
-	 * @var \TYPO3\Flow\Mvc\ActionRequest
-	 * @internal
-	 */
-	protected $request;
+    /**
+     * @var \TYPO3\Flow\Http\Response
+     * @internal
+     */
+    protected $response;
 
-	/**
-	 * @var \TYPO3\Flow\Http\Response
-	 * @internal
-	 */
-	protected $response;
+    /**
+     * @var \TYPO3\Form\Core\Runtime\FormState
+     * @internal
+     */
+    protected $formState;
 
-	/**
-	 * @var \TYPO3\Form\Core\Runtime\FormState
-	 * @internal
-	 */
-	protected $formState;
+    /**
+     * The current page is the page which will be displayed to the user
+     * during rendering.
+     *
+     * If $currentPage is NULL, the *last* page has been submitted and
+     * finishing actions need to take place. You should use $this->isAfterLastPage()
+     * instead of explicitely checking for NULL.
+     *
+     * @var \TYPO3\Form\Core\Model\Page
+     * @internal
+     */
+    protected $currentPage = null;
 
-	/**
-	 * The current page is the page which will be displayed to the user
-	 * during rendering.
-	 *
-	 * If $currentPage is NULL, the *last* page has been submitted and
-	 * finishing actions need to take place. You should use $this->isAfterLastPage()
-	 * instead of explicitely checking for NULL.
-	 *
-	 * @var \TYPO3\Form\Core\Model\Page
-	 * @internal
-	 */
-	protected $currentPage = NULL;
+    /**
+     * Reference to the page which has been shown on the last request (i.e.
+     * we have to handle the submitted data from lastDisplayedPage)
+     *
+     * @var \TYPO3\Form\Core\Model\Page
+     * @internal
+     */
+    protected $lastDisplayedPage = null;
 
-	/**
-	 * Reference to the page which has been shown on the last request (i.e.
-	 * we have to handle the submitted data from lastDisplayedPage)
-	 *
-	 * @var \TYPO3\Form\Core\Model\Page
-	 * @internal
-	 */
-	protected $lastDisplayedPage = NULL;
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Security\Cryptography\HashService
+     * @internal
+     */
+    protected $hashService;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Security\Cryptography\HashService
-	 * @internal
-	 */
-	protected $hashService;
+    /**
+     * Workaround...
+     *
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Mvc\FlashMessageContainer
+     * @internal
+     */
+    protected $flashMessageContainer;
 
-	/**
-	 * Workaround...
-	 *
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Mvc\FlashMessageContainer
-	 * @internal
-	 */
-	protected $flashMessageContainer;
+    /**
+     * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
+     * @param \TYPO3\Flow\Mvc\ActionRequest $request
+     * @param \TYPO3\Flow\Http\Response $response
+     * @throws \TYPO3\Form\Exception\IdentifierNotValidException
+     * @internal
+     */
+    public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response)
+    {
+        $this->formDefinition = $formDefinition;
+        $rootRequest = $request->getMainRequest() ?: $request;
+        $pluginArguments = $rootRequest->getPluginArguments();
+        $this->request = new ActionRequest($request);
+        $formIdentifier = $this->formDefinition->getIdentifier();
+        $this->request->setArgumentNamespace('--' . $formIdentifier);
+        if (isset($pluginArguments[$formIdentifier])) {
+            $this->request->setArguments($pluginArguments[$formIdentifier]);
+        }
 
-	/**
-	 * @param \TYPO3\Form\Core\Model\FormDefinition $formDefinition
-	 * @param \TYPO3\Flow\Mvc\ActionRequest $request
-	 * @param \TYPO3\Flow\Http\Response $response
-	 * @throws \TYPO3\Form\Exception\IdentifierNotValidException
-	 * @internal
-	 */
-	public function __construct(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, \TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response) {
-		$this->formDefinition = $formDefinition;
-		$rootRequest = $request->getMainRequest() ?: $request;
-		$pluginArguments = $rootRequest->getPluginArguments();
-		$this->request = new ActionRequest($request);
-		$formIdentifier = $this->formDefinition->getIdentifier();
-		$this->request->setArgumentNamespace('--' . $formIdentifier);
-		if (isset($pluginArguments[$formIdentifier])) {
-			$this->request->setArguments($pluginArguments[$formIdentifier]);
-		}
+        $this->response = $response;
+    }
 
-		$this->response = $response;
-	}
+    /**
+     * @return void
+     * @internal
+     */
+    public function initializeObject()
+    {
+        $this->initializeFormStateFromRequest();
+        $this->initializeCurrentPageFromRequest();
 
-	/**
-	 * @return void
-	 * @internal
-	 */
-	public function initializeObject() {
-		$this->initializeFormStateFromRequest();
-		$this->initializeCurrentPageFromRequest();
+        if (!$this->isFirstRequest() && $this->getRequest()->getHttpRequest()->getMethod() === 'POST') {
+            $this->processSubmittedFormValues();
+        }
+    }
 
-		if (!$this->isFirstRequest() && $this->getRequest()->getHttpRequest()->getMethod() === 'POST') {
-			$this->processSubmittedFormValues();
-		}
-	}
+    /**
+     * @return void
+     * @internal
+     */
+    protected function initializeFormStateFromRequest()
+    {
+        $serializedFormStateWithHmac = $this->request->getInternalArgument('__state');
+        if ($serializedFormStateWithHmac === null) {
+            $this->formState = new FormState();
+        } else {
+            $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
+            $this->formState = unserialize(base64_decode($serializedFormState));
+        }
+    }
 
-	/**
-	 * @return void
-	 * @internal
-	 */
-	protected function initializeFormStateFromRequest() {
-		$serializedFormStateWithHmac = $this->request->getInternalArgument('__state');
-		if ($serializedFormStateWithHmac === NULL) {
-			$this->formState = new FormState();
-		} else {
-			$serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-			$this->formState = unserialize(base64_decode($serializedFormState));
-		}
-	}
+    /**
+     * @return void
+     * @internal
+     */
+    protected function initializeCurrentPageFromRequest()
+    {
+        if (!$this->formState->isFormSubmitted()) {
+            $this->currentPage = $this->formDefinition->getPageByIndex(0);
+            return;
+        }
+        $this->lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
 
-	/**
-	 * @return void
-	 * @internal
-	 */
-	protected function initializeCurrentPageFromRequest() {
-		if (!$this->formState->isFormSubmitted()) {
-			$this->currentPage = $this->formDefinition->getPageByIndex(0);
-			return;
-		}
-		$this->lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
+        // We know now that lastDisplayedPage is filled
+        $currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
+        if ($currentPageIndex > $this->lastDisplayedPage->getIndex() + 1) {
+            // We only allow jumps to following pages
+            $currentPageIndex = $this->lastDisplayedPage->getIndex() + 1;
+        }
 
-		// We know now that lastDisplayedPage is filled
-		$currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
-		if ($currentPageIndex > $this->lastDisplayedPage->getIndex() + 1) {
-				// We only allow jumps to following pages
-			$currentPageIndex = $this->lastDisplayedPage->getIndex() + 1;
-		}
+        // We now know that the user did not try to skip a page
+        if ($currentPageIndex === count($this->formDefinition->getPages())) {
+            // Last Page
+            $this->currentPage = null;
+        } else {
+            $this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
+        }
+    }
 
-		// We now know that the user did not try to skip a page
-		if ($currentPageIndex === count($this->formDefinition->getPages())) {
-				// Last Page
-			$this->currentPage = NULL;
-		} else {
-			$this->currentPage = $this->formDefinition->getPageByIndex($currentPageIndex);
-		}
-	}
+    /**
+     * Returns TRUE if the last page of the form has been submitted, otherwise FALSE
+     *
+     * @return boolean
+     */
+    protected function isAfterLastPage()
+    {
+        return ($this->currentPage === null);
+    }
 
-	/**
-	 * Returns TRUE if the last page of the form has been submitted, otherwise FALSE
-	 *
-	 * @return boolean
-	 */
-	protected function isAfterLastPage() {
-		return ($this->currentPage === NULL);
-	}
+    /**
+     * Returns TRUE if no previous page is stored in the FormState, otherwise FALSE
+     *
+     * @return boolean
+     */
+    protected function isFirstRequest()
+    {
+        return ($this->lastDisplayedPage === null);
+    }
 
-	/**
-	 * Returns TRUE if no previous page is stored in the FormState, otherwise FALSE
-	 *
-	 * @return boolean
-	 */
-	protected function isFirstRequest() {
-		return ($this->lastDisplayedPage === NULL);
-	}
+    /**
+     * @return void
+     * @internal
+     */
+    protected function processSubmittedFormValues()
+    {
+        $result = $this->mapAndValidatePage($this->lastDisplayedPage);
+        if ($result->hasErrors() && !$this->userWentBackToPreviousStep()) {
+            $this->currentPage = $this->lastDisplayedPage;
+            $this->request->setArgument('__submittedArguments', $this->request->getArguments());
+            $this->request->setArgument('__submittedArgumentValidationResults', $result);
+        }
+    }
 
-	/**
-	 * @return void
-	 * @internal
-	 */
-	protected function processSubmittedFormValues() {
-		$result = $this->mapAndValidatePage($this->lastDisplayedPage);
-		if ($result->hasErrors() && !$this->userWentBackToPreviousStep()) {
-			$this->currentPage = $this->lastDisplayedPage;
-			$this->request->setArgument('__submittedArguments', $this->request->getArguments());
-			$this->request->setArgument('__submittedArgumentValidationResults', $result);
-		}
-	}
+    /**
+     * returns TRUE if the user went back to any previous step in the form.
+     *
+     * @return boolean
+     */
+    protected function userWentBackToPreviousStep()
+    {
+        return !$this->isAfterLastPage() && !$this->isFirstRequest() && $this->currentPage->getIndex() < $this->lastDisplayedPage->getIndex();
+    }
 
-	/**
-	 * returns TRUE if the user went back to any previous step in the form.
-	 *
-	 * @return boolean
-	 */
-	protected function userWentBackToPreviousStep() {
-		return !$this->isAfterLastPage() && !$this->isFirstRequest() && $this->currentPage->getIndex() < $this->lastDisplayedPage->getIndex();
-	}
+    /**
+     * @param \TYPO3\Form\Core\Model\Page $page
+     * @return \TYPO3\Flow\Error\Result
+     * @internal
+     */
+    protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page)
+    {
+        $result = new \TYPO3\Flow\Error\Result();
+        $requestArguments = $this->request->getArguments();
 
-	/**
-	 * @param \TYPO3\Form\Core\Model\Page $page
-	 * @return \TYPO3\Flow\Error\Result
-	 * @internal
-	 */
-	protected function mapAndValidatePage(\TYPO3\Form\Core\Model\Page $page) {
-		$result = new \TYPO3\Flow\Error\Result();
-		$requestArguments = $this->request->getArguments();
+        $propertyPathsForWhichPropertyMappingShouldHappen = array();
+        $registerPropertyPaths = function ($propertyPath) use (&$propertyPathsForWhichPropertyMappingShouldHappen) {
+            $propertyPathParts = explode('.', $propertyPath);
+            $accumulatedPropertyPathParts = array();
+            foreach ($propertyPathParts as $propertyPathPart) {
+                $accumulatedPropertyPathParts[] = $propertyPathPart;
+                $temporaryPropertyPath = implode('.', $accumulatedPropertyPathParts);
+                $propertyPathsForWhichPropertyMappingShouldHappen[$temporaryPropertyPath] = $temporaryPropertyPath;
+            }
+        };
 
-		$propertyPathsForWhichPropertyMappingShouldHappen = array();
-		$registerPropertyPaths = function($propertyPath) use (&$propertyPathsForWhichPropertyMappingShouldHappen) {
-			$propertyPathParts = explode ('.', $propertyPath);
-			$accumulatedPropertyPathParts = array();
-			foreach ($propertyPathParts as $propertyPathPart) {
-				$accumulatedPropertyPathParts[] = $propertyPathPart;
-				$temporaryPropertyPath = implode('.', $accumulatedPropertyPathParts);
-				$propertyPathsForWhichPropertyMappingShouldHappen[$temporaryPropertyPath] = $temporaryPropertyPath;
-			}
-		};
+        foreach ($page->getElementsRecursively() as $element) {
+            $value = \TYPO3\Flow\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
+            $element->onSubmit($this, $value);
 
-		foreach ($page->getElementsRecursively() as $element) {
-			$value = \TYPO3\Flow\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
-			$element->onSubmit($this, $value);
+            $this->formState->setFormValue($element->getIdentifier(), $value);
+            $registerPropertyPaths($element->getIdentifier());
+        }
 
-			$this->formState->setFormValue($element->getIdentifier(), $value);
-			$registerPropertyPaths($element->getIdentifier());
-		}
+        // The more parts the path has, the more early it is processed
+        usort($propertyPathsForWhichPropertyMappingShouldHappen, function ($a, $b) {
+            return substr_count($b, '.') - substr_count($a, '.');
+        });
 
-		// The more parts the path has, the more early it is processed
-		usort($propertyPathsForWhichPropertyMappingShouldHappen, function($a, $b) {
-			return substr_count($b, '.') - substr_count($a, '.');
-		});
+        $processingRules = $this->formDefinition->getProcessingRules();
+        foreach ($propertyPathsForWhichPropertyMappingShouldHappen as $propertyPath) {
+            if (isset($processingRules[$propertyPath])) {
+                $processingRule = $processingRules[$propertyPath];
+                $value = $this->formState->getFormValue($propertyPath);
+                try {
+                    $value = $processingRule->process($value);
+                } catch (\TYPO3\Flow\Property\Exception $exception) {
+                    throw new \TYPO3\Form\Exception\PropertyMappingException('Failed to process FormValue at "' . $propertyPath . '" from "' . gettype($value) . '" to "' . $processingRule->getDataType() . '"', 1355218921, $exception);
+                }
+                $result->forProperty($propertyPath)->merge($processingRule->getProcessingMessages());
+                $this->formState->setFormValue($propertyPath, $value);
+            }
+        }
 
-		$processingRules = $this->formDefinition->getProcessingRules();
-		foreach ($propertyPathsForWhichPropertyMappingShouldHappen as $propertyPath) {
-			if (isset($processingRules[$propertyPath])) {
-				$processingRule = $processingRules[$propertyPath];
-				$value = $this->formState->getFormValue($propertyPath);
-				try {
-					$value = $processingRule->process($value);
-				} catch (\TYPO3\Flow\Property\Exception $exception) {
-					throw new \TYPO3\Form\Exception\PropertyMappingException('Failed to process FormValue at "' . $propertyPath . '" from "' . gettype($value) . '" to "' . $processingRule->getDataType() . '"', 1355218921, $exception);
-				}
-				$result->forProperty($propertyPath)->merge($processingRule->getProcessingMessages());
-				$this->formState->setFormValue($propertyPath, $value);
-			}
-		}
+        return $result;
+    }
 
-		return $result;
-	}
+    /**
+     * Override the current page taken from the request, rendering the page with index $pageIndex instead.
+     *
+     * This is typically not needed in production code, but it is very helpful when displaying
+     * some kind of "preview" of the form.
+     *
+     * @param integer $pageIndex
+     * @return void
+     * @api
+     */
+    public function overrideCurrentPage($pageIndex)
+    {
+        $this->currentPage = $this->formDefinition->getPageByIndex($pageIndex);
+    }
 
-	/**
-	 * Override the current page taken from the request, rendering the page with index $pageIndex instead.
-	 *
-	 * This is typically not needed in production code, but it is very helpful when displaying
-	 * some kind of "preview" of the form.
-	 *
-	 * @param integer $pageIndex
-	 * @return void
-	 * @api
-	 */
-	public function overrideCurrentPage($pageIndex) {
-		$this->currentPage = $this->formDefinition->getPageByIndex($pageIndex);
-	}
+    /**
+     * Render this form.
+     *
+     * @return string rendered form
+     * @api
+     * @throws \TYPO3\Form\Exception\RenderingException
+     */
+    public function render()
+    {
+        if ($this->isAfterLastPage()) {
+            $this->invokeFinishers();
+            return $this->response->getContent();
+        }
 
-	/**
-	 * Render this form.
-	 *
-	 * @return string rendered form
-	 * @api
-	 * @throws \TYPO3\Form\Exception\RenderingException
-	 */
-	public function render() {
-		if ($this->isAfterLastPage()) {
-			$this->invokeFinishers();
-			return $this->response->getContent();
-		}
+        $this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
 
-		$this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
+        if ($this->formDefinition->getRendererClassName() === null) {
+            throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have a rendererClassName set.', $this->formDefinition->getIdentifier()), 1326095912);
+        }
+        $rendererClassName = $this->formDefinition->getRendererClassName();
+        $renderer = new $rendererClassName();
+        if (!($renderer instanceof \TYPO3\Form\Core\Renderer\RendererInterface)) {
+            throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer "%s" des not implement RendererInterface', $rendererClassName), 1326096024);
+        }
 
-		if ($this->formDefinition->getRendererClassName() === NULL) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The form definition "%s" does not have a rendererClassName set.', $this->formDefinition->getIdentifier()), 1326095912);
-		}
-		$rendererClassName = $this->formDefinition->getRendererClassName();
-		$renderer = new $rendererClassName();
-		if (!($renderer instanceof \TYPO3\Form\Core\Renderer\RendererInterface)) {
-			throw new \TYPO3\Form\Exception\RenderingException(sprintf('The renderer "%s" des not implement RendererInterface', $rendererClassName), 1326096024);
-		}
+        $controllerContext = $this->getControllerContext();
+        $renderer->setControllerContext($controllerContext);
 
-		$controllerContext = $this->getControllerContext();
-		$renderer->setControllerContext($controllerContext);
+        $renderer->setFormRuntime($this);
+        return $renderer->renderRenderable($this);
+    }
 
-		$renderer->setFormRuntime($this);
-		return $renderer->renderRenderable($this);
-	}
+    /**
+     * Executes all finishers of this form
+     *
+     * @return void
+     * @internal
+     */
+    protected function invokeFinishers()
+    {
+        $finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this);
+        foreach ($this->formDefinition->getFinishers() as $finisher) {
+            $finisher->execute($finisherContext);
+            if ($finisherContext->isCancelled()) {
+                break;
+            }
+        }
+    }
 
-	/**
-	 * Executes all finishers of this form
-	 *
-	 * @return void
-	 * @internal
-	 */
-	protected function invokeFinishers() {
-		$finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this);
-		foreach ($this->formDefinition->getFinishers() as $finisher) {
-			$finisher->execute($finisherContext);
-			if ($finisherContext->isCancelled()) {
-				break;
-			}
-		}
-	}
+    /**
+     * @return string The identifier of underlying form
+     * @api
+     */
+    public function getIdentifier()
+    {
+        return $this->formDefinition->getIdentifier();
+    }
 
-	/**
-	 * @return string The identifier of underlying form
-	 * @api
-	 */
-	public function getIdentifier() {
-		return $this->formDefinition->getIdentifier();
-	}
+    /**
+     * Get the request this object is bound to.
+     *
+     * This is mostly relevant inside Finishers, where you f.e. want to redirect
+     * the user to another page.
+     *
+     * @return \TYPO3\Flow\Mvc\ActionRequest the request this object is bound to
+     * @api
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
 
-	/**
-	 * Get the request this object is bound to.
-	 *
-	 * This is mostly relevant inside Finishers, where you f.e. want to redirect
-	 * the user to another page.
-	 *
-	 * @return \TYPO3\Flow\Mvc\ActionRequest the request this object is bound to
-	 * @api
-	 */
-	public function getRequest() {
-		return $this->request;
-	}
+    /**
+     * Get the response this object is bound to.
+     *
+     * This is mostly relevant inside Finishers, where you f.e. want to set response
+     * headers or output content.
+     *
+     * @return \TYPO3\Flow\Http\Response the response this object is bound to
+     * @api
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
 
-	/**
-	 * Get the response this object is bound to.
-	 *
-	 * This is mostly relevant inside Finishers, where you f.e. want to set response
-	 * headers or output content.
-	 *
-	 * @return \TYPO3\Flow\Http\Response the response this object is bound to
-	 * @api
-	 */
-	public function getResponse() {
-		return $this->response;
-	}
+    /**
+     * Returns the currently selected page
+     *
+     * @return \TYPO3\Form\Core\Model\Page
+     * @api
+     */
+    public function getCurrentPage()
+    {
+        return $this->currentPage;
+    }
 
-	/**
-	 * Returns the currently selected page
-	 *
-	 * @return \TYPO3\Form\Core\Model\Page
-	 * @api
-	 */
-	public function getCurrentPage() {
-		return $this->currentPage;
-	}
+    /**
+     * Returns the previous page of the currently selected one or NULL if there is no previous page
+     *
+     * @return \TYPO3\Form\Core\Model\Page
+     * @api
+     */
+    public function getPreviousPage()
+    {
+        $previousPageIndex = $this->currentPage->getIndex() - 1;
+        if ($this->formDefinition->hasPageWithIndex($previousPageIndex)) {
+            return $this->formDefinition->getPageByIndex($previousPageIndex);
+        }
+    }
 
-	/**
-	 * Returns the previous page of the currently selected one or NULL if there is no previous page
-	 *
-	 * @return \TYPO3\Form\Core\Model\Page
-	 * @api
-	 */
-	public function getPreviousPage() {
-		$previousPageIndex = $this->currentPage->getIndex() - 1;
-		if ($this->formDefinition->hasPageWithIndex($previousPageIndex)) {
-			return $this->formDefinition->getPageByIndex($previousPageIndex);
-		}
-	}
+    /**
+     * Returns the next page of the currently selected one or NULL if there is no next page
+     *
+     * @return \TYPO3\Form\Core\Model\Page
+     * @api
+     */
+    public function getNextPage()
+    {
+        $nextPageIndex = $this->currentPage->getIndex() + 1;
+        if ($this->formDefinition->hasPageWithIndex($nextPageIndex)) {
+            return $this->formDefinition->getPageByIndex($nextPageIndex);
+        }
+    }
 
-	/**
-	 * Returns the next page of the currently selected one or NULL if there is no next page
-	 *
-	 * @return \TYPO3\Form\Core\Model\Page
-	 * @api
-	 */
-	public function getNextPage() {
-		$nextPageIndex = $this->currentPage->getIndex() + 1;
-		if ($this->formDefinition->hasPageWithIndex($nextPageIndex)) {
-			return $this->formDefinition->getPageByIndex($nextPageIndex);
-		}
-	}
+    /**
+     * @return \TYPO3\Flow\Mvc\Controller\ControllerContext
+     * @internal
+     */
+    protected function getControllerContext()
+    {
+        $uriBuilder = new \TYPO3\Flow\Mvc\Routing\UriBuilder();
+        $uriBuilder->setRequest($this->request);
 
-	/**
-	 * @return \TYPO3\Flow\Mvc\Controller\ControllerContext
-	 * @internal
-	 */
-	protected function getControllerContext() {
-		$uriBuilder = new \TYPO3\Flow\Mvc\Routing\UriBuilder();
-		$uriBuilder->setRequest($this->request);
+        return new \TYPO3\Flow\Mvc\Controller\ControllerContext(
+            $this->request,
+            $this->response,
+            new \TYPO3\Flow\Mvc\Controller\Arguments(array()),
+            $uriBuilder,
+            $this->flashMessageContainer
+        );
+    }
 
-		return new \TYPO3\Flow\Mvc\Controller\ControllerContext(
-			$this->request,
-			$this->response,
-			new \TYPO3\Flow\Mvc\Controller\Arguments(array()),
-			$uriBuilder,
-			$this->flashMessageContainer
-		);
-	}
+    /**
+     * Abstract "type" of this Renderable. Is used during the rendering process
+     * to determine the template file or the View PHP class being used to render
+     * the particular element.
+     *
+     * @return string
+     * @api
+     */
+    public function getType()
+    {
+        return $this->formDefinition->getType();
+    }
 
-	/**
-	 * Abstract "type" of this Renderable. Is used during the rendering process
-	 * to determine the template file or the View PHP class being used to render
-	 * the particular element.
-	 *
-	 * @return string
-	 * @api
-	 */
-	public function getType() {
-		return $this->formDefinition->getType();
-	}
+    /**
+     * @param string $identifier
+     * @return mixed
+     * @api
+     */
+    public function offsetExists($identifier)
+    {
+        return ($this->getElementValue($identifier) !== null);
+    }
 
-	/**
-	 * @param string $identifier
-	 * @return mixed
-	 * @api
-	 */
-	public function offsetExists($identifier) {
-		return ($this->getElementValue($identifier) !== NULL);
-	}
+    /**
+     * Returns the value of the specified element
+     *
+     * @param string $identifier
+     * @return mixed
+     * @api
+     */
+    protected function getElementValue($identifier)
+    {
+        $formValue = $this->formState->getFormValue($identifier);
+        if ($formValue !== null) {
+            return $formValue;
+        }
+        return $this->formDefinition->getElementDefaultValueByIdentifier($identifier);
+    }
 
-	/**
-	 * Returns the value of the specified element
-	 *
-	 * @param string $identifier
-	 * @return mixed
-	 * @api
-	 */
-	protected function getElementValue($identifier) {
-		$formValue = $this->formState->getFormValue($identifier);
-		if ($formValue !== NULL) {
-			return $formValue;
-		}
-		return $this->formDefinition->getElementDefaultValueByIdentifier($identifier);
-	}
+    /**
+     * @param string $identifier
+     * @return mixed
+     * @api
+     */
+    public function offsetGet($identifier)
+    {
+        return $this->getElementValue($identifier);
+    }
 
-	/**
-	 * @param string $identifier
-	 * @return mixed
-	 * @api
-	 */
-	public function offsetGet($identifier) {
-		return $this->getElementValue($identifier);
-	}
+    /**
+     * @param string $identifier
+     * @param mixed $value
+     * @return void
+     * @api
+     */
+    public function offsetSet($identifier, $value)
+    {
+        $this->formState->setFormValue($identifier, $value);
+    }
 
-	/**
-	 * @param string $identifier
-	 * @param mixed $value
-	 * @return void
-	 * @api
-	 */
-	public function offsetSet($identifier, $value) {
-		$this->formState->setFormValue($identifier, $value);
-	}
+    /**
+     * @api
+     * @param string $identifier
+     * @return void
+     */
+    public function offsetUnset($identifier)
+    {
+        $this->formState->setFormValue($identifier, null);
+    }
 
-	/**
-	 * @api
-	 * @param string $identifier
-	 * @return void
-	 */
-	public function offsetUnset($identifier) {
-		$this->formState->setFormValue($identifier, NULL);
-	}
+    /**
+     * @return array<TYPO3\Form\Core\Model\Page> The Form's pages in the correct order
+     * @api
+     */
+    public function getPages()
+    {
+        return $this->formDefinition->getPages();
+    }
 
-	/**
-	 * @return array<TYPO3\Form\Core\Model\Page> The Form's pages in the correct order
-	 * @api
-	 */
-	public function getPages() {
-		return $this->formDefinition->getPages();
-	}
+    /**
+     * @return \TYPO3\Form\Core\Runtime\FormState
+     * @internal
+     */
+    public function getFormState()
+    {
+        return $this->formState;
+    }
 
-	/**
-	 * @return \TYPO3\Form\Core\Runtime\FormState
-	 * @internal
-	 */
-	public function getFormState() {
-		return $this->formState;
-	}
+    /**
+     * Get all rendering options
+     *
+     * @return array associative array of rendering options
+     * @api
+     */
+    public function getRenderingOptions()
+    {
+        return $this->formDefinition->getRenderingOptions();
+    }
 
-	/**
-	 * Get all rendering options
-	 *
-	 * @return array associative array of rendering options
-	 * @api
-	 */
-	public function getRenderingOptions() {
-		return $this->formDefinition->getRenderingOptions();
-	}
+    /**
+     * Get the renderer class name to be used to display this renderable;
+     * must implement RendererInterface
+     *
+     * @return string the renderer class name
+     * @api
+     */
+    public function getRendererClassName()
+    {
+        return $this->formDefinition->getRendererClassName();
+    }
 
-	/**
-	 * Get the renderer class name to be used to display this renderable;
-	 * must implement RendererInterface
-	 *
-	 * @return string the renderer class name
-	 * @api
-	 */
-	public function getRendererClassName() {
-		return $this->formDefinition->getRendererClassName();
-	}
+    /**
+     * Get the label which shall be displayed next to the form element
+     *
+     * @return string
+     * @api
+     */
+    public function getLabel()
+    {
+        return $this->formDefinition->getLabel();
+    }
 
-	/**
-	 * Get the label which shall be displayed next to the form element
-	 *
-	 * @return string
-	 * @api
-	 */
-	public function getLabel() {
-		return $this->formDefinition->getLabel();
-	}
+    /**
+     * Get the underlying form definition from the runtime
+     *
+     * @return \TYPO3\Form\Core\Model\FormDefinition
+     * @api
+     */
+    public function getFormDefinition()
+    {
+        return $this->formDefinition;
+    }
 
-	/**
-	 * Get the underlying form definition from the runtime
-	 *
-	 * @return \TYPO3\Form\Core\Model\FormDefinition
-	 * @api
-	 */
-	public function getFormDefinition() {
-		return $this->formDefinition;
-	}
-
-	/**
-	 * This is a callback that is invoked by the Renderer before the corresponding element is rendered.
-	 * Use this to access previously submitted values and/or modify the $formRuntime before an element
-	 * is outputted to the browser.
-	 *
-	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-	 * @return void
-	 * @api
-	 */
-	public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
-	}
+    /**
+     * This is a callback that is invoked by the Renderer before the corresponding element is rendered.
+     * Use this to access previously submitted values and/or modify the $formRuntime before an element
+     * is outputted to the browser.
+     *
+     * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+     * @return void
+     * @api
+     */
+    public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime)
+    {
+    }
 }

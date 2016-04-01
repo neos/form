@@ -19,69 +19,74 @@ use TYPO3\Form\Core\Runtime\FormRuntime;
  *
  * **This class is not meant to be subclassed by developers.**
  */
-class FinisherContext {
+class FinisherContext
+{
+    /**
+     * If TRUE further finishers won't be invoked
+     *
+     * @var boolean
+     * @internal
+     */
+    protected $cancelled = false;
 
-	/**
-	 * If TRUE further finishers won't be invoked
-	 *
-	 * @var boolean
-	 * @internal
-	 */
-	protected $cancelled = FALSE;
+    /**
+     * A reference to the Form Runtime that the finisher belongs to
+     *
+     * @var \TYPO3\Form\Core\Runtime\FormRuntime
+     * @internal
+     */
+    protected $formRuntime;
 
-	/**
-	 * A reference to the Form Runtime that the finisher belongs to
-	 *
-	 * @var \TYPO3\Form\Core\Runtime\FormRuntime
-	 * @internal
-	 */
-	protected $formRuntime;
+    /**
+     * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+     * @internal
+     */
+    public function __construct(FormRuntime $formRuntime)
+    {
+        $this->formRuntime = $formRuntime;
+    }
 
-	/**
-	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
-	 * @internal
-	 */
-	public function __construct(FormRuntime $formRuntime) {
-		$this->formRuntime = $formRuntime;
-	}
+    /**
+     * Cancels the finisher invocation after the current finisher
+     *
+     * @return void
+     * @api
+     */
+    public function cancel()
+    {
+        $this->cancelled = true;
+    }
 
-	/**
-	 * Cancels the finisher invocation after the current finisher
-	 *
-	 * @return void
-	 * @api
-	 */
-	public function cancel() {
-		$this->cancelled = TRUE;
-	}
+    /**
+     * TRUE if no futher finishers should be invoked. Defaults to FALSE
+     *
+     * @return boolean
+     * @internal
+     */
+    public function isCancelled()
+    {
+        return $this->cancelled;
+    }
 
-	/**
-	 * TRUE if no futher finishers should be invoked. Defaults to FALSE
-	 *
-	 * @return boolean
-	 * @internal
-	 */
-	public function isCancelled() {
-		return $this->cancelled;
-	}
+    /**
+     * The Form Runtime that is associated with the current finisher
+     *
+     * @return \TYPO3\Form\Core\Runtime\FormRuntime
+     * @api
+     */
+    public function getFormRuntime()
+    {
+        return $this->formRuntime;
+    }
 
-	/**
-	 * The Form Runtime that is associated with the current finisher
-	 *
-	 * @return \TYPO3\Form\Core\Runtime\FormRuntime
-	 * @api
-	 */
-	public function getFormRuntime() {
-		return $this->formRuntime;
-	}
-
-	/**
-	 * The values of the submitted form (after validation and property mapping)
-	 *
-	 * @return array
-	 * @api
-	 */
-	public function getFormValues() {
-		return $this->formRuntime->getFormState()->getFormValues();
-	}
+    /**
+     * The values of the submitted form (after validation and property mapping)
+     *
+     * @return array
+     * @api
+     */
+    public function getFormValues()
+    {
+        return $this->formRuntime->getFormState()->getFormValues();
+    }
 }

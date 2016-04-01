@@ -16,16 +16,17 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Form element that amends itself with another field having a validator
  */
-class TestingFormElementWithSubElements extends \TYPO3\Form\FormElements\Section {
-
-	/**
-	 * This is a callback that is invoked by the Form Factory after the whole form has been built.
-	 *
-	 * @return void
-	 * @api
-	 */
-	public function onBuildingFinished() {
-		$element = $this->createElement('myInteger', 'TYPO3.Form:SingleLineText');
-		$element->addValidator(new \TYPO3\Flow\Validation\Validator\IntegerValidator());
-	}
+class TestingFormElementWithSubElements extends \TYPO3\Form\FormElements\Section
+{
+    /**
+     * This is a callback that is invoked by the Form Factory after the whole form has been built.
+     *
+     * @return void
+     * @api
+     */
+    public function onBuildingFinished()
+    {
+        $element = $this->createElement('myInteger', 'TYPO3.Form:SingleLineText');
+        $element->addValidator(new \TYPO3\Flow\Validation\Validator\IntegerValidator());
+    }
 }

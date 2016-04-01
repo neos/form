@@ -18,43 +18,46 @@ use TYPO3\Form\Core\Model\Page;
  * Test for FinisherContext Domain Model
  * @covers \TYPO3\Form\Core\Model\FinisherContext
  */
-class FinisherContextTest extends \TYPO3\Flow\Tests\UnitTestCase {
+class FinisherContextTest extends \TYPO3\Flow\Tests\UnitTestCase
+{
+    /**
+     * @var \TYPO3\Form\Core\Runtime\FormRuntime
+     */
+    protected $mockFormRuntime;
 
-	/**
-	 * @var \TYPO3\Form\Core\Runtime\FormRuntime
-	 */
-	protected $mockFormRuntime;
+    /**
+     * @var \TYPO3\Form\Core\Model\FinisherContext
+     */
+    protected $finisherContext;
 
-	/**
-	 * @var \TYPO3\Form\Core\Model\FinisherContext
-	 */
-	protected $finisherContext;
+    public function setUp()
+    {
+        $this->mockFormRuntime = $this->getMockBuilder('TYPO3\Form\Core\Runtime\FormRuntime')->disableOriginalConstructor()->getMock();
+        $this->finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this->mockFormRuntime);
+    }
 
-	public function setUp() {
-		$this->mockFormRuntime = $this->getMockBuilder('TYPO3\Form\Core\Runtime\FormRuntime')->disableOriginalConstructor()->getMock();
-		$this->finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this->mockFormRuntime);
-	}
+    /**
+     * @test
+     */
+    public function getFormRuntimeReturnsTheFormRuntime()
+    {
+        $this->assertSame($this->mockFormRuntime, $this->finisherContext->getFormRuntime());
+    }
 
-	/**
-	 * @test
-	 */
-	public function getFormRuntimeReturnsTheFormRuntime() {
-		$this->assertSame($this->mockFormRuntime, $this->finisherContext->getFormRuntime());
-	}
+    /**
+     * @test
+     */
+    public function isCancelReturnsFalseByDefault()
+    {
+        $this->assertFalse($this->finisherContext->isCancelled());
+    }
 
-	/**
-	 * @test
-	 */
-	public function isCancelReturnsFalseByDefault() {
-		$this->assertFalse($this->finisherContext->isCancelled());
-	}
-
-	/**
-	 * @test
-	 */
-	public function isCancelReturnsTrueIfContextHasBeenCancelled() {
-		$this->finisherContext->cancel();
-		$this->assertTrue($this->finisherContext->isCancelled());
-	}
-
+    /**
+     * @test
+     */
+    public function isCancelReturnsTrueIfContextHasBeenCancelled()
+    {
+        $this->finisherContext->cancel();
+        $this->assertTrue($this->finisherContext->isCancelled());
+    }
 }

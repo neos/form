@@ -19,21 +19,22 @@ use TYPO3\Media\TypeConverter\AssetInterfaceConverter;
 /**
  * An image upload form element
  */
-class ImageUpload extends \TYPO3\Form\Core\Model\AbstractFormElement {
+class ImageUpload extends \TYPO3\Form\Core\Model\AbstractFormElement
+{
+    /**
+     * @return void
+     */
+    public function initializeFormElement()
+    {
+        /** @var PropertyMappingConfiguration $propertyMappingConfiguration */
+        $propertyMappingConfiguration = $this->getRootForm()->getProcessingRule($this->getIdentifier())->getPropertyMappingConfiguration();
 
-	/**
-	 * @return void
-	 */
-	public function initializeFormElement() {
-		/** @var PropertyMappingConfiguration $propertyMappingConfiguration */
-		$propertyMappingConfiguration = $this->getRootForm()->getProcessingRule($this->getIdentifier())->getPropertyMappingConfiguration();
+        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class, PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, true);
+        $propertyMappingConfiguration->setTypeConverterOption(AssetInterfaceConverter::class, AssetInterfaceConverter::CONFIGURATION_ONE_PER_RESOURCE, true);
+        $propertyMappingConfiguration->allowProperties('resource');
 
-		$propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class, PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, TRUE);
-		$propertyMappingConfiguration->setTypeConverterOption(AssetInterfaceConverter::class, AssetInterfaceConverter::CONFIGURATION_ONE_PER_RESOURCE, TRUE);
-		$propertyMappingConfiguration->allowProperties('resource');
-
-		$this->setDataType('TYPO3\Media\Domain\Model\Image');
-		$imageTypeValidator = new \TYPO3\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
-		$this->addValidator($imageTypeValidator);
-	}
+        $this->setDataType('TYPO3\Media\Domain\Model\Image');
+        $imageTypeValidator = new \TYPO3\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
+        $this->addValidator($imageTypeValidator);
+    }
 }

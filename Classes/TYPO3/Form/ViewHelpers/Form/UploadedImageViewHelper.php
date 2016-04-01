@@ -32,52 +32,55 @@ use TYPO3\Flow\Annotations as Flow;
  * <a href="...">Link to image resource</a>
  * </output>
  */
-class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
+class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper
+{
+    /**
+     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @Flow\Inject
+     */
+    protected $propertyMapper;
 
-	/**
-	 * @var \TYPO3\Flow\Property\PropertyMapper
-	 * @Flow\Inject
-	 */
-	protected $propertyMapper;
+    /**
+     * Initialize the arguments.
+     *
+     * @return void
+     * @author Sebastian Kurfürst <sebastian@typo3.org>
+     * @api
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+    }
 
-	/**
-	 * Initialize the arguments.
-	 *
-	 * @return void
-	 * @author Sebastian Kurfürst <sebastian@typo3.org>
-	 * @api
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-	}
+    /**
+     * @param string $as
+     * @return string
+     * @api
+     */
+    public function render($as = 'image')
+    {
+        $this->templateVariableContainer->add($as, $this->getUploadedImage());
+        $output = $this->renderChildren();
+        $this->templateVariableContainer->remove($as);
 
-	/**
-	 * @param string $as
-	 * @return string
-	 * @api
-	 */
-	public function render($as = 'image') {
-		$this->templateVariableContainer->add($as, $this->getUploadedImage());
-		$output = $this->renderChildren();
-		$this->templateVariableContainer->remove($as);
+        return $output;
+    }
 
-		return $output;
-	}
-
-	/**
-	 * Returns a previously uploaded image.
-	 * If errors occurred during property mapping for this property, NULL is returned
-	 *
-	 * @return \TYPO3\Media\Domain\Model\Image
-	 */
-	protected function getUploadedImage() {
-		if ($this->getMappingResultsForProperty()->hasErrors()) {
-			return NULL;
-		}
-		$image = $this->getValue(FALSE);
-		if ($image instanceof \TYPO3\Media\Domain\Model\Image) {
-			return $image;
-		}
-		return $this->propertyMapper->convert($image, 'TYPO3\Media\Domain\Model\Image');
-	}
+    /**
+     * Returns a previously uploaded image.
+     * If errors occurred during property mapping for this property, NULL is returned
+     *
+     * @return \TYPO3\Media\Domain\Model\Image
+     */
+    protected function getUploadedImage()
+    {
+        if ($this->getMappingResultsForProperty()->hasErrors()) {
+            return null;
+        }
+        $image = $this->getValue(false);
+        if ($image instanceof \TYPO3\Media\Domain\Model\Image) {
+            return $image;
+        }
+        return $this->propertyMapper->convert($image, 'TYPO3\Media\Domain\Model\Image');
+    }
 }

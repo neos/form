@@ -21,25 +21,25 @@ namespace TYPO3\Form\Factory;
  *
  * @api
  */
-interface FormFactoryInterface {
-
-	/**
-	 * Build a form definition, depending on some configuration and a "Preset Name".
-	 *
-	 * The configuration array is factory-specific; for example a YAML or JSON factory
-	 * could retrieve the path to the YAML / JSON file via the configuration array.
-	 *
-	 * The $presetName is intended to facilitate the generation of the same form in
-	 * different *Representation Formats* (f.e. simple HTML, HTML with JavaScript enabled, ...).
-	 *
-	 * The {@link AbstractFormFactory} provides implementations which handle the
-	 * $presetName correctly; so you are advised to sublclass AbstractFormFactory
-	 * directly.
-	 *
-	 * @param array $configuration factory-specific configuration array
-	 * @param string $presetName The name of the "Form Preset" to use; it is factory-specific to implement this.
-	 * @return \TYPO3\Form\Core\Model\FormDefinition a newly built form definition
-	 * @api
-	 */
-	public function build(array $configuration, $presetName);
+interface FormFactoryInterface
+{
+    /**
+     * Build a form definition, depending on some configuration and a "Preset Name".
+     *
+     * The configuration array is factory-specific; for example a YAML or JSON factory
+     * could retrieve the path to the YAML / JSON file via the configuration array.
+     *
+     * The $presetName is intended to facilitate the generation of the same form in
+     * different *Representation Formats* (f.e. simple HTML, HTML with JavaScript enabled, ...).
+     *
+     * The {@link AbstractFormFactory} provides implementations which handle the
+     * $presetName correctly; so you are advised to sublclass AbstractFormFactory
+     * directly.
+     *
+     * @param array $configuration factory-specific configuration array
+     * @param string $presetName The name of the "Form Preset" to use; it is factory-specific to implement this.
+     * @return \TYPO3\Form\Core\Model\FormDefinition a newly built form definition
+     * @api
+     */
+    public function build(array $configuration, $presetName);
 }
