@@ -137,6 +137,8 @@ TYPO3:
             superTypes:
               'TYPO3.Form:FormElement': TRUE
               'TYPO3.Form:SingleSelectionMixin': TRUE
+            properties:
+              elementClassAttribute: 'xlarge'
           'TYPO3.Form:SingleSelectDropdown':
             superTypes:
               'TYPO3.Form:FormElement': TRUE
