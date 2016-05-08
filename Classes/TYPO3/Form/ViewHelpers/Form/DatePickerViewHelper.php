@@ -12,13 +12,14 @@ namespace TYPO3\Form\ViewHelpers\Form;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
  * Display a jQuery date picker.
  *
  * Note: Requires jQuery UI to be included on the page.
  */
-class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper
+class DatePickerViewHelper extends AbstractFormFieldViewHelper
 {
     /**
      * @var string
@@ -26,7 +27,7 @@ class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
     protected $tagName = 'input';
 
     /**
-     * @var TYPO3\Flow\Property\PropertyMapper
+     * @var \TYPO3\Flow\Property\PropertyMapper
      * @Flow\Inject
      */
     protected $propertyMapper;
@@ -60,7 +61,7 @@ class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
         $name = $this->getName();
         $this->registerFieldNameForFormTokenGeneration($name);
 
-        $this->tag->addAttribute('type', 'text');
+        $this->tag->addAttribute('type', 'date');
         $this->tag->addAttribute('name', $name . '[date]');
         if ($enableDatePicker) {
             $this->tag->addAttribute('readonly', true);
