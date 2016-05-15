@@ -51,11 +51,11 @@ class ArrayFormFactory extends AbstractFormFactory
 
     /**
      * @param array $nestedRenderableConfiguration
-     * @param \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface CompositeRenderableInterface $parentRenderable
+     * @param \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable
      * @return mixed
      * @throws \TYPO3\Form\Exception\IdentifierNotValidException
      */
-    protected function addNestedRenderable($nestedRenderableConfiguration, \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable)
+    protected function addNestedRenderable(array $nestedRenderableConfiguration, \TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable)
     {
         if (!isset($nestedRenderableConfiguration['identifier'])) {
             throw new \TYPO3\Form\Exception\IdentifierNotValidException('Identifier not set.', 1329289436);
@@ -90,7 +90,7 @@ class ArrayFormFactory extends AbstractFormFactory
      * @param array $input
      * @return array
      */
-    protected function convertJsonArrayToAssociativeArray($input)
+    protected function convertJsonArrayToAssociativeArray(array $input)
     {
         $output = array();
         foreach ($input as $key => $value) {
