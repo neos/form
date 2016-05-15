@@ -1,4 +1,4 @@
 <f:layout name="TYPO3.Form:Field" />
 <f:section name="field">
-	<f:form.select property="{element.identifier}" id="{element.uniqueIdentifier}" options="{element.properties.options}" class="{element.properties.elementClassAttribute}" errorClass="{element.properties.elementErrorClassAttribute}" />
+	<f:form.select property="{element.identifier}" id="{element.uniqueIdentifier}" options="{element.properties.options}" translate="{by: 'id', prefix: 'forms.elements.{element.identifier}.options.', package: '{element.renderingOptions.translationPackage}'}" class="{element.properties.elementClassAttribute}" errorClass="{element.properties.elementErrorClassAttribute}" />
 </f:section>

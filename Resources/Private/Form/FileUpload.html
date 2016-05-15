@@ -6,7 +6,7 @@
 			<f:form.upload property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" />
 			<f:if condition="{resource}">
 				<div class="clearfix">
-					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')">Cancel</a>
+					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')"><f:translate id="forms.labels.cancel" package="{element.renderingOptions.translationPackage}">Cancel</f:translate></a>
 				</div>
 			</f:if>
 		</div>
@@ -16,7 +16,7 @@
 					{resource.filename}
 				</a>
 				<div class="clearfix">
-					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')">Replace File</a>
+					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')"><f:translate id="forms.labels.replaceFile" package="{element.renderingOptions.translationPackage}">Replace File</f:translate></a>
 				</div>
 			</div>
 		</f:if>

@@ -7,6 +7,10 @@ TYPO3:
     presets:
       default:
         title: 'Default'
+        renderingOptions:
+          # Package with XLIFF files for translation of form labels, placeholders, ...
+          # If you need custom messages, copy Resources/Private/Translations/en/Main.xlf to your package and adjust this setting
+          translationPackage: 'TYPO3.Form'
 
         ########### Required CSS / JavaScripts ###########
 
@@ -26,9 +30,9 @@ TYPO3:
               layoutPathPattern: 'resource://{@package}/Private/Form/Layouts/{@type}.html'
               # set this to TRUE if you want to avoid exceptions for FormElements without definitions
               skipUnknownElements: FALSE
-              # Package with XLIFF files for translatable messages (e.g. validation errors)
+              # Package with XLIFF files for translatable error messages (validation errors)
               # If you need custom messages, copy Resources/Private/Translations/en/ValidationErrors.xlf to your package and adjust this setting
-              translationPackage: 'TYPO3.Flow'
+              validationErrorTranslationPackage: 'TYPO3.Flow'
 
           'TYPO3.Form:Form':
             superTypes:

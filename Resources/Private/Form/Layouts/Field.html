@@ -1,19 +1,19 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 <f:form.validationResults for="{element.identifier}">
 	<div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"<f:if condition="{element.rootForm.renderingOptions.previewMode}"> data-element="{form:form.formElementRootlinePath(renderable:element)}"</f:if>>
-		<label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
+		<label for="{element.uniqueIdentifier}">{element.label -> f:translate(id: 'forms.elements.{element.identifier}.label', package: '{element.renderingOptions.translationPackage}') -> f:format.nl2br()}<f:if condition="{element.required}"><f:render partial="TYPO3.Form:Field/Required" /></f:if></label>
 		<div class="{element.properties.containerClassAttribute}">
 			<f:render section="field" />
 			<f:if condition="{validationResults.flattenedErrors}">
 				<span class="help-inline">
 					<f:for each="{validationResults.errors}" as="error">
-						{error -> f:translate(id: error.code, arguments: error.arguments, package: '{element.renderingOptions.translationPackage}', source: 'ValidationErrors')}
+						{error -> f:translate(id: '{error.code}', arguments: error.arguments, package: '{element.renderingOptions.validationErrorTranslationPackage}', source: 'ValidationErrors')}
 						<br />
 					</f:for>
 				</span>
 			</f:if>
 			<f:if condition="{element.properties.elementDescription}">
-				<span class="help-block">{element.properties.elementDescription}</span>
+				<span class="help-block">{element.properties.elementDescription -> f:translate(id: 'forms.elements.{element.identifier}.elementDescription', package: '{element.renderingOptions.translationPackage}')}</span>
 			</f:if>
 		</div>
 	</div>

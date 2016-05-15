@@ -1,7 +1,7 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 <fieldset id="{section.uniqueIdentifier}"{f:if(condition: section.properties.elementClassAttribute, then: ' class="{section.properties.elementClassAttribute}"')}>
 	<f:if condition="{section.label}">
-		<legend>{section.label}</legend>
+		<legend>{section.label -> f:translate(id: 'forms.sections.{section.identifier}.label', package: '{element.renderingOptions.translationPackage}')}</legend>
 	</f:if>
 	<f:for each="{section.elements}" as="element">
 		<form:renderRenderable renderable="{element}" />

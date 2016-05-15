@@ -1,6 +1,6 @@
 <f:if condition="{element.label}">
-	<h2>{element.label}</h2>
+	<h2>{element.label -> f:translate(id: 'forms.elements.{element.identifier}.label', package: '{element.renderingOptions.translationPackage}')</h2>
 </f:if>
 <f:if condition="{element.properties.text}">
-	<p{f:if(condition: element.properties.elementClassAttribute, then: ' class="{element.properties.elementClassAttribute}"')}>{element.properties.text -> f:format.nl2br()}</p>
+	<p{f:if(condition: element.properties.elementClassAttribute, then: ' class="{element.properties.elementClassAttribute}"')}>{element.properties.text -> f:translate(id: 'forms.elements.{element.identifier}.text', package: '{element.renderingOptions.translationPackage}') -> f:format.nl2br()}</p>
 </f:if>
