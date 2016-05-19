@@ -35,6 +35,7 @@ reference, although there will be links to the in-depth API reference at various
    :maxdepth: 2
 
    quickstart
+   configuring-form-yaml
    adjusting-form-output
    extending-form-api
    configuring-form-builder
@@ -43,7 +44,7 @@ reference, although there will be links to the in-depth API reference at various
 Credits
 =======
 
-This work has been generously sponsored by `AKOM360 - Multi Channel Marketing <http://akom360.de>`_.
+The initial implementation has been generously sponsored by `AKOM360 - Multi Channel Marketing <http://akom360.de>`_.
 
 It has been implemented by:
 
