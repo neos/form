@@ -20,9 +20,6 @@ use TYPO3\Form\Persistence\FormPersistenceManagerInterface;
 /**
  * Main Entry Point to render a Form into a Fluid Template
  *
- * Usage
- * =====
- *
  * <pre>
  * {namespace form=TYPO3\Form\ViewHelpers}
  * <form:render factoryClass="NameOfYourCustomFactoryClass" />
