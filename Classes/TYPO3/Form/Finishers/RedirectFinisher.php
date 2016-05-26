@@ -61,14 +61,12 @@ class RedirectFinisher extends AbstractFinisher
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
         $response = $formRuntime->getResponse();
-        $mainResponse = $response;
-        while ($response = $response->getParentResponse()) {
-            $mainResponse = $response;
-        };
-        $mainResponse->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
-        $mainResponse->setStatus($statusCode);
+
+        $response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
+        $response->setStatus($statusCode);
+
         if ($delay === 0) {
-            $mainResponse->setHeader('Location', (string)$uri);
+            $response->setHeader('Location', (string)$uri);
         }
     }
 
