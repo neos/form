@@ -1,4 +1,11 @@
 <f:layout name="TYPO3.Form:Field" />
 <f:section name="field">
-	<f:form.textarea property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" additionalAttributes="{placeholder: '{element.properties.placeholder -> f:translate(id: \'forms.elements.{element.identifier}.placeholder\', package: \'{element.renderingOptions.translationPackage}\')}'}" rows="{element.properties.rows}" cols="{element.properties.cols}" errorClass="{element.properties.elementErrorClassAttribute}" />
+	<f:if condition="{element.properties.placeholder}">
+		<f:then>
+			<f:form.textarea property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" additionalAttributes="{placeholder: '{element.properties.placeholder -> f:translate(id: \'forms.elements.{element.identifier}.placeholder\', package: \'{element.renderingOptions.translationPackage}\')}'}" rows="{element.properties.rows}" cols="{element.properties.cols}" errorClass="{element.properties.elementErrorClassAttribute}" />
+		</f:then>
+		<f:else>
+			<f:form.textarea property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" rows="{element.properties.rows}" cols="{element.properties.cols}" errorClass="{element.properties.elementErrorClassAttribute}" />
+		</f:else>
+	</f:if>
 </f:section>
