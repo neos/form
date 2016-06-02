@@ -10,5 +10,10 @@
         "psr-0": {
             "TYPO3\\Form": "Classes"
         }
+    },
+    "extra": {
+        "applied-flow-migrations": [
+            "TYPO3.Form-20160601101500"
+        ]
     }
 }

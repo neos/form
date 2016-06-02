@@ -1,7 +1,7 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 <fieldset>
 	<f:if condition="{page.label}">
-		<legend>{page.label -> f:translate(id: 'forms.pages.{page.identifier}.label', package: '{element.renderingOptions.translationPackage}')}</legend>
+		<legend>{page.label -> f:translate(id: 'forms.pages.{page.identifier}.label', package: '{page.renderingOptions.translationPackage}')}</legend>
 	</f:if>
 	<f:for each="{page.elements}" as="element">
 		<form:renderRenderable renderable="{element}" />

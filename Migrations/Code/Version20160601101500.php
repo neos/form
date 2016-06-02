@@ -49,9 +49,9 @@ class Version20160601101500 extends AbstractMigration
     {
         foreach ($preset as $key => $value) {
             if (is_array($value)) {
-                if (array_key_exists('translationPackage', $value)) {
-                    $value['validationErrorTranslationPackage'] = $value['translationPackage'];
-                    unset($value['translationPackage']);
+                if (isset($value['renderingOptions']['translationPackage'])) {
+                    $value['renderingOptions']['validationErrorTranslationPackage'] = $value['renderingOptions']['translationPackage'];
+                    unset($value['renderingOptions']['translationPackage']);
                 }
                 $preset[$key] = $this->renameTranslationPackage($value);
             }
