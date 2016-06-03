@@ -2,7 +2,7 @@
 {namespace media=TYPO3\Media\ViewHelpers}
 <fieldset>
 	<f:if condition="{page.label}">
-		<legend>{page.label -> f:translate(id: 'forms.pages.{page.identifier}.label', package: '{element.renderingOptions.translationPackage}')}</legend>
+		<legend>{page.label -> f:translate(id: 'forms.pages.{page.identifier}.label', package: '{page.renderingOptions.translationPackage}')}</legend>
 	</f:if>
 	<output>
 		<table>

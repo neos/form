@@ -1,14 +1,7 @@
 {namespace form=TYPO3\Form\ViewHelpers}
 <f:layout name="TYPO3.Form:Field" />
 <f:section name="field">
-	<f:if condition="{element.properties.placeholder}">
-		<f:then>
-			<form:form.datePicker id="{element.uniqueIdentifier}" property="{element.identifier}" placeholder="{element.properties.placeholder -> f:translate(id: 'forms.elements.{element.identifier}.placeholder', package: '{element.renderingOptions.translationPackage}')}" dateFormat="{element.properties.dateFormat}" initialDate="{element.properties.initialDate}" enableDatePicker="{element.properties.enableDatePicker}" class="{element.properties.elementClassAttribute}" errorClass="{element.properties.elementErrorClassAttribute}" />
-		</f:then>
-		<f:else>
-			<form:form.datePicker id="{element.uniqueIdentifier}" property="{element.identifier}" dateFormat="{element.properties.dateFormat}" initialDate="{element.properties.initialDate}" enableDatePicker="{element.properties.enableDatePicker}" class="{element.properties.elementClassAttribute}" errorClass="{element.properties.elementErrorClassAttribute}" />
-		</f:else>
-	</f:if>
+	<form:form.datePicker id="{element.uniqueIdentifier}" property="{element.identifier}" placeholder="{element -> form:translateElementProperty(property: 'placeholder')}" dateFormat="{element.properties.dateFormat}" initialDate="{element.properties.initialDate}" enableDatePicker="{element.properties.enableDatePicker}" class="{element.properties.elementClassAttribute}" errorClass="{element.properties.elementErrorClassAttribute}" />
 	<f:if condition="{element.properties.displayTimeSelector}">
 		<form:form.timePicker id="{element.uniqueIdentifier}-time" property="{element.identifier}" initialDate="{element.properties.initialDate}" class="{element.properties.timeSelectorClassAttribute}" errorClass="{element.properties.elementErrorClassAttribute}" />
 	</f:if>
