@@ -412,7 +412,7 @@ class PageTest extends \TYPO3\Flow\Tests\UnitTestCase
             )
         ));
 
-        $formDefinition = $this->getMock('TYPO3\Form\Core\Model\FormDefinition', array('getProcessingRule'), $formDefinitionConstructorArguments);
+        $formDefinition = $this->getMockBuilder('TYPO3\Form\Core\Model\FormDefinition')->setMethods(array('getProcessingRule'))->setConstructorArgs($formDefinitionConstructorArguments)->getMock();
         return $formDefinition;
     }
 }
