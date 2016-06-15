@@ -12,12 +12,13 @@ namespace TYPO3\Form\Tests\Unit\Core\Runtime;
  *                                                                        */
 
 use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Runtime\FormRuntime;
 use TYPO3\Form\Core\Model\Page;
 
 require_once(__DIR__ . '/Fixture/DummyFinisher.php');
+
 /**
  * Test for Form Runtime
+ *
  * @covers \TYPO3\Form\Core\Runtime\FormRuntime<extended>
  */
 class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
@@ -31,7 +32,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
         $mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
         $mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
 
-        $formRuntime = $this->createFormRuntime($formDefinition, $mockActionRequest, $mockHttpResponse);
+        $formRuntime = $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
 
         $this->assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
         $this->assertSame($mockHttpResponse, $formRuntime->getResponse());
@@ -66,7 +67,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $formDefinition->setRenderingOption('asdf', 'test');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame(array('asdf' => 'test'), $formRuntime->getRenderingOptions());
+        $this->assertSame(['asdf' => 'test'], $formRuntime->getRenderingOptions());
     }
 
     /**
@@ -98,7 +99,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
 
-        $finisherCalls = array();
+        $finisherCalls = [];
 
         $finisher1 = $this->getMockFinisher(function () use (&$finisherCalls) {
             $finisherCalls[] = func_get_args();
@@ -129,6 +130,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     {
         $finisher = new Renderer\Fixture\DummyFinisher();
         $finisher->cb = $closureToExecute;
+
         return $finisher;
     }
 
@@ -146,7 +148,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
         $formDefinition->addPage($page3);
 
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame(array($page1, $page2, $page3), $formRuntime->getPages());
+        $this->assertSame([$page1, $page2, $page3], $formRuntime->getPages());
 
         $formRuntime->overrideCurrentPage(0);
         $this->assertSame(null, $formRuntime->getPreviousPage());
@@ -198,19 +200,13 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     /**
      * @param FormDefinition $formDefinition
-     * @param \TYPO3\Flow\Mvc\ActionRequest $request
-     * @param \TYPO3\Flow\Http\Response $response
      * @return \TYPO3\Form\Core\Runtime\FormRuntime
      */
-    protected function createFormRuntime(FormDefinition $formDefinition, \TYPO3\Flow\Mvc\ActionRequest $request = null, \TYPO3\Flow\Http\Response $response = null)
+    protected function createFormRuntime(FormDefinition $formDefinition)
     {
-        if ($request === null) {
-            $httpRequest = \TYPO3\Flow\Http\Request::create(new \TYPO3\Flow\Http\Uri('foo'));
-            $request = $httpRequest->createActionRequest();
-        }
-        if ($response === null) {
-            $response = new \TYPO3\Flow\Http\Response();
-        }
-        return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', array('dummy'), array($formDefinition, $request, $response));
+        $mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
+
+        return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
     }
 }
