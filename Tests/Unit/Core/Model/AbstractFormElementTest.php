@@ -41,7 +41,7 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\IdentifierNotValidException
+     * @expectedException \TYPO3\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
@@ -178,7 +178,7 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMock('TYPO3\Form\Core\Model\AbstractFormElement', array('dummy'), $constructorArguments);
+        return $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
@@ -190,7 +190,7 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
         $mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
         $mockProcessingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
 
-        $formDefinition = $this->getMock('TYPO3\Form\Core\Model\FormDefinition', array('getProcessingRule'), array('foo'));
+        $formDefinition = $this->getMockBuilder('TYPO3\Form\Core\Model\FormDefinition')->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
         $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
 
         return $formDefinition;

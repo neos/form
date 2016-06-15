@@ -69,9 +69,9 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
-        $mockValidator1 = $this->getMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
+        $mockValidator1 = $this->createMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
         $this->processingRule->addValidator($mockValidator1);
-        $mockValidator2 = $this->getMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
+        $mockValidator2 = $this->createMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
         $this->processingRule->addValidator($mockValidator2);
 
         $validators = $this->processingRule->getValidators();

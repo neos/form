@@ -52,8 +52,12 @@ Create your first form
 
 Now, let's try to create the basic contact form from above.
 For this we need to implement a so-called :api-factory:`FormFactory <AbstractFormFactory>`,
-which is responsible for creating the form. The skeleton for building a form
-looks as follows::
+which is responsible for creating the form.
+
+ .. note:: The package comes with a ready-to-use factory for building forms based on YAML
+   files describing the forms. See :ref:`configuring-form-yaml` for details.
+
+If you want to build a form with PHP, the skeleton for building a form looks as follows::
 
 	namespace Your\Package;
 

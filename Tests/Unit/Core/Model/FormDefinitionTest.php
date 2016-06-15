@@ -678,7 +678,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getMockFinisher()
     {
-        return $this->getMock('TYPO3\Form\Core\Model\FinisherInterface');
+        return $this->createMock('TYPO3\Form\Core\Model\FinisherInterface');
     }
 
     /**
