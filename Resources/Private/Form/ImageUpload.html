@@ -7,7 +7,7 @@
 			<f:form.upload property="{element.identifier}.resource" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" />
 			<f:if condition="{image}">
 				<div class="clearfix">
-					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')">Cancel</a>
+					<a class="btn small" href="#" onclick="return !disableUpload('{element.uniqueIdentifier}')"><f:translate id="forms.labels.cancel" package="{element.renderingOptions.translationPackage}">Cancel</f:translate></a>
 				</div>
 			</f:if>
 		</div>
@@ -17,7 +17,7 @@
 					<m:image image="{image}" maximumWidth="250" maximumHeight="500" alt="uploaded image" />
 				</a>
 				<div class="clearfix">
-					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')">Replace Image</a>
+					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')"><f:translate id="forms.labels.replaceImage" package="{element.renderingOptions.translationPackage}">Replace Image</f:translate></a>
 				</div>
 			</div>
 		</f:if>

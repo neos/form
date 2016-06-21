@@ -37,6 +37,7 @@ reference, although there will be links to the in-depth API reference at various
    quickstart
    configuring-form-yaml
    adjusting-form-output
+   translating-forms
    extending-form-api
    configuring-form-builder
    extending-form-builder
