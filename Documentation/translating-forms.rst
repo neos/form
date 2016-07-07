@@ -265,16 +265,18 @@ To enable translation in EmailFinisher set ``translation.enabled: true``. The op
 
 ### Example email template
 
+The translated values are stored in {translatedFormState}.
+
 .. code-block:: txt
 
 {namespace form=TYPO3\Form\ViewHelpers}
 
 {f:translate(id: "email.contact.text", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}
 
-{f:translate(id: "forms.elements.reason.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {form.formState.formValues.reason}
-{f:translate(id: "forms.elements.name.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {form.formState.formValues.name}
-{f:translate(id: "forms.elements.email.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {form.formState.formValues.email}
+{f:translate(id: "forms.elements.reason.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {translatedFormState.formValues.reason}
+{f:translate(id: "forms.elements.name.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {translatedFormState.formValues.name}
+{f:translate(id: "forms.elements.email.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {translatedFormState.formValues.email}
 
 {f:translate(id: "forms.elements.message.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}
 
-{form.formState.formValues.message}
+{translatedFormState.formValues.message}

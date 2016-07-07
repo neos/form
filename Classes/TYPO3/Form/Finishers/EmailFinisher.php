@@ -84,12 +84,10 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
     protected function executeInternal()
     {
         $formRuntime = $this->finisherContext->getFormRuntime();
-
-        $this->translateElementOptions($formRuntime);
-
         $standaloneView = $this->initializeStandaloneView();
         $standaloneView->assignMultiple(array(
             'form' => $formRuntime,
+            'translatedFormState' => $this->translateElementOptions($formRuntime),
             'translation' => array(
                 'package' => $this->getTranslationPackage(),
                 'locale' => $this->getTranslationLocale(),
@@ -192,8 +190,11 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
      * Translate option values of form elements with options such as checkboxes, selectdropdowns, radiobuttons
      *
      * @param FormRuntime $formRuntime
+     * @return \TYPO3\Form\Core\Runtime\FormState translated form state
+     * @throws \TYPO3\Form\Exception\FinisherException
      */
     protected function translateElementOptions(FormRuntime $formRuntime) {
+        $translatedFormState = clone $formRuntime->getFormState();
         if ($this->parseOption('translation.enabled')) {
             /** @var Page $page */
             foreach ($formRuntime->getPages() as $page) {
@@ -210,12 +211,14 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
                     try {
                         $labelId = sprintf('forms.elements.%s.options.%s', $element->getIdentifier(), $formRuntime->getFormState()->getFormValue($element->getIdentifier()));
                         $optionValue = $this->translator->translateById($labelId, array(), null, $this->getTranslationLocale(), $this->parseOption('translation.source'), $this->getTranslationPackage());
-                        $formRuntime->getFormState()->setFormValue($element->getIdentifier(), $optionValue);
+                        $translatedFormState->setFormValue($element->getIdentifier(), $optionValue);
                     } catch (\TYPO3\Flow\Resource\Exception $exception) {
                     }
                 }
             }
         }
+
+        return $translatedFormState;
     }
 
     /**
@@ -255,10 +258,9 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
      * @return array|mixed
      */
     protected function getTranslationPackage() {
-        $formRuntime = $this->finisherContext->getFormRuntime();
         $packageKey = $this->parseOption('translation.package');
         if ($packageKey === null) {
-            $renderingOptions = $formRuntime->getRenderingOptions();
+            $renderingOptions = $this->finisherContext->getFormRuntime()->getRenderingOptions();
             $packageKey = $renderingOptions['translationPackage'];
         }
         return $packageKey;
