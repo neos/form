@@ -10,6 +10,10 @@ namespace TYPO3\Form\Finishers;
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
+use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Form\Core\Model\AbstractFormElement;
+use TYPO3\Form\Core\Model\Page;
+use TYPO3\Form\Core\Runtime\FormRuntime;
 
 /**
  * This finisher sends an email to one recipient
@@ -20,12 +24,16 @@ namespace TYPO3\Form\Finishers;
  * - layoutRootPath: root path for the layouts
  * - partialRootPath: root path for the partials
  * - variables: associative array of variables which are available inside the Fluid template
+ * - translation.enabled:
+ * - translation.locale: Locale identifier. Defaults to the system default locale (only in conjunction with "translation.enabled" being TRUE)
+ * - translation.source: Name of file with translations, defaults to "Main" (only in conjunction with "translation.enabled" being TRUE)
+ * - translation.package: Key of the translation package, defaults to the "translationPackage" rendering option for the current form (only in conjunction with "translation.enabled" being TRUE)
  *
  * The following options control the mail sending. In all of them, placeholders in the form
  * of {...} are replaced with the corresponding form value; i.e. {email} as recipientAddress
  * makes the recipient address configurable.
  *
- * - subject (mandatory): Subject of the email
+ * - subject (mandatory): Subject of the email (translatable)
  * - recipientAddress (mandatory): Email address of the recipient
  * - recipientName: Human-readable name of the recipient
  * - senderAddress (mandatory): Email address of the sender
@@ -49,7 +57,22 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
         'senderName' => '',
         'format' => self::FORMAT_HTML,
         'testMode' => false,
+        'translation.enabled' => false,
+        'translation.locale' => null,
+        'translation.source' => 'Main',
+        'translation.package' => null,
     );
+
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\I18n\Translator
+     */
+    protected $translator;
+
+    /**
+     * @var string
+     */
+    protected $identifier;
 
     /**
      * Executes this finisher
@@ -61,11 +84,21 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
     protected function executeInternal()
     {
         $formRuntime = $this->finisherContext->getFormRuntime();
+
+        $this->translateElementOptions($formRuntime);
+
         $standaloneView = $this->initializeStandaloneView();
-        $standaloneView->assign('form', $formRuntime);
+        $standaloneView->assignMultiple(array(
+            'form' => $formRuntime,
+            'translation' => array(
+                'package' => $this->getTranslationPackage(),
+                'locale' => $this->getTranslationLocale(),
+                'source' => $this->parseOption('translation.source')
+            )
+        ));
         $message = $standaloneView->render();
 
-        $subject = $this->parseOption('subject');
+        $subject = $this->translateOption('subject');
         $recipientAddress = $this->parseOption('recipientAddress');
         $recipientName = $this->parseOption('recipientName');
         $senderAddress = $this->parseOption('senderAddress');
@@ -153,5 +186,98 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
             $standaloneView->assignMultiple($this->options['variables']);
         }
         return $standaloneView;
+    }
+
+    /**
+     * Translate option values of form elements with options such as checkboxes, selectdropdowns, radiobuttons
+     *
+     * @param FormRuntime $formRuntime
+     */
+    protected function translateElementOptions(FormRuntime $formRuntime) {
+        if ($this->parseOption('translation.enabled')) {
+            /** @var Page $page */
+            foreach ($formRuntime->getPages() as $page) {
+                foreach ($page->getElementsRecursively() as $element) {
+                    if (!$element instanceof AbstractFormElement) {
+                        continue;
+                    }
+
+                    $properties = $element->getProperties();
+                    if (!array_key_exists('options', $properties)) {
+                        continue;
+                    }
+
+                    try {
+                        $labelId = sprintf('forms.elements.%s.options.%s', $element->getIdentifier(), $formRuntime->getFormState()->getFormValue($element->getIdentifier()));
+                        $optionValue = $this->translator->translateById($labelId, array(), null, $this->getTranslationLocale(), $this->parseOption('translation.source'), $this->getTranslationPackage());
+                        $formRuntime->getFormState()->setFormValue($element->getIdentifier(), $optionValue);
+                    } catch (\TYPO3\Flow\Resource\Exception $exception) {
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Translate given finisher option such as subject
+     *
+     * @param string $optionName
+     * @return mixed|string
+     * @throws \TYPO3\Form\Exception\FinisherException
+     */
+    protected function translateOption($optionName) {
+        if ($this->parseOption('translation.enabled')) {
+            $labelId = sprintf('forms.emailFinisher.%s.%s', $this->getIdentifier(), $optionName);
+            return $this->translator->translateById($labelId, array(), null, $this->getTranslationLocale(), $this->parseOption('translation.source'), $this->getTranslationPackage());
+        } else {
+            return $this->parseOption($optionName);
+        }
+    }
+
+    /**
+     * Get the identifier of finisher in finisher set
+     *
+     * @return integer
+     */
+    protected function getIdentifier() {
+        if ($this->identifier === null) {
+            foreach ($this->finisherContext->getFormRuntime()->getFormDefinition()->getFinishers() as $key => $finisher) {
+                if ($finisher === $this) {
+                    $this->identifier = $key;
+                }
+            }
+        }
+
+        return $this->identifier;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    protected function getTranslationPackage() {
+        $formRuntime = $this->finisherContext->getFormRuntime();
+        $packageKey = $this->parseOption('translation.package');
+        if ($packageKey === null) {
+            $renderingOptions = $formRuntime->getRenderingOptions();
+            $packageKey = $renderingOptions['translationPackage'];
+        }
+        return $packageKey;
+    }
+
+    /**
+     * @return null|\TYPO3\Flow\I18n\Locale
+     * @throws \TYPO3\Form\Exception\FinisherException
+     */
+    protected function getTranslationLocale() {
+        $locale = null;
+        $localeIdentifier = $this->parseOption('translation.locale');
+        if ($localeIdentifier !== null) {
+            try {
+                $locale = new \TYPO3\Flow\I18n\Locale($localeIdentifier);
+            } catch (\TYPO3\Flow\I18n\Exception\InvalidLocaleIdentifierException $exception) {
+                throw new \TYPO3\Form\Exception\FinisherException(sprintf('"%s" is not a valid locale identifier.', $locale), 1467888923, $exception);
+            }
+        }
+        return $locale;
     }
 }
