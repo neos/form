@@ -12,7 +12,10 @@ namespace TYPO3\Form\ViewHelpers\Form;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Property\PropertyMapper;
+use TYPO3\Flow\Resource\Resource as PersistentResource;
 
 /**
  * This ViewHelper makes the specified Resource object available for its
@@ -34,10 +37,10 @@ use TYPO3\Flow\Annotations as Flow;
  * <a href="...">Link to resource</a>
  * </output>
  */
-class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper
+class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
 {
     /**
-     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @var PropertyMapper
      * @Flow\Inject
      */
     protected $propertyMapper;
@@ -73,7 +76,7 @@ class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractF
      * Returns a previously uploaded resource.
      * If errors occurred during property mapping for this property, NULL is returned
      *
-     * @return \TYPO3\Flow\Resource\Resource
+     * @return Resource
      */
     protected function getUploadedResource()
     {
@@ -81,9 +84,9 @@ class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractF
             return null;
         }
         $resourceObject = $this->getValue(false);
-        if ($resourceObject instanceof \TYPO3\Flow\Resource\Resource) {
+        if ($resourceObject instanceof PersistentResource) {
             return $resourceObject;
         }
-        return $this->propertyMapper->convert($resourceObject, 'TYPO3\Flow\Resource\Resource');
+        return $this->propertyMapper->convert($resourceObject, PersistentResource::class);
     }
 }

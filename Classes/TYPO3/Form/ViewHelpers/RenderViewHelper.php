@@ -14,7 +14,7 @@ namespace TYPO3\Form\ViewHelpers;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Http\Response;
 use TYPO3\Flow\Utility\Arrays;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Form\Persistence\FormPersistenceManagerInterface;
 
 /**
