@@ -10,23 +10,27 @@ namespace TYPO3\Form\Finishers;
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
+use TYPO3\Flow\Mvc\ActionRequest;
+use TYPO3\Flow\Mvc\Routing\UriBuilder;
+use TYPO3\Form\Core\Model\AbstractFinisher;
 
 /**
- * This finisher redirects to another Controller.
+ * This finisher redirects to another Controller or a specific URI.
  */
-class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
+class RedirectFinisher extends AbstractFinisher
 {
     /**
      * @var array
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
         'package' => null,
         'controller' => null,
         'action' => '',
-        'arguments' => array(),
+        'arguments' => [],
+        'uri' => '',
         'delay' => 0,
-        'statusCode' => 303,
-    );
+        'statusCode' => 303
+    ];
 
     /**
      * Executes this finisher
@@ -40,34 +44,29 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
         $formRuntime = $this->finisherContext->getFormRuntime();
         $request = $formRuntime->getRequest()->getMainRequest();
 
-        $packageKey = $this->parseOption('package');
-        $controllerName = $this->parseOption('controller');
-        $actionName = $this->parseOption('action');
-        $arguments = $this->parseOption('arguments');
         $delay = (integer)$this->parseOption('delay');
         $statusCode = $this->parseOption('statusCode');
+        $uri = trim($this->parseOption('uri'));
 
-        $subpackageKey = null;
-        if ($packageKey !== null && strpos($packageKey, '\\') !== false) {
-            list($packageKey, $subpackageKey) = explode('\\', $packageKey, 2);
+        
+        if ($uri === '') {
+            $uri = $this->buildActionUri($request);
         }
-        $uriBuilder = new \TYPO3\Flow\Mvc\Routing\UriBuilder();
-        $uriBuilder->setRequest($request);
-        $uriBuilder->reset();
 
-        $uri = $uriBuilder->uriFor($actionName, $arguments, $controllerName, $packageKey, $subpackageKey);
-        $uri = $request->getHttpRequest()->getBaseUri() . $uri;
+        $uriParts = parse_url($uri);
+        if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
+            $uri = $request->getHttpRequest()->getBaseUri() . $uri;
+        }
+
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
         $response = $formRuntime->getResponse();
-        $mainResponse = $response;
-        while ($response = $response->getParentResponse()) {
-            $mainResponse = $response;
-        };
-        $mainResponse->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
-        $mainResponse->setStatus($statusCode);
+
+        $response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
+        $response->setStatus($statusCode);
+
         if ($delay === 0) {
-            $mainResponse->setHeader('Location', (string)$uri);
+            $response->setHeader('Location', (string)$uri);
         }
     }
 
@@ -79,5 +78,28 @@ class RedirectFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
     public function setOptions(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @param ActionRequest $request
+     * @return string
+     */
+    protected function buildActionUri(ActionRequest $request)
+    {
+        $packageKey = $this->parseOption('package');
+        $controllerName = $this->parseOption('controller');
+        $actionName = $this->parseOption('action');
+        $arguments = $this->parseOption('arguments');
+
+        $subpackageKey = null;
+        if ($packageKey !== null && strpos($packageKey, '\\') !== false) {
+            list($packageKey, $subpackageKey) = explode('\\', $packageKey, 2);
+        }
+        $uriBuilder = new UriBuilder();
+        $uriBuilder->setRequest($request);
+        $uriBuilder->reset();
+
+        $uri = $uriBuilder->uriFor($actionName, $arguments, $controllerName, $packageKey, $subpackageKey);
+        return $uri;
     }
 }
