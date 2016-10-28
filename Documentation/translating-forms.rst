@@ -69,7 +69,7 @@ forms.navigation.previousPage
 forms.navigation.submitButton
   In forms this is used for the submit button.
 
-Forms and sections can have their labels translated using this, where where ``{identifier}`` is the identifier
+Forms and sections can have their labels translated using this, where ``{identifier}`` is the identifier
 of the page or section itself:
 
 forms.pages.{identifier}.label
@@ -142,6 +142,17 @@ Assume it is configured like this using YAML:
             properties:
               placeholder: 'Enter a valid email address'
           -
+            type: 'TYPO3.Form:SingleSelectDropdown'
+            identifier: 'reason'
+            label: 'Reason'
+            validators:
+              - identifier: 'TYPO3.Flow:NotEmpty'
+            properties:
+              options:
+                '': 'Choose an option ...'
+                'general': 'General Question'
+                'product': 'Question concerning a product'
+          -
             type: 'TYPO3.Form:MultiLineText'
             identifier: message
             label: 'Message'
@@ -196,9 +207,76 @@ The following XLIFF would allow to translate the form:
                 <trans-unit id="forms.elements.message.placeholder" xml:space="preserve">
                     <source>Enter your message here</source>
                 </trans-unit>
+
+                <trans-unit id="forms.elements.reason.label" xml:space="preserve">
+                    <source>Reason</source>
+                </trans-unit>                
+                <trans-unit id="forms.elements.reason.options." xml:space="preserve">
+                    <source>Choose an option ...</source>
+                </trans-unit>
+                <trans-unit id="forms.elements.reason.options.general" xml:space="preserve">
+                    <source>General Question</source>
+                </trans-unit>
+                <trans-unit id="forms.elements.reason.options.product" xml:space="preserve">
+                    <source>Question concerning a product</source>
+                </trans-unit>
+                <trans-unit id="email.contact.text" xml:space="preserve">
+                    <source>The contact form has been submitted with the following values</source>
+                </trans-unit>
             </body>
         </file>
     </xliff>
 
 Copy it to your target language and add the ``target-language`` attribute as well as the needed
 ``<target>…</target>`` entries.
+
+Translate email template
+------------------------
+
+To make use of translations in i.e. email templates you can use the fluid translate viewhelper ``<f:translate id="..." package= "{translation.package}", source= "{translation.source}", locale= "{translation.locale}">``.
+
+The translation configuration for EmailFinisher can be configured via yaml
+
+.. code-block:: yaml
+
+    type: 'TYPO3.Form:Form'
+    identifier: 'contact'
+    label: 'Contact form'
+    renderables:
+      ...
+          
+    finishers:
+      -
+        identifier: 'TYPO3.Form:Email'
+        options:
+          templatePathAndFilename: resource://AcmeCom.SomePackage/Private/Templates/Form/Contact.txt
+          subject: '{subject}'
+          recipientAddress: 'info@acme.com'
+          recipientName: 'Acme Customer Care'
+          senderAddress: '{email}'
+          senderName: '{name}'
+          format: plaintext
+          translation.enabled: true
+          translation.package: 'AcmeCom.SomePackage'
+          translation.locale: 'de_DE'
+          translation.source: 'Main'
+
+To enable translation in EmailFinisher set ``translation.enabled: true``. The options ``translation.package``, ``translation.locale``, ``translation.source`` are optional.
+
+### Example email template
+
+The translated values are stored in {translatedFormState}.
+
+.. code-block:: txt
+
+{namespace form=TYPO3\Form\ViewHelpers}
+
+{f:translate(id: "email.contact.text", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}
+
+{f:translate(id: "forms.elements.reason.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {translatedFormState.formValues.reason}
+{f:translate(id: "forms.elements.name.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {translatedFormState.formValues.name}
+{f:translate(id: "forms.elements.email.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}: {translatedFormState.formValues.email}
+
+{f:translate(id: "forms.elements.message.label", package: "{translation.package}", source: "{translation.source}", locale: "{translation.locale}")}
+
+{translatedFormState.formValues.message}
