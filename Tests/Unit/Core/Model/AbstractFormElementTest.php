@@ -178,7 +178,7 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
+        return $this->getMockBuilder(\TYPO3\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
@@ -187,10 +187,10 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {
-        $mockProcessingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
+        $mockProcessingRule = $this->getAccessibleMock(\TYPO3\Form\Core\Model\ProcessingRule::class, array('dummy'));
         $mockProcessingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
 
-        $formDefinition = $this->getMockBuilder('TYPO3\Form\Core\Model\FormDefinition')->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
+        $formDefinition = $this->getMockBuilder(\TYPO3\Form\Core\Model\FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
         $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
 
         return $formDefinition;

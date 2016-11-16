@@ -84,10 +84,10 @@ use TYPO3\Flow\Annotations as Flow;
  * $formDefaults = array(
  *   'formElementTypes' => array(
  *     'TYPO3.Form:Page' => array(
- *       'implementationClassName' => 'TYPO3\Form\Core\Model\Page'
+ *       'implementationClassName' => \TYPO3\Form\Core\Model\Page::class
  *     ),
  *     'TYPO3.Form:Textfield' => array(
- *       'implementationClassName' => 'TYPO3\Form\Core\Model\GenericFormElement'
+ *       'implementationClassName' => \TYPO3\Form\Core\Model\GenericFormElement::class
  *     )
  *   )
  * )
@@ -102,11 +102,11 @@ use TYPO3\Flow\Annotations as Flow;
  * $formDefaults = array(
  *   'formElementTypes' => array(
  *     'TYPO3.Form:Page' => array(
- *       'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
+ *       'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
  *       'label' => 'this is the label of the page if nothing is specified'
  *     ),
  *     'TYPO3.Form:Textfield' => array(
- *       'implementationClassName' => 'TYPO3\Form\Core\Model\GenericFormElement',
+ *       'implementationClassName' => \TYPO3\Form\Core\Model\GenericFormElement::class,
  *       'label' = >'Default Label',
  *       'defaultValue' => 'Default form element value',
  *       'properties' => array(
@@ -129,7 +129,7 @@ use TYPO3\Flow\Annotations as Flow;
  * $formDefaults = array(
  *   'formElementTypes' => array(
  *     'TYPO3.Form:Base' => array(
- *       'implementationClassName' => 'TYPO3\Form\Core\Model\GenericFormElement',
+ *       'implementationClassName' => \TYPO3\Form\Core\Model\GenericFormElement::class,
  *       'label' = >'Default Label'
  *     ),
  *     'TYPO3.Form:Textfield' => array(

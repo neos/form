@@ -49,7 +49,7 @@ class RenderViewHelper extends AbstractViewHelper
      * @param array $overrideConfiguration factory specific configuration
      * @return string the rendered form
      */
-    public function render($persistenceIdentifier = null, $factoryClass = 'TYPO3\Form\Factory\ArrayFormFactory', $presetName = 'default', array $overrideConfiguration = null)
+    public function render($persistenceIdentifier = null, $factoryClass = \TYPO3\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = null)
     {
         if (isset($persistenceIdentifier)) {
             $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: array());

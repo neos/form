@@ -23,7 +23,7 @@ class FileUpload extends \TYPO3\Form\Core\Model\AbstractFormElement
      */
     public function initializeFormElement()
     {
-        $this->setDataType('TYPO3\Flow\Resource\Resource');
+        $this->setDataType(\TYPO3\Flow\Resource\Resource::class);
         $fileTypeValidator = new \TYPO3\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
         $this->addValidator($fileTypeValidator);
     }

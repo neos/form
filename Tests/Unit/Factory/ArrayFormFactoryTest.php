@@ -102,17 +102,17 @@ class ArrayFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
 
                         ),
                         'TYPO3.Form:Page' => array(
-                            'implementationClassName' => 'TYPO3\Form\Core\Model\Page'
+                            'implementationClassName' => \TYPO3\Form\Core\Model\Page::class
                         ),
                         'TYPO3.Form:TestElement' => array(
-                            'implementationClassName' => 'TYPO3\Form\FormElements\GenericFormElement'
+                            'implementationClassName' => \TYPO3\Form\FormElements\GenericFormElement::class
                         )
                     )
                 )
             )
         );
 
-        $accessibleFactory = $this->buildAccessibleProxy('\TYPO3\Form\Factory\ArrayFormFactory');
+        $accessibleFactory = $this->buildAccessibleProxy(\TYPO3\Form\Factory\ArrayFormFactory::class);
         $factory = new $accessibleFactory;
         $factory->_set('formSettings', $settings);
         return $factory;

@@ -33,7 +33,7 @@ class ImageUpload extends \TYPO3\Form\Core\Model\AbstractFormElement
         $propertyMappingConfiguration->setTypeConverterOption(AssetInterfaceConverter::class, AssetInterfaceConverter::CONFIGURATION_ONE_PER_RESOURCE, true);
         $propertyMappingConfiguration->allowProperties('resource');
 
-        $this->setDataType('TYPO3\Media\Domain\Model\Image');
+        $this->setDataType(\TYPO3\Media\Domain\Model\Image::class);
         $imageTypeValidator = new \TYPO3\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
         $this->addValidator($imageTypeValidator);
     }

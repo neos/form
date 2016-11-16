@@ -12,6 +12,7 @@ namespace TYPO3\Form\Core\Model;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Form\Core\Renderer\UnknownFormElementRenderer;
 use TYPO3\Form\Core\Runtime\FormRuntime;
 use TYPO3\Form\Exception\IdentifierNotValidException;
 
@@ -60,7 +61,7 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
      */
     public function getRendererClassName()
     {
-        return 'TYPO3\Form\Core\Renderer\UnknownFormElementRenderer';
+        return UnknownFormElementRenderer::class;
     }
 
     /**

@@ -32,8 +32,8 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     public function setUp()
     {
-        $this->mockPropertyMapper = $this->getMockBuilder('TYPO3\Flow\Property\PropertyMapper')->getMock();
-        $this->processingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
+        $this->mockPropertyMapper = $this->getMockBuilder(\TYPO3\Flow\Property\PropertyMapper::class)->getMock();
+        $this->processingRule = $this->getAccessibleMock(\TYPO3\Form\Core\Model\ProcessingRule::class, array('dummy'));
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
         $this->processingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
         $this->processingRule->_set('processingMessages', new \TYPO3\Flow\Error\Result());
@@ -69,9 +69,9 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
-        $mockValidator1 = $this->createMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
+        $mockValidator1 = $this->createMock(\TYPO3\Flow\Validation\Validator\ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator1);
-        $mockValidator2 = $this->createMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
+        $mockValidator2 = $this->createMock(\TYPO3\Flow\Validation\Validator\ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator2);
 
         $validators = $this->processingRule->getValidators();
@@ -113,7 +113,7 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function processConvertsValueIfDataTypeIsSpecified()
     {
         $this->processingRule->setDataType('SomeDataType');
-        $mockPropertyMappingConfiguration = $this->getMockBuilder('TYPO3\Flow\Property\PropertyMappingConfiguration')->getMock();
+        $mockPropertyMappingConfiguration = $this->getMockBuilder(\TYPO3\Flow\Property\PropertyMappingConfiguration::class)->getMock();
         $this->processingRule->_set('propertyMappingConfiguration', $mockPropertyMappingConfiguration);
 
         $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));

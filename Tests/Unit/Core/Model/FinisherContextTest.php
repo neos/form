@@ -32,7 +32,7 @@ class FinisherContextTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     public function setUp()
     {
-        $this->mockFormRuntime = $this->getMockBuilder('TYPO3\Form\Core\Runtime\FormRuntime')->disableOriginalConstructor()->getMock();
+        $this->mockFormRuntime = $this->getMockBuilder(\TYPO3\Form\Core\Runtime\FormRuntime::class)->disableOriginalConstructor()->getMock();
         $this->finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this->mockFormRuntime);
     }
 

@@ -202,7 +202,7 @@ class AbstractFinisherTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getAbstractFinisher()
     {
-        return $this->getAccessibleMock('TYPO3\Form\Core\Model\AbstractFinisher', array('executeInternal'));
+        return $this->getAccessibleMock(\TYPO3\Form\Core\Model\AbstractFinisher::class, array('executeInternal'));
     }
 
     /**
@@ -210,7 +210,7 @@ class AbstractFinisherTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', array('dummy'), array(), '', false);
+        $this->formRuntime = $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, array('dummy'), array(), '', false);
         return new \TYPO3\Form\Core\Model\FinisherContext($this->formRuntime);
     }
 }

@@ -77,7 +77,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
         $formDefinition = new FormDefinition('myForm', array(
             'finisherPresets' => array(
                 'myFinisher' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher'),
+                    'implementationClassName' => $this->buildAccessibleProxy(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
                     'options' => array(
                         'foo' => 'bar',
                         'test' => 'asdf'
@@ -100,7 +100,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
         $finishers = $formDefinition->getFinishers();
         $this->assertSame(1, count($finishers));
         $finisher = $finishers[0];
-        $this->assertInstanceOf('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher', $finisher);
+        $this->assertInstanceOf(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
         $this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
     }
 
@@ -262,11 +262,11 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
 
-        $mockRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-        $mockResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->getMock();
+        $mockRequest = $this->getMockBuilder(\TYPO3\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockResponse = $this->getMockBuilder(\TYPO3\Flow\Http\Response::class)->getMock();
 
         $form = $formDefinition->bind($mockRequest, $mockResponse);
-        $this->assertInstanceOf('TYPO3\Form\Core\Runtime\FormRuntime', $form);
+        $this->assertInstanceOf(\TYPO3\Form\Core\Runtime\FormRuntime::class, $form);
     }
 
     /**
@@ -328,7 +328,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
             'formElementTypes' => array(
                 'TYPO3.Form:Form' => array(),
                 'TYPO3.Form:Page' => array(
-                    'implementationClassName' => 'TYPO3\Form\Core\Model\Page'
+                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class
                 )
             )
         ));
@@ -347,7 +347,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
             'formElementTypes' => array(
                 'TYPO3.Form:Form' => array(),
                 'TYPO3.Form:Page' => array(
-                    'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
+                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
                     'label' => 'My Label'
                 )
             )
@@ -365,7 +365,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
             'formElementTypes' => array(
                 'TYPO3.Form:Form' => array(),
                 'TYPO3.Form:Page' => array(
-                    'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
+                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
                     'rendererClassName' => 'MyRenderer'
                 )
             )
@@ -383,7 +383,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
             'formElementTypes' => array(
                 'TYPO3.Form:Form' => array(),
                 'TYPO3.Form:Page' => array(
-                    'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
+                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
                     'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
                 )
             )
@@ -402,7 +402,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
             'formElementTypes' => array(
                 'TYPO3.Form:Form' => array(),
                 'TYPO3.Form:Page' => array(
-                    'implementationClassName' => 'TYPO3\Form\Core\Model\Page',
+                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
                     'label' => 'My Label',
                     'unknownProperty' => 'this is an unknown property'
                 )
@@ -434,7 +434,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function formFieldTypeManagerIsReturned()
     {
         $formDefinition = new FormDefinition('myForm');
-        $this->assertInstanceOf('TYPO3\Form\Utility\SupertypeResolver', $formDefinition->getFormFieldTypeManager());
+        $this->assertInstanceOf(\TYPO3\Form\Utility\SupertypeResolver::class, $formDefinition->getFormFieldTypeManager());
     }
 
     /**
@@ -575,7 +575,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
         $processingRule1 = $formDefinition->getProcessingRule('foo');
         $processingRule2 = $formDefinition->getProcessingRule('foo');
 
-        $this->assertInstanceOf('TYPO3\Form\Core\Model\ProcessingRule', $processingRule1);
+        $this->assertInstanceOf(\TYPO3\Form\Core\Model\ProcessingRule::class, $processingRule1);
         $this->assertSame($processingRule1, $processingRule2);
 
         $this->assertSame(array('foo' => $processingRule1), $formDefinition->getProcessingRules());
@@ -620,7 +620,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('email');
-        $this->assertInstanceOf('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher', $finisher);
+        $this->assertInstanceOf(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
         $this->assertSame(array($finisher), $formDefinition->getFinishers());
     }
 
@@ -656,10 +656,10 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
                     'assd' => 'as'
                 ),
                 'email' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher')
+                    'implementationClassName' => $this->buildAccessibleProxy(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class)
                 ),
                 'emailWithOptions' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy('TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher'),
+                    'implementationClassName' => $this->buildAccessibleProxy(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
                     'options' => array(
                         'foo' => 'bar',
                         'name' => 'asdf'
@@ -678,7 +678,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getMockFinisher()
     {
-        return $this->createMock('TYPO3\Form\Core\Model\FinisherInterface');
+        return $this->createMock(\TYPO3\Form\Core\Model\FinisherInterface::class);
     }
 
     /**
@@ -687,7 +687,7 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getMockFormElement($identifier)
     {
-        $mockFormElement = $this->getMockBuilder('TYPO3\Form\Core\Model\AbstractFormElement')->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
+        $mockFormElement = $this->getMockBuilder(\TYPO3\Form\Core\Model\AbstractFormElement::class)->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
         $mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
         return $mockFormElement;
