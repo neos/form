@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * This ViewHelper makes the specified Resource object available for its
- * childNodes. If no resource object wsa found at the specified position,
+ * This ViewHelper makes the specified PersistentResource available for its
+ * childNodes. If no resource object was found at the specified position,
  * the child nodes are not rendered.
  *
  * In case the form is redisplayed because of validation errors, a previously
@@ -73,7 +73,7 @@ class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractF
      * Returns a previously uploaded resource.
      * If errors occurred during property mapping for this property, NULL is returned
      *
-     * @return \TYPO3\Flow\Resource\Resource
+     * @return \TYPO3\Flow\ResourceManagement\PersistentResource
      */
     protected function getUploadedResource()
     {
@@ -81,9 +81,9 @@ class UploadedResourceViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractF
             return null;
         }
         $resourceObject = $this->getValue(false);
-        if ($resourceObject instanceof \TYPO3\Flow\Resource\Resource) {
+        if ($resourceObject instanceof \TYPO3\Flow\ResourceManagement\PersistentResource) {
             return $resourceObject;
         }
-        return $this->propertyMapper->convert($resourceObject, \TYPO3\Flow\Resource\Resource::class);
+        return $this->propertyMapper->convert($resourceObject, \TYPO3\Flow\ResourceManagement\PersistentResource::class);
     }
 }

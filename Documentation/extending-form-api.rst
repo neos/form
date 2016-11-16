@@ -19,7 +19,7 @@ This is where you want to get your hands dirty and create custom Form Element im
 Examples for such custom Form Elements are:
 
 * A *DatePicker* that converts the input to a ``DateTime`` object
-* A *File upload* that validates and converts an uploaded file to a ``Resource``
+* A *File upload* that validates and converts an uploaded file to a ``PersistentResource``
 * A *Captcha* image
 
 A Form Element must implement the ``FormElementInterface`` interface located in

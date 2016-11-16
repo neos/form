@@ -13,7 +13,7 @@ namespace TYPO3\Form\ViewHelpers;
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\I18n\Translator;
-use TYPO3\Flow\Resource\Exception as ResourceException;
+use TYPO3\Flow\ResourceManagement\Exception as ResourceException;
 use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Fluid\Core\ViewHelper\Exception as ViewHelperException;
 use TYPO3\Form\Core\Model\FormElementInterface;
