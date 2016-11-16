@@ -10,6 +10,9 @@ namespace TYPO3\Form\Finishers;
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
+use Neos\FluidAdaptor\View\StandaloneView;
+use TYPO3\Form\Core\Model\AbstractFinisher;
+use TYPO3\Form\Exception\FinisherException;
 
 /**
  * This finisher sends an email to one recipient
@@ -36,7 +39,7 @@ namespace TYPO3\Form\Finishers;
  * - format: format of the email (one of the FORMAT_* constants). By default mails are sent as HTML
  * - testMode: if TRUE the email is not actually sent but outputted for debugging purposes. Defaults to FALSE
  */
-class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
+class EmailFinisher extends AbstractFinisher
 {
     const FORMAT_PLAINTEXT = 'plaintext';
     const FORMAT_HTML = 'html';
@@ -56,7 +59,7 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
      * @see AbstractFinisher::execute()
      *
      * @return void
-     * @throws \TYPO3\Form\Exception\FinisherException
+     * @throws FinisherException
      */
     protected function executeInternal()
     {
@@ -77,13 +80,13 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
         $testMode = $this->parseOption('testMode');
 
         if ($subject === null) {
-            throw new \TYPO3\Form\Exception\FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
+            throw new FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
         }
         if ($recipientAddress === null) {
-            throw new \TYPO3\Form\Exception\FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
+            throw new FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
         }
         if ($senderAddress === null) {
-            throw new \TYPO3\Form\Exception\FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
+            throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
 
         $mail = new \TYPO3\SwiftMailer\Message();
@@ -130,14 +133,14 @@ class EmailFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
     }
 
     /**
-     * @return \TYPO3\Fluid\View\StandaloneView
-     * @throws \TYPO3\Form\Exception\FinisherException
+     * @return StandaloneView
+     * @throws FinisherException
      */
     protected function initializeStandaloneView()
     {
-        $standaloneView = new \TYPO3\Fluid\View\StandaloneView();
+        $standaloneView = new StandaloneView();
         if (!isset($this->options['templatePathAndFilename'])) {
-            throw new \TYPO3\Form\Exception\FinisherException('The option "templatePathAndFilename" must be set for the EmailFinisher.', 1327058829);
+            throw new FinisherException('The option "templatePathAndFilename" must be set for the EmailFinisher.', 1327058829);
         }
         $standaloneView->setTemplatePathAndFilename($this->options['templatePathAndFilename']);
 

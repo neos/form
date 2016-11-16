@@ -12,7 +12,10 @@ namespace TYPO3\Form\ViewHelpers\Form;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Property\PropertyMapper;
+use TYPO3\Media\Domain\Model\Image;
 
 /**
  * This ViewHelper makes the specified Image object available for its
@@ -32,10 +35,10 @@ use TYPO3\Flow\Annotations as Flow;
  * <a href="...">Link to image resource</a>
  * </output>
  */
-class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper
+class UploadedImageViewHelper extends AbstractFormFieldViewHelper
 {
     /**
-     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @var PropertyMapper
      * @Flow\Inject
      */
     protected $propertyMapper;
@@ -70,7 +73,7 @@ class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractForm
      * Returns a previously uploaded image.
      * If errors occurred during property mapping for this property, NULL is returned
      *
-     * @return \TYPO3\Media\Domain\Model\Image
+     * @return Image
      */
     protected function getUploadedImage()
     {
@@ -78,9 +81,9 @@ class UploadedImageViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractForm
             return null;
         }
         $image = $this->getValue(false);
-        if ($image instanceof \TYPO3\Media\Domain\Model\Image) {
+        if ($image instanceof Image) {
             return $image;
         }
-        return $this->propertyMapper->convert($image, 'TYPO3\Media\Domain\Model\Image');
+        return $this->propertyMapper->convert($image, Image::class);
     }
 }
