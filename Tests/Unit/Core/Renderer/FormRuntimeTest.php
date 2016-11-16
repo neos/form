@@ -1,15 +1,15 @@
 <?php
 namespace TYPO3\Form\Tests\Unit\Core\Runtime;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use TYPO3\Form\Core\Model\FormDefinition;
 use TYPO3\Form\Core\Model\Page;
@@ -29,10 +29,10 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function valuesSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
-        $mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(\TYPO3\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(\TYPO3\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
 
-        $formRuntime = $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        $formRuntime = $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
 
         $this->assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
         $this->assertSame($mockHttpResponse, $formRuntime->getResponse());
@@ -204,9 +204,9 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {
-        $mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(\TYPO3\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(\TYPO3\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
 
-        return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        return $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
     }
 }
