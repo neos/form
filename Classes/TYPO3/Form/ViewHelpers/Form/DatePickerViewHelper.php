@@ -12,7 +12,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
  */
 
 use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
  * Display a jQuery date picker.

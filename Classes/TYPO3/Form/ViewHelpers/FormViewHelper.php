@@ -11,14 +11,15 @@ namespace TYPO3\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\ActionRequest;
-use TYPO3\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
  * Custom form ViewHelper that renders the form state instead of referrer fields
  */
-class FormViewHelper extends \TYPO3\Fluid\ViewHelpers\FormViewHelper
+class FormViewHelper extends FluidFormViewHelper
 {
     /**
      * @Flow\Inject

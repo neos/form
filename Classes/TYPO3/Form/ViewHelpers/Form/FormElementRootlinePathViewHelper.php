@@ -11,18 +11,20 @@ namespace TYPO3\Form\ViewHelpers\Form;
  * source code.
  */
 
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Form\Core\Model\Renderable\RenderableInterface;
 
 /**
  * Form Element Rootline Path
  */
-class FormElementRootlinePathViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+class FormElementRootlinePathViewHelper extends AbstractViewHelper
 {
     /**
-     * @param \TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable
+     * @param RenderableInterface $renderable
      * @return string
      */
-    public function render(\TYPO3\Form\Core\Model\Renderable\RenderableInterface $renderable)
+    public function render(RenderableInterface $renderable)
     {
         $path = $renderable->getIdentifier();
         while ($renderable = $renderable->getParentRenderable()) {

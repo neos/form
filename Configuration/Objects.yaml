@@ -1,7 +1,2 @@
-TYPO3\Form\Core\Renderer\FluidFormRenderer:
-  properties:
-    renderingContext:
-      object: TYPO3\Fluid\Core\Rendering\RenderingContext
-
 TYPO3\Form\Persistence\FormPersistenceManagerInterface:
   className: TYPO3\Form\Persistence\YamlPersistenceManager

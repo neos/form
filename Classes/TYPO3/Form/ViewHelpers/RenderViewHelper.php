@@ -11,10 +11,10 @@ namespace TYPO3\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Http\Response;
 use TYPO3\Flow\Utility\Arrays;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Form\Persistence\FormPersistenceManagerInterface;
 
 /**
@@ -52,7 +52,7 @@ class RenderViewHelper extends AbstractViewHelper
     public function render($persistenceIdentifier = null, $factoryClass = \TYPO3\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = null)
     {
         if (isset($persistenceIdentifier)) {
-            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: array());
+            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: []);
         }
 
         $factory = $this->objectManager->get($factoryClass);

@@ -11,8 +11,8 @@ namespace TYPO3\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Form\Core\Model\FormElementInterface;
 use TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface;
 use TYPO3\Form\Core\Model\Renderable\RootRenderableInterface;
@@ -39,7 +39,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
         if ($renderable instanceof CompositeRenderableInterface) {
             $elements = $renderable->getRenderablesRecursively();
         } else {
-            $elements = array($renderable);
+            $elements = [$renderable];
         }
 
         /** @var RendererInterface $fluidFormRenderer */
@@ -53,12 +53,12 @@ class RenderValuesViewHelper extends AbstractViewHelper
             }
             $value = $formState->getFormValue($element->getIdentifier());
 
-            $formValue = array(
+            $formValue = [
                 'element' => $element,
                 'value' => $value,
                 'processedValue' => $this->processElementValue($element, $value),
                 'isMultiValue' => is_array($value) || $value instanceof \Iterator
-            );
+            ];
             $this->templateVariableContainer->add($as, $formValue);
             $output .= $this->renderChildren();
             $this->templateVariableContainer->remove($as);
@@ -91,6 +91,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
 
     /**
      * Replaces the given values (=keys) with the corresponding elements in $options
+     *
      * @see mapValueToOption()
      *
      * @param array $value
@@ -99,7 +100,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      */
     protected function mapValuesToOptions(array $value, array $options)
     {
-        $result = array();
+        $result = [];
         foreach ($value as $key) {
             $result[] = $this->mapValueToOption($key, $options);
         }

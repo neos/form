@@ -11,10 +11,10 @@ namespace TYPO3\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
+use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\ResourceManagement\Publishing\ResourcePublisher;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3\Fluid\Core\ViewHelper\Exception as ViewHelperException;
 use TYPO3\Form\Factory\ArrayFormFactory;
 
 /**
@@ -47,11 +47,11 @@ class RenderHeadViewHelper extends AbstractViewHelper
     {
         $content = '';
         $presetConfiguration = $this->formBuilderFactory->getPresetConfiguration($presetName);
-        $stylesheets = isset($presetConfiguration['stylesheets']) ? $presetConfiguration['stylesheets'] : array();
+        $stylesheets = isset($presetConfiguration['stylesheets']) ? $presetConfiguration['stylesheets'] : [];
         foreach ($stylesheets as $stylesheet) {
             $content .= sprintf('<link href="%s" rel="stylesheet">', $this->resolveResourcePath($stylesheet['source']));
         }
-        $javaScripts = isset($presetConfiguration['javaScripts']) ? $presetConfiguration['javaScripts'] : array();
+        $javaScripts = isset($presetConfiguration['javaScripts']) ? $presetConfiguration['javaScripts'] : [];
         foreach ($javaScripts as $javaScript) {
             $content .= sprintf('<script src="%s"></script>', $this->resolveResourcePath($javaScript['source']));
         }
@@ -66,9 +66,9 @@ class RenderHeadViewHelper extends AbstractViewHelper
     protected function resolveResourcePath($resourcePath)
     {
         // TODO: This method should be somewhere in the resource manager probably?
-        $matches = array();
+        $matches = [];
         preg_match('#resource://([^/]*)/Public/(.*)#', $resourcePath, $matches);
-        if ($matches === array()) {
+        if ($matches === []) {
             throw new ViewHelperException('Resource path "' . $resourcePath . '" can\'t be resolved.', 1328543327);
         }
         $package = $matches[1];
