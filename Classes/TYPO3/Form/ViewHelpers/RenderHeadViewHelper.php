@@ -12,9 +12,9 @@ namespace TYPO3\Form\ViewHelpers;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Resource\Publishing\ResourcePublisher;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
+use TYPO3\Flow\Resource\ResourceManager;
 use TYPO3\Form\Factory\ArrayFormFactory;
 
 /**
@@ -29,9 +29,9 @@ class RenderHeadViewHelper extends AbstractViewHelper
 
     /**
      * @Flow\Inject
-     * @var ResourcePublisher
+     * @var ResourceManager
      */
-    protected $resourcePublisher;
+    protected $resourceManager;
 
     /**
      * @Flow\Inject
@@ -49,30 +49,12 @@ class RenderHeadViewHelper extends AbstractViewHelper
         $presetConfiguration = $this->formBuilderFactory->getPresetConfiguration($presetName);
         $stylesheets = isset($presetConfiguration['stylesheets']) ? $presetConfiguration['stylesheets'] : array();
         foreach ($stylesheets as $stylesheet) {
-            $content .= sprintf('<link href="%s" rel="stylesheet">', $this->resolveResourcePath($stylesheet['source']));
+            $content .= sprintf('<link href="%s" rel="stylesheet">', $this->resourceManager->getPublicPackageResourceUriByPath($stylesheet['source']));
         }
         $javaScripts = isset($presetConfiguration['javaScripts']) ? $presetConfiguration['javaScripts'] : array();
         foreach ($javaScripts as $javaScript) {
-            $content .= sprintf('<script src="%s"></script>', $this->resolveResourcePath($javaScript['source']));
+            $content .= sprintf('<script src="%s"></script>', $this->resourceManager->getPublicPackageResourceUriByPath($javaScript['source']));
         }
         return $content;
-    }
-
-    /**
-     * @param string $resourcePath
-     * @return string
-     * @throws ViewHelperException
-     */
-    protected function resolveResourcePath($resourcePath)
-    {
-        // TODO: This method should be somewhere in the resource manager probably?
-        $matches = array();
-        preg_match('#resource://([^/]*)/Public/(.*)#', $resourcePath, $matches);
-        if ($matches === array()) {
-            throw new ViewHelperException('Resource path "' . $resourcePath . '" can\'t be resolved.', 1328543327);
-        }
-        $package = $matches[1];
-        $path = $matches[2];
-        return $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/' . $package . '/' . $path;
     }
 }
