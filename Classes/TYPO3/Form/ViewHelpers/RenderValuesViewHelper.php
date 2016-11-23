@@ -1,18 +1,18 @@
 <?php
 namespace TYPO3\Form\ViewHelpers;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
-use TYPO3\Flow\Annotations as Flow;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Form\Core\Model\FormElementInterface;
 use TYPO3\Form\Core\Model\Renderable\CompositeRenderableInterface;
 use TYPO3\Form\Core\Model\Renderable\RootRenderableInterface;
@@ -39,7 +39,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
         if ($renderable instanceof CompositeRenderableInterface) {
             $elements = $renderable->getRenderablesRecursively();
         } else {
-            $elements = array($renderable);
+            $elements = [$renderable];
         }
 
         /** @var RendererInterface $fluidFormRenderer */
@@ -53,12 +53,12 @@ class RenderValuesViewHelper extends AbstractViewHelper
             }
             $value = $formState->getFormValue($element->getIdentifier());
 
-            $formValue = array(
+            $formValue = [
                 'element' => $element,
                 'value' => $value,
                 'processedValue' => $this->processElementValue($element, $value),
                 'isMultiValue' => is_array($value) || $value instanceof \Iterator
-            );
+            ];
             $this->templateVariableContainer->add($as, $formValue);
             $output .= $this->renderChildren();
             $this->templateVariableContainer->remove($as);
@@ -91,6 +91,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
 
     /**
      * Replaces the given values (=keys) with the corresponding elements in $options
+     *
      * @see mapValueToOption()
      *
      * @param array $value
@@ -99,7 +100,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      */
     protected function mapValuesToOptions(array $value, array $options)
     {
-        $result = array();
+        $result = [];
         foreach ($value as $key) {
             $result[] = $this->mapValueToOption($key, $options);
         }

@@ -1,15 +1,15 @@
 <?php
 namespace TYPO3\Form\Tests\Unit\Core\Model;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use TYPO3\Form\Core\Model\FormDefinition;
 use TYPO3\Form\Core\Model\Page;
@@ -202,7 +202,7 @@ class AbstractFinisherTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getAbstractFinisher()
     {
-        return $this->getAccessibleMock('TYPO3\Form\Core\Model\AbstractFinisher', array('executeInternal'));
+        return $this->getAccessibleMock(\TYPO3\Form\Core\Model\AbstractFinisher::class, array('executeInternal'));
     }
 
     /**
@@ -210,7 +210,7 @@ class AbstractFinisherTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', array('dummy'), array(), '', false);
+        $this->formRuntime = $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, array('dummy'), array(), '', false);
         return new \TYPO3\Form\Core\Model\FinisherContext($this->formRuntime);
     }
 }

@@ -1,19 +1,19 @@
 <?php
 namespace TYPO3\Form\Validation;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 
 /**
- * The given $value is valid if it is an \TYPO3\Flow\Resource\Resource of the configured resolution
+ * The given $value is valid if it is an \TYPO3\Flow\ResourceManagement\PersistentResource of the configured resolution
  * Note: a value of NULL or empty string ('') is considered valid
  */
 class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidator
@@ -26,17 +26,17 @@ class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidat
     );
 
     /**
-     * The given $value is valid if it is an \TYPO3\Flow\Resource\Resource of the configured resolution
+     * The given $value is valid if it is an \TYPO3\Flow\ResourceManagement\PersistentResource of the configured resolution
      * Note: a value of NULL or empty string ('') is considered valid
      *
-     * @param \TYPO3\Flow\Resource\Resource $resource The resource object that should be validated
+     * @param \TYPO3\Flow\ResourceManagement\PersistentResource $resource The resource object that should be validated
      * @return void
      * @api
      */
     protected function isValid($resource)
     {
-        if (!$resource instanceof \TYPO3\Flow\Resource\Resource) {
-            $this->addError('The given value was not a Resource instance.', 1327865587);
+        if (!$resource instanceof \TYPO3\Flow\ResourceManagement\PersistentResource) {
+            $this->addError('The given value was not a PersistentResource instance.', 1327865587);
             return;
         }
         $fileExtension = $resource->getFileExtension();
