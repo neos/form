@@ -1,25 +1,25 @@
 <?php
 namespace TYPO3\Form\ViewHelpers\Form;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use Doctrine\ORM\Mapping as ORM;
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Property\PropertyMapper;
-use TYPO3\Flow\Resource\Resource as PersistentResource;
+use TYPO3\Flow\ResourceManagement\PersistentResource;
 
 /**
- * This ViewHelper makes the specified Resource object available for its
- * childNodes. If no resource object wsa found at the specified position,
+ * This ViewHelper makes the specified PersistentResource available for its
+ * childNodes. If no resource object was found at the specified position,
  * the child nodes are not rendered.
  *
  * In case the form is redisplayed because of validation errors, a previously
@@ -76,7 +76,7 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
      * Returns a previously uploaded resource.
      * If errors occurred during property mapping for this property, NULL is returned
      *
-     * @return Resource
+     * @return PersistentResource
      */
     protected function getUploadedResource()
     {

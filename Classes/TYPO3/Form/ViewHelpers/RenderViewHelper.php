@@ -1,20 +1,20 @@
 <?php
 namespace TYPO3\Form\ViewHelpers;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Http\Response;
 use TYPO3\Flow\Utility\Arrays;
-use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Form\Persistence\FormPersistenceManagerInterface;
 
 /**
@@ -49,10 +49,10 @@ class RenderViewHelper extends AbstractViewHelper
      * @param array $overrideConfiguration factory specific configuration
      * @return string the rendered form
      */
-    public function render($persistenceIdentifier = null, $factoryClass = 'TYPO3\Form\Factory\ArrayFormFactory', $presetName = 'default', array $overrideConfiguration = null)
+    public function render($persistenceIdentifier = null, $factoryClass = \TYPO3\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = null)
     {
         if (isset($persistenceIdentifier)) {
-            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: array());
+            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: []);
         }
 
         $factory = $this->objectManager->get($factoryClass);
