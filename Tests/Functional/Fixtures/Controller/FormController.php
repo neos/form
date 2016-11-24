@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Functional\Fixtures\Controller;
+namespace Neos\Form\Tests\Functional\Fixtures\Controller;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -25,8 +25,8 @@ class FormController extends \Neos\Flow\Mvc\Controller\ActionController
      */
     public function indexAction($formFactoryClassName)
     {
-        $formFactoryClassName = 'TYPO3\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
-        /* @var $formFactory \TYPO3\Form\Factory\FormFactoryInterface */
+        $formFactoryClassName = 'Neos\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
+        /* @var $formFactory \Neos\Form\Factory\FormFactoryInterface */
         $formFactory = new $formFactoryClassName();
         $formDefinition = $formFactory->build(array(), 'default');
 

@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Model;
+namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,12 +11,12 @@ namespace TYPO3\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 /**
  * Test for ProcessingRule Domain Model
- * @covers \TYPO3\Form\Core\Model\ProcessingRule
+ * @covers \Neos\Form\Core\Model\ProcessingRule
  */
 class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -26,14 +26,14 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
     protected $mockPropertyMapper;
 
     /**
-     * @var \TYPO3\Form\Core\Model\ProcessingRule
+     * @var \Neos\Form\Core\Model\ProcessingRule
      */
     protected $processingRule;
 
     public function setUp()
     {
         $this->mockPropertyMapper = $this->getMockBuilder(\Neos\Flow\Property\PropertyMapper::class)->getMock();
-        $this->processingRule = $this->getAccessibleMock(\TYPO3\Form\Core\Model\ProcessingRule::class, array('dummy'));
+        $this->processingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
         $this->processingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
         $this->processingRule->_set('processingMessages', new \Neos\Flow\Error\Result());

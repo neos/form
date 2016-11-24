@@ -26,7 +26,7 @@ class Version20160601101500 extends AbstractMigration
     {
         $this->processConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
             function (array &$configuration) {
-                $presetsConfiguration = \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($configuration, 'TYPO3.Form.presets');
+                $presetsConfiguration = \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($configuration, 'Neos.Form.presets');
                 if (!is_array($presetsConfiguration)) {
                     return;
                 }

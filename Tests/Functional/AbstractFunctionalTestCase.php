@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Functional;
+namespace Neos\Form\Tests\Functional;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -34,7 +34,7 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
         $route = new \Neos\Flow\Mvc\Routing\Route();
         $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
         $route->setDefaults(array(
-            '@package' => 'TYPO3.Form',
+            '@package' => 'Neos.Form',
             '@subpackage' => 'Tests\Functional\Fixtures',
             '@controller' => 'Form',
             '@action' => 'index',

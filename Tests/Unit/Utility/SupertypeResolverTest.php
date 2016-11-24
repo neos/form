@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Utility;
+namespace Neos\Form\Tests\Unit\Utility;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,11 +11,11 @@ namespace TYPO3\Form\Tests\Unit\Utility;
  * source code.
  */
 
-use TYPO3\Form\Utility\SupertypeResolver;
+use Neos\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
- * @covers \TYPO3\Form\Utility\SupertypeResolver<extended>
+ * @covers \Neos\Form\Utility\SupertypeResolver<extended>
  */
 class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -133,7 +133,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\TypeDefinitionNotFoundException
+     * @expectedException Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {

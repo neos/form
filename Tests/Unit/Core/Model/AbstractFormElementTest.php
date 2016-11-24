@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Model;
+namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,12 +11,12 @@ namespace TYPO3\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 /**
  * Test for AbstractFormElement Domain Model
- * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
+ * @covers \Neos\Form\Core\Model\AbstractFormElement<extended>
  */
 class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -25,9 +25,9 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function constructorSetsIdentifierAndType()
     {
-        $element = $this->getFormElement(array('myIdentifier', 'TYPO3.Form:MyType'));
+        $element = $this->getFormElement(array('myIdentifier', 'Neos.Form:MyType'));
         $this->assertSame('myIdentifier', $element->getIdentifier());
-        $this->assertSame('TYPO3.Form:MyType', $element->getType());
+        $this->assertSame('Neos.Form:MyType', $element->getType());
     }
 
     public function invalidIdentifiers()
@@ -41,12 +41,12 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Form\Exception\IdentifierNotValidException
+     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
-        $this->getFormElement(array($identifier, 'TYPO3.Form:MyType'));
+        $this->getFormElement(array($identifier, 'Neos.Form:MyType'));
     }
 
     /**
@@ -54,7 +54,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function labelCanBeSetAndGet()
     {
-        $formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
         $this->assertSame('', $formElement->getLabel());
         $formElement->setLabel('my label');
         $this->assertSame('my label', $formElement->getLabel());
@@ -66,7 +66,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
     public function defaultValueCanBeSetAndGet()
     {
         $formDefinition = new FormDefinition('foo');
-        $formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
         $page = new Page('page');
         $formDefinition->addPage($page);
         $page->addElement($formElement);
@@ -80,7 +80,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function renderingOptionsCanBeSetAndGet()
     {
-        $formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
         $this->assertSame(array(), $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option1', 'value1');
         $this->assertSame(array('option1' => 'value1'), $formElement->getRenderingOptions());
@@ -93,7 +93,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function rendererClassNameCanBeGetAndSet()
     {
-        $formElement = $this->getFormElement(array('foo', 'TYPO3.Form:MyType'));
+        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
         $this->assertNull($formElement->getRendererClassName());
         $formElement->setRendererClassName('MyRendererClassName');
         $this->assertSame('MyRendererClassName', $formElement->getRendererClassName());
@@ -105,7 +105,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
     public function getUniqueIdentifierBuildsIdentifierFromRootFormAndElementIdentifier()
     {
         $formDefinition = new FormDefinition('foo');
-        $myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
+        $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
         $page = new Page('asdf');
         $formDefinition->addPage($page);
 
@@ -133,7 +133,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
     public function getUniqueIdentifierReplacesSpecialCharactersByUnderscores($formIdentifier, $elementIdentifier, $expectedResult)
     {
         $formDefinition = new FormDefinition($formIdentifier);
-        $myFormElement = $this->getFormElement(array($elementIdentifier, 'TYPO3.Form:MyType'));
+        $myFormElement = $this->getFormElement(array($elementIdentifier, 'Neos.Form:MyType'));
         $page = new Page('somePage');
         $formDefinition->addPage($page);
 
@@ -150,7 +150,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
         $page = new Page('asdf');
         $formDefinition->addPage($page);
 
-        $myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
+        $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
         $page->addElement($myFormElement);
 
         $this->assertFalse($myFormElement->isRequired());
@@ -165,7 +165,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
         $page = new Page('asdf');
         $formDefinition->addPage($page);
 
-        $myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
+        $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
         $page->addElement($myFormElement);
 
         $myFormElement->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
@@ -174,11 +174,11 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @param array $constructorArguments
-     * @return \TYPO3\Form\Core\Model\AbstractFormElement
+     * @return \Neos\Form\Core\Model\AbstractFormElement
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMockBuilder(\TYPO3\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
+        return $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
@@ -187,10 +187,10 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
      */
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {
-        $mockProcessingRule = $this->getAccessibleMock(\TYPO3\Form\Core\Model\ProcessingRule::class, array('dummy'));
+        $mockProcessingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
         $mockProcessingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
 
-        $formDefinition = $this->getMockBuilder(\TYPO3\Form\Core\Model\FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
+        $formDefinition = $this->getMockBuilder(\Neos\Form\Core\Model\FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
         $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
 
         return $formDefinition;

@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\ViewHelpers;
+namespace Neos\Form\Tests\Unit\ViewHelpers;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -16,7 +16,7 @@ use Neos\Flow\Http\Uri;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\Tests\UnitTestCase;
-use TYPO3\Form\ViewHelpers\FormViewHelper;
+use Neos\Form\ViewHelpers\FormViewHelper;
 
 /**
  * Tests for the custom FormViewHelper

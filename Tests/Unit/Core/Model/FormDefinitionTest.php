@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Model;
+namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,15 +11,15 @@ namespace TYPO3\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 require_once(__DIR__ . '/Fixture/EmptyFinisher.php');
 
 /**
  * Test for FormDefinition Domain Model
- * @covers \TYPO3\Form\Core\Model\FormDefinition<extended>
- * @covers \TYPO3\Form\Core\Model\Page<extended>
+ * @covers \Neos\Form\Core\Model\FormDefinition<extended>
+ * @covers \Neos\Form\Core\Model\Page<extended>
  */
 class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -46,7 +46,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\IdentifierNotValidException
+     * @expectedException Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
@@ -61,7 +61,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(
+                'Neos.Form:Form' => array(
                     'rendererClassName' => 'FooRenderer'
                 )
             )
@@ -77,7 +77,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $formDefinition = new FormDefinition('myForm', array(
             'finisherPresets' => array(
                 'myFinisher' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
+                    'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
                     'options' => array(
                         'foo' => 'bar',
                         'test' => 'asdf'
@@ -85,7 +85,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
                 )
             ),
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(
+                'Neos.Form:Form' => array(
                     'finishers' => array(
                         array(
                             'identifier' => 'myFinisher',
@@ -100,7 +100,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $finishers = $formDefinition->getFinishers();
         $this->assertSame(1, count($finishers));
         $finisher = $finishers[0];
-        $this->assertInstanceOf(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
+        $this->assertInstanceOf(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
         $this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
     }
 
@@ -111,7 +111,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(
+                'Neos.Form:Form' => array(
                     'renderingOptions' => array(
                         'foo' => 'bar',
                         'baz' => 'test'
@@ -132,7 +132,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
                 'foo' => 'bar'
             ),
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array()
+                'Neos.Form:Form' => array()
             )
         ));
         $this->assertSame(array('foo' => 'bar'), $formDefinition->getValidatorPresets());
@@ -140,13 +140,13 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\TypeDefinitionNotValidException
+     * @expectedException Neos\Form\Exception\TypeDefinitionNotValidException
      */
     public function constructorThrowsExceptionIfUnknownPropertySet()
     {
         new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(
+                'Neos.Form:Form' => array(
                     'unknownFormProperty' => 'val'
                 )
             )
@@ -164,7 +164,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Form\Exception
+     * @expectedException \Neos\Form\Exception
      */
     public function getPageByIndexThrowsExceptionIfSpecifiedIndexDoesNotExist()
     {
@@ -266,12 +266,12 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $mockResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->getMock();
 
         $form = $formDefinition->bind($mockRequest, $mockResponse);
-        $this->assertInstanceOf(\TYPO3\Form\Core\Runtime\FormRuntime::class, $form);
+        $this->assertInstanceOf(\Neos\Form\Core\Runtime\FormRuntime::class, $form);
     }
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\DuplicateFormElementException
+     * @expectedException Neos\Form\Exception\DuplicateFormElementException
      */
     public function attachingTwoElementsWithSameIdentifierToFormThrowsException1()
     {
@@ -288,7 +288,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\DuplicateFormElementException
+     * @expectedException Neos\Form\Exception\DuplicateFormElementException
      */
     public function attachingTwoElementsWithSameIdentifierToFormThrowsException2()
     {
@@ -306,7 +306,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function aPageCanOnlyBeAttachedToASingleFormDefinition()
     {
@@ -326,9 +326,9 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(),
-                'TYPO3.Form:Page' => array(
-                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class
+                'Neos.Form:Form' => array(),
+                'Neos.Form:Page' => array(
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class
                 )
             )
         ));
@@ -345,9 +345,9 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(),
-                'TYPO3.Form:Page' => array(
-                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
+                'Neos.Form:Form' => array(),
+                'Neos.Form:Page' => array(
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class,
                     'label' => 'My Label'
                 )
             )
@@ -363,9 +363,9 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(),
-                'TYPO3.Form:Page' => array(
-                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
+                'Neos.Form:Form' => array(),
+                'Neos.Form:Page' => array(
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class,
                     'rendererClassName' => 'MyRenderer'
                 )
             )
@@ -381,9 +381,9 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(),
-                'TYPO3.Form:Page' => array(
-                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
+                'Neos.Form:Form' => array(),
+                'Neos.Form:Page' => array(
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class,
                     'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
                 )
             )
@@ -394,15 +394,15 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\TypeDefinitionNotValidException
+     * @expectedException Neos\Form\Exception\TypeDefinitionNotValidException
      */
     public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(),
-                'TYPO3.Form:Page' => array(
-                    'implementationClassName' => \TYPO3\Form\Core\Model\Page::class,
+                'Neos.Form:Form' => array(),
+                'Neos.Form:Page' => array(
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class,
                     'label' => 'My Label',
                     'unknownProperty' => 'this is an unknown property'
                 )
@@ -413,19 +413,19 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\TypeDefinitionNotFoundException
+     * @expectedException Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function createPageThrowsExceptionIfImplementationClassNameNotFound()
     {
         $formDefinition = new FormDefinition('myForm', array(
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array(
+                'Neos.Form:Form' => array(
 
                 ),
-                'TYPO3.Form:Page2' => array()
+                'Neos.Form:Page2' => array()
             )
         ));
-        $page = $formDefinition->createPage('myPage', 'TYPO3.Form:Page2');
+        $page = $formDefinition->createPage('myPage', 'Neos.Form:Page2');
     }
 
     /**
@@ -434,7 +434,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     public function formFieldTypeManagerIsReturned()
     {
         $formDefinition = new FormDefinition('myForm');
-        $this->assertInstanceOf(\TYPO3\Form\Utility\SupertypeResolver::class, $formDefinition->getFormFieldTypeManager());
+        $this->assertInstanceOf(\Neos\Form\Utility\SupertypeResolver::class, $formDefinition->getFormFieldTypeManager());
     }
 
     /**
@@ -465,7 +465,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function movePageBeforeThrowsExceptionIfPagesDoNotBelongToSameForm()
     {
@@ -505,7 +505,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function movePageAfterThrowsExceptionIfPagesDoNotBelongToSameForm()
     {
@@ -557,7 +557,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function removePageThrowsExceptionIfPageIsNotOnForm()
     {
@@ -575,7 +575,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $processingRule1 = $formDefinition->getProcessingRule('foo');
         $processingRule2 = $formDefinition->getProcessingRule('foo');
 
-        $this->assertInstanceOf(\TYPO3\Form\Core\Model\ProcessingRule::class, $processingRule1);
+        $this->assertInstanceOf(\Neos\Form\Core\Model\ProcessingRule::class, $processingRule1);
         $this->assertSame($processingRule1, $processingRule2);
 
         $this->assertSame(array('foo' => $processingRule1), $formDefinition->getProcessingRules());
@@ -595,7 +595,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Form\Exception\FinisherPresetNotFoundException
+     * @expectedException \Neos\Form\Exception\FinisherPresetNotFoundException
      */
     public function createFinisherThrowsExceptionIfFinisherPresetNotFound()
     {
@@ -605,7 +605,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Form\Exception\FinisherPresetNotFoundException
+     * @expectedException \Neos\Form\Exception\FinisherPresetNotFoundException
      */
     public function createFinisherThrowsExceptionIfImplementationClassNameIsEmpty()
     {
@@ -620,7 +620,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('email');
-        $this->assertInstanceOf(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
+        $this->assertInstanceOf(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
         $this->assertSame(array($finisher), $formDefinition->getFinishers());
     }
 
@@ -646,7 +646,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
 
     /**
-     * @return \TYPO3\Form\Core\Model\FormDefinition
+     * @return \Neos\Form\Core\Model\FormDefinition
      */
     protected function getFormDefinitionWithFinisherConfiguration()
     {
@@ -656,10 +656,10 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
                     'assd' => 'as'
                 ),
                 'email' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class)
+                    'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class)
                 ),
                 'emailWithOptions' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy(\TYPO3\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
+                    'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
                     'options' => array(
                         'foo' => 'bar',
                         'name' => 'asdf'
@@ -667,27 +667,27 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
                 )
             ),
             'formElementTypes' => array(
-                'TYPO3.Form:Form' => array()
+                'Neos.Form:Form' => array()
             )
         ));
         return $formDefinition;
     }
 
     /**
-     * @return \TYPO3\Form\Core\Model\FinisherInterface
+     * @return \Neos\Form\Core\Model\FinisherInterface
      */
     protected function getMockFinisher()
     {
-        return $this->createMock(\TYPO3\Form\Core\Model\FinisherInterface::class);
+        return $this->createMock(\Neos\Form\Core\Model\FinisherInterface::class);
     }
 
     /**
      * @param string $identifier
-     * @return \TYPO3\Form\Core\Model\FormElementInterface
+     * @return \Neos\Form\Core\Model\FormElementInterface
      */
     protected function getMockFormElement($identifier)
     {
-        $mockFormElement = $this->getMockBuilder(\TYPO3\Form\Core\Model\AbstractFormElement::class)->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
+        $mockFormElement = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
         $mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
         return $mockFormElement;

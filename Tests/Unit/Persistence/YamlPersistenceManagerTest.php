@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Persistence;
+namespace Neos\Form\Tests\Unit\Persistence;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -15,19 +15,19 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamWrapper;
 
 /**
- * @covers \TYPO3\Form\Persistence\YamlPersistenceManager<extended>
+ * @covers \Neos\Form\Persistence\YamlPersistenceManager<extended>
  */
 class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
-     * @var \TYPO3\Form\Persistence\YamlPersistenceManager
+     * @var \Neos\Form\Persistence\YamlPersistenceManager
      */
     protected $yamlPersistenceManager;
 
     public function setUp()
     {
         vfsStream::setup('someSavePath');
-        $this->yamlPersistenceManager = new \TYPO3\Form\Persistence\YamlPersistenceManager();
+        $this->yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
         $this->yamlPersistenceManager->injectSettings(array(
                 'yamlPersistenceManager' =>
                     array('savePath' => vfsStream::url('someSavePath')
@@ -42,7 +42,7 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
     public function injectSettingsCreatesSaveDirectoryIfItDoesntExist()
     {
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
-        $yamlPersistenceManager = new \TYPO3\Form\Persistence\YamlPersistenceManager();
+        $yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
         $settings = array(
             'yamlPersistenceManager' =>
                 array('savePath' => vfsStream::url('someSavePath/foo/bar')
@@ -54,11 +54,11 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Form\Exception\PersistenceManagerException
+     * @expectedException \Neos\Form\Exception\PersistenceManagerException
      */
     public function loadThrowsExceptionIfSpecifiedFormDoesNotExist()
     {
-        $yamlPersistenceManager = new \TYPO3\Form\Persistence\YamlPersistenceManager();
+        $yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
         $yamlPersistenceManager->load('someNonExistingPersistenceIdentifier');
     }
 
@@ -67,7 +67,7 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function loadReturnsFormDefinitionAsArray()
     {
-        $mockYamlFormDefinition = 'type: \'TYPO3.Form:Form\'
+        $mockYamlFormDefinition = 'type: \'Neos.Form:Form\'
 identifier: formFixture
 label: \'Form Fixture\'
 ';
@@ -75,7 +75,7 @@ label: \'Form Fixture\'
 
         $actualResult = $this->yamlPersistenceManager->load('mockFormPersistenceIdentifier');
         $expectedResult = array(
-            'type' => 'TYPO3.Form:Form',
+            'type' => 'Neos.Form:Form',
             'identifier' => 'formFixture',
             'label' => 'Form Fixture'
         );
@@ -88,14 +88,14 @@ label: \'Form Fixture\'
     public function saveStoresFormDefinitionAsYaml()
     {
         $mockArrayFormDefinition = array(
-            'type' => 'TYPO3.Form:Form',
+            'type' => 'Neos.Form:Form',
             'identifier' => 'formFixture',
             'label' => 'Form Fixture'
         );
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('mockFormPersistenceIdentifier.yaml'));
 
         $this->yamlPersistenceManager->save('mockFormPersistenceIdentifier', $mockArrayFormDefinition);
-        $expectedResult = 'type: \'TYPO3.Form:Form\'
+        $expectedResult = 'type: \'Neos.Form:Form\'
 identifier: formFixture
 label: \'Form Fixture\'
 ';
@@ -116,7 +116,7 @@ label: \'Form Fixture\'
      */
     public function existsReturnsTrueIfTheSpecifiedFormExists()
     {
-        $mockYamlFormDefinition = 'type: \'TYPO3.Form:Form\'
+        $mockYamlFormDefinition = 'type: \'Neos.Form:Form\'
 identifier: formFixture
 label: \'Form Fixture\'
 ';
@@ -137,11 +137,11 @@ label: \'Form Fixture\'
      */
     public function listFormsReturnsAvailableForms()
     {
-        $mockYamlFormDefinition1 = 'type: \'TYPO3.Form:Form\'
+        $mockYamlFormDefinition1 = 'type: \'Neos.Form:Form\'
 identifier: formFixture1
 label: \'Form Fixture1\'
 ';
-        $mockYamlFormDefinition2 = 'type: \'TYPO3.Form:Form\'
+        $mockYamlFormDefinition2 = 'type: \'Neos.Form:Form\'
 identifier: formFixture2
 label: \'Form Fixture2\'
 ';

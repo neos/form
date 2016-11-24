@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Runtime\Renderer\Fixture;
+namespace Neos\Form\Tests\Unit\Core\Runtime\Renderer\Fixture;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,19 +11,19 @@ namespace TYPO3\Form\Tests\Unit\Core\Runtime\Renderer\Fixture;
  * source code.
  */
 
-use TYPO3\Form\Core\Model\FinisherContext;
+use Neos\Form\Core\Model\FinisherContext;
 
 /**
 * Dummy finisher for testing
 */
-class DummyFinisher implements \TYPO3\Form\Core\Model\FinisherInterface
+class DummyFinisher implements \Neos\Form\Core\Model\FinisherInterface
 {
     public $cb = null;
 
     /**
      * Executes the finisher
      *
-     * @param \TYPO3\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
+     * @param \Neos\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
      * @return void
      * @api
      */

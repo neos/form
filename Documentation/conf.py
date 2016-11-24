@@ -37,10 +37,10 @@ extensions = [
 ]
 
 extlinks = {
-	'api-core-model': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.Core.Model.%s.html', ''),
-	'api-factory': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.Factory.%s.html', ''),
-	'api-viewhelpers': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.ViewHelpers.%sViewHelper.html', ''),
-	'api-finishers': ('http://api.typo3.org/flow3-form/master/class-TYPO3.Form.Finishers.%s.html', '')
+	'api-core-model': ('http://api.typo3.org/flow3-form/master/class-Neos.Form.Core.Model.%s.html', ''),
+	'api-factory': ('http://api.typo3.org/flow3-form/master/class-Neos.Form.Factory.%s.html', ''),
+	'api-viewhelpers': ('http://api.typo3.org/flow3-form/master/class-Neos.Form.ViewHelpers.%sViewHelper.html', ''),
+	'api-finishers': ('http://api.typo3.org/flow3-form/master/class-Neos.Form.Finishers.%s.html', '')
 }
 
 # Add any paths that contain templates here, relative to this directory.

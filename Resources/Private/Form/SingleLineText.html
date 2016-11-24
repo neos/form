@@ -1,5 +1,5 @@
-{namespace form=TYPO3\Form\ViewHelpers}
-<f:layout name="TYPO3.Form:Field" />
+{namespace form=Neos\Form\ViewHelpers}
+<f:layout name="Neos.Form:Field" />
 <f:section name="field">
 	<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" placeholder="{element -> form:translateElementProperty(property: 'placeholder')}" errorClass="{element.properties.elementErrorClassAttribute}" />
 </f:section>

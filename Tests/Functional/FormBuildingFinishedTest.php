@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Functional;
+namespace Neos\Form\Tests\Functional;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *

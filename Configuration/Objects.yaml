@@ -1,2 +1,2 @@
-TYPO3\Form\Persistence\FormPersistenceManagerInterface:
-  className: TYPO3\Form\Persistence\YamlPersistenceManager
+Neos\Form\Persistence\FormPersistenceManagerInterface:
+  className: Neos\Form\Persistence\YamlPersistenceManager

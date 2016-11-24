@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Model;
+namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,29 +11,29 @@ namespace TYPO3\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 /**
  * Test for FinisherContext Domain Model
- * @covers \TYPO3\Form\Core\Model\FinisherContext
+ * @covers \Neos\Form\Core\Model\FinisherContext
  */
 class FinisherContextTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
-     * @var \TYPO3\Form\Core\Runtime\FormRuntime
+     * @var \Neos\Form\Core\Runtime\FormRuntime
      */
     protected $mockFormRuntime;
 
     /**
-     * @var \TYPO3\Form\Core\Model\FinisherContext
+     * @var \Neos\Form\Core\Model\FinisherContext
      */
     protected $finisherContext;
 
     public function setUp()
     {
-        $this->mockFormRuntime = $this->getMockBuilder(\TYPO3\Form\Core\Runtime\FormRuntime::class)->disableOriginalConstructor()->getMock();
-        $this->finisherContext = new \TYPO3\Form\Core\Model\FinisherContext($this->mockFormRuntime);
+        $this->mockFormRuntime = $this->getMockBuilder(\Neos\Form\Core\Runtime\FormRuntime::class)->disableOriginalConstructor()->getMock();
+        $this->finisherContext = new \Neos\Form\Core\Model\FinisherContext($this->mockFormRuntime);
     }
 
     /**

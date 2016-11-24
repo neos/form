@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Factory;
+namespace Neos\Form\Tests\Unit\Factory;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,11 +11,11 @@ namespace TYPO3\Form\Tests\Unit\Factory;
  * source code.
  */
 
-use TYPO3\Form\Utility\SupertypeResolver;
+use Neos\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
- * @covers \TYPO3\Form\Factory\AbstractFormFactory<extended>
+ * @covers \Neos\Form\Factory\AbstractFormFactory<extended>
  */
 class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -24,7 +24,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
         $presets = array(
             'default' => array(
                 'formElementTypes' => array(
-                    'TYPO3.Form:Base' => array()
+                    'Neos.Form:Base' => array()
                 )
             ),
             'special' => array(
@@ -47,7 +47,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 'presetName' => 'default',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Base' => array()
+                        'Neos.Form:Base' => array()
                     )
                 )
             ),
@@ -57,7 +57,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 'presetName' => 'special',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Base' => array()
+                        'Neos.Form:Base' => array()
                     ),
                     'foo' => 'bar',
                     'baz' => array(
@@ -71,7 +71,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 'presetName' => 'specialSub',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Base' => array()
+                        'Neos.Form:Base' => array()
                     ),
                     'foo' => 'bar',
                     'baz' => array(
@@ -99,7 +99,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\PresetNotFoundException
+     * @expectedException Neos\Form\Exception\PresetNotFoundException
      */
     public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound()
     {
@@ -117,7 +117,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
         $mockConfigurationManager
             ->expects($this->once())
             ->method('getConfiguration')
-            ->with(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
+            ->with(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form')
             ->will($this->returnValue('MyConfig'));
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
@@ -126,11 +126,11 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \TYPO3\Form\Factory\AbstractFormFactory
+     * @return \Neos\Form\Factory\AbstractFormFactory
      */
     protected function getAbstractFormFactory()
     {
-        return $this->getAccessibleMock(\TYPO3\Form\Factory\AbstractFormFactory::class, array('build'));
+        return $this->getAccessibleMock(\Neos\Form\Factory\AbstractFormFactory::class, array('build'));
     }
 
     /**

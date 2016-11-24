@@ -1,5 +1,5 @@
-{namespace form=TYPO3\Form\ViewHelpers}
-<f:layout name="TYPO3.Form:Field" />
+{namespace form=Neos\Form\ViewHelpers}
+<f:layout name="Neos.Form:Field" />
 <f:section name="field">
 	<form:form.uploadedResource property="{element.identifier}" as="resource">
 		<div id="{element.uniqueIdentifier}-uploadfields"{f:if(condition:resource, then: ' style="display:none"')}>

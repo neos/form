@@ -20,7 +20,7 @@ way to configure it is this:
         presets:
           default:
             formElementTypes:
-              'TYPO3.Form:Base':
+              'Neos.Form:Base':
                 renderingOptions:
                   translationPackage: 'AcmeCom.SomePackage'
 
@@ -41,7 +41,7 @@ catalog (``Main.xlf``):
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-        <file original="" product-name="TYPO3.Form" source-language="en" datatype="plaintext">
+        <file original="" product-name="Neos.Form" source-language="en" datatype="plaintext">
             <body>
                 <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                     <source>Previous page</source>
@@ -116,16 +116,16 @@ Assume it is configured like this using YAML:
 
 .. code-block:: yaml
 
-    type: 'TYPO3.Form:Form'
+    type: 'Neos.Form:Form'
     identifier: 'contact'
     label: 'Contact form'
     renderables:
       -
-        type: 'TYPO3.Form:Page'
+        type: 'Neos.Form:Page'
         identifier: 'page-one'
         renderables:
           -
-            type: 'TYPO3.Form:SingleLineText'
+            type: 'Neos.Form:SingleLineText'
             identifier: name
             label: 'Name'
             validators:
@@ -133,7 +133,7 @@ Assume it is configured like this using YAML:
             properties:
               placeholder: 'Please enter your full name'
           -
-            type: 'TYPO3.Form:SingleLineText'
+            type: 'Neos.Form:SingleLineText'
             identifier: email
             label: 'Email'
             validators:
@@ -142,7 +142,7 @@ Assume it is configured like this using YAML:
             properties:
               placeholder: 'Enter a valid email address'
           -
-            type: 'TYPO3.Form:MultiLineText'
+            type: 'Neos.Form:MultiLineText'
             identifier: message
             label: 'Message'
             validators:
@@ -160,7 +160,7 @@ The following XLIFF would allow to translate the form:
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-        <file original="" product-name="TYPO3.Form" source-language="en" datatype="plaintext">
+        <file original="" product-name="Neos.Form" source-language="en" datatype="plaintext">
             <body>
                 <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                     <source>Previous page</source>

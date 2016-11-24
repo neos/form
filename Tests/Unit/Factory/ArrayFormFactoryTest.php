@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Factory;
+namespace Neos\Form\Tests\Unit\Factory;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,10 +11,10 @@ namespace TYPO3\Form\Tests\Unit\Factory;
  * source code.
  */
 
-use TYPO3\Form\Utility\SupertypeResolver;
+use Neos\Form\Utility\SupertypeResolver;
 
 /**
- * @covers \TYPO3\Form\Factory\ArrayFormFactory<extended>
+ * @covers \Neos\Form\Factory\ArrayFormFactory<extended>
  */
 class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -44,11 +44,11 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
             'renderables' => array(
                 array(
                     'identifier' => 'page1',
-                    'type' => 'TYPO3.Form:Page',
+                    'type' => 'Neos.Form:Page',
                     'renderables' => array(
                         array(
                             'identifier' => 'element1',
-                            'type' => 'TYPO3.Form:TestElement',
+                            'type' => 'Neos.Form:TestElement',
                             'properties' => array(
                                 'options' => array(
                                     0 => array(
@@ -72,7 +72,7 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException \TYPO3\Form\Exception\IdentifierNotValidException
+     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      */
     public function renderableWithoutIdentifierThrowsException()
     {
@@ -90,7 +90,7 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \TYPO3\Form\Factory\ArrayFormFactory
+     * @return \Neos\Form\Factory\ArrayFormFactory
      */
     protected function getArrayFormFactory()
     {
@@ -98,21 +98,21 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
             'presets' => array(
                 'default' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Form' => array(
+                        'Neos.Form:Form' => array(
 
                         ),
-                        'TYPO3.Form:Page' => array(
-                            'implementationClassName' => \TYPO3\Form\Core\Model\Page::class
+                        'Neos.Form:Page' => array(
+                            'implementationClassName' => \Neos\Form\Core\Model\Page::class
                         ),
-                        'TYPO3.Form:TestElement' => array(
-                            'implementationClassName' => \TYPO3\Form\FormElements\GenericFormElement::class
+                        'Neos.Form:TestElement' => array(
+                            'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class
                         )
                     )
                 )
             )
         );
 
-        $accessibleFactory = $this->buildAccessibleProxy(\TYPO3\Form\Factory\ArrayFormFactory::class);
+        $accessibleFactory = $this->buildAccessibleProxy(\Neos\Form\Factory\ArrayFormFactory::class);
         $factory = new $accessibleFactory;
         $factory->_set('formSettings', $settings);
         return $factory;

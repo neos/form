@@ -50,17 +50,17 @@ When a form element is created, you can define some default values which are dir
 
 In this case, we want to define some default programming languages, but the integrator who builds the form should be able to add custom options as well. These default options can be set in ``Settings.yaml`` using the ``formBuilder:predefinedDefaults`` key.
 
-Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which is an example taken from the ``TYPO3.FormExample`` package):
+Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which is an example taken from the ``Neos.FormExample`` package):
 
 .. code-block:: yaml
 
 	# we are now inside TYPO3:Form:presets:[presetName]
 	formElementTypes:
-	  'TYPO3.FormExample:ProgrammingLanguageSelect':
+	  'Neos.FormExample:ProgrammingLanguageSelect':
 	    superTypes:
-	      'TYPO3.Form:SingleSelectRadiobuttons': TRUE
+	      'Neos.Form:SingleSelectRadiobuttons': TRUE
 	    renderingOptions:
-	      templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleSelectRadiobuttons.html'
+	      templatePathPattern: 'resource://Neos.Form/Private/Form/SingleSelectRadiobuttons.html'
 
 	      # here follow the form builder specific options
 	      formBuilder:
@@ -102,7 +102,7 @@ Choosing which strategy to use depends mostly on the expected usage patterns:
 
 		# we are now inside TYPO3:Form:presets:[presetName]
 		formElementTypes:
-		  'TYPO3.FormExample:GenderSelect':
+		  'Neos.FormExample:GenderSelect':
 		    formBuilder:
 		      editors:
 		        # Disable "options" editor
@@ -125,7 +125,7 @@ This can be configured as follows:
 
 	# we are now inside TYPO3:Form:presets:[presetName]
 	formElementTypes:
-	  'TYPO3.Form:TextMixin': # or any other type here
+	  'Neos.Form:TextMixin': # or any other type here
 	    formBuilder:
 	      editors:
 	        validation:
@@ -143,12 +143,12 @@ The same works for Finishers, for example the following configuration makes the 
 
 	# we are now inside TYPO3:Form:presets:[presetName]
 	formElementTypes:
-	  'TYPO3.Form:Form':
+	  'Neos.Form:Form':
 	    formBuilder:
 	      editors:
 	        finishers:
 	          availableFinishers:
-	            'TYPO3.Form:Email': # or any other finisher
+	            'Neos.Form:Email': # or any other finisher
 	              # mark this finisher required such that it is always shown.
 	              required: true
 

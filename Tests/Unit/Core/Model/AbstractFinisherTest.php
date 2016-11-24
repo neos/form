@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Model;
+namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
- * This file is part of the TYPO3.Form package.
+ * This file is part of the Neos.Form package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,15 +11,15 @@ namespace TYPO3\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 /**
  * Test for AbstractFinisher
- * @covers \TYPO3\Form\Core\Model\AbstractFinisher<extended>
- * @covers \TYPO3\Form\Core\Model\FinisherContext<extended>
- * @covers \TYPO3\Form\Core\Runtime\FormRuntime<extended>
- * @covers \TYPO3\Form\Core\Runtime\FormState<extended>
+ * @covers \Neos\Form\Core\Model\AbstractFinisher<extended>
+ * @covers \Neos\Form\Core\Model\FinisherContext<extended>
+ * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
+ * @covers \Neos\Form\Core\Runtime\FormState<extended>
  */
 class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
 {
@@ -154,7 +154,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $finisher = $this->getAbstractFinisher();
         $finisherContext = $this->getFinisherContext();
-        $formState = new \TYPO3\Form\Core\Runtime\FormState();
+        $formState = new \Neos\Form\Core\Runtime\FormState();
         foreach ($formValues as $key => $value) {
             $formState->setFormValue($key, $value);
         }
@@ -174,7 +174,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $finisher = $this->getAbstractFinisher();
         $finisherContext = $this->getFinisherContext();
-        $formState = new \TYPO3\Form\Core\Runtime\FormState();
+        $formState = new \Neos\Form\Core\Runtime\FormState();
         foreach ($formValues as $key => $value) {
             $formState->setFormValue($key, $value);
         }
@@ -198,19 +198,19 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \TYPO3\Form\Core\Model\AbstractFinisher
+     * @return \Neos\Form\Core\Model\AbstractFinisher
      */
     protected function getAbstractFinisher()
     {
-        return $this->getAccessibleMock(\TYPO3\Form\Core\Model\AbstractFinisher::class, array('executeInternal'));
+        return $this->getAccessibleMock(\Neos\Form\Core\Model\AbstractFinisher::class, array('executeInternal'));
     }
 
     /**
-     * @return \TYPO3\Form\Core\Model\FinisherContext
+     * @return \Neos\Form\Core\Model\FinisherContext
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, array('dummy'), array(), '', false);
-        return new \TYPO3\Form\Core\Model\FinisherContext($this->formRuntime);
+        $this->formRuntime = $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, array('dummy'), array(), '', false);
+        return new \Neos\Form\Core\Model\FinisherContext($this->formRuntime);
     }
 }
