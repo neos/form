@@ -81,7 +81,7 @@ class FormState
      */
     public function setFormValue($propertyPath, $value)
     {
-        $this->formValues = \Neos\Flow\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
+        $this->formValues = \Neos\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
     }
 
     /**
@@ -90,6 +90,6 @@ class FormState
      */
     public function getFormValue($propertyPath)
     {
-        return \Neos\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
+        return \Neos\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
     }
 }

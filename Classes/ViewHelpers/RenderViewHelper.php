@@ -14,7 +14,7 @@ namespace Neos\Form\ViewHelpers;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Http\Response;
-use Neos\Flow\Utility\Arrays;
+use Neos\Utility\Arrays;
 use Neos\Form\Persistence\FormPersistenceManagerInterface;
 
 /**

@@ -12,7 +12,7 @@ namespace Neos\Form\Finishers;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Error\Message;
+use Neos\Error\Messages\Message;
 
 /**
  * A simple finisher that adds a message to the FlashMessageContainer
@@ -25,7 +25,7 @@ use Neos\Flow\Error\Message;
  *     'messageBody' => 'Some message body',
  *     'messageTitle' => 'Some message title',
  *     'messageArguments' => array('foo' => 'bar'),
- *     'severity' => \Neos\Flow\Error\Message::SEVERITY_ERROR
+ *     'severity' => \Neos\Error\Messages\Message::SEVERITY_ERROR
  *   )
  * );
  * $formDefinition->addFinisher($flashMessageFinisher);
@@ -69,13 +69,13 @@ class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
         $severity = $this->parseOption('severity');
         switch ($severity) {
             case Message::SEVERITY_NOTICE:
-                $message = new \Neos\Flow\Error\Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
+                $message = new \Neos\Error\Messages\Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
                 break;
             case Message::SEVERITY_WARNING:
-                $message = new \Neos\Flow\Error\Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
+                $message = new \Neos\Error\Messages\Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
                 break;
             case Message::SEVERITY_ERROR:
-                $message = new \Neos\Flow\Error\Error($messageBody, $messageCode, $messageArguments, $messageTitle);
+                $message = new \Neos\Error\Messages\Error($messageBody, $messageCode, $messageArguments, $messageTitle);
                 break;
             default:
                 $message = new Message($messageBody, $messageCode, $messageArguments, $messageTitle);

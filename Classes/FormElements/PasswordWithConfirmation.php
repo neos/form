@@ -22,7 +22,7 @@ class PasswordWithConfirmation extends \Neos\Form\Core\Model\AbstractFormElement
     {
         if ($elementValue['password'] !== $elementValue['confirmation']) {
             $processingRule = $this->getRootForm()->getProcessingRule($this->getIdentifier());
-            $processingRule->getProcessingMessages()->addError(new \Neos\Flow\Error\Error('Password doesn\'t match confirmation', 1334768052));
+            $processingRule->getProcessingMessages()->addError(new \Neos\Error\Messages\Error('Password doesn\'t match confirmation', 1334768052));
         }
         $elementValue = $elementValue['password'];
     }

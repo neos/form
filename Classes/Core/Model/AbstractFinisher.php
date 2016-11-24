@@ -117,7 +117,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
         }
         $formRuntime = $this->finisherContext->getFormRuntime();
         return preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
-            return \Neos\Flow\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
+            return \Neos\Utility\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
         }, $option);
     }
 }

@@ -477,7 +477,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
             $implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
             $defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
 
-            $options = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+            $options = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
             $finisher = new $implementationClassName;
             $finisher->setOptions($options);
@@ -555,7 +555,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      */
     public function addElementDefaultValue($elementIdentifier, $defaultValue)
     {
-        $this->elementDefaultValues = \Neos\Flow\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
+        $this->elementDefaultValues = \Neos\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
     }
 
     /**
@@ -568,7 +568,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      */
     public function getElementDefaultValueByIdentifier($elementIdentifier)
     {
-        return \Neos\Flow\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
+        return \Neos\Utility\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
     }
 
     /**

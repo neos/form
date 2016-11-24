@@ -154,7 +154,7 @@ abstract class AbstractRenderable implements RenderableInterface
             $implementationClassName = $validatorPresets[$validatorIdentifier]['implementationClassName'];
             $defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : array();
 
-            $options = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+            $options = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
             $validator = new $implementationClassName($options);
             $this->addValidator($validator);

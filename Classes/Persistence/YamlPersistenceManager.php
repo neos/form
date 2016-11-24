@@ -33,7 +33,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
         if (isset($settings['yamlPersistenceManager']['savePath'])) {
             $this->savePath = $settings['yamlPersistenceManager']['savePath'];
             if (!is_dir($this->savePath)) {
-                \Neos\Flow\Utility\Files::createDirectoryRecursively($this->savePath);
+                \Neos\Utility\Files::createDirectoryRecursively($this->savePath);
             }
         }
     }
@@ -120,6 +120,6 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
     protected function getFormPathAndFilename($persistenceIdentifier)
     {
         $formFileName = sprintf('%s.yaml', $persistenceIdentifier);
-        return \Neos\Flow\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
+        return \Neos\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
     }
 }

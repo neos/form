@@ -40,7 +40,7 @@ class ProcessingRule
     protected $validator;
 
     /**
-     * @var \Neos\Flow\Error\Result
+     * @var \Neos\Error\Messages\Result
      */
     protected $processingMessages;
 
@@ -56,7 +56,7 @@ class ProcessingRule
      */
     public function __construct()
     {
-        $this->processingMessages = new \Neos\Flow\Error\Result();
+        $this->processingMessages = new \Neos\Error\Messages\Result();
     }
 
     /**
@@ -113,7 +113,7 @@ class ProcessingRule
             $value = $this->propertyMapper->convert($value, $this->dataType, $this->propertyMappingConfiguration);
             $messages = $this->propertyMapper->getMessages();
         } else {
-            $messages = new \Neos\Flow\Error\Result();
+            $messages = new \Neos\Error\Messages\Result();
         }
 
         $validationResult = $this->validator->validate($value);
@@ -124,7 +124,7 @@ class ProcessingRule
     }
 
     /**
-     * @return \Neos\Flow\Error\Result
+     * @return \Neos\Error\Messages\Result
      */
     public function getProcessingMessages()
     {

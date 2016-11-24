@@ -242,12 +242,12 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @param \Neos\Form\Core\Model\Page $page
-     * @return \Neos\Flow\Error\Result
+     * @return \Neos\Error\Messages\Result
      * @internal
      */
     protected function mapAndValidatePage(\Neos\Form\Core\Model\Page $page)
     {
-        $result = new \Neos\Flow\Error\Result();
+        $result = new \Neos\Error\Messages\Result();
         $requestArguments = $this->request->getArguments();
 
         $propertyPathsForWhichPropertyMappingShouldHappen = array();
@@ -262,7 +262,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
         };
 
         foreach ($page->getElementsRecursively() as $element) {
-            $value = \Neos\Flow\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
+            $value = \Neos\Utility\Arrays::getValueByPath($requestArguments, $element->getIdentifier());
             $element->onSubmit($this, $value);
 
             $this->formState->setFormValue($element->getIdentifier(), $value);

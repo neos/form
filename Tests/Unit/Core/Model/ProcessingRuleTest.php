@@ -36,7 +36,7 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
         $this->processingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
         $this->processingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
-        $this->processingRule->_set('processingMessages', new \Neos\Flow\Error\Result());
+        $this->processingRule->_set('processingMessages', new \Neos\Error\Messages\Result());
     }
 
     /**
@@ -93,7 +93,7 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function processingMessagesCanBeModifiedBeforeProcessing()
     {
-        $this->processingRule->getProcessingMessages()->addError(new \Neos\Flow\Error\Error('Test'));
+        $this->processingRule->getProcessingMessages()->addError(new \Neos\Error\Messages\Error('Test'));
         $this->processingRule->process('Some Value');
         $this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
     }
@@ -117,7 +117,7 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
         $this->processingRule->_set('propertyMappingConfiguration', $mockPropertyMappingConfiguration);
 
         $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));
-        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \Neos\Flow\Error\Result()));
+        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \Neos\Error\Messages\Result()));
         $this->assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
 }
