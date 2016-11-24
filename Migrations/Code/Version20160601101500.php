@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Flow\Core\Migrations;
+namespace Neos\Flow\Core\Migrations;
 
 /*
  * This file is part of the TYPO3.Flow package.
@@ -11,7 +11,7 @@ namespace TYPO3\Flow\Core\Migrations;
  * source code.
  */
 
-use TYPO3\Flow\Configuration\ConfigurationManager;
+use Neos\Flow\Configuration\ConfigurationManager;
 
 /**
  * Adjust "Settings.yaml" to use validationErrorTranslationPackage instead of translationPackage
