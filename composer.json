@@ -49,7 +49,8 @@
             "Neos.FluidAdaptor-20141121091700",
             "Neos.FluidAdaptor-20150214130800",
             "Neos.Flow-20151113161300",
-            "Neos.Flow-20161115140400"
+            "Neos.Flow-20161115140400",
+            "Neos.Flow-20161115140430"
         ]
     }
 }
