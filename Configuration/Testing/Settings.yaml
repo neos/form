@@ -1,5 +1,5 @@
 
-TYPO3:
+Neos:
   Form:
     presets:
       default:
@@ -10,5 +10,3 @@ TYPO3:
               'Neos.Form:Section': true
             renderingOptions:
               templatePathPattern: 'resource://{@package}/Private/Form/Section.html'
-Neos:
-  Flow: null
