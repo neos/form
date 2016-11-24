@@ -12,6 +12,7 @@ namespace Neos\Flow\Core\Migrations;
  */
 
 use Neos\Flow\Configuration\ConfigurationManager;
+use Neos\Utility\ObjectAccess;
 
 /**
  * Adjust "Settings.yaml" to use validationErrorTranslationPackage instead of translationPackage
@@ -26,7 +27,7 @@ class Version20160601101500 extends AbstractMigration
     {
         $this->processConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
             function (array &$configuration) {
-                $presetsConfiguration = \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($configuration, 'Neos.Form.presets');
+                $presetsConfiguration = ObjectAccess::getPropertyPath($configuration, 'Neos.Form.presets');
                 if (!is_array($presetsConfiguration)) {
                     return;
                 }
