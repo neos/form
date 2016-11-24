@@ -21,7 +21,7 @@ require_once(__DIR__ . '/Fixture/EmptyFinisher.php');
  * @covers \TYPO3\Form\Core\Model\FormDefinition<extended>
  * @covers \TYPO3\Form\Core\Model\Page<extended>
  */
-class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
+class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @test
@@ -262,8 +262,8 @@ class FormDefinitionTest extends \TYPO3\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
 
-        $mockRequest = $this->getMockBuilder(\TYPO3\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockResponse = $this->getMockBuilder(\TYPO3\Flow\Http\Response::class)->getMock();
+        $mockRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->getMock();
 
         $form = $formDefinition->bind($mockRequest, $mockResponse);
         $this->assertInstanceOf(\TYPO3\Form\Core\Runtime\FormRuntime::class, $form);

@@ -19,7 +19,7 @@ use TYPO3\Form\Core\Model\Page;
  * @covers \TYPO3\Form\Core\Model\Page<extended>
  * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
  */
-class PageTest extends \TYPO3\Flow\Tests\UnitTestCase
+class PageTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @test
@@ -322,7 +322,7 @@ class PageTest extends \TYPO3\Flow\Tests\UnitTestCase
         $formDefinition = $this->getDummyFormDefinition();
 
         $mockProcessingRule = $this->getAccessibleMock(\TYPO3\Form\Core\Model\ProcessingRule::class, array('dummy'));
-        $mockProcessingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
+        $mockProcessingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
         $formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->will($this->returnValue($mockProcessingRule));
 
         $page1 = $formDefinition->createPage('myPage1');
@@ -331,7 +331,7 @@ class PageTest extends \TYPO3\Flow\Tests\UnitTestCase
         $validators = $el->getValidators();
         $validators = iterator_to_array($validators);
         $this->assertSame(2, count($validators));
-        $this->assertInstanceOf(\TYPO3\Flow\Validation\Validator\StringLengthValidator::class, $validators[0]);
+        $this->assertInstanceOf(\Neos\Flow\Validation\Validator\StringLengthValidator::class, $validators[0]);
         $this->assertSame(array('minimum' => 10, 'maximum' => PHP_INT_MAX), $validators[0]->getOptions());
     }
 
@@ -352,10 +352,10 @@ class PageTest extends \TYPO3\Flow\Tests\UnitTestCase
         $formDefinitionConstructorArguments = array('myForm', array(
             'validatorPresets' => array(
                 'MyValidatorIdentifier' => array(
-                    'implementationClassName' => \TYPO3\Flow\Validation\Validator\StringLengthValidator::class
+                    'implementationClassName' => \Neos\Flow\Validation\Validator\StringLengthValidator::class
                 ),
                 'MyOtherValidatorIdentifier' => array(
-                    'implementationClassName' => \TYPO3\Flow\Validation\Validator\NotEmptyValidator::class
+                    'implementationClassName' => \Neos\Flow\Validation\Validator\NotEmptyValidator::class
                 ),
             ),
             'formElementTypes' => array(

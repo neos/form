@@ -11,7 +11,7 @@ namespace TYPO3\Form\FormElements;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A password with confirmation form element
@@ -22,7 +22,7 @@ class PasswordWithConfirmation extends \TYPO3\Form\Core\Model\AbstractFormElemen
     {
         if ($elementValue['password'] !== $elementValue['confirmation']) {
             $processingRule = $this->getRootForm()->getProcessingRule($this->getIdentifier());
-            $processingRule->getProcessingMessages()->addError(new \TYPO3\Flow\Error\Error('Password doesn\'t match confirmation', 1334768052));
+            $processingRule->getProcessingMessages()->addError(new \Neos\Flow\Error\Error('Password doesn\'t match confirmation', 1334768052));
         }
         $elementValue = $elementValue['password'];
     }

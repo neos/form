@@ -21,7 +21,7 @@ abstract class AbstractElementRenderer implements RendererInterface
     /**
      * The assigned controller context which might be needed by the renderer.
      *
-     * @var \TYPO3\Flow\Mvc\Controller\ControllerContext
+     * @var \Neos\Flow\Mvc\Controller\ControllerContext
      * @api
      */
     protected $controllerContext;
@@ -35,10 +35,10 @@ abstract class AbstractElementRenderer implements RendererInterface
     /**
      * Set the controller context which should be used
      *
-     * @param \TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext
+     * @param \Neos\Flow\Mvc\Controller\ControllerContext $controllerContext
      * @api
      */
-    public function setControllerContext(\TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext)
+    public function setControllerContext(\Neos\Flow\Mvc\Controller\ControllerContext $controllerContext)
     {
         $this->controllerContext = $controllerContext;
     }

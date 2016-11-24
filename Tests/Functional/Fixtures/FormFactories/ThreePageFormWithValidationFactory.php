@@ -11,7 +11,7 @@ namespace TYPO3\Form\Tests\Functional\Fixtures\FormFactories;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Basic three-page form
@@ -28,7 +28,7 @@ class ThreePageFormWithValidationFactory extends \TYPO3\Form\Factory\AbstractFor
 
         $page1->createElement('text1-1', 'TYPO3.Form:SingleLineText');
         $text21 = $page2->createElement('text2-1', 'TYPO3.Form:SingleLineText');
-        $text21->addValidator(new \TYPO3\Flow\Validation\Validator\IntegerValidator());
+        $text21->addValidator(new \Neos\Flow\Validation\Validator\IntegerValidator());
         $page3->createElement('text3-1', 'TYPO3.Form:SingleLineText');
 
         return $formDefinition;

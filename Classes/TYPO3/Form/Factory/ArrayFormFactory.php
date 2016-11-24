@@ -11,7 +11,7 @@ namespace TYPO3\Form\Factory;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 use TYPO3\Form\Core\Model\FormDefinition;
 
 /**´

@@ -71,10 +71,10 @@ class SupertypeResolver
                     $superTypeName = $enabled;
                 }
 
-                $mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superTypeName, $showHiddenProperties));
+                $mergedTypeDefinition = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->getMergedTypeDefinition($superTypeName, $showHiddenProperties));
             }
         }
-        $mergedTypeDefinition = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
+        $mergedTypeDefinition = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($mergedTypeDefinition, $this->configuration[$type]);
         unset($mergedTypeDefinition['superTypes']);
 
         if ($showHiddenProperties === false && isset($this->settings['supertypeResolver']['hiddenProperties']) && is_array($this->settings['supertypeResolver']['hiddenProperties'])) {

@@ -11,7 +11,7 @@ namespace TYPO3\Form\Persistence;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * persistence identifier is some resource:// uri probably
@@ -33,7 +33,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
         if (isset($settings['yamlPersistenceManager']['savePath'])) {
             $this->savePath = $settings['yamlPersistenceManager']['savePath'];
             if (!is_dir($this->savePath)) {
-                \TYPO3\Flow\Utility\Files::createDirectoryRecursively($this->savePath);
+                \Neos\Flow\Utility\Files::createDirectoryRecursively($this->savePath);
             }
         }
     }
@@ -120,6 +120,6 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
     protected function getFormPathAndFilename($persistenceIdentifier)
     {
         $formFileName = sprintf('%s.yaml', $persistenceIdentifier);
-        return \TYPO3\Flow\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
+        return \Neos\Flow\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
     }
 }

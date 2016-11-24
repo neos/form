@@ -107,7 +107,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
 
         // 2. TEST SETUP: BUILD GET REQUEST ONLY CONTAINING FORM STATE
         $form = $this->browser->getForm();
-        \TYPO3\Flow\Reflection\ObjectAccess::setProperty($form, 'method', 'GET', true);
+        \Neos\Flow\Reflection\ObjectAccess::setProperty($form, 'method', 'GET', true);
 
         // we want to stay on the current page, that's why we send __currentPage = 1. (== 2nd page of the form)
         $doc = new \DOMDocument();

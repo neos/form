@@ -13,9 +13,9 @@ namespace TYPO3\Form\ViewHelpers;
 
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\I18n\Translator;
-use TYPO3\Flow\ResourceManagement\Exception as ResourceException;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\I18n\Translator;
+use Neos\Flow\ResourceManagement\Exception as ResourceException;
 use TYPO3\Form\Core\Model\FormElementInterface;
 
 /**

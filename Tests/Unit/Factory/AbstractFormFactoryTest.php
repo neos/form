@@ -17,7 +17,7 @@ use TYPO3\Form\Utility\SupertypeResolver;
  * Test for Supertype Resolver
  * @covers \TYPO3\Form\Factory\AbstractFormFactory<extended>
  */
-class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
+class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 {
     public function dataProviderForConfigurationMerging()
     {
@@ -113,11 +113,11 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function initializeObjectLoadsSettings()
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $mockConfigurationManager = $this->getMockBuilder(\TYPO3\Flow\Configuration\ConfigurationManager::class)->disableOriginalConstructor()->getMock();
+        $mockConfigurationManager = $this->getMockBuilder(\Neos\Flow\Configuration\ConfigurationManager::class)->disableOriginalConstructor()->getMock();
         $mockConfigurationManager
             ->expects($this->once())
             ->method('getConfiguration')
-            ->with(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
+            ->with(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
             ->will($this->returnValue('MyConfig'));
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 

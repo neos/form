@@ -11,7 +11,7 @@ namespace TYPO3\Form\FormElements;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A Section, being part of a bigger Page
@@ -133,10 +133,10 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
     /**
      * Add a validator to the element
      *
-     * @param \TYPO3\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
      * @return void
      */
-    public function addValidator(\TYPO3\Flow\Validation\Validator\ValidatorInterface $validator)
+    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
     {
         $formDefinition = $this->getRootForm();
         $formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
@@ -151,7 +151,7 @@ class Section extends \TYPO3\Form\Core\Model\AbstractSection implements \TYPO3\F
     public function isRequired()
     {
         foreach ($this->getValidators() as $validator) {
-            if ($validator instanceof \TYPO3\Flow\Validation\Validator\NotEmptyValidator) {
+            if ($validator instanceof \Neos\Flow\Validation\Validator\NotEmptyValidator) {
                 return true;
             }
         }

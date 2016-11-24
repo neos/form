@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A base form element, which is the starting point for creating custom (PHP-based)
@@ -108,7 +108,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     public function isRequired()
     {
         foreach ($this->getValidators() as $validator) {
-            if ($validator instanceof \TYPO3\Flow\Validation\Validator\NotEmptyValidator) {
+            if ($validator instanceof \Neos\Flow\Validation\Validator\NotEmptyValidator) {
                 return true;
             }
         }

@@ -10,8 +10,8 @@ namespace TYPO3\Form\Finishers;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-use TYPO3\Flow\Mvc\ActionRequest;
-use TYPO3\Flow\Mvc\Routing\UriBuilder;
+use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\Routing\UriBuilder;
 use TYPO3\Form\Core\Model\AbstractFinisher;
 
 /**

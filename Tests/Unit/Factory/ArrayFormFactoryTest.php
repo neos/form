@@ -16,7 +16,7 @@ use TYPO3\Form\Utility\SupertypeResolver;
 /**
  * @covers \TYPO3\Form\Factory\ArrayFormFactory<extended>
  */
-class ArrayFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
+class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @test

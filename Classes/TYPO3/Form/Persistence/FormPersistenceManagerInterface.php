@@ -11,7 +11,7 @@ namespace TYPO3\Form\Persistence;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Note: PersistenceIdentifier can be a file name, or anything else depending on the

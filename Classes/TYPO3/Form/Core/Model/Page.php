@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A Page, being part of a bigger FormDefinition. It contains numerous FormElements

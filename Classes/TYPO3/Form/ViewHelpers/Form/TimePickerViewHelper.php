@@ -12,7 +12,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
  */
 
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Displays two select-boxes for hour and minute selection.
@@ -25,7 +25,7 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
     protected $tagName = 'select';
 
     /**
-     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @var \Neos\Flow\Property\PropertyMapper
      * @Flow\Inject
      */
     protected $propertyMapper;

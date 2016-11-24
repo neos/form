@@ -18,7 +18,7 @@ use TYPO3\Form\Core\Model\Page;
  * Test for AbstractFormElement Domain Model
  * @covers \TYPO3\Form\Core\Model\AbstractFormElement<extended>
  */
-class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
+class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @test
@@ -168,7 +168,7 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
         $myFormElement = $this->getFormElement(array('bar', 'TYPO3.Form:MyType'));
         $page->addElement($myFormElement);
 
-        $myFormElement->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+        $myFormElement->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
         $this->assertTrue($myFormElement->isRequired());
     }
 
@@ -188,7 +188,7 @@ class AbstractFormElementTest extends \TYPO3\Flow\Tests\UnitTestCase
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {
         $mockProcessingRule = $this->getAccessibleMock(\TYPO3\Form\Core\Model\ProcessingRule::class, array('dummy'));
-        $mockProcessingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
+        $mockProcessingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
 
         $formDefinition = $this->getMockBuilder(\TYPO3\Form\Core\Model\FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
         $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));

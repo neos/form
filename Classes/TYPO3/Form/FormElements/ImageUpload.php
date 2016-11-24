@@ -11,9 +11,9 @@ namespace TYPO3\Form\FormElements;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Property\PropertyMappingConfiguration;
-use TYPO3\Flow\Property\TypeConverter\PersistentObjectConverter;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Property\PropertyMappingConfiguration;
+use Neos\Flow\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\Media\TypeConverter\AssetInterfaceConverter;
 
 /**

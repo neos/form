@@ -14,7 +14,7 @@ namespace TYPO3\Form\Core\Renderer;
 use Neos\FluidAdaptor\Core\ViewHelper\TemplateVariableContainer;
 use Neos\FluidAdaptor\View\TemplatePaths;
 use Neos\FluidAdaptor\View\TemplateView;
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Default form renderer which used *Fluid Templates* to render *Renderables*.

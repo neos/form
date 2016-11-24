@@ -13,7 +13,7 @@ namespace TYPO3\Form\Exception;
 
 /**
  * This Exception is thrown in the FormRuntime if the PropertyMapper throws
- * a \TYPO3\Flow\Property\Exception. It adds some more Information to
+ * a \Neos\Flow\Property\Exception. It adds some more Information to
  * better understand why the PropertyMapper failed to map the properties
  *
  * @api

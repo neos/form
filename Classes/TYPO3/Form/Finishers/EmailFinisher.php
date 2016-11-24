@@ -115,7 +115,7 @@ class EmailFinisher extends AbstractFinisher
         }
 
         if ($testMode === true) {
-            \TYPO3\Flow\var_dump(
+            \Neos\Flow\var_dump(
                 array(
                     'sender' => array($senderAddress => $senderName),
                     'recipient' => array($recipientAddress => $recipientName),

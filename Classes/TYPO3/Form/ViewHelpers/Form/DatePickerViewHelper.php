@@ -11,7 +11,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
@@ -27,7 +27,7 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
     protected $tagName = 'input';
 
     /**
-     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @var \Neos\Flow\Property\PropertyMapper
      * @Flow\Inject
      */
     protected $propertyMapper;

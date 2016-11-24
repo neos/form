@@ -11,12 +11,12 @@ namespace TYPO3\Form\Tests\Functional\Fixtures\Controller;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Controller for rendering a form defined in
  */
-class FormController extends \TYPO3\Flow\Mvc\Controller\ActionController
+class FormController extends \Neos\Flow\Mvc\Controller\ActionController
 {
     /**
      * render the form identified by $formFactoryClassName

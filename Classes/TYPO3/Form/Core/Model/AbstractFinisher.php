@@ -117,7 +117,7 @@ abstract class AbstractFinisher implements \TYPO3\Form\Core\Model\FinisherInterf
         }
         $formRuntime = $this->finisherContext->getFormRuntime();
         return preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
-            return \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
+            return \Neos\Flow\Reflection\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
         }, $option);
     }
 }

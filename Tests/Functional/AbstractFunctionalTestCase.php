@@ -17,10 +17,10 @@ use Symfony\Component\DomCrawler\Field\InputFormField;
  *
  * @group large
  */
-abstract class AbstractFunctionalTestCase extends \TYPO3\Flow\Tests\FunctionalTestCase
+abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTestCase
 {
     /**
-     * @var \TYPO3\Flow\Http\Client\Browser
+     * @var \Neos\Flow\Http\Client\Browser
      */
     protected $browser;
 
@@ -31,7 +31,7 @@ abstract class AbstractFunctionalTestCase extends \TYPO3\Flow\Tests\FunctionalTe
     {
         parent::setUp();
 
-        $route = new \TYPO3\Flow\Mvc\Routing\Route();
+        $route = new \Neos\Flow\Mvc\Routing\Route();
         $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
         $route->setDefaults(array(
             '@package' => 'TYPO3.Form',
@@ -48,7 +48,7 @@ abstract class AbstractFunctionalTestCase extends \TYPO3\Flow\Tests\FunctionalTe
      * Go to the next form page
      *
      * @param \Symfony\Component\DomCrawler\Form $form
-     * @return \TYPO3\Flow\Http\Response
+     * @return \Neos\Flow\Http\Response
      */
     protected function gotoNextFormPage(\Symfony\Component\DomCrawler\Form $form)
     {
@@ -63,7 +63,7 @@ abstract class AbstractFunctionalTestCase extends \TYPO3\Flow\Tests\FunctionalTe
      * Go to the previous form page
      *
      * @param \Symfony\Component\DomCrawler\Form $form
-     * @return \TYPO3\Flow\Http\Response
+     * @return \Neos\Flow\Http\Response
      */
     protected function gotoPreviousFormPage(\Symfony\Component\DomCrawler\Form $form)
     {

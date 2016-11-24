@@ -12,7 +12,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
  */
 
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 use TYPO3\Form\Core\Model\Renderable\RenderableInterface;
 
 /**

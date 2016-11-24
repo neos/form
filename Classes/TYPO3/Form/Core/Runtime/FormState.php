@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Runtime;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * The current state of the form which is attached to the {@link FormRuntime}
@@ -81,7 +81,7 @@ class FormState
      */
     public function setFormValue($propertyPath, $value)
     {
-        $this->formValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
+        $this->formValues = \Neos\Flow\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
     }
 
     /**
@@ -90,6 +90,6 @@ class FormState
      */
     public function getFormValue($propertyPath)
     {
-        return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
+        return \Neos\Flow\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
     }
 }

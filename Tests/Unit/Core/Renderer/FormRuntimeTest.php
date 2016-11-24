@@ -21,7 +21,7 @@ require_once(__DIR__ . '/Fixture/DummyFinisher.php');
  *
  * @covers \TYPO3\Form\Core\Runtime\FormRuntime<extended>
  */
-class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
+class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @test
@@ -29,8 +29,8 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function valuesSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
-        $mockActionRequest = $this->getMockBuilder(\TYPO3\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder(\TYPO3\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
 
         $formRuntime = $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
 
@@ -204,8 +204,8 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {
-        $mockActionRequest = $this->getMockBuilder(\TYPO3\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder(\TYPO3\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
 
         return $this->getAccessibleMock(\TYPO3\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
     }

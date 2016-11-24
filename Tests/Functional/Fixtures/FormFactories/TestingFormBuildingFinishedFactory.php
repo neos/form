@@ -11,7 +11,7 @@ namespace TYPO3\Form\Tests\Functional\Fixtures\FormFactories;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Simple form for testing

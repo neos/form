@@ -90,7 +90,7 @@ interface FormElementInterface extends Renderable\RenderableInterface
     /**
      * Returns the child validators of the ConjunctionValidator that is registered for this element
      *
-     * @return \SplObjectStorage<\TYPO3\Flow\Validation\Validator\ValidatorInterface>
+     * @return \SplObjectStorage<\Neos\Flow\Validation\Validator\ValidatorInterface>
      * @internal
      */
     public function getValidators();
@@ -98,11 +98,11 @@ interface FormElementInterface extends Renderable\RenderableInterface
     /**
      * Registers a validator for this element
      *
-     * @param \TYPO3\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
      * @return void
      * @api
      */
-    public function addValidator(\TYPO3\Flow\Validation\Validator\ValidatorInterface $validator);
+    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator);
 
     /**
      * Set the target data type for this element

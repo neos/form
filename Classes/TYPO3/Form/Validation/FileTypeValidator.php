@@ -13,10 +13,10 @@ namespace TYPO3\Form\Validation;
 
 
 /**
- * The given $value is valid if it is an \TYPO3\Flow\ResourceManagement\PersistentResource of the configured resolution
+ * The given $value is valid if it is an \Neos\Flow\ResourceManagement\PersistentResource of the configured resolution
  * Note: a value of NULL or empty string ('') is considered valid
  */
-class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidator
+class FileTypeValidator extends \Neos\Flow\Validation\Validator\AbstractValidator
 {
     /**
      * @var array
@@ -26,16 +26,16 @@ class FileTypeValidator extends \TYPO3\Flow\Validation\Validator\AbstractValidat
     );
 
     /**
-     * The given $value is valid if it is an \TYPO3\Flow\ResourceManagement\PersistentResource of the configured resolution
+     * The given $value is valid if it is an \Neos\Flow\ResourceManagement\PersistentResource of the configured resolution
      * Note: a value of NULL or empty string ('') is considered valid
      *
-     * @param \TYPO3\Flow\ResourceManagement\PersistentResource $resource The resource object that should be validated
+     * @param \Neos\Flow\ResourceManagement\PersistentResource $resource The resource object that should be validated
      * @return void
      * @api
      */
     protected function isValid($resource)
     {
-        if (!$resource instanceof \TYPO3\Flow\ResourceManagement\PersistentResource) {
+        if (!$resource instanceof \Neos\Flow\ResourceManagement\PersistentResource) {
             $this->addError('The given value was not a PersistentResource instance.', 1327865587);
             return;
         }

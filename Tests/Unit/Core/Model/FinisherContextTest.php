@@ -18,7 +18,7 @@ use TYPO3\Form\Core\Model\Page;
  * Test for FinisherContext Domain Model
  * @covers \TYPO3\Form\Core\Model\FinisherContext
  */
-class FinisherContextTest extends \TYPO3\Flow\Tests\UnitTestCase
+class FinisherContextTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @var \TYPO3\Form\Core\Runtime\FormRuntime

@@ -17,7 +17,7 @@ use org\bovigo\vfs\vfsStreamWrapper;
 /**
  * @covers \TYPO3\Form\Persistence\YamlPersistenceManager<extended>
  */
-class YamlPersistenceManagerTest extends \TYPO3\Flow\Tests\UnitTestCase
+class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @var \TYPO3\Form\Persistence\YamlPersistenceManager

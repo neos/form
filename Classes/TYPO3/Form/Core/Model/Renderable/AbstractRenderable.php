@@ -154,7 +154,7 @@ abstract class AbstractRenderable implements RenderableInterface
             $implementationClassName = $validatorPresets[$validatorIdentifier]['implementationClassName'];
             $defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : array();
 
-            $options = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+            $options = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
             $validator = new $implementationClassName($options);
             $this->addValidator($validator);
@@ -167,10 +167,10 @@ abstract class AbstractRenderable implements RenderableInterface
     /**
      * Add a validator to the element
      *
-     * @param \TYPO3\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
      * @return void
      */
-    public function addValidator(\TYPO3\Flow\Validation\Validator\ValidatorInterface $validator)
+    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
     {
         $formDefinition = $this->getRootForm();
         $formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);

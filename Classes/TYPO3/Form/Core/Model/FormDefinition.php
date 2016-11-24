@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * This class encapsulates a complete *Form Definition*, with all of its pages,
@@ -216,7 +216,7 @@ use TYPO3\Flow\Annotations as Flow;
  * ==========================
  *
  * In order to trigger *rendering* on a FormDefinition,
- * the current {@link \TYPO3\Flow\Mvc\ActionRequest} needs to be bound to the FormDefinition,
+ * the current {@link \Neos\Flow\Mvc\ActionRequest} needs to be bound to the FormDefinition,
  * resulting in a {@link \TYPO3\Form\Core\Runtime\FormRuntime} object which contains the *Runtime State* of the form
  * (such as the currently inserted values).
  *
@@ -477,7 +477,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
             $implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
             $defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
 
-            $options = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+            $options = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
             $finisher = new $implementationClassName;
             $finisher->setOptions($options);
@@ -555,7 +555,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      */
     public function addElementDefaultValue($elementIdentifier, $defaultValue)
     {
-        $this->elementDefaultValues = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
+        $this->elementDefaultValues = \Neos\Flow\Utility\Arrays::setValueByPath($this->elementDefaultValues, $elementIdentifier, $defaultValue);
     }
 
     /**
@@ -568,7 +568,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      */
     public function getElementDefaultValueByIdentifier($elementIdentifier)
     {
-        return \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
+        return \Neos\Flow\Reflection\ObjectAccess::getPropertyPath($this->elementDefaultValues, $elementIdentifier);
     }
 
     /**
@@ -613,12 +613,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * Bind the current request & response to this form instance, effectively creating
      * a new "instance" of the Form.
      *
-     * @param \TYPO3\Flow\Mvc\ActionRequest $request
-     * @param \TYPO3\Flow\Http\Response $response
+     * @param \Neos\Flow\Mvc\ActionRequest $request
+     * @param \Neos\Flow\Http\Response $response
      * @return \TYPO3\Form\Core\Runtime\FormRuntime
      * @api
      */
-    public function bind(\TYPO3\Flow\Mvc\ActionRequest $request, \TYPO3\Flow\Http\Response $response)
+    public function bind(\Neos\Flow\Mvc\ActionRequest $request, \Neos\Flow\Http\Response $response)
     {
         return new \TYPO3\Form\Core\Runtime\FormRuntime($this, $request, $response);
     }

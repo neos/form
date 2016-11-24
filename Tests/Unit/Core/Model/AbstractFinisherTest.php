@@ -21,7 +21,7 @@ use TYPO3\Form\Core\Model\Page;
  * @covers \TYPO3\Form\Core\Runtime\FormRuntime<extended>
  * @covers \TYPO3\Form\Core\Runtime\FormState<extended>
  */
-class AbstractFinisherTest extends \TYPO3\Flow\Tests\UnitTestCase
+class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
 {
     protected $formRuntime = null;
 

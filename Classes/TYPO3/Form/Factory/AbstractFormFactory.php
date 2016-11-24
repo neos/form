@@ -11,7 +11,7 @@ namespace TYPO3\Form\Factory;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Base class for custom *Form Factories*. A Form Factory is responsible for building
@@ -105,7 +105,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Configuration\ConfigurationManager
+     * @var \Neos\Flow\Configuration\ConfigurationManager
      * @internal
      */
     protected $configurationManager;
@@ -115,7 +115,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
      */
     public function initializeObject()
     {
-        $this->formSettings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
+        $this->formSettings = $this->configurationManager->getConfiguration(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form');
     }
 
     /**
@@ -136,7 +136,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
         if (isset($preset['parentPreset'])) {
             $parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
             unset($preset['parentPreset']);
-            $preset = \TYPO3\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
+            $preset = \Neos\Flow\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
         }
         return $preset;
     }

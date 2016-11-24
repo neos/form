@@ -11,7 +11,7 @@ namespace TYPO3\Form\Tests\Functional\Fixtures;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Form element that amends itself with another field having a validator
@@ -27,6 +27,6 @@ class TestingFormElementWithSubElements extends \TYPO3\Form\FormElements\Section
     public function onBuildingFinished()
     {
         $element = $this->createElement('myInteger', 'TYPO3.Form:SingleLineText');
-        $element->addValidator(new \TYPO3\Flow\Validation\Validator\IntegerValidator());
+        $element->addValidator(new \Neos\Flow\Validation\Validator\IntegerValidator());
     }
 }

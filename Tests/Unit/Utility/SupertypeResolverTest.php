@@ -17,7 +17,7 @@ use TYPO3\Form\Utility\SupertypeResolver;
  * Test for Supertype Resolver
  * @covers \TYPO3\Form\Utility\SupertypeResolver<extended>
  */
-class SupertypeResolverTest extends \TYPO3\Flow\Tests\UnitTestCase
+class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
 {
     public function dataProviderForTypeResolving()
     {

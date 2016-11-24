@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A processing Rule contains information for property mapping and validation.
@@ -29,24 +29,24 @@ class ProcessingRule
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Property\PropertyMappingConfiguration
+     * @var \Neos\Flow\Property\PropertyMappingConfiguration
      */
     protected $propertyMappingConfiguration;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Validation\Validator\ConjunctionValidator
+     * @var \Neos\Flow\Validation\Validator\ConjunctionValidator
      */
     protected $validator;
 
     /**
-     * @var \TYPO3\Flow\Error\Result
+     * @var \Neos\Flow\Error\Result
      */
     protected $processingMessages;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @var \Neos\Flow\Property\PropertyMapper
      * @internal
      */
     protected $propertyMapper;
@@ -56,11 +56,11 @@ class ProcessingRule
      */
     public function __construct()
     {
-        $this->processingMessages = new \TYPO3\Flow\Error\Result();
+        $this->processingMessages = new \Neos\Flow\Error\Result();
     }
 
     /**
-     * @return \TYPO3\Flow\Property\PropertyMappingConfiguration
+     * @return \Neos\Flow\Property\PropertyMappingConfiguration
      */
     public function getPropertyMappingConfiguration()
     {
@@ -86,7 +86,7 @@ class ProcessingRule
     /**
      * Returns the child validators of the ConjunctionValidator that is bound to this processing rule
      *
-     * @return \SplObjectStorage<\TYPO3\Flow\Validation\Validator\ValidatorInterface>
+     * @return \SplObjectStorage<\Neos\Flow\Validation\Validator\ValidatorInterface>
      * @internal
      */
     public function getValidators()
@@ -95,10 +95,10 @@ class ProcessingRule
     }
 
     /**
-     * @param \TYPO3\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
      * @return void
      */
-    public function addValidator(\TYPO3\Flow\Validation\Validator\ValidatorInterface $validator)
+    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
     {
         $this->validator->addValidator($validator);
     }
@@ -113,7 +113,7 @@ class ProcessingRule
             $value = $this->propertyMapper->convert($value, $this->dataType, $this->propertyMappingConfiguration);
             $messages = $this->propertyMapper->getMessages();
         } else {
-            $messages = new \TYPO3\Flow\Error\Result();
+            $messages = new \Neos\Flow\Error\Result();
         }
 
         $validationResult = $this->validator->validate($value);
@@ -124,7 +124,7 @@ class ProcessingRule
     }
 
     /**
-     * @return \TYPO3\Flow\Error\Result
+     * @return \Neos\Flow\Error\Result
      */
     public function getProcessingMessages()
     {

@@ -11,7 +11,7 @@ namespace TYPO3\Form\Core\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 use TYPO3\Form\Core\Renderer\UnknownFormElementRenderer;
 use TYPO3\Form\Core\Runtime\FormRuntime;
 use TYPO3\Form\Exception\IdentifierNotValidException;

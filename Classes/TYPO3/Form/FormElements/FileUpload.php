@@ -11,7 +11,7 @@ namespace TYPO3\Form\FormElements;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A generic file upload form element
@@ -23,7 +23,7 @@ class FileUpload extends \TYPO3\Form\Core\Model\AbstractFormElement
      */
     public function initializeFormElement()
     {
-        $this->setDataType(\TYPO3\Flow\ResourceManagement\PersistentResource::class);
+        $this->setDataType(\Neos\Flow\ResourceManagement\PersistentResource::class);
         $fileTypeValidator = new \TYPO3\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
         $this->addValidator($fileTypeValidator);
     }

@@ -13,9 +13,9 @@ namespace TYPO3\Form\ViewHelpers\Form;
 
 use Doctrine\ORM\Mapping as ORM;
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Property\PropertyMapper;
-use TYPO3\Flow\ResourceManagement\PersistentResource;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Property\PropertyMapper;
+use Neos\Flow\ResourceManagement\PersistentResource;
 
 /**
  * This ViewHelper makes the specified PersistentResource available for its

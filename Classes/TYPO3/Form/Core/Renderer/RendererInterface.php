@@ -22,10 +22,10 @@ interface RendererInterface
     /**
      * Set the controller context which should be used
      *
-     * @param \TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext
+     * @param \Neos\Flow\Mvc\Controller\ControllerContext $controllerContext
      * @api
      */
-    public function setControllerContext(\TYPO3\Flow\Mvc\Controller\ControllerContext $controllerContext);
+    public function setControllerContext(\Neos\Flow\Mvc\Controller\ControllerContext $controllerContext);
 
     /**
      * Render the passed $renderable and return the rendered Renderable.

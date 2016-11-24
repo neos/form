@@ -12,8 +12,8 @@ namespace TYPO3\Form\ViewHelpers;
  */
 
 use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Mvc\ActionRequest;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Mvc\ActionRequest;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
@@ -23,7 +23,7 @@ class FormViewHelper extends FluidFormViewHelper
 {
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Security\Cryptography\HashService
+     * @var \Neos\Flow\Security\Cryptography\HashService
      */
     protected $hashService;
 
