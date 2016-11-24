@@ -20,6 +20,11 @@ use Neos\Utility\ObjectAccess;
 class Version20160601101500 extends AbstractMigration
 {
 
+    public function getIdentifier()
+    {
+        return 'TYPO3.Form-20160601101500';
+    }
+
     /**
      * @return void
      */
