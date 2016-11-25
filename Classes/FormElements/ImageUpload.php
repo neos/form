@@ -14,7 +14,7 @@ namespace Neos\Form\FormElements;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMappingConfiguration;
 use Neos\Flow\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\Media\TypeConverter\AssetInterfaceConverter;
+use Neos\Media\TypeConverter\AssetInterfaceConverter;
 
 /**
  * An image upload form element
@@ -33,8 +33,8 @@ class ImageUpload extends \Neos\Form\Core\Model\AbstractFormElement
         $propertyMappingConfiguration->setTypeConverterOption(AssetInterfaceConverter::class, AssetInterfaceConverter::CONFIGURATION_ONE_PER_RESOURCE, true);
         $propertyMappingConfiguration->allowProperties('resource');
 
-        $this->setDataType(\TYPO3\Media\Domain\Model\Image::class);
-        $imageTypeValidator = new \TYPO3\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
+        $this->setDataType(\Neos\Media\Domain\Model\Image::class);
+        $imageTypeValidator = new \Neos\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
         $this->addValidator($imageTypeValidator);
     }
 }
