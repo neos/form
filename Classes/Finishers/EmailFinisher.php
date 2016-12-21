@@ -24,6 +24,8 @@ use Neos\Form\Exception\FinisherException;
  * - partialRootPath: root path for the partials
  * - variables: associative array of variables which are available inside the Fluid template
  *
+ * - referrer: The referrer of the form is available in the Fluid template
+ *
  * The following options control the mail sending. In all of them, placeholders in the form
  * of {...} are replaced with the corresponding form value; i.e. {email} as recipientAddress
  * makes the recipient address configurable.
@@ -66,6 +68,8 @@ class EmailFinisher extends AbstractFinisher
         $formRuntime = $this->finisherContext->getFormRuntime();
         $standaloneView = $this->initializeStandaloneView();
         $standaloneView->assign('form', $formRuntime);
+        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
+        $standaloneView->assign('referrer', $referrer);
         $message = $standaloneView->render();
 
         $subject = $this->parseOption('subject');
