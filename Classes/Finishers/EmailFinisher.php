@@ -15,7 +15,7 @@ use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 
 /**
- * This finisher sends an email to one or more recipients.
+ * This finisher sends an email to one or more recipients
  *
  * Options:
  *
@@ -27,11 +27,12 @@ use Neos\Form\Exception\FinisherException;
  * - referrer: The referrer of the form is available in the Fluid template
  *
  * The following options control the mail sending. In all of them, placeholders in the form
- * of {...} are replaced with the corresponding form value; i.e. {email} as senderAdress
- * makes the sender address configurable.
+ * of {...} are replaced with the corresponding form value; i.e. {email} as recipientAddress
+ * makes the recipient address configurable.
  *
  * - subject (mandatory): Subject of the email
- * - recipients (mandatory): Email(s) of recipients: array('recipient.one@example.com' => 'Recipient One', 'recipient.two@example.com')
+ * - recipientAddress (mandatory): Email address of the recipient (use multiple addresses with an array)
+ * - recipientName: Human-readable name of the recipient
  * - senderAddress (mandatory): Email address of the sender
  * - senderName: Human-readable name of the sender
  * - replyToAddress: Email address of to be used as reply-to email (use multiple addresses with an array)
@@ -72,7 +73,8 @@ class EmailFinisher extends AbstractFinisher
         $message = $standaloneView->render();
 
         $subject = $this->parseOption('subject');
-        $recipients = $this->parseOption('recipients');
+        $recipientAddress = $this->parseOption('recipientAddress');
+        $recipientName = $this->parseOption('recipientName');
         $senderAddress = $this->parseOption('senderAddress');
         $senderName = $this->parseOption('senderName');
         $replyToAddress = $this->parseOption('replyToAddress');
@@ -84,8 +86,11 @@ class EmailFinisher extends AbstractFinisher
         if ($subject === null) {
             throw new FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
         }
-        if ($recipients === null) {
-            throw new FinisherException('The option "recipients" must be set for the EmailFinisher.', 1327060200);
+        if ($recipientAddress === null) {
+            throw new FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
+        }
+        if (is_array($recipientAddress) && $recipientName !== '') {
+            throw new \TYPO3\Form\Exception\FinisherException('The option "recipientName" cannot be used with multiple recipients in the EmailFinisher.', 1483365977);
         }
         if ($senderAddress === null) {
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
@@ -95,8 +100,13 @@ class EmailFinisher extends AbstractFinisher
 
         $mail
             ->setFrom(array($senderAddress => $senderName))
-            ->setTo($recipients)
             ->setSubject($subject);
+
+        if (is_array($recipientAddress)) {
+            $mail->setTo($recipientAddress);
+        } else {
+            $mail->setTo(array($recipientAddress => $recipientName));
+        }
 
         if ($replyToAddress !== null) {
             $mail->setReplyTo($replyToAddress);
@@ -120,7 +130,7 @@ class EmailFinisher extends AbstractFinisher
             \Neos\Flow\var_dump(
                 array(
                     'sender' => array($senderAddress => $senderName),
-                    'recipients' => $recipients,
+                    'recipients' => is_array($recipientAddress) ? $recipientAddress : array($recipientAddress => $recipientName),
                     'replyToAddress' => $replyToAddress,
                     'carbonCopyAddress' => $carbonCopyAddress,
                     'blindCarbonCopyAddress' => $blindCarbonCopyAddress,
