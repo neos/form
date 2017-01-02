@@ -90,7 +90,7 @@ class EmailFinisher extends AbstractFinisher
             throw new FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
         }
         if (is_array($recipientAddress) && $recipientName !== '') {
-            throw new \TYPO3\Form\Exception\FinisherException('The option "recipientName" cannot be used with multiple recipients in the EmailFinisher.', 1483365977);
+            throw new FinisherException('The option "recipientName" cannot be used with multiple recipients in the EmailFinisher.', 1483365977);
         }
         if ($senderAddress === null) {
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
