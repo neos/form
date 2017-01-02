@@ -124,7 +124,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
      * Set a property of the element.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      */
     public function setProperty($key, $value)
     {
