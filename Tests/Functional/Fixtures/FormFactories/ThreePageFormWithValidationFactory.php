@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional\Fixtures\FormFactories;
 
 /*
@@ -14,7 +15,7 @@ namespace Neos\Form\Tests\Functional\Fixtures\FormFactories;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * Basic three-page form
+ * Basic three-page form.
  */
 class ThreePageFormWithValidationFactory extends \Neos\Form\Factory\AbstractFormFactory
 {

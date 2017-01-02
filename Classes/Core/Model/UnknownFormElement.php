@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -11,7 +12,6 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Form\Core\Renderer\UnknownFormElementRenderer;
 use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Exception\IdentifierNotValidException;
@@ -24,10 +24,11 @@ use Neos\Form\Exception\IdentifierNotValidException;
 class UnknownFormElement extends Renderable\AbstractRenderable implements FormElementInterface
 {
     /**
-     * Constructor. Needs this FormElement's identifier and the FormElement type
+     * Constructor. Needs this FormElement's identifier and the FormElement type.
      *
      * @param string $identifier The FormElement's identifier
-     * @param string $type The Form Element Type
+     * @param string $type       The Form Element Type
+     *
      * @throws IdentifierNotValidException
      */
     public function __construct($identifier, $type)
@@ -42,7 +43,7 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
     /**
      * Returns a unique identifier of this element.
      * While element identifiers are only unique within one form,
-     * this includes the identifier of the form itself, making it "globally" unique
+     * this includes the identifier of the form itself, making it "globally" unique.
      *
      * @return string the "globally" unique identifier of this element
      */
@@ -51,11 +52,12 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
         $formDefinition = $this->getRootForm();
         $uniqueIdentifier = sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
         $uniqueIdentifier = preg_replace('/[^a-zA-Z0-9-_]/', '_', $uniqueIdentifier);
+
         return lcfirst($uniqueIdentifier);
     }
 
     /**
-     * Unknown Form Elements are rendered with the UnknownFormElementRenderer
+     * Unknown Form Elements are rendered with the UnknownFormElementRenderer.
      *
      * @return string the renderer class name
      */
@@ -65,7 +67,7 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
     }
 
     /**
-     * Not used in this implementation
+     * Not used in this implementation.
      *
      * @return void
      */
@@ -78,11 +80,10 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
      */
     public function getDefaultValue()
     {
-        return null;
     }
 
     /**
-     * Not used in this implementation
+     * Not used in this implementation.
      *
      * @param mixed $defaultValue the default value for this Form Element
      */
@@ -91,10 +92,11 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
     }
 
     /**
-     * Not used in this implementation
+     * Not used in this implementation.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setProperty($key, $value)
@@ -106,11 +108,11 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
      */
     public function getProperties()
     {
-        return array();
+        return [];
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRequired()
     {
@@ -118,11 +120,13 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
     }
 
     /**
-     * Not used in this implementation
+     * Not used in this implementation.
      *
      * @param FormRuntime $formRuntime
-     * @param mixed $elementValue submitted value of the element *before post processing*
+     * @param mixed       $elementValue submitted value of the element *before post processing*
+     *
      * @return void
+     *
      * @see \Neos\Form\Core\Runtime\FormRuntime::mapAndValidate()
      */
     public function onSubmit(FormRuntime $formRuntime, &$elementValue)

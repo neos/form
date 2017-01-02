@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model\Renderable;
 
 /*
@@ -17,14 +18,14 @@ namespace Neos\Form\Core\Model\Renderable;
  *
  * **This interface should not be implemented by developers**, it is only
  * used for improving the internal code structure.
- *
  */
 interface CompositeRenderableInterface extends RenderableInterface
 {
     /**
-     * Returns all RenderableInterface instances of this composite renderable recursively
+     * Returns all RenderableInterface instances of this composite renderable recursively.
      *
      * @return array<Neos\Form\Core\Model\RenderableInterface>
+     *
      * @internal
      */
     public function getRenderablesRecursively();

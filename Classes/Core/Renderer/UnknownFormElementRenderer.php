@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Renderer;
 
 /*
@@ -26,11 +27,14 @@ class UnknownFormElementRenderer extends AbstractElementRenderer
     /**
      * This renders the given $renderable depending on the context:
      * In preview Mode this returns an error message. Otherwise this throws an exception or returns an empty string
-     * depending on the "skipUnknownElements" rendering option
+     * depending on the "skipUnknownElements" rendering option.
      *
      * @param RootRenderableInterface $renderable
-     * @return string the rendered $renderable
+     *
      * @throws TypeDefinitionNotFoundException
+     *
+     * @return string the rendered $renderable
+     *
      * @api
      */
     public function renderRenderable(RootRenderableInterface $renderable)
@@ -44,21 +48,24 @@ class UnknownFormElementRenderer extends AbstractElementRenderer
         if (!$skipUnknownElements) {
             throw new TypeDefinitionNotFoundException(sprintf('Type "%s" not found. Probably some configuration is missing.', $renderable->getType()), 1382364019);
         }
+
         return '';
     }
 
     /**
-     * Returns the path of a $renderable in the format <formIdentifier>/<sectionIdentifier>/<sectionIdentifier>/.../<elementIdentifier>
+     * Returns the path of a $renderable in the format <formIdentifier>/<sectionIdentifier>/<sectionIdentifier>/.../<elementIdentifier>.
      *
      * @param RootRenderableInterface $renderable
+     *
      * @return string
      */
     protected function getRenderablePath(RootRenderableInterface $renderable)
     {
         $path = $renderable->getIdentifier();
         while ($renderable = $renderable->getParentRenderable()) {
-            $path = $renderable->getIdentifier() . '/' . $path;
+            $path = $renderable->getIdentifier().'/'.$path;
         }
+
         return $path;
     }
 }

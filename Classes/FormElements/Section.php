@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\FormElements;
 
 /*
@@ -11,10 +12,8 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
- * A Section, being part of a bigger Page
+ * A Section, being part of a bigger Page.
  *
  * **This class is not meant to be subclassed by developers.**
  *
@@ -29,13 +28,15 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
-     * Will be called as soon as the element is (tried to be) added to a form
+     * Will be called as soon as the element is (tried to be) added to a form.
+     *
      * @see registerInFormIfPossible()
      *
      * @return void
+     *
      * @internal
      */
     public function initializeFormElement()
@@ -45,47 +46,50 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
     /**
      * Returns a unique identifier of this element.
      * While element identifiers are only unique within one form,
-     * this includes the identifier of the form itself, making it "globally" unique
+     * this includes the identifier of the form itself, making it "globally" unique.
      *
      * @return string the "globally" unique identifier of this element
+     *
      * @api
      */
     public function getUniqueIdentifier()
     {
         $formDefinition = $this->getRootForm();
+
         return sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
     }
 
     /**
      * Get the default value with which the Form Element should be initialized
      * during display.
-     * Note: This is currently not used for section elements
+     * Note: This is currently not used for section elements.
      *
      * @return mixed the default value for this Form Element
+     *
      * @api
      */
     public function getDefaultValue()
     {
-        return null;
     }
 
     /**
      * Set the default value with which the Form Element should be initialized
      * during display.
-     * Note: This is currently ignored for section elements
+     * Note: This is currently ignored for section elements.
      *
      * @param mixed $defaultValue the default value for this Form Element
+     *
      * @api
      */
     public function setDefaultValue($defaultValue)
     {
     }
 
-
     /**
-     * Get all element-specific configuration properties
+     * Get all element-specific configuration properties.
      *
      * @return array
+     *
      * @api
      */
     public function getProperties()
@@ -97,8 +101,10 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
      * Set an element-specific configuration property.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
+     *
      * @api
      */
     public function setProperty($key, $value)
@@ -110,8 +116,10 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
      * Set the rendering option $key to $value.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @api
+     *
      * @return mixed
      */
     public function setRenderingOption($key, $value)
@@ -120,20 +128,22 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
     }
 
     /**
-     * Get all validators on the element
+     * Get all validators on the element.
      *
      * @return \SplObjectStorage
      */
     public function getValidators()
     {
         $formDefinition = $this->getRootForm();
+
         return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
     }
 
     /**
-     * Add a validator to the element
+     * Add a validator to the element.
      *
      * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     *
      * @return void
      */
     public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
@@ -143,9 +153,10 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
     }
 
     /**
-     * Whether or not this element is required
+     * Whether or not this element is required.
      *
-     * @return boolean
+     * @return bool
+     *
      * @api
      */
     public function isRequired()
@@ -155,6 +166,7 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
                 return true;
             }
         }
+
         return false;
     }
 }

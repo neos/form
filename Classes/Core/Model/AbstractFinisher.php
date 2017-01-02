@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -10,8 +11,6 @@ namespace Neos\Form\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
-use Neos\Form\Core\Model\FinisherContext;
 
 /**
  * Finisher base class.
@@ -25,29 +24,34 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
      * accessing them, you should rather use parseOption().
      *
      * @var array
+     *
      * @internal
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * These are the default options of the finisher.
      * Override them in your concrete implementation.
-     * Default options should not be changed from "outside"
+     * Default options should not be changed from "outside".
      *
      * @var array
+     *
      * @api
      */
-    protected $defaultOptions = array();
+    protected $defaultOptions = [];
 
     /**
      * @var \Neos\Form\Core\Model\FinisherContext
+     *
      * @api
      */
     protected $finisherContext;
 
     /**
      * @param array $options configuration options in the format array('option1' => 'value1', 'option2' => 'value2', ...)
+     *
      * @return void
+     *
      * @api
      */
     public function setOptions(array $options)
@@ -56,11 +60,13 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
     }
 
     /**
-     * Sets a single finisher option (@see setOptions())
+     * Sets a single finisher option (@see setOptions()).
      *
-     * @param string $optionName name of the option to be set
-     * @param mixed $optionValue value of the option
+     * @param string $optionName  name of the option to be set
+     * @param mixed  $optionValue value of the option
+     *
      * @return void
+     *
      * @api
      */
     public function setOption($optionName, $optionValue)
@@ -69,10 +75,12 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
     }
 
     /**
-     * Executes the finisher
+     * Executes the finisher.
      *
      * @param \Neos\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
+     *
      * @return void
+     *
      * @api
      */
     final public function execute(FinisherContext $finisherContext)
@@ -87,6 +95,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
      * Override and fill with your own implementation!
      *
      * @return void
+     *
      * @api
      */
     abstract protected function executeInternal();
@@ -98,7 +107,9 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
      * if $optionName was not found, the corresponding default option is returned (from $this->defaultOptions)
      *
      * @param string $optionName
+     *
      * @return mixed
+     *
      * @api
      */
     protected function parseOption($optionName)
@@ -107,7 +118,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
             if (isset($this->defaultOptions[$optionName])) {
                 $option = $this->defaultOptions[$optionName];
             } else {
-                return null;
+                return;
             }
         } else {
             $option = $this->options[$optionName];
@@ -116,6 +127,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
             return $option;
         }
         $formRuntime = $this->finisherContext->getFormRuntime();
+
         return preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
             return \Neos\Utility\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
         }, $option);

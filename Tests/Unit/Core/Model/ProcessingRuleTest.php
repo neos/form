@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
@@ -11,11 +12,9 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
-use Neos\Form\Core\Model\Page;
-
 /**
- * Test for ProcessingRule Domain Model
+ * Test for ProcessingRule Domain Model.
+ *
  * @covers \Neos\Form\Core\Model\ProcessingRule
  */
 class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
@@ -33,7 +32,7 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
     public function setUp()
     {
         $this->mockPropertyMapper = $this->getMockBuilder(\Neos\Flow\Property\PropertyMapper::class)->getMock();
-        $this->processingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
+        $this->processingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, ['dummy']);
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
         $this->processingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
         $this->processingRule->_set('processingMessages', new \Neos\Error\Messages\Result());

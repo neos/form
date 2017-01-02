@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model\Renderable;
 
 /*
@@ -25,22 +26,25 @@ interface RootRenderableInterface
      * the particular element.
      *
      * @return string
+     *
      * @api
      */
     public function getType();
 
     /**
-     * The identifier of this renderable
+     * The identifier of this renderable.
      *
      * @return string
+     *
      * @api
      */
     public function getIdentifier();
 
     /**
-     * Get the label which shall be displayed next to the form element
+     * Get the label which shall be displayed next to the form element.
      *
      * @return string
+     *
      * @api
      */
     public function getLabel();
@@ -51,28 +55,32 @@ interface RootRenderableInterface
      * is outputted to the browser.
      *
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     *
      * @return void
+     *
      * @api
      */
     public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime);
 
     /**
      * Get the renderer class name to be used to display this renderable;
-     * must implement RendererInterface
+     * must implement RendererInterface.
      *
      * Is only set if a specific renderer should be used for this renderable,
      * if it is NULL the caller needs to determine the renderer or take care
      * of the renderer itself.
      *
      * @return string the renderer class name
+     *
      * @api
      */
     public function getRendererClassName();
 
     /**
-     * Get all rendering options
+     * Get all rendering options.
      *
      * @return array associative array of rendering options
+     *
      * @api
      */
     public function getRenderingOptions();

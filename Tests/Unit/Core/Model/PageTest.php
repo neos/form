@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
@@ -11,11 +12,11 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
 
 /**
- * Test for Page Domain Model
+ * Test for Page Domain Model.
+ *
  * @covers \Neos\Form\Core\Model\Page<extended>
  * @covers \Neos\Form\Core\Model\AbstractFormElement<extended>
  */
@@ -53,11 +54,11 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     public function invalidIdentifiers()
     {
-        return array(
-            'Null Identifier' => array(null),
-            'Integer Identifier' => array(42),
-            'Empty String Identifier' => array('')
-        );
+        return [
+            'Null Identifier'         => [null],
+            'Integer Identifier'      => [42],
+            'Empty String Identifier' => [''],
+        ];
     }
 
     /**
@@ -76,7 +77,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     public function getElementsReturnsEmptyArrayByDefault()
     {
         $page = new Page('foo');
-        $this->assertSame(array(), $page->getElements());
+        $this->assertSame([], $page->getElements());
     }
 
     /**
@@ -85,7 +86,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     public function getElementsRecursivelyReturnsEmptyArrayByDefault()
     {
         $page = new Page('foo');
-        $this->assertSame(array(), $page->getElementsRecursively());
+        $this->assertSame([], $page->getElementsRecursively());
     }
 
     /**
@@ -94,11 +95,11 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     public function getElementsRecursivelyReturnsFirstLevelFormElements()
     {
         $page = new Page('foo');
-        $element1 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
-        $element2 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+        $element1 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element2 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $page->addElement($element1);
         $page->addElement($element2);
-        $this->assertSame(array($element1, $element2), $page->getElementsRecursively());
+        $this->assertSame([$element1, $element2], $page->getElementsRecursively());
     }
 
     /**
@@ -107,18 +108,18 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     public function getElementsRecursivelyReturnsRecursiveFormElementsInCorrectOrder()
     {
         $page = new Page('foo');
-        $element1 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
-        $element2 = $this->getMockBuilder(\Neos\Form\FormElements\Section::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
-        $element21 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
-        $element22 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+        $element1 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element2 = $this->getMockBuilder(\Neos\Form\FormElements\Section::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element21 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element22 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $element2->addElement($element21);
         $element2->addElement($element22);
-        $element3 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+        $element3 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page->addElement($element1);
         $page->addElement($element2);
         $page->addElement($element3);
-        $this->assertSame(array($element1, $element2, $element21, $element22, $element3), $page->getElementsRecursively());
+        $this->assertSame([$element1, $element2, $element21, $element22, $element3], $page->getElementsRecursively());
     }
 
     /**
@@ -127,7 +128,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function aFormElementCanOnlyBeAttachedToASinglePage()
     {
-        $element = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+        $element = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page1 = new Page('bar1');
         $page2 = new Page('bar2');
@@ -142,9 +143,9 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     public function addElementAddsElementAndSetsBackReferenceToPage()
     {
         $page = new Page('bar');
-        $element = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+        $element = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $page->addElement($element);
-        $this->assertSame(array($element), $page->getElements());
+        $this->assertSame([$element], $page->getElements());
         $this->assertSame($page, $element->getParentRenderable());
     }
 
@@ -160,7 +161,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
         $this->assertSame('myElement', $element->getIdentifier());
         $this->assertInstanceOf(\Neos\Form\FormElements\GenericFormElement::class, $element);
         $this->assertSame('Neos.Form:MyElementType', $element->getType());
-        $this->assertSame(array($element), $page->getElements());
+        $this->assertSame([$element], $page->getElements());
     }
 
     /**
@@ -174,8 +175,8 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
         $this->assertSame('my label', $element->getLabel());
         $this->assertSame('This is the default value', $element->getDefaultValue());
-        $this->assertSame(array('property1' => 'val1', 'property2' => 'val2'), $element->getProperties());
-        $this->assertSame(array('ro1' => 'rv1', 'ro2' => 'rv2'), $element->getRenderingOptions());
+        $this->assertSame(['property1' => 'val1', 'property2' => 'val2'], $element->getProperties());
+        $this->assertSame(['ro1' => 'rv1', 'ro2' => 'rv2'], $element->getRenderingOptions());
         $this->assertSame('MyRendererClassName', $element->getRendererClassName());
     }
 
@@ -232,9 +233,9 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
         $element1 = $page->createElement('myElement', 'Neos.Form:MyElementType');
         $element2 = $page->createElement('myElement2', 'Neos.Form:MyElementType');
 
-        $this->assertSame(array($element1, $element2), $page->getElements());
+        $this->assertSame([$element1, $element2], $page->getElements());
         $page->moveElementBefore($element2, $element1);
-        $this->assertSame(array($element2, $element1), $page->getElements());
+        $this->assertSame([$element2, $element1], $page->getElements());
     }
 
     /**
@@ -263,9 +264,9 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
         $element1 = $page->createElement('myElement', 'Neos.Form:MyElementType');
         $element2 = $page->createElement('myElement2', 'Neos.Form:MyElementType');
 
-        $this->assertSame(array($element1, $element2), $page->getElements());
+        $this->assertSame([$element1, $element2], $page->getElements());
         $page->moveElementAfter($element1, $element2);
-        $this->assertSame(array($element2, $element1), $page->getElements());
+        $this->assertSame([$element2, $element1], $page->getElements());
     }
 
     /**
@@ -295,7 +296,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
         $page1->removeElement($element1);
 
-        $this->assertSame(array(), $page1->getElements());
+        $this->assertSame([], $page1->getElements());
         $this->assertNull($formDefinition->getElementByIdentifier('myElement'));
 
         $this->assertNull($element1->getParentRenderable());
@@ -309,7 +310,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = $this->getDummyFormDefinition();
         $page1 = $formDefinition->createPage('myPage1');
-        $element1 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->disableOriginalConstructor()->getMock();
+        $element1 = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page1->removeElement($element1);
     }
@@ -321,7 +322,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = $this->getDummyFormDefinition();
 
-        $mockProcessingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
+        $mockProcessingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, ['dummy']);
         $mockProcessingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
         $formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->will($this->returnValue($mockProcessingRule));
 
@@ -332,7 +333,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
         $validators = iterator_to_array($validators);
         $this->assertSame(2, count($validators));
         $this->assertInstanceOf(\Neos\Flow\Validation\Validator\StringLengthValidator::class, $validators[0]);
-        $this->assertSame(array('minimum' => 10, 'maximum' => PHP_INT_MAX), $validators[0]->getOptions());
+        $this->assertSame(['minimum' => 10, 'maximum' => PHP_INT_MAX], $validators[0]->getOptions());
     }
 
     /**
@@ -349,70 +350,71 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     protected function getDummyFormDefinition()
     {
-        $formDefinitionConstructorArguments = array('myForm', array(
-            'validatorPresets' => array(
-                'MyValidatorIdentifier' => array(
-                    'implementationClassName' => \Neos\Flow\Validation\Validator\StringLengthValidator::class
-                ),
-                'MyOtherValidatorIdentifier' => array(
-                    'implementationClassName' => \Neos\Flow\Validation\Validator\NotEmptyValidator::class
-                ),
-            ),
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(),
-                'Neos.Form:Page' => array(
-                    'implementationClassName' => \Neos\Form\Core\Model\Page::class
-                ),
-                'Neos.Form:MyElementType' => array(
-                    'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class
-                ),
-                'Neos.Form:MyElementTypeWithAdditionalProperties' => array(
+        $formDefinitionConstructorArguments = ['myForm', [
+            'validatorPresets' => [
+                'MyValidatorIdentifier' => [
+                    'implementationClassName' => \Neos\Flow\Validation\Validator\StringLengthValidator::class,
+                ],
+                'MyOtherValidatorIdentifier' => [
+                    'implementationClassName' => \Neos\Flow\Validation\Validator\NotEmptyValidator::class,
+                ],
+            ],
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+                'Neos.Form:Page' => [
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class,
+                ],
+                'Neos.Form:MyElementType' => [
                     'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class,
-                    'label' => 'my label',
-                    'defaultValue' => 'This is the default value',
-                    'properties' => array(
+                ],
+                'Neos.Form:MyElementTypeWithAdditionalProperties' => [
+                    'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class,
+                    'label'                   => 'my label',
+                    'defaultValue'            => 'This is the default value',
+                    'properties'              => [
                         'property1' => 'val1',
-                        'property2' => 'val2'
-                    ),
-                    'renderingOptions' => array(
+                        'property2' => 'val2',
+                    ],
+                    'renderingOptions' => [
                         'ro1' => 'rv1',
-                        'ro2' => 'rv2'
-                    ),
-                    'rendererClassName' => 'MyRendererClassName'
-                ),
-                'Neos.Form:MyElementTypeWithoutImplementationClassName' => array(),
-                'Neos.Form:MyElementTypeWithUnknownProperties' => array(
+                        'ro2' => 'rv2',
+                    ],
+                    'rendererClassName' => 'MyRendererClassName',
+                ],
+                'Neos.Form:MyElementTypeWithoutImplementationClassName' => [],
+                'Neos.Form:MyElementTypeWithUnknownProperties'          => [
                     'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class,
-                    'unknownProperty' => 'foo'
-                ),
-                'Neos.Form:MyElementTypeWhichDoesNotImplementFormElementInterface' => array(
+                    'unknownProperty'         => 'foo',
+                ],
+                'Neos.Form:MyElementTypeWhichDoesNotImplementFormElementInterface' => [
                     'implementationClassName' => \Neos\Form\Factory\ArrayFormFactory::class,
-                ),
-                'Neos.Form:MyElementWithValidator' => array(
+                ],
+                'Neos.Form:MyElementWithValidator' => [
                     'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class,
-                    'validators' => array(
-                        array(
+                    'validators'              => [
+                        [
                             'identifier' => 'MyValidatorIdentifier',
-                            'options' => array('minimum' => 10)
-                        ),
-                        array(
-                            'identifier' => 'MyOtherValidatorIdentifier'
-                        ),
-                    )
-                ),
-                'Neos.Form:MyElementWithBrokenValidator' => array(
+                            'options'    => ['minimum' => 10],
+                        ],
+                        [
+                            'identifier' => 'MyOtherValidatorIdentifier',
+                        ],
+                    ],
+                ],
+                'Neos.Form:MyElementWithBrokenValidator' => [
                     'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class,
-                    'validators' => array(
-                        array(
+                    'validators'              => [
+                        [
                             'identifier' => 'nonExisting',
-                        )
-                    )
-                )
+                        ],
+                    ],
+                ],
 
-            )
-        ));
+            ],
+        ]];
 
-        $formDefinition = $this->getMockBuilder(\Neos\Form\Core\Model\FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs($formDefinitionConstructorArguments)->getMock();
+        $formDefinition = $this->getMockBuilder(\Neos\Form\Core\Model\FormDefinition::class)->setMethods(['getProcessingRule'])->setConstructorArgs($formDefinitionConstructorArguments)->getMock();
+
         return $formDefinition;
     }
 }

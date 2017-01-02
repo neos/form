@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\FormElements;
 
 /*
@@ -11,10 +12,8 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
- * A generic form element
+ * A generic form element.
  */
 class GenericFormElement extends \Neos\Form\Core\Model\AbstractFormElement
 {

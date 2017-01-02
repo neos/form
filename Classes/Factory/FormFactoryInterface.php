@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Factory;
 
 /*
@@ -36,9 +37,11 @@ interface FormFactoryInterface
      * $presetName correctly; so you are advised to sublclass AbstractFormFactory
      * directly.
      *
-     * @param array $configuration factory-specific configuration array
-     * @param string $presetName The name of the "Form Preset" to use; it is factory-specific to implement this.
+     * @param array  $configuration factory-specific configuration array
+     * @param string $presetName    The name of the "Form Preset" to use; it is factory-specific to implement this.
+     *
      * @return \Neos\Form\Core\Model\FormDefinition a newly built form definition
+     *
      * @api
      */
     public function build(array $configuration, $presetName);

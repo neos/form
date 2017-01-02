@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model\Renderable;
 
 /*
@@ -21,9 +22,10 @@ namespace Neos\Form\Core\Model\Renderable;
 interface RenderableInterface extends RootRenderableInterface
 {
     /**
-     * Return the parent renderable
+     * Return the parent renderable.
      *
      * @return CompositeRenderableInterface the parent renderable
+     *
      * @internal
      */
     public function getParentRenderable();
@@ -35,24 +37,29 @@ interface RenderableInterface extends RootRenderableInterface
      * This method should also register itself at the parent form, if possible.
      *
      * @param CompositeRenderableInterface $renderable
+     *
      * @return void
+     *
      * @internal
      */
     public function setParentRenderable(CompositeRenderableInterface $renderable);
 
     /**
-     * Set the index of this renderable inside the parent renderable
+     * Set the index of this renderable inside the parent renderable.
      *
-     * @param integer $index
+     * @param int $index
+     *
      * @return void
+     *
      * @internal
      */
     public function setIndex($index);
 
     /**
-     * Get the index inside the parent renderable
+     * Get the index inside the parent renderable.
      *
-     * @return integer
+     * @return int
+     *
      * @api
      */
     public function getIndex();
@@ -64,6 +71,7 @@ interface RenderableInterface extends RootRenderableInterface
      * at the form.
      *
      * @return void
+     *
      * @internal
      */
     public function onRemoveFromParentRenderable();
@@ -73,6 +81,7 @@ interface RenderableInterface extends RootRenderableInterface
      * It can be used to add new form elements as children for complex form elements.
      *
      * @return void
+     *
      * @api
      */
     public function onBuildingFinished();

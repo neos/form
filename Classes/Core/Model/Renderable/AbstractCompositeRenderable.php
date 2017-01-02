@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model\Renderable;
 
 /*
@@ -21,12 +22,13 @@ namespace Neos\Form\Core\Model\Renderable;
 abstract class AbstractCompositeRenderable extends AbstractRenderable implements CompositeRenderableInterface
 {
     /**
-     * array of child renderables
+     * array of child renderables.
      *
      * @var array<Neos\Form\Core\Model\RenderableInterface>
+     *
      * @api
      */
-    protected $renderables = array();
+    protected $renderables = [];
 
     /**
      * Add a renderable to the list of child renderables.
@@ -35,8 +37,11 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
      * or "addElement" method with the correct type hint.
      *
      * @param RenderableInterface $renderable
-     * @return void
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException
+     *
+     * @return void
+     *
      * @internal
      */
     protected function addRenderable(RenderableInterface $renderable)
@@ -50,15 +55,18 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
     }
 
     /**
-     * Move $renderableToMove before $referenceRenderable
+     * Move $renderableToMove before $referenceRenderable.
      *
      * This function will be wrapped by the subclasses, f.e. with an "movePageBefore"
      * or "moveElementBefore" method with the correct type hint.
      *
      * @param RenderableInterface $renderableToMove
      * @param RenderableInterface $referenceRenderable
-     * @return void
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException
+     *
+     * @return void
+     *
      * @internal
      */
     protected function moveRenderableBefore(RenderableInterface $renderableToMove, RenderableInterface $referenceRenderable)
@@ -67,7 +75,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
             throw new \Neos\Form\Exception\FormDefinitionConsistencyException('Moved renderables need to be part of the same parent element.', 1326089744);
         }
 
-        $reorderedRenderables = array();
+        $reorderedRenderables = [];
         $i = 0;
         foreach ($this->renderables as $renderable) {
             if ($renderable === $renderableToMove) {
@@ -87,15 +95,18 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
     }
 
     /**
-     * Move $renderableToMove after $referenceRenderable
+     * Move $renderableToMove after $referenceRenderable.
      *
      * This function will be wrapped by the subclasses, f.e. with an "movePageAfter"
      * or "moveElementAfter" method with the correct type hint.
      *
      * @param RenderableInterface $renderableToMove
      * @param RenderableInterface $referenceRenderable
-     * @return void
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException
+     *
+     * @return void
+     *
      * @internal
      */
     protected function moveRenderableAfter(RenderableInterface $renderableToMove, RenderableInterface $referenceRenderable)
@@ -104,7 +115,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
             throw new \Neos\Form\Exception\FormDefinitionConsistencyException('Moved renderables need to be part of the same parent element.', 1326089744);
         }
 
-        $reorderedRenderables = array();
+        $reorderedRenderables = [];
         $i = 0;
         foreach ($this->renderables as $renderable) {
             if ($renderable === $renderableToMove) {
@@ -125,20 +136,22 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
     }
 
     /**
-     * Returns all RenderableInterface instances of this composite renderable recursively
+     * Returns all RenderableInterface instances of this composite renderable recursively.
      *
      * @return array<Neos\Form\Core\Model\RenderableInterface>
+     *
      * @internal
      */
     public function getRenderablesRecursively()
     {
-        $renderables = array();
+        $renderables = [];
         foreach ($this->renderables as $renderable) {
             $renderables[] = $renderable;
             if ($renderable instanceof CompositeRenderableInterface) {
                 $renderables = array_merge($renderables, $renderable->getRenderablesRecursively());
             }
         }
+
         return $renderables;
     }
 
@@ -149,8 +162,11 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
      * or "removeElement" method with the correct type hint.
      *
      * @param RenderableInterface $renderableToRemove
-     * @return void
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException
+     *
+     * @return void
+     *
      * @internal
      */
     protected function removeRenderable(RenderableInterface $renderableToRemove)
@@ -159,7 +175,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
             throw new \Neos\Form\Exception\FormDefinitionConsistencyException('The renderable to be removed must be part of the calling parent renderable.', 1326090127);
         }
 
-        $updatedRenderables = array();
+        $updatedRenderables = [];
         foreach ($this->renderables as $renderable) {
             if ($renderable === $renderableToRemove) {
                 continue;
@@ -176,6 +192,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
      * Register this element at the parent form, if there is a connection to the parent form.
      *
      * @internal
+     *
      * @return void
      */
     public function registerInFormIfPossible()
@@ -192,6 +209,7 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
      * This just passes the event down to all child renderables of this composite renderable.
      *
      * @return void
+     *
      * @internal
      */
     public function onRemoveFromParentRenderable()

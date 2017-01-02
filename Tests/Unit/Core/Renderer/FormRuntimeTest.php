@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Runtime;
 
 /*
@@ -14,10 +15,10 @@ namespace Neos\Form\Tests\Unit\Core\Runtime;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
 
-require_once(__DIR__ . '/Fixture/DummyFinisher.php');
+require_once __DIR__.'/Fixture/DummyFinisher.php';
 
 /**
- * Test for Form Runtime
+ * Test for Form Runtime.
  *
  * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
  */
@@ -200,6 +201,7 @@ class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @param FormDefinition $formDefinition
+     *
      * @return \Neos\Form\Core\Runtime\FormRuntime
      */
     protected function createFormRuntime(FormDefinition $formDefinition)

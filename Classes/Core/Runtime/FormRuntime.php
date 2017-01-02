@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Runtime;
 
 /*
@@ -57,24 +58,28 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 {
     /**
      * @var \Neos\Form\Core\Model\FormDefinition
+     *
      * @internal
      */
     protected $formDefinition;
 
     /**
      * @var \Neos\Flow\Mvc\ActionRequest
+     *
      * @internal
      */
     protected $request;
 
     /**
      * @var \Neos\Flow\Http\Response
+     *
      * @internal
      */
     protected $response;
 
     /**
      * @var \Neos\Form\Core\Runtime\FormState
+     *
      * @internal
      */
     protected $formState;
@@ -88,22 +93,26 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * instead of explicitely checking for NULL.
      *
      * @var \Neos\Form\Core\Model\Page
+     *
      * @internal
      */
     protected $currentPage = null;
 
     /**
      * Reference to the page which has been shown on the last request (i.e.
-     * we have to handle the submitted data from lastDisplayedPage)
+     * we have to handle the submitted data from lastDisplayedPage).
      *
      * @var \Neos\Form\Core\Model\Page
+     *
      * @internal
      */
     protected $lastDisplayedPage = null;
 
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Security\Cryptography\HashService
+     *
      * @internal
      */
     protected $hashService;
@@ -112,16 +121,20 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * Workaround...
      *
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Mvc\FlashMessageContainer
+     *
      * @internal
      */
     protected $flashMessageContainer;
 
     /**
      * @param \Neos\Form\Core\Model\FormDefinition $formDefinition
-     * @param \Neos\Flow\Mvc\ActionRequest $request
-     * @param \Neos\Flow\Http\Response $response
+     * @param \Neos\Flow\Mvc\ActionRequest         $request
+     * @param \Neos\Flow\Http\Response             $response
+     *
      * @throws \Neos\Form\Exception\IdentifierNotValidException
+     *
      * @internal
      */
     public function __construct(\Neos\Form\Core\Model\FormDefinition $formDefinition, \Neos\Flow\Mvc\ActionRequest $request, \Neos\Flow\Http\Response $response)
@@ -131,7 +144,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
         $pluginArguments = $rootRequest->getPluginArguments();
         $this->request = new ActionRequest($request);
         $formIdentifier = $this->formDefinition->getIdentifier();
-        $this->request->setArgumentNamespace('--' . $formIdentifier);
+        $this->request->setArgumentNamespace('--'.$formIdentifier);
         if (isset($pluginArguments[$formIdentifier])) {
             $this->request->setArguments($pluginArguments[$formIdentifier]);
         }
@@ -141,6 +154,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return void
+     *
      * @internal
      */
     public function initializeObject()
@@ -155,6 +169,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return void
+     *
      * @internal
      */
     protected function initializeFormStateFromRequest()
@@ -170,18 +185,20 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return void
+     *
      * @internal
      */
     protected function initializeCurrentPageFromRequest()
     {
         if (!$this->formState->isFormSubmitted()) {
             $this->currentPage = $this->formDefinition->getPageByIndex(0);
+
             return;
         }
         $this->lastDisplayedPage = $this->formDefinition->getPageByIndex($this->formState->getLastDisplayedPageIndex());
 
         // We know now that lastDisplayedPage is filled
-        $currentPageIndex = (integer)$this->request->getInternalArgument('__currentPage');
+        $currentPageIndex = (int) $this->request->getInternalArgument('__currentPage');
         if ($currentPageIndex > $this->lastDisplayedPage->getIndex() + 1) {
             // We only allow jumps to following pages
             $currentPageIndex = $this->lastDisplayedPage->getIndex() + 1;
@@ -197,27 +214,28 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Returns TRUE if the last page of the form has been submitted, otherwise FALSE
+     * Returns TRUE if the last page of the form has been submitted, otherwise FALSE.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isAfterLastPage()
     {
-        return ($this->currentPage === null);
+        return $this->currentPage === null;
     }
 
     /**
-     * Returns TRUE if no previous page is stored in the FormState, otherwise FALSE
+     * Returns TRUE if no previous page is stored in the FormState, otherwise FALSE.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isFirstRequest()
     {
-        return ($this->lastDisplayedPage === null);
+        return $this->lastDisplayedPage === null;
     }
 
     /**
      * @return void
+     *
      * @internal
      */
     protected function processSubmittedFormValues()
@@ -233,7 +251,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     /**
      * returns TRUE if the user went back to any previous step in the form.
      *
-     * @return boolean
+     * @return bool
      */
     protected function userWentBackToPreviousStep()
     {
@@ -242,7 +260,9 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @param \Neos\Form\Core\Model\Page $page
+     *
      * @return \Neos\Error\Messages\Result
+     *
      * @internal
      */
     protected function mapAndValidatePage(\Neos\Form\Core\Model\Page $page)
@@ -250,10 +270,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
         $result = new \Neos\Error\Messages\Result();
         $requestArguments = $this->request->getArguments();
 
-        $propertyPathsForWhichPropertyMappingShouldHappen = array();
+        $propertyPathsForWhichPropertyMappingShouldHappen = [];
         $registerPropertyPaths = function ($propertyPath) use (&$propertyPathsForWhichPropertyMappingShouldHappen) {
             $propertyPathParts = explode('.', $propertyPath);
-            $accumulatedPropertyPathParts = array();
+            $accumulatedPropertyPathParts = [];
             foreach ($propertyPathParts as $propertyPathPart) {
                 $accumulatedPropertyPathParts[] = $propertyPathPart;
                 $temporaryPropertyPath = implode('.', $accumulatedPropertyPathParts);
@@ -282,7 +302,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
                 try {
                     $value = $processingRule->process($value);
                 } catch (\Neos\Flow\Property\Exception $exception) {
-                    throw new \Neos\Form\Exception\PropertyMappingException('Failed to process FormValue at "' . $propertyPath . '" from "' . gettype($value) . '" to "' . $processingRule->getDataType() . '"', 1355218921, $exception);
+                    throw new \Neos\Form\Exception\PropertyMappingException('Failed to process FormValue at "'.$propertyPath.'" from "'.gettype($value).'" to "'.$processingRule->getDataType().'"', 1355218921, $exception);
                 }
                 $result->forProperty($propertyPath)->merge($processingRule->getProcessingMessages());
                 $this->formState->setFormValue($propertyPath, $value);
@@ -298,8 +318,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * This is typically not needed in production code, but it is very helpful when displaying
      * some kind of "preview" of the form.
      *
-     * @param integer $pageIndex
+     * @param int $pageIndex
+     *
      * @return void
+     *
      * @api
      */
     public function overrideCurrentPage($pageIndex)
@@ -310,14 +332,17 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     /**
      * Render this form.
      *
-     * @return string rendered form
-     * @api
      * @throws \Neos\Form\Exception\RenderingException
+     *
+     * @return string rendered form
+     *
+     * @api
      */
     public function render()
     {
         if ($this->isAfterLastPage()) {
             $this->invokeFinishers();
+
             return $this->response->getContent();
         }
 
@@ -336,13 +361,15 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
         $renderer->setControllerContext($controllerContext);
 
         $renderer->setFormRuntime($this);
+
         return $renderer->renderRenderable($this);
     }
 
     /**
-     * Executes all finishers of this form
+     * Executes all finishers of this form.
      *
      * @return void
+     *
      * @internal
      */
     protected function invokeFinishers()
@@ -358,6 +385,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return string The identifier of underlying form
+     *
      * @api
      */
     public function getIdentifier()
@@ -372,6 +400,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * the user to another page.
      *
      * @return \Neos\Flow\Mvc\ActionRequest the request this object is bound to
+     *
      * @api
      */
     public function getRequest()
@@ -386,6 +415,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * headers or output content.
      *
      * @return \Neos\Flow\Http\Response the response this object is bound to
+     *
      * @api
      */
     public function getResponse()
@@ -394,9 +424,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Returns the currently selected page
+     * Returns the currently selected page.
      *
      * @return \Neos\Form\Core\Model\Page
+     *
      * @api
      */
     public function getCurrentPage()
@@ -405,9 +436,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Returns the previous page of the currently selected one or NULL if there is no previous page
+     * Returns the previous page of the currently selected one or NULL if there is no previous page.
      *
      * @return \Neos\Form\Core\Model\Page
+     *
      * @api
      */
     public function getPreviousPage()
@@ -419,9 +451,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Returns the next page of the currently selected one or NULL if there is no next page
+     * Returns the next page of the currently selected one or NULL if there is no next page.
      *
      * @return \Neos\Form\Core\Model\Page
+     *
      * @api
      */
     public function getNextPage()
@@ -434,6 +467,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return \Neos\Flow\Mvc\Controller\ControllerContext
+     *
      * @internal
      */
     protected function getControllerContext()
@@ -444,7 +478,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
         return new \Neos\Flow\Mvc\Controller\ControllerContext(
             $this->request,
             $this->response,
-            new \Neos\Flow\Mvc\Controller\Arguments(array()),
+            new \Neos\Flow\Mvc\Controller\Arguments([]),
             $uriBuilder,
             $this->flashMessageContainer
         );
@@ -456,6 +490,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * the particular element.
      *
      * @return string
+     *
      * @api
      */
     public function getType()
@@ -465,19 +500,23 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @param string $identifier
+     *
      * @return mixed
+     *
      * @api
      */
     public function offsetExists($identifier)
     {
-        return ($this->getElementValue($identifier) !== null);
+        return $this->getElementValue($identifier) !== null;
     }
 
     /**
-     * Returns the value of the specified element
+     * Returns the value of the specified element.
      *
      * @param string $identifier
+     *
      * @return mixed
+     *
      * @api
      */
     protected function getElementValue($identifier)
@@ -486,12 +525,15 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
         if ($formValue !== null) {
             return $formValue;
         }
+
         return $this->formDefinition->getElementDefaultValueByIdentifier($identifier);
     }
 
     /**
      * @param string $identifier
+     *
      * @return mixed
+     *
      * @api
      */
     public function offsetGet($identifier)
@@ -501,8 +543,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @param string $identifier
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
+     *
      * @api
      */
     public function offsetSet($identifier, $value)
@@ -512,7 +556,9 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @api
+     *
      * @param string $identifier
+     *
      * @return void
      */
     public function offsetUnset($identifier)
@@ -522,6 +568,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return array<Neos\Form\Core\Model\Page> The Form's pages in the correct order
+     *
      * @api
      */
     public function getPages()
@@ -531,6 +578,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * @return \Neos\Form\Core\Runtime\FormState
+     *
      * @internal
      */
     public function getFormState()
@@ -539,9 +587,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Get all rendering options
+     * Get all rendering options.
      *
      * @return array associative array of rendering options
+     *
      * @api
      */
     public function getRenderingOptions()
@@ -551,9 +600,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
 
     /**
      * Get the renderer class name to be used to display this renderable;
-     * must implement RendererInterface
+     * must implement RendererInterface.
      *
      * @return string the renderer class name
+     *
      * @api
      */
     public function getRendererClassName()
@@ -562,9 +612,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Get the label which shall be displayed next to the form element
+     * Get the label which shall be displayed next to the form element.
      *
      * @return string
+     *
      * @api
      */
     public function getLabel()
@@ -573,9 +624,10 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
     }
 
     /**
-     * Get the underlying form definition from the runtime
+     * Get the underlying form definition from the runtime.
      *
      * @return \Neos\Form\Core\Model\FormDefinition
+     *
      * @api
      */
     public function getFormDefinition()
@@ -589,7 +641,9 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * is outputted to the browser.
      *
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     *
      * @return void
+     *
      * @api
      */
     public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime)

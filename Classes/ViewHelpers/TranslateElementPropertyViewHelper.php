@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers;
 
 /*
@@ -11,15 +12,14 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
-use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Flow\ResourceManagement\Exception as ResourceException;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Form\Core\Model\FormElementInterface;
 
 /**
- * ViewHelper to translate the property of a given form element based on its rendering options
+ * ViewHelper to translate the property of a given form element based on its rendering options.
  *
  * = Examples =
  *
@@ -29,12 +29,12 @@ use Neos\Form\Core\Model\FormElementInterface;
  * <output>
  *  the translated placeholder, or the actual "placeholder" property if no translation was found
  * </output>
- *
  */
 class TranslateElementPropertyViewHelper extends AbstractViewHelper
 {
     /**
      * @Flow\Inject
+     *
      * @var Translator
      */
     protected $translator;
@@ -45,8 +45,9 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
     protected $escapeChildren = false;
 
     /**
-     * @param string $property
+     * @param string               $property
      * @param FormElementInterface $element
+     *
      * @return string the rendered form head
      */
     public function render($property, FormElementInterface $element = null)
@@ -57,7 +58,7 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
         if ($property === 'label') {
             $defaultValue = $element->getLabel();
         } else {
-            $defaultValue = isset($element->getProperties()[$property]) ? (string)$element->getProperties()[$property] : '';
+            $defaultValue = isset($element->getProperties()[$property]) ? (string) $element->getProperties()[$property] : '';
         }
         $renderingOptions = $element->getRenderingOptions();
         if (!isset($renderingOptions['translationPackage'])) {
@@ -69,6 +70,7 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
         } catch (ResourceException $exception) {
             return $defaultValue;
         }
+
         return $translation === null ? $defaultValue : $translation;
     }
 }

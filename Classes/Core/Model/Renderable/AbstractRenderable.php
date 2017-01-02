@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model\Renderable;
 
 /*
@@ -30,32 +31,32 @@ abstract class AbstractRenderable implements RenderableInterface
     protected $type;
 
     /**
-     * The identifier of this renderable
+     * The identifier of this renderable.
      *
      * @var string
      */
     protected $identifier;
 
     /**
-     * The parent renderable
+     * The parent renderable.
      *
      * @var CompositeRenderableInterface
      */
     protected $parentRenderable;
 
     /**
-     * The label of this renderable
+     * The label of this renderable.
      *
      * @var string
      */
     protected $label = '';
 
     /**
-     * associative array of rendering options
+     * associative array of rendering options.
      *
      * @var array
      */
-    protected $renderingOptions = array();
+    protected $renderingOptions = [];
 
     /**
      * Renderer class name to be used for this renderable.
@@ -71,12 +72,12 @@ abstract class AbstractRenderable implements RenderableInterface
     /**
      * The position of this renderable inside the parent renderable.
      *
-     * @var integer
+     * @var int
      */
     protected $index = 0;
 
     /**
-     * Get the type of the renderable
+     * Get the type of the renderable.
      *
      * @return string
      */
@@ -86,7 +87,7 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get the identifier of the element
+     * Get the identifier of the element.
      *
      * @return string
      */
@@ -101,7 +102,9 @@ abstract class AbstractRenderable implements RenderableInterface
      * the passed $options array.
      *
      * @param array $options
+     *
      * @return void
+     *
      * @internal
      */
     public function setOptions(array $options)
@@ -132,42 +135,46 @@ abstract class AbstractRenderable implements RenderableInterface
 
         if (isset($options['validators'])) {
             foreach ($options['validators'] as $validatorConfiguration) {
-                $this->createValidator($validatorConfiguration['identifier'], isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array());
+                $this->createValidator($validatorConfiguration['identifier'], isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : []);
             }
         }
 
-        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions', 'validators'));
+        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, ['label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions', 'validators']);
     }
 
     /**
-     * Create a validator for the element
+     * Create a validator for the element.
      *
      * @param string $validatorIdentifier
-     * @param array $options
-     * @return mixed
+     * @param array  $options
+     *
      * @throws \Neos\Form\Exception\ValidatorPresetNotFoundException
+     *
+     * @return mixed
      */
-    public function createValidator($validatorIdentifier, array $options = array())
+    public function createValidator($validatorIdentifier, array $options = [])
     {
         $validatorPresets = $this->getRootForm()->getValidatorPresets();
         if (isset($validatorPresets[$validatorIdentifier]) && is_array($validatorPresets[$validatorIdentifier]) && isset($validatorPresets[$validatorIdentifier]['implementationClassName'])) {
             $implementationClassName = $validatorPresets[$validatorIdentifier]['implementationClassName'];
-            $defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : array();
+            $defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : [];
 
             $options = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
             $validator = new $implementationClassName($options);
             $this->addValidator($validator);
+
             return $validator;
         } else {
-            throw new \Neos\Form\Exception\ValidatorPresetNotFoundException('The validator preset identified by "' . $validatorIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328710202);
+            throw new \Neos\Form\Exception\ValidatorPresetNotFoundException('The validator preset identified by "'.$validatorIdentifier.'" could not be found, or the implementationClassName was not specified.', 1328710202);
         }
     }
 
     /**
-     * Add a validator to the element
+     * Add a validator to the element.
      *
      * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     *
      * @return void
      */
     public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
@@ -177,20 +184,22 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get all validators on the element
+     * Get all validators on the element.
      *
      * @return \SplObjectStorage
      */
     public function getValidators()
     {
         $formDefinition = $this->getRootForm();
+
         return $formDefinition->getProcessingRule($this->getIdentifier())->getValidators();
     }
 
     /**
-     * Set the datatype
+     * Set the datatype.
      *
      * @param string $dataType
+     *
      * @return void
      */
     public function setDataType($dataType)
@@ -200,10 +209,12 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Set the renderer class name
+     * Set the renderer class name.
      *
      * @param string $rendererClassName
+     *
      * @api
+     *
      * @return void
      */
     public function setRendererClassName($rendererClassName)
@@ -212,7 +223,7 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get the classname of the renderer
+     * Get the classname of the renderer.
      *
      * @return string
      */
@@ -222,7 +233,7 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get all rendering options
+     * Get all rendering options.
      *
      * @return array
      */
@@ -235,8 +246,10 @@ abstract class AbstractRenderable implements RenderableInterface
      * Set the rendering option $key to $value.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @api
+     *
      * @return mixed
      */
     public function setRenderingOption($key, $value)
@@ -245,7 +258,7 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get the parent renderable
+     * Get the parent renderable.
      *
      * @return CompositeRenderableInterface
      * @return void
@@ -256,9 +269,10 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Set the parent renderable
+     * Set the parent renderable.
      *
      * @param CompositeRenderableInterface $parentRenderable
+     *
      * @return void
      */
     public function setParentRenderable(CompositeRenderableInterface $parentRenderable)
@@ -268,10 +282,12 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get the root form this element belongs to
+     * Get the root form this element belongs to.
      *
      * @internal
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException
+     *
      * @return \Neos\Form\Core\Model\FormDefinition
      */
     public function getRootForm()
@@ -291,6 +307,7 @@ abstract class AbstractRenderable implements RenderableInterface
      * Register this element at the parent form, if there is a connection to the parent form.
      *
      * @internal
+     *
      * @return void
      */
     public function registerInFormIfPossible()
@@ -303,7 +320,7 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Triggered when the renderable is removed from it's parent
+     * Triggered when the renderable is removed from it's parent.
      *
      * @return void
      */
@@ -318,9 +335,9 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get the index of the renderable
+     * Get the index of the renderable.
      *
-     * @return integer
+     * @return int
      */
     public function getIndex()
     {
@@ -328,9 +345,10 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Set the index of the renderable
+     * Set the index of the renderable.
      *
-     * @param integer $index
+     * @param int $index
+     *
      * @return void
      */
     public function setIndex($index)
@@ -339,7 +357,7 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Get the label of the renderable
+     * Get the label of the renderable.
      *
      * @return string
      */
@@ -349,10 +367,12 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Set the label which shall be displayed next to the form element
+     * Set the label which shall be displayed next to the form element.
      *
      * @param string $label
+     *
      * @return void
+     *
      * @api
      */
     public function setLabel($label)
@@ -361,9 +381,10 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
-     * Override this method in your custom Renderable if needed
+     * Override this method in your custom Renderable if needed.
      *
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     *
      * @return void
      */
     public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime)
@@ -377,6 +398,7 @@ abstract class AbstractRenderable implements RenderableInterface
      * Override this method in your custom Renderable if needed.
      *
      * @return void
+     *
      * @api
      */
     public function onBuildingFinished()

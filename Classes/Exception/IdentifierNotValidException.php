@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Exception;
 
 /*
@@ -13,7 +14,7 @@ namespace Neos\Form\Exception;
 
 /**
  * This exception is thrown if the "identifier" for a Form, a Page or a Form Element
- * is invalid (i.e. empty or not a string)
+ * is invalid (i.e. empty or not a string).
  *
  * @api
  */

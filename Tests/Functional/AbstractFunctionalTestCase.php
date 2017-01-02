@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional;
 
 /*
@@ -13,7 +14,7 @@ namespace Neos\Form\Tests\Functional;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
- * Testcase for Simple Form
+ * Testcase for Simple Form.
  *
  * @group large
  */
@@ -25,7 +26,7 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
     protected $browser;
 
     /**
-     * Initializer
+     * Initializer.
      */
     public function setUp()
     {
@@ -33,21 +34,22 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
 
         $route = new \Neos\Flow\Mvc\Routing\Route();
         $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
-        $route->setDefaults(array(
-            '@package' => 'Neos.Form',
+        $route->setDefaults([
+            '@package'    => 'Neos.Form',
             '@subpackage' => 'Tests\Functional\Fixtures',
             '@controller' => 'Form',
-            '@action' => 'index',
-            '@format' => 'html'
-        ));
+            '@action'     => 'index',
+            '@format'     => 'html',
+        ]);
         $route->setAppendExceedingArguments(true);
         $this->router->addRoute($route);
     }
 
     /**
-     * Go to the next form page
+     * Go to the next form page.
      *
      * @param \Symfony\Component\DomCrawler\Form $form
+     *
      * @return \Neos\Flow\Http\Response
      */
     protected function gotoNextFormPage(\Symfony\Component\DomCrawler\Form $form)
@@ -60,9 +62,10 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
     }
 
     /**
-     * Go to the previous form page
+     * Go to the previous form page.
      *
      * @param \Symfony\Component\DomCrawler\Form $form
+     *
      * @return \Neos\Flow\Http\Response
      */
     protected function gotoPreviousFormPage(\Symfony\Component\DomCrawler\Form $form)

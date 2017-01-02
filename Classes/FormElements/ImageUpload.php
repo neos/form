@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\FormElements;
 
 /*
@@ -11,13 +12,12 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMappingConfiguration;
 use Neos\Flow\Property\TypeConverter\PersistentObjectConverter;
 use Neos\Media\TypeConverter\AssetInterfaceConverter;
 
 /**
- * An image upload form element
+ * An image upload form element.
  */
 class ImageUpload extends \Neos\Form\Core\Model\AbstractFormElement
 {
@@ -34,7 +34,7 @@ class ImageUpload extends \Neos\Form\Core\Model\AbstractFormElement
         $propertyMappingConfiguration->allowProperties('resource');
 
         $this->setDataType(\Neos\Media\Domain\Model\Image::class);
-        $imageTypeValidator = new \Neos\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
+        $imageTypeValidator = new \Neos\Media\Validator\ImageTypeValidator(['allowedTypes' => $this->properties['allowedTypes']]);
         $this->addValidator($imageTypeValidator);
     }
 }

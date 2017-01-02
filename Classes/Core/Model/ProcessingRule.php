@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -21,7 +22,7 @@ use Neos\Flow\Annotations as Flow;
 class ProcessingRule
 {
     /**
-     * The target data type the data should be converted to
+     * The target data type the data should be converted to.
      *
      * @var string
      */
@@ -29,12 +30,14 @@ class ProcessingRule
 
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Property\PropertyMappingConfiguration
      */
     protected $propertyMappingConfiguration;
 
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Validation\Validator\ConjunctionValidator
      */
     protected $validator;
@@ -46,13 +49,15 @@ class ProcessingRule
 
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Property\PropertyMapper
+     *
      * @internal
      */
     protected $propertyMapper;
 
     /**
-     * Constructs this processing rule
+     * Constructs this processing rule.
      */
     public function __construct()
     {
@@ -84,9 +89,10 @@ class ProcessingRule
     }
 
     /**
-     * Returns the child validators of the ConjunctionValidator that is bound to this processing rule
+     * Returns the child validators of the ConjunctionValidator that is bound to this processing rule.
      *
      * @return \SplObjectStorage<\Neos\Flow\Validation\Validator\ValidatorInterface>
+     *
      * @internal
      */
     public function getValidators()
@@ -96,6 +102,7 @@ class ProcessingRule
 
     /**
      * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     *
      * @return void
      */
     public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
@@ -105,6 +112,7 @@ class ProcessingRule
 
     /**
      * @param mixed $value
+     *
      * @return mixed
      */
     public function process($value)
@@ -120,6 +128,7 @@ class ProcessingRule
         $messages->merge($validationResult);
 
         $this->processingMessages->merge($messages);
+
         return $value;
     }
 

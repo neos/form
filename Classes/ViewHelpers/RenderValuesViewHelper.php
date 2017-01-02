@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers;
 
 /*
@@ -12,7 +13,6 @@ namespace Neos\Form\ViewHelpers;
  */
 
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\Flow\Annotations as Flow;
 use Neos\Form\Core\Model\FormElementInterface;
 use Neos\Form\Core\Model\Renderable\CompositeRenderableInterface;
 use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
@@ -20,18 +20,19 @@ use Neos\Form\Core\Renderer\RendererInterface;
 use Neos\Media\Domain\Model\Image;
 
 /**
- * Renders the values of a form
+ * Renders the values of a form.
  */
 class RenderValuesViewHelper extends AbstractViewHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
     /**
      * @param RootRenderableInterface $renderable
-     * @param string $as
+     * @param string                  $as
+     *
      * @return string the rendered form values
      */
     public function render(RootRenderableInterface $renderable, $as = 'formValue')
@@ -54,23 +55,25 @@ class RenderValuesViewHelper extends AbstractViewHelper
             $value = $formState->getFormValue($element->getIdentifier());
 
             $formValue = [
-                'element' => $element,
-                'value' => $value,
+                'element'        => $element,
+                'value'          => $value,
                 'processedValue' => $this->processElementValue($element, $value),
-                'isMultiValue' => is_array($value) || $value instanceof \Iterator
+                'isMultiValue'   => is_array($value) || $value instanceof \Iterator,
             ];
             $this->templateVariableContainer->add($as, $formValue);
             $output .= $this->renderChildren();
             $this->templateVariableContainer->remove($as);
         }
+
         return $output;
     }
 
     /**
-     * Converts the given value to a simple type (string or array) considering the underlying FormElement definition
+     * Converts the given value to a simple type (string or array) considering the underlying FormElement definition.
      *
      * @param FormElementInterface $element
-     * @param mixed $value
+     * @param mixed                $value
+     *
      * @return string
      */
     protected function processElementValue(FormElementInterface $element, $value)
@@ -86,16 +89,18 @@ class RenderValuesViewHelper extends AbstractViewHelper
         if (is_object($value)) {
             return $this->processObject($element, $value);
         }
+
         return $value;
     }
 
     /**
-     * Replaces the given values (=keys) with the corresponding elements in $options
+     * Replaces the given values (=keys) with the corresponding elements in $options.
      *
      * @see mapValueToOption()
      *
      * @param array $value
      * @param array $options
+     *
      * @return string
      */
     protected function mapValuesToOptions(array $value, array $options)
@@ -104,15 +109,17 @@ class RenderValuesViewHelper extends AbstractViewHelper
         foreach ($value as $key) {
             $result[] = $this->mapValueToOption($key, $options);
         }
+
         return $result;
     }
 
     /**
      * Replaces the given value (=key) with the corresponding element in $options
-     * If the key does not exist in $options, it is returned without modification
+     * If the key does not exist in $options, it is returned without modification.
      *
      * @param mixed $value
      * @param array $options
+     *
      * @return string
      */
     protected function mapValueToOption($value, array $options)
@@ -121,10 +128,11 @@ class RenderValuesViewHelper extends AbstractViewHelper
     }
 
     /**
-     * Converts the given $object to a string representation considering the $element FormElement definition
+     * Converts the given $object to a string representation considering the $element FormElement definition.
      *
      * @param FormElementInterface $element
-     * @param object $object
+     * @param object               $object
+     *
      * @return string
      */
     protected function processObject(FormElementInterface $element, $object)
@@ -139,14 +147,16 @@ class RenderValuesViewHelper extends AbstractViewHelper
             } else {
                 $dateFormat = \DateTime::W3C;
             }
+
             return $object->format($dateFormat);
         }
         if ($object instanceof Image) {
             return sprintf('%s Image (%d x %d)', $object->getFileExtension(), $object->getWidth(), $object->getHeight());
         }
         if (method_exists($object, '__toString')) {
-            return (string)$object;
+            return (string) $object;
         }
-        return 'Object [' . get_class($object) . ']';
+
+        return 'Object ['.get_class($object).']';
     }
 }

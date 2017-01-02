@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -10,8 +11,6 @@ namespace Neos\Form\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
-use Neos\Flow\Annotations as Flow;
 
 /**
  * A base form element, which is the starting point for creating custom (PHP-based)
@@ -36,14 +35,16 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
-     * Constructor. Needs this FormElement's identifier and the FormElement type
+     * Constructor. Needs this FormElement's identifier and the FormElement type.
      *
      * @param string $identifier The FormElement's identifier
-     * @param string $type The Form Element Type
+     * @param string $type       The Form Element Type
+     *
      * @api
+     *
      * @throws \Neos\Form\Exception\IdentifierNotValidException
      */
     public function __construct($identifier, $type)
@@ -56,7 +57,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     }
 
     /**
-     * Override this method in your custom FormElements if needed
+     * Override this method in your custom FormElements if needed.
      *
      * @return void
      */
@@ -65,7 +66,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     }
 
     /**
-     * Get the global unique identifier of the element
+     * Get the global unique identifier of the element.
      *
      * @return string
      */
@@ -74,24 +75,27 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
         $formDefinition = $this->getRootForm();
         $uniqueIdentifier = sprintf('%s-%s', $formDefinition->getIdentifier(), $this->identifier);
         $uniqueIdentifier = preg_replace('/[^a-zA-Z0-9-_]/', '_', $uniqueIdentifier);
+
         return lcfirst($uniqueIdentifier);
     }
 
     /**
-     * Get the default value of the element
+     * Get the default value of the element.
      *
      * @return mixed
      */
     public function getDefaultValue()
     {
         $formDefinition = $this->getRootForm();
+
         return $formDefinition->getElementDefaultValueByIdentifier($this->identifier);
     }
 
     /**
-     * Set the default value of the element
+     * Set the default value of the element.
      *
      * @param mixed $defaultValue
+     *
      * @return void
      */
     public function setDefaultValue($defaultValue)
@@ -101,9 +105,9 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     }
 
     /**
-     * Check if the element is required
+     * Check if the element is required.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRequired()
     {
@@ -112,14 +116,15 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Set a property of the element
+     * Set a property of the element.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function setProperty($key, $value)
     {
@@ -127,7 +132,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     }
 
     /**
-     * Get all properties
+     * Get all properties.
      *
      * @return array
      */
@@ -137,10 +142,11 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     }
 
     /**
-     * Override this method in your custom FormElements if needed
+     * Override this method in your custom FormElements if needed.
      *
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
-     * @param mixed $elementValue
+     * @param mixed                               $elementValue
+     *
      * @return void
      */
     public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Exception;
 
 /*
@@ -12,7 +13,7 @@ namespace Neos\Form\Exception;
  */
 
 /**
- * This exception is thrown if the form definition would get an inconsistent state, like:
+ * This exception is thrown if the form definition would get an inconsistent state, like:.
  *
  * - adding a page to two different forms
  *

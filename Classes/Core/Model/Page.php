@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -10,8 +11,6 @@ namespace Neos\Form\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
-use Neos\Flow\Annotations as Flow;
 
 /**
  * A Page, being part of a bigger FormDefinition. It contains numerous FormElements
@@ -30,11 +29,13 @@ use Neos\Flow\Annotations as Flow;
 class Page extends AbstractSection
 {
     /**
-     * Constructor. Needs this Page's identifier
+     * Constructor. Needs this Page's identifier.
      *
      * @param string $identifier The Page's identifier
-     * @param string $type The Page's type
+     * @param string $type       The Page's type
+     *
      * @throws \Neos\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
+     *
      * @api
      */
     public function __construct($identifier, $type = 'Neos.Form:Page')
@@ -43,11 +44,13 @@ class Page extends AbstractSection
     }
 
     /**
-     * Set the parent renderable
+     * Set the parent renderable.
      *
      * @param Renderable\CompositeRenderableInterface $parentRenderable
-     * @return void
+     *
      * @throws \Neos\Form\Exception
+     *
+     * @return void
      */
     public function setParentRenderable(Renderable\CompositeRenderableInterface $parentRenderable)
     {

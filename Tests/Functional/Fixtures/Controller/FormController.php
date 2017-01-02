@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional\Fixtures\Controller;
 
 /*
@@ -14,21 +15,21 @@ namespace Neos\Form\Tests\Functional\Fixtures\Controller;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * Controller for rendering a form defined in
+ * Controller for rendering a form defined in.
  */
 class FormController extends \Neos\Flow\Mvc\Controller\ActionController
 {
     /**
-     * render the form identified by $formFactoryClassName
+     * render the form identified by $formFactoryClassName.
      *
      * @param string $formFactoryClassName
      */
     public function indexAction($formFactoryClassName)
     {
-        $formFactoryClassName = 'Neos\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
+        $formFactoryClassName = 'Neos\Form\Tests\Functional\Fixtures\FormFactories\\'.$formFactoryClassName.'Factory';
         /* @var $formFactory \Neos\Form\Factory\FormFactoryInterface */
         $formFactory = new $formFactoryClassName();
-        $formDefinition = $formFactory->build(array(), 'default');
+        $formDefinition = $formFactory->build([], 'default');
 
         $formRuntime = $formDefinition->bind($this->request, $this->response);
 

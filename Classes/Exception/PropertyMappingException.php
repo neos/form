@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Exception;
 
 /*
@@ -14,7 +15,7 @@ namespace Neos\Form\Exception;
 /**
  * This Exception is thrown in the FormRuntime if the PropertyMapper throws
  * a \Neos\Flow\Property\Exception. It adds some more Information to
- * better understand why the PropertyMapper failed to map the properties
+ * better understand why the PropertyMapper failed to map the properties.
  *
  * @api
  */

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form;
 
 /*
@@ -12,7 +13,7 @@ namespace Neos\Form;
  */
 
 /**
- * A generic Form Exception
+ * A generic Form Exception.
  *
  * @api
  */

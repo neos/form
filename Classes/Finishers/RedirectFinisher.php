@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Finishers;
 
 /*
@@ -23,56 +24,59 @@ class RedirectFinisher extends AbstractFinisher
      * @var array
      */
     protected $defaultOptions = [
-        'package' => null,
+        'package'    => null,
         'controller' => null,
-        'action' => '',
-        'arguments' => [],
-        'uri' => '',
-        'delay' => 0,
-        'statusCode' => 303
+        'action'     => '',
+        'arguments'  => [],
+        'uri'        => '',
+        'delay'      => 0,
+        'statusCode' => 303,
     ];
 
     /**
-     * Executes this finisher
+     * Executes this finisher.
+     *
      * @see AbstractFinisher::execute()
      *
-     * @return void
      * @throws \Neos\Form\Exception\FinisherException
+     *
+     * @return void
      */
     public function executeInternal()
     {
         $formRuntime = $this->finisherContext->getFormRuntime();
         $request = $formRuntime->getRequest()->getMainRequest();
 
-        $delay = (integer)$this->parseOption('delay');
+        $delay = (int) $this->parseOption('delay');
         $statusCode = $this->parseOption('statusCode');
         $uri = trim($this->parseOption('uri'));
 
-        
         if ($uri === '') {
             $uri = $this->buildActionUri($request);
         }
 
         $uriParts = parse_url($uri);
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
-            $uri = $request->getHttpRequest()->getBaseUri() . $uri;
+            $uri = $request->getHttpRequest()->getBaseUri().$uri;
         }
 
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
 
         $response = $formRuntime->getResponse();
 
-        $response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
+        $response->setContent('<html><head><meta http-equiv="refresh" content="'.$delay.';url='.$escapedUri.'"/></head></html>');
         $response->setStatus($statusCode);
 
         if ($delay === 0) {
-            $response->setHeader('Location', (string)$uri);
+            $response->setHeader('Location', (string) $uri);
         }
     }
 
     /**
      * @param array $options configuration options in the format array('@action' => 'foo', '@controller' => 'bar', '@package' => 'baz')
+     *
      * @return void
+     *
      * @api
      */
     public function setOptions(array $options)
@@ -82,6 +86,7 @@ class RedirectFinisher extends AbstractFinisher
 
     /**
      * @param ActionRequest $request
+     *
      * @return string
      */
     protected function buildActionUri(ActionRequest $request)
@@ -100,6 +105,7 @@ class RedirectFinisher extends AbstractFinisher
         $uriBuilder->reset();
 
         $uri = $uriBuilder->uriFor($actionName, $arguments, $controllerName, $packageKey, $subpackageKey);
+
         return $uri;
     }
 }

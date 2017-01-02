@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
@@ -11,11 +12,9 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
-use Neos\Form\Core\Model\Page;
-
 /**
- * Test for AbstractFinisher
+ * Test for AbstractFinisher.
+ *
  * @covers \Neos\Form\Core\Model\AbstractFinisher<extended>
  * @covers \Neos\Form\Core\Model\FinisherContext<extended>
  * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
@@ -47,7 +46,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
         $finisherContext = $this->getFinisherContext();
         $finisher->execute($finisherContext);
 
-        $finisher->setOptions(array('foo' => 'bar'));
+        $finisher->setOptions(['foo' => 'bar']);
         $this->assertSame('bar', $finisher->_call('parseOption', 'foo'));
     }
 
@@ -61,53 +60,53 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
         $finisher->execute($finisherContext);
 
         $obj = new \stdClass();
-        $finisher->setOptions(array('foo' => 42, 'baz' => $obj));
+        $finisher->setOptions(['foo' => 42, 'baz' => $obj]);
         $this->assertSame(42, $finisher->_call('parseOption', 'foo'));
         $this->assertSame($obj, $finisher->_call('parseOption', 'baz'));
     }
 
     public function dataProviderForDefaultOptions()
     {
-        $defaultOptions = array(
-            'overridden1' => 'Overridden1Default',
-            'nullOption' => 'NullDefault',
+        $defaultOptions = [
+            'overridden1'       => 'Overridden1Default',
+            'nullOption'        => 'NullDefault',
             'emptyStringOption' => 'EmptyStringDefault',
-            'nonExisting' => 'NonExistingDefault'
-        );
+            'nonExisting'       => 'NonExistingDefault',
+        ];
 
-        $options = array(
-            'overridden1' => 'MyString',
-            'nullOption' => null,
-            'emptyStringOption' => '',
-            'someOptionWithoutDefault' => ''
-        );
+        $options = [
+            'overridden1'              => 'MyString',
+            'nullOption'               => null,
+            'emptyStringOption'        => '',
+            'someOptionWithoutDefault' => '',
+        ];
 
-        return array(
-            'Empty String is regarded as non-set value' => array(
+        return [
+            'Empty String is regarded as non-set value' => [
                 'defaultOptions' => $defaultOptions,
-                'options' => $options,
-                'optionKey' => 'emptyStringOption',
-                'expected' => 'EmptyStringDefault'
-            ),
-            'null is regarded as non-set value' => array(
+                'options'        => $options,
+                'optionKey'      => 'emptyStringOption',
+                'expected'       => 'EmptyStringDefault',
+            ],
+            'null is regarded as non-set value' => [
                 'defaultOptions' => $defaultOptions,
-                'options' => $options,
-                'optionKey' => 'nullOption',
-                'expected' => 'NullDefault'
-            ),
-            'non-existing key is regarded as non-set value' => array(
+                'options'        => $options,
+                'optionKey'      => 'nullOption',
+                'expected'       => 'NullDefault',
+            ],
+            'non-existing key is regarded as non-set value' => [
                 'defaultOptions' => $defaultOptions,
-                'options' => $options,
-                'optionKey' => 'nonExisting',
-                'expected' => 'NonExistingDefault'
-            ),
-            'empty string is unified to NULL if no default value exists' => array(
+                'options'        => $options,
+                'optionKey'      => 'nonExisting',
+                'expected'       => 'NonExistingDefault',
+            ],
+            'empty string is unified to NULL if no default value exists' => [
                 'defaultOptions' => $defaultOptions,
-                'options' => $options,
-                'optionKey' => 'someOptionWithoutDefault',
-                'expected' => null
-            )
-        );
+                'options'        => $options,
+                'optionKey'      => 'someOptionWithoutDefault',
+                'expected'       => null,
+            ],
+        ];
     }
 
     /**
@@ -127,23 +126,23 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
 
     public function dataProviderForPlaceholderReplacement()
     {
-        $formValues = array(
-            'foo' => 'My Value',
-            'bar.baz' => 'Trst'
-        );
+        $formValues = [
+            'foo'     => 'My Value',
+            'bar.baz' => 'Trst',
+        ];
 
-        return array(
-            'Simple placeholder' => array(
-                'formValues' => $formValues,
+        return [
+            'Simple placeholder' => [
+                'formValues'  => $formValues,
                 'optionValue' => 'test {foo} baz',
-                'expected' => 'test My Value baz'
-            ),
-            'Property Path' => array(
-                'formValues' => $formValues,
+                'expected'    => 'test My Value baz',
+            ],
+            'Property Path' => [
+                'formValues'  => $formValues,
                 'optionValue' => 'test {bar.baz} baz',
-                'expected' => 'test Trst baz'
-            ),
-        );
+                'expected'    => 'test Trst baz',
+            ],
+        ];
     }
 
     /**
@@ -162,7 +161,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
         $this->formRuntime->_set('formState', $formState);
         $finisher->execute($finisherContext);
 
-        $finisher->setOptions(array('key1' => $optionValue));
+        $finisher->setOptions(['key1' => $optionValue]);
         $this->assertSame($expected, $finisher->_call('parseOption', 'key1'));
     }
 
@@ -182,7 +181,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
         $this->formRuntime->_set('formState', $formState);
         $finisher->execute($finisherContext);
 
-        $finisher->_set('defaultOptions', array('key1' => $optionValue));
+        $finisher->_set('defaultOptions', ['key1' => $optionValue]);
         $this->assertSame($expected, $finisher->_call('parseOption', 'key1'));
     }
 
@@ -202,7 +201,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
      */
     protected function getAbstractFinisher()
     {
-        return $this->getAccessibleMock(\Neos\Form\Core\Model\AbstractFinisher::class, array('executeInternal'));
+        return $this->getAccessibleMock(\Neos\Form\Core\Model\AbstractFinisher::class, ['executeInternal']);
     }
 
     /**
@@ -210,7 +209,8 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, array('dummy'), array(), '', false);
+        $this->formRuntime = $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, ['dummy'], [], '', false);
+
         return new \Neos\Form\Core\Model\FinisherContext($this->formRuntime);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Factory;
 
 /*
@@ -23,8 +24,9 @@ class ArrayFormFactory extends AbstractFormFactory
     /**
      * Build a form definition, depending on some configuration and a "Preset Name".
      *
-     * @param array $configuration
+     * @param array  $configuration
      * @param string $presetName
+     *
      * @return \Neos\Form\Core\Model\FormDefinition
      */
     public function build(array $configuration, $presetName)
@@ -50,10 +52,12 @@ class ArrayFormFactory extends AbstractFormFactory
     }
 
     /**
-     * @param array $nestedRenderableConfiguration
+     * @param array                                                         $nestedRenderableConfiguration
      * @param \Neos\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable
-     * @return mixed
+     *
      * @throws \Neos\Form\Exception\IdentifierNotValidException
+     *
+     * @return mixed
      */
     protected function addNestedRenderable(array $nestedRenderableConfiguration, \Neos\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable)
     {
@@ -69,7 +73,7 @@ class ArrayFormFactory extends AbstractFormFactory
         if (isset($nestedRenderableConfiguration['renderables']) && is_array($nestedRenderableConfiguration['renderables'])) {
             $childRenderables = $nestedRenderableConfiguration['renderables'];
         } else {
-            $childRenderables = array();
+            $childRenderables = [];
         }
 
         unset($nestedRenderableConfiguration['type']);
@@ -88,13 +92,14 @@ class ArrayFormFactory extends AbstractFormFactory
 
     /**
      * @param array $input
+     *
      * @return array
      */
     protected function convertJsonArrayToAssociativeArray(array $input)
     {
-        $output = array();
+        $output = [];
         foreach ($input as $key => $value) {
-            if (is_integer($key) && is_array($value) && isset($value['_key']) && isset($value['_value'])) {
+            if (is_int($key) && is_array($value) && isset($value['_key']) && isset($value['_value'])) {
                 $key = $value['_key'];
                 $value = $value['_value'];
             }
@@ -104,6 +109,7 @@ class ArrayFormFactory extends AbstractFormFactory
                 $output[$key] = $value;
             }
         }
+
         return $output;
     }
 }

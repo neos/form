@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Factory;
 
 /*
@@ -10,8 +11,6 @@ namespace Neos\Form\Tests\Unit\Factory;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
-use Neos\Form\Utility\SupertypeResolver;
 
 /**
  * @covers \Neos\Form\Factory\ArrayFormFactory<extended>
@@ -25,9 +24,9 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $factory = $this->getArrayFormFactory();
 
-        $configuration = array(
-            'identifier' => 'myFormIdentifier'
-        );
+        $configuration = [
+            'identifier' => 'myFormIdentifier',
+        ];
         $form = $factory->build($configuration, 'default');
         $this->assertSame('myFormIdentifier', $form->getIdentifier());
     }
@@ -39,35 +38,35 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $factory = $this->getArrayFormFactory();
 
-        $configuration = array(
-            'identifier' => 'myFormIdentifier',
-            'renderables' => array(
-                array(
-                    'identifier' => 'page1',
-                    'type' => 'Neos.Form:Page',
-                    'renderables' => array(
-                        array(
+        $configuration = [
+            'identifier'  => 'myFormIdentifier',
+            'renderables' => [
+                [
+                    'identifier'  => 'page1',
+                    'type'        => 'Neos.Form:Page',
+                    'renderables' => [
+                        [
                             'identifier' => 'element1',
-                            'type' => 'Neos.Form:TestElement',
-                            'properties' => array(
-                                'options' => array(
-                                    0 => array(
-                                        '_key' => 'MyKey',
-                                        '_value' => 'MyValue'
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        );
+                            'type'       => 'Neos.Form:TestElement',
+                            'properties' => [
+                                'options' => [
+                                    0 => [
+                                        '_key'   => 'MyKey',
+                                        '_value' => 'MyValue',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
         $form = $factory->build($configuration, 'default');
         $page1 = $form->getPageByIndex(0);
         $this->assertSame('page1', $page1->getIdentifier());
         $element1 = $form->getElementByIdentifier('element1');
         $this->assertSame('element1', $element1->getIdentifier());
-        $this->assertSame(array('options' => array('MyKey' => 'MyValue')), $element1->getProperties());
+        $this->assertSame(['options' => ['MyKey' => 'MyValue']], $element1->getProperties());
     }
 
     /**
@@ -78,14 +77,14 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $factory = $this->getArrayFormFactory();
 
-        $configuration = array(
-            'identifier' => 'myFormIdentifier',
-            'renderables' => array(
-                array(
+        $configuration = [
+            'identifier'  => 'myFormIdentifier',
+            'renderables' => [
+                [
                     // identifier missing
-                )
-            )
-        );
+                ],
+            ],
+        ];
         $form = $factory->build($configuration, 'default');
     }
 
@@ -94,27 +93,28 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
      */
     protected function getArrayFormFactory()
     {
-        $settings = array(
-            'presets' => array(
-                'default' => array(
-                    'formElementTypes' => array(
-                        'Neos.Form:Form' => array(
+        $settings = [
+            'presets' => [
+                'default' => [
+                    'formElementTypes' => [
+                        'Neos.Form:Form' => [
 
-                        ),
-                        'Neos.Form:Page' => array(
-                            'implementationClassName' => \Neos\Form\Core\Model\Page::class
-                        ),
-                        'Neos.Form:TestElement' => array(
-                            'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class
-                        )
-                    )
-                )
-            )
-        );
+                        ],
+                        'Neos.Form:Page' => [
+                            'implementationClassName' => \Neos\Form\Core\Model\Page::class,
+                        ],
+                        'Neos.Form:TestElement' => [
+                            'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class,
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $accessibleFactory = $this->buildAccessibleProxy(\Neos\Form\Factory\ArrayFormFactory::class);
-        $factory = new $accessibleFactory;
+        $factory = new $accessibleFactory();
         $factory->_set('formSettings', $settings);
+
         return $factory;
     }
 }

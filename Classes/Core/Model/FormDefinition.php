@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -10,8 +11,6 @@ namespace Neos\Form\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
-use Neos\Flow\Annotations as Flow;
 
 /**
  * This class encapsulates a complete *Form Definition*, with all of its pages,
@@ -235,52 +234,59 @@ use Neos\Flow\Annotations as Flow;
 class FormDefinition extends Renderable\AbstractCompositeRenderable
 {
     /**
-     * The finishers for this form
+     * The finishers for this form.
      *
      * @var array<Neos\Form\Core\Model\FinisherInterface>
+     *
      * @internal
      */
-    protected $finishers = array();
+    protected $finishers = [];
 
     /**
-     * Property Mapping Rules, indexed by element identifier
+     * Property Mapping Rules, indexed by element identifier.
      *
      * @var array<Neos\Form\Core\Model\ProcessingRule>
+     *
      * @internal
      */
-    protected $processingRules = array();
+    protected $processingRules = [];
 
     /**
      * Contains all elements of the form, indexed by identifier.
      * Is used as internal cache as we need this really often.
      *
      * @var array <Neos\Form\Core\Model\FormElementInterface>
+     *
      * @internal
      */
-    protected $elementsByIdentifier = array();
+    protected $elementsByIdentifier = [];
 
     /**
-     * Form element default values in the format array('elementIdentifier' => 'default value')
+     * Form element default values in the format array('elementIdentifier' => 'default value').
      *
      * @var array
+     *
      * @internal
      */
-    protected $elementDefaultValues = array();
+    protected $elementDefaultValues = [];
 
     /**
      * @var \Neos\Form\Utility\SupertypeResolver
+     *
      * @internal
      */
     protected $formFieldTypeManager;
 
     /**
      * @var array
+     *
      * @internal
      */
     protected $validatorPresets;
 
     /**
      * @var array
+     *
      * @internal
      */
     protected $finisherPresets;
@@ -288,17 +294,19 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     /**
      * Constructor. Creates a new FormDefinition with the given identifier.
      *
-     * @param string $identifier The Form Definition's identifier, must be a non-empty string.
-     * @param array $formDefaults overrides form defaults of this definition
-     * @param string $type element type of this form in the format Package:Type
+     * @param string $identifier   The Form Definition's identifier, must be a non-empty string.
+     * @param array  $formDefaults overrides form defaults of this definition
+     * @param string $type         element type of this form in the format Package:Type
+     *
      * @throws \Neos\Form\Exception\IdentifierNotValidException if the identifier was not valid
+     *
      * @api
      */
-    public function __construct($identifier, $formDefaults = array(), $type = 'Neos.Form:Form')
+    public function __construct($identifier, $formDefaults = [], $type = 'Neos.Form:Form')
     {
-        $this->formFieldTypeManager = new \Neos\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : array());
-        $this->validatorPresets = isset($formDefaults['validatorPresets']) ? $formDefaults['validatorPresets'] : array();
-        $this->finisherPresets = isset($formDefaults['finisherPresets']) ? $formDefaults['finisherPresets'] : array();
+        $this->formFieldTypeManager = new \Neos\Form\Utility\SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : []);
+        $this->validatorPresets = isset($formDefaults['validatorPresets']) ? $formDefaults['validatorPresets'] : [];
+        $this->finisherPresets = isset($formDefaults['finisherPresets']) ? $formDefaults['finisherPresets'] : [];
 
         if (!is_string($identifier) || strlen($identifier) === 0) {
             throw new \Neos\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
@@ -306,15 +314,16 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
         $this->identifier = $identifier;
         $this->type = $type;
 
-        if ($formDefaults !== array()) {
+        if ($formDefaults !== []) {
             $this->initializeFromFormDefaults();
         }
     }
 
     /**
-     * Initialize the form defaults of the current type
+     * Initialize the form defaults of the current type.
      *
      * @return void
+     *
      * @internal
      */
     protected function initializeFromFormDefaults()
@@ -329,7 +338,9 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * the passed $options array.
      *
      * @param array $options
+     *
      * @return void
+     *
      * @internal
      */
     public function setOptions(array $options)
@@ -344,11 +355,11 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
         }
         if (isset($options['finishers'])) {
             foreach ($options['finishers'] as $finisherConfiguration) {
-                $this->createFinisher($finisherConfiguration['identifier'], isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : array());
+                $this->createFinisher($finisherConfiguration['identifier'], isset($finisherConfiguration['options']) ? $finisherConfiguration['options'] : []);
             }
         }
 
-        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('rendererClassName', 'renderingOptions', 'finishers'));
+        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, ['rendererClassName', 'renderingOptions', 'finishers']);
     }
 
     /**
@@ -360,9 +371,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * - return the newly created Page object
      *
      * @param string $identifier Identifier of the new page
-     * @param string $typeName Type of the new page
-     * @return \Neos\Form\Core\Model\Page the newly created page
+     * @param string $typeName   Type of the new page
+     *
      * @throws \Neos\Form\Exception\TypeDefinitionNotFoundException
+     *
+     * @return \Neos\Form\Core\Model\Page the newly created page
+     *
      * @api
      */
     public function createPage($identifier, $typeName = 'Neos.Form:Page')
@@ -389,9 +403,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
             }
         }
 
-        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, array('implementationClassName', 'label', 'rendererClassName', 'renderingOptions'));
+        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($typeDefinition, ['implementationClassName', 'label', 'rendererClassName', 'renderingOptions']);
 
         $this->addPage($page);
+
         return $page;
     }
 
@@ -401,9 +416,13 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * Instead of this method, you should often use {@link createPage} instead.
      *
      * @param Page $page
-     * @return void
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException if Page is already added to a FormDefinition
+     *
+     * @return void
+     *
      * @see createPage
+     *
      * @api
      */
     public function addPage(Page $page)
@@ -412,9 +431,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Get the Form's pages
+     * Get the Form's pages.
      *
      * @return array<Neos\Form\Core\Model\Page> The Form's pages in the correct order
+     *
      * @api
      */
     public function getPages()
@@ -423,10 +443,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Check whether a page with the given $index exists
+     * Check whether a page with the given $index exists.
      *
-     * @param integer $index
-     * @return boolean TRUE if a page with the given $index exists, otherwise FALSE
+     * @param int $index
+     *
+     * @return bool TRUE if a page with the given $index exists, otherwise FALSE
+     *
      * @api
      */
     public function hasPageWithIndex($index)
@@ -439,9 +461,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      *
      * If page at $index does not exist, an exception is thrown. @see hasPageWithIndex()
      *
-     * @param integer $index
-     * @return Page the page, or NULL if none found.
+     * @param int $index
+     *
      * @throws \Neos\Form\Exception if the specified index does not exist
+     *
+     * @return Page the page, or NULL if none found.
+     *
      * @api
      */
     public function getPageByIndex($index)
@@ -449,14 +474,17 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
         if (!$this->hasPageWithIndex($index)) {
             throw new \Neos\Form\Exception(sprintf('There is no page with an index of %d', $index), 1329233627);
         }
+
         return $this->renderables[$index];
     }
 
     /**
-     * Adds the specified finisher to this form
+     * Adds the specified finisher to this form.
      *
      * @param \Neos\Form\Core\Model\FinisherInterface $finisher
+     *
      * @return void
+     *
      * @api
      */
     public function addFinisher(FinisherInterface $finisher)
@@ -466,32 +494,37 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
 
     /**
      * @param string $finisherIdentifier identifier of the finisher as registered in the current form preset (for example: "Neos.Form:Redirect")
-     * @param array $options options for this finisher in the format array('option1' => 'value1', 'option2' => 'value2', ...)
-     * @return FinisherInterface
+     * @param array  $options            options for this finisher in the format array('option1' => 'value1', 'option2' => 'value2', ...)
+     *
      * @throws \Neos\Form\Exception\FinisherPresetNotFoundException
+     *
+     * @return FinisherInterface
+     *
      * @api
      */
-    public function createFinisher($finisherIdentifier, array $options = array())
+    public function createFinisher($finisherIdentifier, array $options = [])
     {
         if (isset($this->finisherPresets[$finisherIdentifier]) && is_array($this->finisherPresets[$finisherIdentifier]) && isset($this->finisherPresets[$finisherIdentifier]['implementationClassName'])) {
             $implementationClassName = $this->finisherPresets[$finisherIdentifier]['implementationClassName'];
-            $defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : array();
+            $defaultOptions = isset($this->finisherPresets[$finisherIdentifier]['options']) ? $this->finisherPresets[$finisherIdentifier]['options'] : [];
 
             $options = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
-            $finisher = new $implementationClassName;
+            $finisher = new $implementationClassName();
             $finisher->setOptions($options);
             $this->addFinisher($finisher);
+
             return $finisher;
         } else {
-            throw new \Neos\Form\Exception\FinisherPresetNotFoundException('The finisher preset identified by "' . $finisherIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328709784);
+            throw new \Neos\Form\Exception\FinisherPresetNotFoundException('The finisher preset identified by "'.$finisherIdentifier.'" could not be found, or the implementationClassName was not specified.', 1328709784);
         }
     }
 
     /**
-     * Gets all finishers of this form
+     * Gets all finishers of this form.
      *
      * @return array<\Neos\Form\Core\Model\FinisherInterface>
+     *
      * @api
      */
     public function getFinishers()
@@ -503,8 +536,11 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * Add an element to the ElementsByIdentifier Cache.
      *
      * @param Renderable\RenderableInterface $renderable
-     * @return void
+     *
      * @throws \Neos\Form\Exception\DuplicateFormElementException
+     *
+     * @return void
+     *
      * @internal
      */
     public function registerRenderable(Renderable\RenderableInterface $renderable)
@@ -518,10 +554,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Remove an element from the ElementsByIdentifier cache
+     * Remove an element from the ElementsByIdentifier cache.
      *
      * @param Renderable\RenderableInterface $renderable
+     *
      * @return void
+     *
      * @internal
      */
     public function unregisterRenderable(Renderable\RenderableInterface $renderable)
@@ -532,12 +570,14 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Get a Form Element by its identifier
+     * Get a Form Element by its identifier.
      *
      * If identifier does not exist, returns NULL.
      *
      * @param string $elementIdentifier
+     *
      * @return FormElementInterface The element with the given $elementIdentifier or NULL if none found
+     *
      * @api
      */
     public function getElementByIdentifier($elementIdentifier)
@@ -546,11 +586,13 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Sets the default value of a form element
+     * Sets the default value of a form element.
      *
      * @param string $elementIdentifier identifier of the form element. This supports property paths!
-     * @param mixed $defaultValue
+     * @param mixed  $defaultValue
+     *
      * @return void
+     *
      * @internal
      */
     public function addElementDefaultValue($elementIdentifier, $defaultValue)
@@ -560,10 +602,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
 
     /**
      * returns the default value of the specified form element
-     * or NULL if no default value was set
+     * or NULL if no default value was set.
      *
      * @param string $elementIdentifier identifier of the form element. This supports property paths!
+     *
      * @return mixed The elements default value
+     *
      * @internal
      */
     public function getElementDefaultValueByIdentifier($elementIdentifier)
@@ -572,11 +616,13 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Move $pageToMove before $referencePage
+     * Move $pageToMove before $referencePage.
      *
      * @param Page $pageToMove
      * @param Page $referencePage
+     *
      * @return void
+     *
      * @api
      */
     public function movePageBefore(Page $pageToMove, Page $referencePage)
@@ -585,11 +631,13 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Move $pageToMove after $referencePage
+     * Move $pageToMove after $referencePage.
      *
      * @param Page $pageToMove
      * @param Page $referencePage
+     *
      * @return void
+     *
      * @api
      */
     public function movePageAfter(Page $pageToMove, Page $referencePage)
@@ -598,10 +646,12 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Remove $pageToRemove from form
+     * Remove $pageToRemove from form.
      *
      * @param Page $pageToRemove
+     *
      * @return void
+     *
      * @api
      */
     public function removePage(Page $pageToRemove)
@@ -614,8 +664,10 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * a new "instance" of the Form.
      *
      * @param \Neos\Flow\Mvc\ActionRequest $request
-     * @param \Neos\Flow\Http\Response $response
+     * @param \Neos\Flow\Http\Response     $response
+     *
      * @return \Neos\Form\Core\Runtime\FormRuntime
+     *
      * @api
      */
     public function bind(\Neos\Flow\Mvc\ActionRequest $request, \Neos\Flow\Http\Response $response)
@@ -625,7 +677,9 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
 
     /**
      * @param string $propertyPath
+     *
      * @return ProcessingRule
+     *
      * @api
      */
     public function getProcessingRule($propertyPath)
@@ -633,13 +687,15 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
         if (!isset($this->processingRules[$propertyPath])) {
             $this->processingRules[$propertyPath] = new ProcessingRule();
         }
+
         return $this->processingRules[$propertyPath];
     }
 
     /**
-     * Get all mapping rules
+     * Get all mapping rules.
      *
      * @return array<MappingRule>
+     *
      * @internal
      */
     public function getProcessingRules()
@@ -649,6 +705,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
 
     /**
      * @return \Neos\Form\Utility\SupertypeResolver
+     *
      * @internal
      */
     public function getFormFieldTypeManager()
@@ -658,6 +715,7 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
 
     /**
      * @return array
+     *
      * @internal
      */
     public function getValidatorPresets()
