@@ -4,7 +4,7 @@
     "license": "LGPL-3.0+",
     "description": "Extensible and flexible API for building web forms",
     "require": {
-        "neos/flow": "*"
+        "neos/flow": "~4.0 | dev-master"
     },
     "replace": {
         "typo3/form": "self.version"
