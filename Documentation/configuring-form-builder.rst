@@ -10,7 +10,7 @@ Let's say you have created your form element, and want to make it available insi
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
 	  'Your.Package:YourFormElement':
 	    # the definitions for your form element
@@ -35,7 +35,7 @@ All form element groups are defined inside ``formElementGroups`` inside the pres
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementGroups:
 	  specialCustom:
 	    sorting: 500
@@ -54,7 +54,7 @@ Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
 	  'Neos.FormExample:ProgrammingLanguageSelect':
 	    superTypes:
@@ -100,7 +100,7 @@ Choosing which strategy to use depends mostly on the expected usage patterns:
 
 	.. code-block:: yaml
 
-		# we are now inside TYPO3:Form:presets:[presetName]
+		# we are now inside Neos:Form:presets:[presetName]
 		formElementTypes:
 		  'Neos.FormExample:GenderSelect':
 		    formBuilder:
@@ -123,14 +123,14 @@ This can be configured as follows:
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
 	  'Neos.Form:TextMixin': # or any other type here
 	    formBuilder:
 	      editors:
 	        validation:
 	          availableValidators:
-	            'TYPO3.Flow:StringLength': # or any other validator
+	            'Neos.Flow:StringLength': # or any other validator
 	              # mark this validator required such that it is always shown.
 	              required: true
 
@@ -141,7 +141,7 @@ The same works for Finishers, for example the following configuration makes the 
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
 	  'Neos.Form:Form':
 	    formBuilder:

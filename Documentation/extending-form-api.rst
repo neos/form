@@ -89,7 +89,7 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 	      if ($triggerValue === NULL || $triggerValue === '') {
 	         return;
 	      }
-	      $this->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+	      $this->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
 	   }
 	}
 
@@ -106,7 +106,7 @@ In order to use the new Form Element type you first have to extend the Form Defi
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      somePreset:
