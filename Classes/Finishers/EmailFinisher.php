@@ -89,7 +89,7 @@ class EmailFinisher extends AbstractFinisher
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
 
-        $mail = new \TYPO3\SwiftMailer\Message();
+        $mail = new \Neos\SwiftMailer\Message();
 
         $mail
             ->setFrom(array($senderAddress => $senderName))
