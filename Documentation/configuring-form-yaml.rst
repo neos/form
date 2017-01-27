@@ -12,7 +12,7 @@ configuration is stored. This is done in ``Settings.yaml``:
 
 .. code-block:: yaml
 
-    TYPO3:
+    Neos:
       Form:
         yamlPersistenceManager:
           savePath: 'resource://AcmeCom.SomePackage/Private/Form/'
@@ -63,20 +63,20 @@ The following YAML is stored as ``contact.yaml``:
             identifier: name
             label: 'Name'
             validators:
-              - identifier: 'TYPO3.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:NotEmpty'
           -
             type: 'Neos.Form:SingleLineText'
             identifier: email
             label: 'Email'
             validators:
-              - identifier: 'TYPO3.Flow:NotEmpty'
-              - identifier: 'TYPO3.Flow:EmailAddress'
+              - identifier: 'Neos.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:EmailAddress'
           -
             type: 'Neos.Form:MultiLineText'
             identifier: message
             label: 'Message'
             validators:
-              - identifier: 'TYPO3.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:NotEmpty'
     finishers:
       -
         identifier: 'Neos.Form:Email'

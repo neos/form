@@ -47,8 +47,8 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function typeCanBeOverridden()
     {
-        $page = new Page('foo', 'TYPO3.Foo:Bar');
-        $this->assertSame('TYPO3.Foo:Bar', $page->getType());
+        $page = new Page('foo', 'Neos.Foo:Bar');
+        $this->assertSame('Neos.Foo:Bar', $page->getType());
     }
 
     public function invalidIdentifiers()

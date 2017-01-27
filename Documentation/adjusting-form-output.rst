@@ -35,7 +35,7 @@ file, like in the following example:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      preset1:
@@ -160,7 +160,7 @@ contents:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      myCustom:
@@ -221,7 +221,7 @@ Adjust ``Your.Package/Configuration/Settings.yaml`` accordingly:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      myCustom:
@@ -361,27 +361,27 @@ Now, you only need to adjust the form definition in order to use the new templat
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
-	  presets:
-	    ########### CUSTOM PRESETS ###########
+	    presets:
+	      ########### CUSTOM PRESETS ###########
 
-	    myCustom:
-	      title: 'Custom Elements'
-	      parentPreset: 'default'
-	      formElementTypes:
+	      myCustom:
+	        title: 'Custom Elements'
+	        parentPreset: 'default'
+	        formElementTypes:
 
-	         # ...
+	           # ...
 
-	         ### override template path of Neos.Form:Form ###
-	        'Neos.Form:Form':
-	          renderingOptions:
-	            templatePathPattern: 'resource://Neos.FormExample/Private/CustomElements/Form.html'
+	           ### override template path of Neos.Form:Form ###
+	          'Neos.Form:Form':
+	            renderingOptions:
+	              templatePathPattern: 'resource://Neos.FormExample/Private/CustomElements/Form.html'
 
-	         ### override default layout path ###
-	        'Neos.Form:Base':
-	          renderingOptions:
-	            layoutPathPattern: 'resource://Neos.FormExample/Private/CustomElements/Layouts/{@type}.html'
+	           ### override default layout path ###
+	          'Neos.Form:Base':
+	            renderingOptions:
+	              layoutPathPattern: 'resource://Neos.FormExample/Private/CustomElements/Layouts/{@type}.html'
 
 .. tip:: You can use **placeholders** in ``templatePathPattern``, ``partialPathPattern`` and ``layoutPathPattern``:
    ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type
@@ -402,7 +402,7 @@ two radio buttons for ``Female`` and ``Male``. That's just a matter of a few lin
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	       ########### CUSTOM PRESETS ###########

@@ -15,7 +15,7 @@ way to configure it is this:
 
 .. code-block:: yaml
 
-    TYPO3:
+    Neos:
       Form:
         presets:
           default:
@@ -26,7 +26,7 @@ way to configure it is this:
 
 Of course it can be set in a custom preset in the same way.
 
-The translation of validation error messages uses the TYPO3.Flow package by default, to avoid having to
+The translation of validation error messages uses the Neos.Flow package by default, to avoid having to
 copy the validation errors message catalog to all packages used for form translation. If you want to
 adjust those error messages as well, copy ``ValidationErrors.xlf`` to your package and set the option
 ``validationErrorTranslationPackage`` to your package key.
@@ -129,7 +129,7 @@ Assume it is configured like this using YAML:
             identifier: name
             label: 'Name'
             validators:
-              - identifier: 'TYPO3.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:NotEmpty'
             properties:
               placeholder: 'Please enter your full name'
           -
@@ -137,8 +137,8 @@ Assume it is configured like this using YAML:
             identifier: email
             label: 'Email'
             validators:
-              - identifier: 'TYPO3.Flow:NotEmpty'
-              - identifier: 'TYPO3.Flow:EmailAddress'
+              - identifier: 'Neos.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:EmailAddress'
             properties:
               placeholder: 'Enter a valid email address'
           -
@@ -146,7 +146,7 @@ Assume it is configured like this using YAML:
             identifier: message
             label: 'Message'
             validators:
-              - identifier: 'TYPO3.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:NotEmpty'
             properties:
               placeholder: 'Enter your message here'
 

@@ -21,7 +21,7 @@ Let's say you want to adjust the form builder with a custom CSS file inside ``Yo
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  FormBuilder:
 	    stylesheets:
 	      customAdjustments:
@@ -50,18 +50,18 @@ The default template is located inside ``Neos.FormBuilder/Resources/Private/Form
 
 	<h1>Form Builder - {{Neos.FormBuilder.Model.Form.formDefinition.label}}</h1>
 	{{#if Neos.FormBuilder.Model.Form.currentlyLoadingPreview}}
-	   <span id="typo3-formbuilder-loading">Loading..</span>
+	   <span id="neos-formbuilder-loading">Loading..</span>
 	{{/if}}
 
-	<ul id="typo3-formbuilder-toolbar">
-	   <li class="typo3-formbuilder-preset">
+	<ul id="neos-formbuilder-toolbar">
+	   <li class="neos-formbuilder-preset">
 	      {{view Neos.FormBuilder.View.Header.PresetSelector}}
 	   </li>
-	   <li class="typo3-formbuilder-preview">
-	      {{#view Neos.FormBuilder.View.Header.PreviewButton class="typo3-formbuilder-button icon"}}Preview{{/view}}
+	   <li class="neos-formbuilder-preview">
+	      {{#view Neos.FormBuilder.View.Header.PreviewButton class="neos-formbuilder-button icon"}}Preview{{/view}}
 	   </li>
-	   <li class="typo3-formbuilder-save">
-		{{#view Neos.FormBuilder.View.Header.SaveButton class="typo3-formbuilder-button icon"}}Save{{/view}}
+	   <li class="neos-formbuilder-save">
+		{{#view Neos.FormBuilder.View.Header.SaveButton class="neos-formbuilder-button icon"}}Save{{/view}}
 	   </li>
 	</ul>
 
@@ -75,7 +75,7 @@ Then, we need to tell the form builder that we want to use a different handlebar
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  FormBuilder:
 	    handlebarsTemplates:
 	      Header: resource://Your.Package/Private/FormBuilderTemplates/Header.html
@@ -91,7 +91,7 @@ All editors for a given form element are defined inside the ``formElementTypes``
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]:formElementTypes
+	# we are now inside Neos:Form:presets:[presetName]:formElementTypes
 	'Neos.Form:TextMixin':
 	  formBuilder:
 	    editors:
@@ -122,9 +122,9 @@ Then, we will create a basic handlebars template and register it underneath ``El
 
 .. code-block:: html
 
-	<div class="typo3-formbuilder-controlGroup">
+	<div class="neos-formbuilder-controlGroup">
 	   <label>{{label}}:</label>
-	   <div class="typo3-formbuilder-controls">
+	   <div class="neos-formbuilder-controls">
 	      [select should come here]
 	   </div>
 	</div>
@@ -135,7 +135,7 @@ Now that we have all the pieces ready, let's actually use the editor inside the 
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]:formElementTypes
+	# we are now inside Neos:Form:presets:[presetName]:formElementTypes
 	'Neos.Form:FileUpload':
          formBuilder:
            editors:
@@ -228,7 +228,7 @@ You need to do three things:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      yourPresetName: # fill in your preset name here, or "default"
@@ -260,12 +260,12 @@ Now, you only need to include the appropriate Handlebars template, which could l
 	   {{label}}
 	   {{#view Ember.Button target="parentView" action="remove"
 	                        isVisibleBinding="notRequired"
-	                        class="typo3-formbuilder-removeButton"}}Remove{{/view}}
+	                        class="neos-formbuilder-removeButton"}}Remove{{/view}}
 	</h4>
 
-	<div class="typo3-formbuilder-controlGroup">
+	<div class="neos-formbuilder-controlGroup">
 	   <label>Database Table</label>
-	   <div class="typo3-formbuilder-controls">
+	   <div class="neos-formbuilder-controls">
 	      {{view Ember.TextField valueBinding="currentCollectionElement.options.databaseTable"}}
 	   </div>
 	</div>

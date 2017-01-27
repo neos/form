@@ -15,7 +15,7 @@ use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 
 /**
- * This finisher sends an email to one recipient
+ * This finisher sends an email to one or more recipients
  *
  * Options:
  *
@@ -24,12 +24,14 @@ use Neos\Form\Exception\FinisherException;
  * - partialRootPath: root path for the partials
  * - variables: associative array of variables which are available inside the Fluid template
  *
+ * - referrer: The referrer of the form is available in the Fluid template
+ *
  * The following options control the mail sending. In all of them, placeholders in the form
  * of {...} are replaced with the corresponding form value; i.e. {email} as recipientAddress
  * makes the recipient address configurable.
  *
  * - subject (mandatory): Subject of the email
- * - recipientAddress (mandatory): Email address of the recipient
+ * - recipientAddress (mandatory): Email address of the recipient (use multiple addresses with an array)
  * - recipientName: Human-readable name of the recipient
  * - senderAddress (mandatory): Email address of the sender
  * - senderName: Human-readable name of the sender
@@ -66,6 +68,8 @@ class EmailFinisher extends AbstractFinisher
         $formRuntime = $this->finisherContext->getFormRuntime();
         $standaloneView = $this->initializeStandaloneView();
         $standaloneView->assign('form', $formRuntime);
+        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
+        $standaloneView->assign('referrer', $referrer);
         $message = $standaloneView->render();
 
         $subject = $this->parseOption('subject');
@@ -85,16 +89,24 @@ class EmailFinisher extends AbstractFinisher
         if ($recipientAddress === null) {
             throw new FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
         }
+        if (is_array($recipientAddress) && $recipientName !== '') {
+            throw new FinisherException('The option "recipientName" cannot be used with multiple recipients in the EmailFinisher.', 1483365977);
+        }
         if ($senderAddress === null) {
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
 
-        $mail = new \TYPO3\SwiftMailer\Message();
+        $mail = new \Neos\SwiftMailer\Message();
 
         $mail
             ->setFrom(array($senderAddress => $senderName))
-            ->setTo(array($recipientAddress => $recipientName))
             ->setSubject($subject);
+
+        if (is_array($recipientAddress)) {
+            $mail->setTo($recipientAddress);
+        } else {
+            $mail->setTo(array($recipientAddress => $recipientName));
+        }
 
         if ($replyToAddress !== null) {
             $mail->setReplyTo($replyToAddress);
@@ -118,7 +130,7 @@ class EmailFinisher extends AbstractFinisher
             \Neos\Flow\var_dump(
                 array(
                     'sender' => array($senderAddress => $senderName),
-                    'recipient' => array($recipientAddress => $recipientName),
+                    'recipients' => is_array($recipientAddress) ? $recipientAddress : array($recipientAddress => $recipientName),
                     'replyToAddress' => $replyToAddress,
                     'carbonCopyAddress' => $carbonCopyAddress,
                     'blindCarbonCopyAddress' => $blindCarbonCopyAddress,
