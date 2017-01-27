@@ -15,6 +15,9 @@
         }
     },
     "extra": {
+        "branch-alias": {
+            "dev-master": "3.0.x-dev"
+        },
         "applied-flow-migrations": [
             "TYPO3.Form-20160601101500",
             "TYPO3.FLOW3-201201261636",
