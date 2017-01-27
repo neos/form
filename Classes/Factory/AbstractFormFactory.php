@@ -51,12 +51,12 @@ use Neos\Flow\Annotations as Flow;
  * definition.
  *
  * The AbstractFormFactory loads the presets from the package settings, from the
- * YAML key *TYPO3: Form: presets: [presetName]*.
+ * YAML key *Neos: Form: presets: [presetName]*.
  *
  * The YAML preset definition has the following structure:
  *
  * <pre>
- * TYPO3:
+ * Neos:
  *   Form:
  *     presets:
  *       default:
@@ -130,7 +130,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
     public function getPresetConfiguration($presetName)
     {
         if (!isset($this->formSettings['presets'][$presetName])) {
-            throw new \Neos\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath TYPO3: Form: presets.', $presetName), 1325685498);
+            throw new \Neos\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath Neos: Form: presets.', $presetName), 1325685498);
         }
         $preset = $this->formSettings['presets'][$presetName];
         if (isset($preset['parentPreset'])) {

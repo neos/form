@@ -61,7 +61,7 @@ If you want to build a form with PHP, the skeleton for building a form looks as 
 
 	namespace Your\Package;
 
-	use TYPO3\Flow\Annotations as Flow;
+	use Neos\Flow\Annotations as Flow;
 	use Neos\Form\Core\Model\FormDefinition;
 
 	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory {
@@ -137,15 +137,15 @@ Validation
 ----------
 
 Every :api-core-model:`FormElement <AbstractFormElement>` implements the :api-core-model:`FormElementInterface`
-which provides a convenient way to work with TYPO3 Flow validators::
+which provides a convenient way to work with Neos Flow validators::
 
-	$name->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+	$name->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
 
-	$email->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-	$email->addValidator(new \TYPO3\Flow\Validation\Validator\EmailAddressValidator());
+	$email->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+	$email->addValidator(new \Neos\Flow\Validation\Validator\EmailAddressValidator());
 
-	$comments->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-	$comments->addValidator(new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
+	$comments->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+	$comments->addValidator(new \Neos\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
 With the ``addValidator($validator)`` method you can attach one or more validators to a form element.
 If you save the changes and reload the page where you embedded the form, you can see that
@@ -199,7 +199,7 @@ That's it for the quickstart. The complete code of your form factory should look
 
 	namespace Your\Package;
 
-	use TYPO3\Flow\Annotations as Flow;
+	use Neos\Flow\Annotations as Flow;
 	use Neos\Form\Core\Model\FormDefinition;
 
 	/**
@@ -220,17 +220,17 @@ That's it for the quickstart. The complete code of your form factory should look
 
 			$name = $page1->createElement('name', 'Neos.Form:SingleLineText');
 			$name->setLabel('Name');
-			$name->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+			$name->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
 
 			$email = $page1->createElement('email', 'Neos.Form:SingleLineText');
 			$email->setLabel('Email');
-			$email->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-			$email->addValidator(new \TYPO3\Flow\Validation\Validator\EmailAddressValidator());
+			$email->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+			$email->addValidator(new \Neos\Flow\Validation\Validator\EmailAddressValidator());
 
 			$comments = $page1->createElement('message', 'Neos.Form:MultiLineText');
 			$comments->setLabel('Message');
-			$comments->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-			$comments->addValidator(new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
+			$comments->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+			$comments->addValidator(new \Neos\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
 			$emailFinisher = new \Neos\Form\Finishers\EmailFinisher();
 			$emailFinisher->setOptions(array(
