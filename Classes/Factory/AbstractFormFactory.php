@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Factory;
 
 /*
@@ -19,7 +20,7 @@ use Neos\Flow\Annotations as Flow;
  *
  * **This class is meant to be subclassed by developers.**
  *
- * {@inheritDoc}
+ * {@inheritdoc}
  *
  * This class implements *Preset Handling* from the Package's settings,
  * making it possible to easily create different presets, only specifying
@@ -96,16 +97,19 @@ use Neos\Flow\Annotations as Flow;
 abstract class AbstractFormFactory implements FormFactoryInterface
 {
     /**
-     * The settings of the Neos.Form package
+     * The settings of the Neos.Form package.
      *
      * @var array
+     *
      * @api
      */
     protected $formSettings;
 
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Configuration\ConfigurationManager
+     *
      * @internal
      */
     protected $configurationManager;
@@ -123,8 +127,11 @@ abstract class AbstractFormFactory implements FormFactoryInterface
      * (specified by *parentPreset*) into account.
      *
      * @param string $presetName name of the preset to get the configuration for
-     * @return array the preset configuration
+     *
      * @throws \Neos\Form\Exception\PresetNotFoundException if preset with the name $presetName was not found
+     *
+     * @return array the preset configuration
+     *
      * @api
      */
     public function getPresetConfiguration($presetName)
@@ -138,6 +145,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
             unset($preset['parentPreset']);
             $preset = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
         }
+
         return $preset;
     }
 
@@ -146,7 +154,9 @@ abstract class AbstractFormFactory implements FormFactoryInterface
      * template method on all form elements.
      *
      * @param \Neos\Form\Core\Model\FormDefinition $form
+     *
      * @return void
+     *
      * @api
      */
     protected function triggerFormBuildingFinished(\Neos\Form\Core\Model\FormDefinition $form)
@@ -157,7 +167,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
     }
 
     /**
-     * Get the available preset names
+     * Get the available preset names.
      *
      * @return array
      */

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
@@ -11,11 +12,9 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
-use Neos\Form\Core\Model\Page;
-
 /**
- * Test for FinisherContext Domain Model
+ * Test for FinisherContext Domain Model.
+ *
  * @covers \Neos\Form\Core\Model\FinisherContext
  */
 class FinisherContextTest extends \Neos\Flow\Tests\UnitTestCase

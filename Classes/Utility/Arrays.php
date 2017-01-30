@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Utility;
 
 /*
@@ -12,7 +13,8 @@ namespace Neos\Form\Utility;
  */
 
 /**
- * Collection of static array utility functions
+ * Collection of static array utility functions.
+ *
  * @internal
  */
 class Arrays
@@ -22,8 +24,10 @@ class Arrays
      *
      * @param array $arrayToTest
      * @param array $allowedArrayKeys
-     * @return void
+     *
      * @throws \Neos\Form\Exception\TypeDefinitionNotValidException if an element in $arrayToTest is not in $allowedArrayKeys
+     *
+     * @return void
      */
     public static function assertAllArrayKeysAreValid(array $arrayToTest, array $allowedArrayKeys)
     {

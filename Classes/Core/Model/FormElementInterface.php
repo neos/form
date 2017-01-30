@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -24,10 +25,12 @@ namespace Neos\Form\Core\Model;
 interface FormElementInterface extends Renderable\RenderableInterface
 {
     /**
-     * Will be called as soon as the element is (tried to be) added to a form
+     * Will be called as soon as the element is (tried to be) added to a form.
+     *
      * @see registerInFormIfPossible()
      *
      * @return void
+     *
      * @internal
      */
     public function initializeFormElement();
@@ -35,9 +38,10 @@ interface FormElementInterface extends Renderable\RenderableInterface
     /**
      * Returns a unique identifier of this element.
      * While element identifiers are only unique within one form,
-     * this includes the identifier of the form itself, making it "globally" unique
+     * this includes the identifier of the form itself, making it "globally" unique.
      *
      * @return string the "globally" unique identifier of this element
+     *
      * @api
      */
     public function getUniqueIdentifier();
@@ -47,6 +51,7 @@ interface FormElementInterface extends Renderable\RenderableInterface
      * during display.
      *
      * @return mixed the default value for this Form Element
+     *
      * @api
      */
     public function getDefaultValue();
@@ -56,6 +61,7 @@ interface FormElementInterface extends Renderable\RenderableInterface
      * during display.
      *
      * @param mixed $defaultValue the default value for this Form Element
+     *
      * @api
      */
     public function setDefaultValue($defaultValue);
@@ -64,71 +70,84 @@ interface FormElementInterface extends Renderable\RenderableInterface
      * Set an element-specific configuration property.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
+     *
      * @api
      */
     public function setProperty($key, $value);
 
     /**
-     * Get all element-specific configuration properties
+     * Get all element-specific configuration properties.
      *
      * @return array
+     *
      * @api
      */
     public function getProperties();
 
     /**
-     * Set a rendering option
+     * Set a rendering option.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @api
      */
     public function setRenderingOption($key, $value);
 
     /**
-     * Returns the child validators of the ConjunctionValidator that is registered for this element
+     * Returns the child validators of the ConjunctionValidator that is registered for this element.
      *
      * @return \SplObjectStorage<\Neos\Flow\Validation\Validator\ValidatorInterface>
+     *
      * @internal
      */
     public function getValidators();
 
     /**
-     * Registers a validator for this element
+     * Registers a validator for this element.
      *
      * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     *
      * @return void
+     *
      * @api
      */
     public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator);
 
     /**
-     * Set the target data type for this element
+     * Set the target data type for this element.
      *
      * @param string $dataType the target data type
+     *
      * @return void
+     *
      * @api
      */
     public function setDataType($dataType);
 
     /**
-     * Whether or not this element is required
+     * Whether or not this element is required.
      *
-     * @return boolean
+     * @return bool
+     *
      * @api
      */
     public function isRequired();
 
     /**
      * This callback is invoked by the FormRuntime whenever values are mapped and validated
-     * (after a form page was submitted)
+     * (after a form page was submitted).
      *
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
-     * @param mixed $elementValue submitted value of the element *before post processing*
+     * @param mixed                               $elementValue submitted value of the element *before post processing*
+     *
      * @return void
+     *
      * @see \Neos\Form\Core\Runtime\FormRuntime::mapAndValidate()
+     *
      * @api
      */
     public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue);

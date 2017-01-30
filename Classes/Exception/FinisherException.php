@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Exception;
 
 /*
@@ -12,7 +13,7 @@ namespace Neos\Form\Exception;
  */
 
 /**
- * This exception is thrown in Form Finishers
+ * This exception is thrown in Form Finishers.
  *
  * @api
  */

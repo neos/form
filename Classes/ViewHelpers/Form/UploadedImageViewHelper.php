@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers\Form;
 
 /*
@@ -11,10 +12,9 @@ namespace Neos\Form\ViewHelpers\Form;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
-use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMapper;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Media\Domain\Model\Image;
 
 /**
@@ -47,7 +47,9 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
      * Initialize the arguments.
      *
      * @return void
+     *
      * @author Sebastian Kurfürst <sebastian@typo3.org>
+     *
      * @api
      */
     public function initializeArguments()
@@ -57,7 +59,9 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * @param string $as
+     *
      * @return string
+     *
      * @api
      */
     public function render($as = 'image')
@@ -71,19 +75,20 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * Returns a previously uploaded image.
-     * If errors occurred during property mapping for this property, NULL is returned
+     * If errors occurred during property mapping for this property, NULL is returned.
      *
      * @return Image
      */
     protected function getUploadedImage()
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
-            return null;
+            return;
         }
         $image = $this->getValue(false);
         if ($image instanceof Image) {
             return $image;
         }
+
         return $this->propertyMapper->convert($image, Image::class);
     }
 }

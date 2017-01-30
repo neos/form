@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Model;
 
 /*
@@ -14,10 +15,11 @@ namespace Neos\Form\Tests\Unit\Core\Model;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
 
-require_once(__DIR__ . '/Fixture/EmptyFinisher.php');
+require_once __DIR__.'/Fixture/EmptyFinisher.php';
 
 /**
- * Test for FormDefinition Domain Model
+ * Test for FormDefinition Domain Model.
+ *
  * @covers \Neos\Form\Core\Model\FormDefinition<extended>
  * @covers \Neos\Form\Core\Model\Page<extended>
  */
@@ -37,11 +39,11 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     public function invalidIdentifiers()
     {
-        return array(
-            'Null Identifier' => array(null),
-            'Integer Identifier' => array(42),
-            'Empty String Identifier' => array('')
-        );
+        return [
+            'Null Identifier'         => [null],
+            'Integer Identifier'      => [42],
+            'Empty String Identifier' => [''],
+        ];
     }
 
     /**
@@ -59,13 +61,13 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function constructorSetsRendererClassName()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'rendererClassName' => 'FooRenderer'
-                )
-            )
-        ));
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'rendererClassName' => 'FooRenderer',
+                ],
+            ],
+        ]);
         $this->assertSame('FooRenderer', $formDefinition->getRendererClassName());
     }
 
@@ -74,34 +76,34 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function constructorSetsFinishers()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'finisherPresets' => array(
-                'myFinisher' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'finisherPresets' => [
+                'myFinisher' => [
                     'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
-                    'options' => array(
-                        'foo' => 'bar',
-                        'test' => 'asdf'
-                    )
-                )
-            ),
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'finishers' => array(
-                        array(
+                    'options'                 => [
+                        'foo'  => 'bar',
+                        'test' => 'asdf',
+                    ],
+                ],
+            ],
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'finishers' => [
+                        [
                             'identifier' => 'myFinisher',
-                            'options' => array(
-                                'foo' => 'baz'
-                            )
-                        )
-                    )
-                )
-            )
-        ));
+                            'options'    => [
+                                'foo' => 'baz',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
         $finishers = $formDefinition->getFinishers();
         $this->assertSame(1, count($finishers));
         $finisher = $finishers[0];
         $this->assertInstanceOf(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
-        $this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
+        $this->assertSame(['foo' => 'baz', 'test' => 'asdf'], $finisher->_get('options'));
     }
 
     /**
@@ -109,17 +111,17 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function constructorSetsRenderingOptions()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'renderingOptions' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'renderingOptions' => [
                         'foo' => 'bar',
-                        'baz' => 'test'
-                    )
-                )
-            )
-        ));
-        $this->assertSame(array('foo' => 'bar', 'baz' => 'test'), $formDefinition->getRenderingOptions());
+                        'baz' => 'test',
+                    ],
+                ],
+            ],
+        ]);
+        $this->assertSame(['foo' => 'bar', 'baz' => 'test'], $formDefinition->getRenderingOptions());
     }
 
     /**
@@ -127,15 +129,15 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function constructorMakesValidatorPresetsAvailable()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'validatorPresets' => array(
-                'foo' => 'bar'
-            ),
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array()
-            )
-        ));
-        $this->assertSame(array('foo' => 'bar'), $formDefinition->getValidatorPresets());
+        $formDefinition = new FormDefinition('myForm', [
+            'validatorPresets' => [
+                'foo' => 'bar',
+            ],
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+            ],
+        ]);
+        $this->assertSame(['foo' => 'bar'], $formDefinition->getValidatorPresets());
     }
 
     /**
@@ -144,13 +146,13 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function constructorThrowsExceptionIfUnknownPropertySet()
     {
-        new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'unknownFormProperty' => 'val'
-                )
-            )
-        ));
+        new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'unknownFormProperty' => 'val',
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -159,7 +161,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     public function getPagesReturnsEmptyArrayByDefault()
     {
         $formDefinition = new FormDefinition('foo');
-        $this->assertSame(array(), $formDefinition->getPages());
+        $this->assertSame([], $formDefinition->getPages());
     }
 
     /**
@@ -203,7 +205,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $page = new Page('bar');
         $formDefinition->addPage($page);
-        $this->assertSame(array($page), $formDefinition->getPages());
+        $this->assertSame([$page], $formDefinition->getPages());
         $this->assertSame($formDefinition, $page->getParentRenderable());
 
         $this->assertSame($page, $formDefinition->getPageByIndex(0));
@@ -324,14 +326,14 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function createPageCreatesPageAndAddsItToForm()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(),
-                'Neos.Form:Page' => array(
-                    'implementationClassName' => \Neos\Form\Core\Model\Page::class
-                )
-            )
-        ));
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+                'Neos.Form:Page' => [
+                    'implementationClassName' => \Neos\Form\Core\Model\Page::class,
+                ],
+            ],
+        ]);
         $page = $formDefinition->createPage('myPage');
         $this->assertSame('myPage', $page->getIdentifier());
         $this->assertSame($page, $formDefinition->getPageByIndex(0));
@@ -343,15 +345,15 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function createPageSetsLabelFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(),
-                'Neos.Form:Page' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+                'Neos.Form:Page' => [
                     'implementationClassName' => \Neos\Form\Core\Model\Page::class,
-                    'label' => 'My Label'
-                )
-            )
-        ));
+                    'label'                   => 'My Label',
+                ],
+            ],
+        ]);
         $page = $formDefinition->createPage('myPage');
         $this->assertSame('My Label', $page->getLabel());
     }
@@ -361,15 +363,15 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function createPageSetsRendererClassNameFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(),
-                'Neos.Form:Page' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+                'Neos.Form:Page' => [
                     'implementationClassName' => \Neos\Form\Core\Model\Page::class,
-                    'rendererClassName' => 'MyRenderer'
-                )
-            )
-        ));
+                    'rendererClassName'       => 'MyRenderer',
+                ],
+            ],
+        ]);
         $page = $formDefinition->createPage('myPage');
         $this->assertSame('MyRenderer', $page->getRendererClassName());
     }
@@ -379,17 +381,17 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function createPageSetsRenderingOptionsFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(),
-                'Neos.Form:Page' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+                'Neos.Form:Page' => [
                     'implementationClassName' => \Neos\Form\Core\Model\Page::class,
-                    'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
-                )
-            )
-        ));
+                    'renderingOptions'        => ['foo' => 'bar', 'baz' => 'asdf'],
+                ],
+            ],
+        ]);
         $page = $formDefinition->createPage('myPage');
-        $this->assertSame(array('foo' => 'bar', 'baz' => 'asdf'), $page->getRenderingOptions());
+        $this->assertSame(['foo' => 'bar', 'baz' => 'asdf'], $page->getRenderingOptions());
     }
 
     /**
@@ -398,16 +400,16 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(),
-                'Neos.Form:Page' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+                'Neos.Form:Page' => [
                     'implementationClassName' => \Neos\Form\Core\Model\Page::class,
-                    'label' => 'My Label',
-                    'unknownProperty' => 'this is an unknown property'
-                )
-            )
-        ));
+                    'label'                   => 'My Label',
+                    'unknownProperty'         => 'this is an unknown property',
+                ],
+            ],
+        ]);
         $page = $formDefinition->createPage('myPage');
     }
 
@@ -417,14 +419,14 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function createPageThrowsExceptionIfImplementationClassNameNotFound()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
 
-                ),
-                'Neos.Form:Page2' => array()
-            )
-        ));
+                ],
+                'Neos.Form:Page2' => [],
+            ],
+        ]);
         $page = $formDefinition->createPage('myPage', 'Neos.Form:Page2');
     }
 
@@ -453,14 +455,14 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $this->assertSame(0, $page1->getIndex());
         $this->assertSame(1, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
+        $this->assertSame([$page1, $page2, $page3], $formDefinition->getPages());
 
         $formDefinition->movePageBefore($page2, $page1);
 
         $this->assertSame(1, $page1->getIndex());
         $this->assertSame(0, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
+        $this->assertSame([$page2, $page1, $page3], $formDefinition->getPages());
     }
 
     /**
@@ -493,14 +495,14 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $this->assertSame(0, $page1->getIndex());
         $this->assertSame(1, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
+        $this->assertSame([$page1, $page2, $page3], $formDefinition->getPages());
 
         $formDefinition->movePageAfter($page1, $page2);
 
         $this->assertSame(1, $page1->getIndex());
         $this->assertSame(0, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
+        $this->assertSame([$page2, $page1, $page3], $formDefinition->getPages());
     }
 
     /**
@@ -530,7 +532,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
         $formDefinition->removePage($page1);
         $this->assertNull($page1->getParentRenderable());
-        $this->assertSame(array($page2), $formDefinition->getPages());
+        $this->assertSame([$page2], $formDefinition->getPages());
     }
 
     /**
@@ -578,7 +580,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $this->assertInstanceOf(\Neos\Form\Core\Model\ProcessingRule::class, $processingRule1);
         $this->assertSame($processingRule1, $processingRule2);
 
-        $this->assertSame(array('foo' => $processingRule1), $formDefinition->getProcessingRules());
+        $this->assertSame(['foo' => $processingRule1], $formDefinition->getProcessingRules());
     }
 
     /**
@@ -587,10 +589,10 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     public function addFinisherAddsFinishersToList()
     {
         $formDefinition = new FormDefinition('foo1');
-        $this->assertSame(array(), $formDefinition->getFinishers());
+        $this->assertSame([], $formDefinition->getFinishers());
         $finisher = $this->getMockFinisher();
         $formDefinition->addFinisher($finisher);
-        $this->assertSame(array($finisher), $formDefinition->getFinishers());
+        $this->assertSame([$finisher], $formDefinition->getFinishers());
     }
 
     /**
@@ -621,7 +623,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('email');
         $this->assertInstanceOf(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class, $finisher);
-        $this->assertSame(array($finisher), $formDefinition->getFinishers());
+        $this->assertSame([$finisher], $formDefinition->getFinishers());
     }
 
     /**
@@ -631,7 +633,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('emailWithOptions');
-        $this->assertSame(array('foo' => 'bar', 'name' => 'asdf'), $finisher->_get('options'));
+        $this->assertSame(['foo' => 'bar', 'name' => 'asdf'], $finisher->_get('options'));
     }
 
     /**
@@ -640,36 +642,36 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
     public function createFinisherSetsOptionsCorrectlyAndMergesThemWithPassedOptions()
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
-        $finisher = $formDefinition->createFinisher('emailWithOptions', array('foo' => 'baz'));
-        $this->assertSame(array('foo' => 'baz', 'name' => 'asdf'), $finisher->_get('options'));
+        $finisher = $formDefinition->createFinisher('emailWithOptions', ['foo' => 'baz']);
+        $this->assertSame(['foo' => 'baz', 'name' => 'asdf'], $finisher->_get('options'));
     }
-
 
     /**
      * @return \Neos\Form\Core\Model\FormDefinition
      */
     protected function getFormDefinitionWithFinisherConfiguration()
     {
-        $formDefinition = new FormDefinition('foo1', array(
-            'finisherPresets' => array(
-                'asdf' => array(
-                    'assd' => 'as'
-                ),
-                'email' => array(
-                    'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class)
-                ),
-                'emailWithOptions' => array(
+        $formDefinition = new FormDefinition('foo1', [
+            'finisherPresets' => [
+                'asdf' => [
+                    'assd' => 'as',
+                ],
+                'email' => [
                     'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
-                    'options' => array(
-                        'foo' => 'bar',
-                        'name' => 'asdf'
-                    )
-                )
-            ),
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array()
-            )
-        ));
+                ],
+                'emailWithOptions' => [
+                    'implementationClassName' => $this->buildAccessibleProxy(\Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher::class),
+                    'options'                 => [
+                        'foo'  => 'bar',
+                        'name' => 'asdf',
+                    ],
+                ],
+            ],
+            'formElementTypes' => [
+                'Neos.Form:Form' => [],
+            ],
+        ]);
+
         return $formDefinition;
     }
 
@@ -683,11 +685,12 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @param string $identifier
+     *
      * @return \Neos\Form\Core\Model\FormElementInterface
      */
     protected function getMockFormElement($identifier)
     {
-        $mockFormElement = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
+        $mockFormElement = $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(['getIdentifier'])->disableOriginalConstructor()->getMock();
         $mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
         return $mockFormElement;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Renderer;
 
 /*
@@ -14,7 +15,6 @@ namespace Neos\Form\Core\Renderer;
 use Neos\FluidAdaptor\Core\ViewHelper\TemplateVariableContainer;
 use Neos\FluidAdaptor\View\TemplatePaths;
 use Neos\FluidAdaptor\View\TemplateView;
-use Neos\Flow\Annotations as Flow;
 
 /**
  * Default form renderer which used *Fluid Templates* to render *Renderables*.
@@ -111,7 +111,9 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
 
     /**
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     *
      * @return void
+     *
      * @api
      */
     public function setFormRuntime(\Neos\Form\Core\Runtime\FormRuntime $formRuntime)
@@ -121,6 +123,7 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
 
     /**
      * @return \Neos\Form\Core\Runtime\FormRuntime
+     *
      * @api
      */
     public function getFormRuntime()
@@ -132,8 +135,11 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
      * Render the passed $renderable and return the rendered Renderable.
      *
      * @param \Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable
-     * @return string the rendered $renderable
+     *
      * @throws \Neos\Form\Exception\RenderingException
+     *
+     * @return string the rendered $renderable
+     *
      * @api
      */
     public function renderRenderable(\Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable)
@@ -144,12 +150,13 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
 
         if ($renderable->getRendererClassName() !== null && $renderable->getRendererClassName() !== get_class($this)) {
             $rendererClassName = $renderable->getRendererClassName();
-            $renderer = new $rendererClassName;
+            $renderer = new $rendererClassName();
             if (!($renderer instanceof RendererInterface)) {
                 throw new \Neos\Form\Exception\RenderingException(sprintf('The renderer class "%s" for "%s" does not implement RendererInterface.', $rendererClassName, $renderableType), 1326098022);
             }
             $renderer->setControllerContext($this->controllerContext);
             $renderer->setFormRuntime($this->formRuntime);
+
             return $renderer->renderRenderable($renderable);
         }
 
@@ -170,13 +177,13 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
         } else {
             $renderingContext = clone $this->getCurrentRenderingContext();
         }
-        $renderingContext->getViewHelperVariableContainer()->addOrUpdate(FluidFormRenderer::class, 'currentRenderable', $renderable);
+        $renderingContext->getViewHelperVariableContainer()->addOrUpdate(self::class, 'currentRenderable', $renderable);
 
         if (!isset($renderingOptions['renderableNameInTemplate'])) {
             throw new \Neos\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "renderableNameInTemplate" defined.', $renderableType), 1326094948);
         }
 
-        $templateVariableContainer = new TemplateVariableContainer(array($renderingOptions['renderableNameInTemplate'] => $renderable));
+        $templateVariableContainer = new TemplateVariableContainer([$renderingOptions['renderableNameInTemplate'] => $renderable]);
         $renderingContext->setVariableProvider($templateVariableContainer);
 
         if ($parsedRenderable->hasLayout()) {
@@ -194,6 +201,7 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
         }
 
         $this->baseRenderingContext->setTemplatePaths($currentTemplatePathsResolver);
+
         return $output;
     }
 
@@ -204,6 +212,7 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
 
     /**
      * @param array $renderingOptions
+     *
      * @return TemplatePaths
      */
     protected function createTemplatePathsResolverWithRenderingOptions($renderingOptions)
@@ -239,9 +248,12 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
      * from the given $renderableType.
      *
      * @param string $renderableType
-     * @param array $renderingOptions
-     * @return string the full path to the template which shall be used.
+     * @param array  $renderingOptions
+     *
      * @throws \Neos\Form\Exception\RenderingException
+     *
+     * @return string the full path to the template which shall be used.
+     *
      * @internal
      */
     protected function getPathAndFilenameForRenderable($renderableType, array $renderingOptions)
@@ -251,10 +263,10 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
         }
         list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 
-        return strtr($renderingOptions['templatePathPattern'], array(
+        return strtr($renderingOptions['templatePathPattern'], [
             '{@package}' => $packageKey,
-            '{@type}' => $shortRenderableType
-        ));
+            '{@type}'    => $shortRenderableType,
+        ]);
     }
 
     /**
@@ -264,9 +276,12 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
      * from the given $renderableType.
      *
      * @param string $renderableType
-     * @param array $renderingOptions
-     * @return string the full path to the layout which shall be used.
+     * @param array  $renderingOptions
+     *
      * @throws \Neos\Form\Exception\RenderingException
+     *
+     * @return string the full path to the layout which shall be used.
+     *
      * @internal
      */
     protected function getPathAndFilenameForRenderableLayout($renderableType, array $renderingOptions)
@@ -276,38 +291,40 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
         }
         list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 
-        return strtr($renderingOptions['layoutPathPattern'], array(
+        return strtr($renderingOptions['layoutPathPattern'], [
             '{@package}' => $packageKey,
-            '{@type}' => $shortRenderableType
-        ));
+            '{@type}'    => $shortRenderableType,
+        ]);
     }
 
     /**
      * Resolve the partial path and filename based on $this->partialPathAndFilenamePattern.
      *
      * @param string $renderableType The name of the partial
-     * @return string the full path which should be used. The path definitely exists.
+     *
      * @throws \Neos\FluidAdaptor\View\Exception\InvalidTemplateResourceException
      * @throws \Neos\Form\Exception\RenderingException
+     *
+     * @return string the full path which should be used. The path definitely exists.
      */
     protected function getPartialPathAndFilename($renderableType)
     {
         $renderingContext = $this->getCurrentRenderingContext();
-        $currentRenderable = $renderingContext->getViewHelperVariableContainer()->get(FluidFormRenderer::class, 'currentRenderable');
+        $currentRenderable = $renderingContext->getViewHelperVariableContainer()->get(self::class, 'currentRenderable');
         $renderingOptions = $currentRenderable->getRenderingOptions();
         if (!isset($renderingOptions['partialPathPattern'])) {
             throw new \Neos\Form\Exception\RenderingException(sprintf('The Renderable "%s" did not have the rendering option "partialPathPattern" defined.', $renderableType), 1326713352);
         }
         list($packageKey, $shortRenderableType) = explode(':', $renderableType);
 
-        $partialPath = strtr($renderingOptions['partialPathPattern'], array(
+        $partialPath = strtr($renderingOptions['partialPathPattern'], [
             '{@package}' => $packageKey,
-            '{@type}' => $shortRenderableType
-        ));
+            '{@type}'    => $shortRenderableType,
+        ]);
         if (file_exists($partialPath)) {
             return $partialPath;
         }
-        throw new \Neos\FluidAdaptor\View\Exception\InvalidTemplateResourceException('The template file "' . $partialPath . '" could not be loaded.', 1326713418);
+        throw new \Neos\FluidAdaptor\View\Exception\InvalidTemplateResourceException('The template file "'.$partialPath.'" could not be loaded.', 1326713418);
     }
 
     /**
@@ -317,9 +334,12 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
      *
      * @param string $renderableType
      * @param string $renderablePathAndFilename
-     * @return \Neos\FluidAdaptor\Core\Parser\ParsedTemplateInterface
-     * @return \Neos\FluidAdaptor\Core\Parser\ParsedTemplateInterface
+     *
      * @throws \Neos\Form\Exception
+     *
+     * @return \Neos\FluidAdaptor\Core\Parser\ParsedTemplateInterface
+     * @return \Neos\FluidAdaptor\Core\Parser\ParsedTemplateInterface
+     *
      * @internal
      */
     protected function getParsedRenderable($renderableType, $renderablePathAndFilename)
@@ -328,7 +348,7 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
             throw new \Neos\Form\Exception(sprintf('The template "%s" does not exist', $renderablePathAndFilename), 1329233920);
         }
         $templateModifiedTimestamp = \filemtime($renderablePathAndFilename);
-        $renderableIdentifier = sprintf('renderable_%s_%s', str_replace(array('.', ':'), '_', $renderableType), sha1($renderablePathAndFilename . '|' . $templateModifiedTimestamp));
+        $renderableIdentifier = sprintf('renderable_%s_%s', str_replace(['.', ':'], '_', $renderableType), sha1($renderablePathAndFilename.'|'.$templateModifiedTimestamp));
 
         $parsedRenderable = $this->baseRenderingContext->getTemplateParser()->getOrParseAndStoreTemplate(
             $renderableIdentifier,

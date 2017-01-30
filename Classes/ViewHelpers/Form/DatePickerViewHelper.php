@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers\Form;
 
 /*
@@ -36,7 +37,6 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
      * Initialize the arguments.
      *
      * @return void
-
      * @api
      */
     public function initializeArguments()
@@ -50,10 +50,11 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
     }
 
     /**
-     * Renders the text field, hidden field and required javascript
+     * Renders the text field, hidden field and required javascript.
      *
      * @param string $dateFormat
-     * @param boolean $enableDatePicker
+     * @param bool   $enableDatePicker
+     *
      * @return string
      */
     public function render($dateFormat = 'Y-m-d', $enableDatePicker = true)
@@ -62,7 +63,7 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
         $this->registerFieldNameForFormTokenGeneration($name);
 
         $this->tag->addAttribute('type', 'date');
-        $this->tag->addAttribute('name', $name . '[date]');
+        $this->tag->addAttribute('name', $name.'[date]');
         if ($enableDatePicker) {
             $this->tag->addAttribute('readonly', true);
         }
@@ -74,20 +75,20 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
         if ($this->hasArgument('id')) {
             $id = $this->arguments['id'];
         } else {
-            $id = 'field' . md5(uniqid());
+            $id = 'field'.md5(uniqid());
             $this->tag->addAttribute('id', $id);
         }
         $this->setErrorClassAttribute();
         $content = '';
         $content .= $this->tag->render();
-        $content .= '<input type="hidden" name="' . $name . '[dateFormat]" value="' . htmlspecialchars($dateFormat) . '" />';
+        $content .= '<input type="hidden" name="'.$name.'[dateFormat]" value="'.htmlspecialchars($dateFormat).'" />';
 
         if ($enableDatePicker) {
             $datePickerDateFormat = $this->convertDateFormatToDatePickerFormat($dateFormat);
             $content .= '<script type="text/javascript">//<![CDATA[
 				$(function() {
-					$("#' . $id . '").datepicker({
-						dateFormat: "' . $datePickerDateFormat . '"
+					$("#'.$id.'").datepicker({
+						dateFormat: "'.$datePickerDateFormat.'"
 					}).keydown(function(e) {
 							// By using "backspace" or "delete", you can clear the datepicker again.
 						if(e.keyCode == 8 || e.keyCode == 46) {
@@ -98,6 +99,7 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
 				});
 				//]]></script>';
         }
+
         return $content;
     }
 
@@ -113,8 +115,9 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
         if ($date !== null) {
             $date = $this->propertyMapper->convert($date, 'DateTime');
             if (!$date instanceof \DateTime) {
-                return null;
+                return;
             }
+
             return $date;
         }
         if ($this->hasArgument('initialDate')) {
@@ -124,11 +127,12 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * @param string $dateFormat
+     *
      * @return string
      */
     protected function convertDateFormatToDatePickerFormat($dateFormat)
     {
-        $replacements = array(
+        $replacements = [
             'd' => 'dd',
             'D' => 'D',
             'j' => 'o',
@@ -140,8 +144,9 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
             'n' => 'm',
 
             'Y' => 'yy',
-            'y' => 'y'
-        );
+            'y' => 'y',
+        ];
+
         return strtr($dateFormat, $replacements);
     }
 }

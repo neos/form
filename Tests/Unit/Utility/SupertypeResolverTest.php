@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Utility;
 
 /*
@@ -14,111 +15,113 @@ namespace Neos\Form\Tests\Unit\Utility;
 use Neos\Form\Utility\SupertypeResolver;
 
 /**
- * Test for Supertype Resolver
+ * Test for Supertype Resolver.
+ *
  * @covers \Neos\Form\Utility\SupertypeResolver<extended>
  */
 class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
 {
     public function dataProviderForTypeResolving()
     {
-        $types = array(
-            'typeFoo' => array(
-                'config1' => 'val1'
-            ),
-            'typeBar' => array(
-                'config3' => 'val3'
-            ),
-            'typeBar2' => array(
-                'config3' => 'val3a'
-            ),
-            'typeWithSupertypes' => array(
-                'superTypes' => array('typeFoo' => true, 'typeBar' => true),
-                'config2' => 'val2'
-            ),
-            'typeWithSupertypes2' => array(
-                'superTypes' => array('typeFoo' => true, 'typeBar' => true, 'typeBar2' => true),
-                'config2' => 'val2'
-            ),
-            'subTypeWithSupertypes2' => array(
-                'superTypes' => array('typeWithSupertypes2' => true),
-                'config2' => 'val2a'
-            ),
-            'typeWithSupertypesInArraySyntax' => array(
-                'superTypes' => array('typeFoo', 'typeBar'),
-                'config2' => 'val2'
-            ),
-            'typeWithSupertypes2InArraySyntax' => array(
-                'superTypes' => array('typeFoo', 'typeBar', 'typeBar2'),
-                'config2' => 'val2'
-            ),
-            'subTypeWithSupertypes2InArraySyntax' => array(
-                'superTypes' => array('typeWithSupertypes2InArraySyntax'),
-                'config2' => 'val2a'
-            ),
-        );
-        return array(
-            'without supertype' => array(
-                'types' => $types,
+        $types = [
+            'typeFoo' => [
+                'config1' => 'val1',
+            ],
+            'typeBar' => [
+                'config3' => 'val3',
+            ],
+            'typeBar2' => [
+                'config3' => 'val3a',
+            ],
+            'typeWithSupertypes' => [
+                'superTypes' => ['typeFoo' => true, 'typeBar' => true],
+                'config2'    => 'val2',
+            ],
+            'typeWithSupertypes2' => [
+                'superTypes' => ['typeFoo' => true, 'typeBar' => true, 'typeBar2' => true],
+                'config2'    => 'val2',
+            ],
+            'subTypeWithSupertypes2' => [
+                'superTypes' => ['typeWithSupertypes2' => true],
+                'config2'    => 'val2a',
+            ],
+            'typeWithSupertypesInArraySyntax' => [
+                'superTypes' => ['typeFoo', 'typeBar'],
+                'config2'    => 'val2',
+            ],
+            'typeWithSupertypes2InArraySyntax' => [
+                'superTypes' => ['typeFoo', 'typeBar', 'typeBar2'],
+                'config2'    => 'val2',
+            ],
+            'subTypeWithSupertypes2InArraySyntax' => [
+                'superTypes' => ['typeWithSupertypes2InArraySyntax'],
+                'config2'    => 'val2a',
+            ],
+        ];
+
+        return [
+            'without supertype' => [
+                'types'    => $types,
                 'typeName' => 'typeFoo',
-                'expected' => array(
-                    'config1' => 'val1'
-                )
-            ),
-            'with a list of supertypes' => array(
-                'types' => $types,
+                'expected' => [
+                    'config1' => 'val1',
+                ],
+            ],
+            'with a list of supertypes' => [
+                'types'    => $types,
                 'typeName' => 'typeWithSupertypes',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3',
-                    'config2' => 'val2'
-                )
-            ),
-            'with a list of supertypes' => array(
-                'types' => $types,
+                    'config2' => 'val2',
+                ],
+            ],
+            'with a list of supertypes' => [
+                'types'    => $types,
                 'typeName' => 'typeWithSupertypes2',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
-                    'config2' => 'val2'
-                )
-            ),
-            'with recursive supertypes' => array(
-                'types' => $types,
+                    'config2' => 'val2',
+                ],
+            ],
+            'with recursive supertypes' => [
+                'types'    => $types,
                 'typeName' => 'subTypeWithSupertypes2',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
-                    'config2' => 'val2a'
-                )
-            ),
-            'with a list of supertypes' => array(
-                'types' => $types,
+                    'config2' => 'val2a',
+                ],
+            ],
+            'with a list of supertypes' => [
+                'types'    => $types,
                 'typeName' => 'typeWithSupertypesInArraySyntax',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3',
-                    'config2' => 'val2'
-                )
-            ),
-            'with a list of supertypes' => array(
-                'types' => $types,
+                    'config2' => 'val2',
+                ],
+            ],
+            'with a list of supertypes' => [
+                'types'    => $types,
                 'typeName' => 'typeWithSupertypes2InArraySyntax',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
-                    'config2' => 'val2'
-                )
-            ),
-            'with recursive supertypes' => array(
-                'types' => $types,
+                    'config2' => 'val2',
+                ],
+            ],
+            'with recursive supertypes' => [
+                'types'    => $types,
                 'typeName' => 'subTypeWithSupertypes2InArraySyntax',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
-                    'config2' => 'val2a'
-                )
-            )
-        );
+                    'config2' => 'val2a',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -137,7 +140,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {
-        $supertypeResolver = new SupertypeResolver(array());
+        $supertypeResolver = new SupertypeResolver([]);
         $supertypeResolver->getMergedTypeDefinition('nonExistingType');
     }
 }

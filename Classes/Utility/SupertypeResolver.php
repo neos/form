@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Utility;
 
 /*
@@ -38,6 +39,7 @@ class SupertypeResolver
 
     /**
      * @param array $settings
+     *
      * @internal
      */
     public function injectSettings(array $settings)
@@ -46,11 +48,13 @@ class SupertypeResolver
     }
 
     /**
-     *
      * @param string $type
-     * @param boolean $showHiddenProperties if TRUE, the hidden properties are shown as configured in settings "supertypeResolver.hiddenProperties" are shown as well. FALSE by default
-     * @return array
+     * @param bool   $showHiddenProperties if TRUE, the hidden properties are shown as configured in settings "supertypeResolver.hiddenProperties" are shown as well. FALSE by default
+     *
      * @throws \Neos\Form\Exception\TypeDefinitionNotFoundException if a type definition was not found
+     *
+     * @return array
+     *
      * @internal
      */
     public function getMergedTypeDefinition($type, $showHiddenProperties = false)
@@ -58,7 +62,7 @@ class SupertypeResolver
         if (!isset($this->configuration[$type])) {
             throw new \Neos\Form\Exception\TypeDefinitionNotFoundException(sprintf('Type "%s" not found. Probably some configuration is missing.', $type), 1325686909);
         }
-        $mergedTypeDefinition = array();
+        $mergedTypeDefinition = [];
         if (isset($this->configuration[$type]['superTypes'])) {
             foreach ($this->configuration[$type]['superTypes'] as $superTypeName => $enabled) {
                 // Skip unset node types
@@ -87,16 +91,19 @@ class SupertypeResolver
     }
 
     /**
-     * @param boolean $showHiddenProperties  if TRUE, the hidden properties are shown as configured in settings "supertypeResolver.hiddenProperties" are shown as well. FALSE by default
+     * @param bool $showHiddenProperties if TRUE, the hidden properties are shown as configured in settings "supertypeResolver.hiddenProperties" are shown as well. FALSE by default
+     *
      * @return array associative array of all completely merged type definitions.
+     *
      * @internal
      */
     public function getCompleteMergedTypeDefinition($showHiddenProperties = false)
     {
-        $configuration = array();
+        $configuration = [];
         foreach (array_keys($this->configuration) as $type) {
             $configuration[$type] = $this->getMergedTypeDefinition($type, $showHiddenProperties);
         }
+
         return $configuration;
     }
 }

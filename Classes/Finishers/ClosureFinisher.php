@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Finishers;
 
 /*
@@ -12,7 +13,7 @@ namespace Neos\Form\Finishers;
  */
 
 /**
- * A simple finisher that invokes a closure when executed
+ * A simple finisher that invokes a closure when executed.
  *
  * Usage:
  * //...
@@ -29,16 +30,18 @@ class ClosureFinisher extends \Neos\Form\Core\Model\AbstractFinisher
     /**
      * @var array
      */
-    protected $defaultOptions = array(
-        'closure' => null
-    );
+    protected $defaultOptions = [
+        'closure' => null,
+    ];
 
     /**
-     * Executes this finisher
+     * Executes this finisher.
+     *
      * @see AbstractFinisher::execute()
      *
-     * @return void
      * @throws \Neos\Form\Exception\FinisherException
+     *
+     * @return void
      */
     protected function executeInternal()
     {

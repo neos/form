@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Core\Runtime\Renderer\Fixture;
 
 /*
@@ -14,17 +15,19 @@ namespace Neos\Form\Tests\Unit\Core\Runtime\Renderer\Fixture;
 use Neos\Form\Core\Model\FinisherContext;
 
 /**
-* Dummy finisher for testing
-*/
+ * Dummy finisher for testing.
+ */
 class DummyFinisher implements \Neos\Form\Core\Model\FinisherInterface
 {
     public $cb = null;
 
     /**
-     * Executes the finisher
+     * Executes the finisher.
      *
      * @param \Neos\Form\Core\Model\FinisherContext $finisherContext The Finisher context that contains the current Form Runtime and Response
+     *
      * @return void
+     *
      * @api
      */
     public function execute(FinisherContext $finisherContext)
@@ -35,7 +38,9 @@ class DummyFinisher implements \Neos\Form\Core\Model\FinisherInterface
 
     /**
      * @param array $options configuration options in the format array('@action' => 'foo', '@controller' => 'bar', '@package' => 'baz')
+     *
      * @return void
+     *
      * @api
      */
     public function setOptions(array $options)
@@ -43,11 +48,13 @@ class DummyFinisher implements \Neos\Form\Core\Model\FinisherInterface
     }
 
     /**
-     * Sets a single finisher option (@see setOptions())
+     * Sets a single finisher option (@see setOptions()).
      *
-     * @param string $optionName name of the option to be set
-     * @param mixed $optionValue value of the option
+     * @param string $optionName  name of the option to be set
+     * @param mixed  $optionValue value of the option
+     *
      * @return void
+     *
      * @api
      */
     public function setOption($optionName, $optionValue)

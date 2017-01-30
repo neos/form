@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\ViewHelpers;
 
 /*
@@ -19,8 +20,8 @@ use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\ViewHelpers\FormViewHelper;
 
 /**
- * Tests for the custom FormViewHelper
-*/
+ * Tests for the custom FormViewHelper.
+ */
 class FormViewHelperTest extends UnitTestCase
 {
     /**
@@ -66,6 +67,7 @@ class FormViewHelperTest extends UnitTestCase
 
     /**
      * @test
+     *
      * @param string $requestUri
      * @param string $sectionArgument
      * @param string $expectedResult

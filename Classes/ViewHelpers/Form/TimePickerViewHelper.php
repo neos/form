@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers\Form;
 
 /*
@@ -11,8 +12,8 @@ namespace Neos\Form\ViewHelpers\Form;
  * source code.
  */
 
-use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Flow\Annotations as Flow;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
  * Displays two select-boxes for hour and minute selection.
@@ -34,7 +35,6 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
      * Initialize the arguments.
      *
      * @return void
-
      * @api
      */
     public function initializeArguments()
@@ -49,7 +49,7 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
     }
 
     /**
-     * Renders the select fields for hour & minute
+     * Renders the select fields for hour & minute.
      *
      * @return string
      */
@@ -58,13 +58,14 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
         $name = $this->getName();
         $this->registerFieldNameForFormTokenGeneration($name);
 
-        $this->tag->addAttribute('name', $name . '[hour]');
+        $this->tag->addAttribute('name', $name.'[hour]');
         $date = $this->getSelectedDate();
         $this->setErrorClassAttribute();
 
         $content = '';
         $content .= $this->buildHourSelector($date);
         $content .= $this->buildMinuteSelector($date);
+
         return $content;
     }
 
@@ -80,8 +81,9 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
         if ($date !== null) {
             $date = $this->propertyMapper->convert($date, 'DateTime');
             if (!$date instanceof \DateTime) {
-                return null;
+                return;
             }
+
             return $date;
         }
         if ($this->hasArgument('initialDate')) {
@@ -91,6 +93,7 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * @param \DateTime $date
+     *
      * @return string
      */
     protected function buildHourSelector(\DateTime $date = null)
@@ -102,14 +105,16 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
         foreach (range(0, 23) as $hour) {
             $hour = str_pad($hour, 2, '0', STR_PAD_LEFT);
             $selected = $hour === $value ? ' selected="selected"' : '';
-            $options .= '<option value="' . $hour . '"' . $selected . '>' . $hour . '</option>';
+            $options .= '<option value="'.$hour.'"'.$selected.'>'.$hour.'</option>';
         }
         $hourSelector->setContent($options);
+
         return $hourSelector->render();
     }
 
     /**
      * @param \DateTime $date
+     *
      * @return string
      */
     protected function buildMinuteSelector(\DateTime $date = null)
@@ -117,16 +122,17 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
         $value = $date !== null ? $date->format('i') : null;
         $minuteSelector = clone $this->tag;
         if ($this->hasArgument('id')) {
-            $minuteSelector->addAttribute('id', $this->arguments['id'] . '-minute');
+            $minuteSelector->addAttribute('id', $this->arguments['id'].'-minute');
         }
         $minuteSelector->addAttribute('name', sprintf('%s[minute]', $this->getName()));
         $options = '';
         foreach (range(0, 59) as $minute) {
             $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
             $selected = $minute === $value ? ' selected="selected"' : '';
-            $options .= '<option value="' . $minute . '"' . $selected . '>' . $minute . '</option>';
+            $options .= '<option value="'.$minute.'"'.$selected.'>'.$minute.'</option>';
         }
         $minuteSelector->setContent($options);
+
         return $minuteSelector->render();
     }
 }

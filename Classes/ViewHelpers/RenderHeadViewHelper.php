@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers;
 
 /*
@@ -11,36 +12,38 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
-use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ResourceManagement\ResourceManager;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Form\Factory\ArrayFormFactory;
 
 /**
- * Output the configured stylesheets and JavaScript include tags for a given preset
+ * Output the configured stylesheets and JavaScript include tags for a given preset.
  */
 class RenderHeadViewHelper extends AbstractViewHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
     /**
      * @Flow\Inject
+     *
      * @var ResourceManager
      */
     protected $resourceManager;
 
     /**
      * @Flow\Inject
+     *
      * @var ArrayFormFactory
      */
     protected $formBuilderFactory;
 
     /**
      * @param string $presetName name of the preset to use
+     *
      * @return string the rendered form head
      */
     public function render($presetName = 'default')
@@ -55,6 +58,7 @@ class RenderHeadViewHelper extends AbstractViewHelper
         foreach ($javaScripts as $javaScript) {
             $content .= sprintf('<script src="%s"></script>', $this->resourceManager->getPublicPackageResourceUriByPath($javaScript['source']));
         }
+
         return $content;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional;
 
 /*
@@ -13,7 +14,7 @@ namespace Neos\Form\Tests\Functional;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
- * Testcase for Simple Form
+ * Testcase for Simple Form.
  *
  * @group large
  */
@@ -78,7 +79,6 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         $form = $this->browser->getForm();
         $this->assertSame('', $form['--three-page-form-with-validation']['text3-1']->getValue());
     }
-
 
     /**
      * This is an edge-case which occurs if somebody makes the formState persistent, which can happen when subclassing the FormRuntime.

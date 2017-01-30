@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Runtime;
 
 /*
@@ -10,8 +11,6 @@ namespace Neos\Form\Core\Runtime;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
-use Neos\Flow\Annotations as Flow;
 
 /**
  * The current state of the form which is attached to the {@link FormRuntime}
@@ -30,27 +29,27 @@ class FormState
     const NOPAGE = -1;
 
     /**
-     * The last displayed page index
+     * The last displayed page index.
      *
-     * @var integer
+     * @var int
      */
     protected $lastDisplayedPageIndex = self::NOPAGE;
 
     /**
      * @var array
      */
-    protected $formValues = array();
+    protected $formValues = [];
 
     /**
-     * @return boolean FALSE if the form has never been submitted before, TRUE otherwise
+     * @return bool FALSE if the form has never been submitted before, TRUE otherwise
      */
     public function isFormSubmitted()
     {
-        return ($this->lastDisplayedPageIndex !== self::NOPAGE);
+        return $this->lastDisplayedPageIndex !== self::NOPAGE;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getLastDisplayedPageIndex()
     {
@@ -58,7 +57,8 @@ class FormState
     }
 
     /**
-     * @param integer $lastDisplayedPageIndex
+     * @param int $lastDisplayedPageIndex
+     *
      * @return void
      */
     public function setLastDisplayedPageIndex($lastDisplayedPageIndex)
@@ -76,7 +76,8 @@ class FormState
 
     /**
      * @param string $propertyPath
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setFormValue($propertyPath, $value)
@@ -86,6 +87,7 @@ class FormState
 
     /**
      * @param string $propertyPath
+     *
      * @return mixed
      */
     public function getFormValue($propertyPath)

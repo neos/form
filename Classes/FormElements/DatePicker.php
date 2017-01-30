@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\FormElements;
 
 /*
@@ -11,10 +12,8 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
- * A date picker form element
+ * A date picker form element.
  */
 class DatePicker extends \Neos\Form\Core\Model\AbstractFormElement
 {

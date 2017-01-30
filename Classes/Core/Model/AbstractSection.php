@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -11,11 +12,9 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
  * A base class for "section-like" form parts like "Page" or "Section" (which
- * is rendered as "Fieldset")
+ * is rendered as "Fieldset").
  *
  * **This class should not be subclassed by developers**, it is only
  * used for improving the internal code structure.
@@ -27,11 +26,13 @@ use Neos\Flow\Annotations as Flow;
 abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
 {
     /**
-     * Constructor. Needs the identifier and type of this element
+     * Constructor. Needs the identifier and type of this element.
      *
      * @param string $identifier The Section identifier
-     * @param string $type The Section type
+     * @param string $type       The Section type
+     *
      * @throws \Neos\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
+     *
      * @api
      */
     public function __construct($identifier, $type)
@@ -45,9 +46,10 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Get the child Form Elements
+     * Get the child Form Elements.
      *
      * @return array<\Neos\Form\Core\Model\FormElementInterface> The Page's elements
+     *
      * @api
      */
     public function getElements()
@@ -56,9 +58,10 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Get the child Form Elements
+     * Get the child Form Elements.
      *
      * @return array<\Neos\Form\Core\Model\FormElementInterface> The Page's elements
+     *
      * @api
      */
     public function getElementsRecursively()
@@ -67,11 +70,14 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Add a new form element at the end of the section
+     * Add a new form element at the end of the section.
      *
      * @param FormElementInterface $formElement The form element to add
-     * @return void
+     *
      * @throws \Neos\Form\Exception\FormDefinitionConsistencyException if FormElement is already added to a section
+     *
+     * @return void
+     *
      * @api
      */
     public function addElement(FormElementInterface $formElement)
@@ -89,10 +95,13 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
      *
      *
      * @param string $identifier Identifier of the new form element
-     * @param string $typeName type of the new form element
-     * @return \Neos\Form\Core\Model\FormElementInterface the newly created form element
+     * @param string $typeName   type of the new form element
+     *
      * @throws \Neos\Form\Exception\TypeDefinitionNotFoundException
      * @throws \Neos\Form\Exception\TypeDefinitionNotValidException
+     *
+     * @return \Neos\Form\Core\Model\FormElementInterface the newly created form element
+     *
      * @api
      */
     public function createElement($identifier, $typeName)
@@ -104,6 +113,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
         } catch (\Neos\Form\Exception\TypeDefinitionNotFoundException $exception) {
             $element = new UnknownFormElement($identifier, $typeName);
             $this->addElement($element);
+
             return $element;
         }
         if (!isset($typeDefinition['implementationClassName'])) {
@@ -120,6 +130,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
         $element->setOptions($typeDefinition);
 
         $element->initializeFormElement();
+
         return $element;
     }
 
@@ -130,7 +141,9 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
      *
      * @param FormElementInterface $elementToMove
      * @param FormElementInterface $referenceElement
+     *
      * @return void
+     *
      * @api
      */
     public function moveElementBefore(FormElementInterface $elementToMove, FormElementInterface $referenceElement)
@@ -139,13 +152,15 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Move FormElement $element after $referenceElement
+     * Move FormElement $element after $referenceElement.
      *
      * Both $element and $referenceElement must be direct descendants of this Section/Page.
      *
      * @param FormElementInterface $elementToMove
      * @param FormElementInterface $referenceElement
+     *
      * @return void
+     *
      * @api
      */
     public function moveElementAfter(FormElementInterface $elementToMove, FormElementInterface $referenceElement)
@@ -154,10 +169,12 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     }
 
     /**
-     * Remove $elementToRemove from this Section/Page
+     * Remove $elementToRemove from this Section/Page.
      *
      * @param FormElementInterface $elementToRemove
+     *
      * @return void
+     *
      * @api
      */
     public function removeElement(FormElementInterface $elementToRemove)
@@ -167,12 +184,15 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
 
     /**
      * This callback is invoked by the FormRuntime whenever values are mapped and validated
-     * (after a form page was submitted)
+     * (after a form page was submitted).
+     *
      * @see \Neos\Form\Core\Runtime\FormRuntime::mapAndValidate()
      *
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
-     * @param mixed $elementValue submitted value of the element *before post processing*
+     * @param mixed                               $elementValue submitted value of the element *before post processing*
+     *
      * @return void
+     *
      * @api
      */
     public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)

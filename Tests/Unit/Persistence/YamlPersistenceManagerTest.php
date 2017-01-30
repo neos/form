@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Persistence;
 
 /*
@@ -28,11 +29,10 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
     {
         vfsStream::setup('someSavePath');
         $this->yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
-        $this->yamlPersistenceManager->injectSettings(array(
-                'yamlPersistenceManager' =>
-                    array('savePath' => vfsStream::url('someSavePath')
-                )
-            )
+        $this->yamlPersistenceManager->injectSettings([
+                'yamlPersistenceManager' => ['savePath' => vfsStream::url('someSavePath'),
+                ],
+            ]
         );
     }
 
@@ -43,11 +43,10 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
         $yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
-        $settings = array(
-            'yamlPersistenceManager' =>
-                array('savePath' => vfsStream::url('someSavePath/foo/bar')
-            )
-        );
+        $settings = [
+            'yamlPersistenceManager' => ['savePath' => vfsStream::url('someSavePath/foo/bar'),
+            ],
+        ];
         $yamlPersistenceManager->injectSettings($settings);
         $this->assertTrue(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
     }
@@ -74,11 +73,11 @@ label: \'Form Fixture\'
         file_put_contents(vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
 
         $actualResult = $this->yamlPersistenceManager->load('mockFormPersistenceIdentifier');
-        $expectedResult = array(
-            'type' => 'Neos.Form:Form',
+        $expectedResult = [
+            'type'       => 'Neos.Form:Form',
             'identifier' => 'formFixture',
-            'label' => 'Form Fixture'
-        );
+            'label'      => 'Form Fixture',
+        ];
         $this->assertEquals($expectedResult, $actualResult);
     }
 
@@ -87,11 +86,11 @@ label: \'Form Fixture\'
      */
     public function saveStoresFormDefinitionAsYaml()
     {
-        $mockArrayFormDefinition = array(
-            'type' => 'Neos.Form:Form',
+        $mockArrayFormDefinition = [
+            'type'       => 'Neos.Form:Form',
             'identifier' => 'formFixture',
-            'label' => 'Form Fixture'
-        );
+            'label'      => 'Form Fixture',
+        ];
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('mockFormPersistenceIdentifier.yaml'));
 
         $this->yamlPersistenceManager->save('mockFormPersistenceIdentifier', $mockArrayFormDefinition);
@@ -129,7 +128,7 @@ label: \'Form Fixture\'
      */
     public function listFormsReturnsAnEmptyArrayIfNoFormsAreAvailable()
     {
-        $this->assertEquals(array(), $this->yamlPersistenceManager->listForms());
+        $this->assertEquals([], $this->yamlPersistenceManager->listForms());
     }
 
     /**
@@ -149,18 +148,18 @@ label: \'Form Fixture2\'
         file_put_contents(vfsStream::url('someSavePath/mockForm2.yaml'), $mockYamlFormDefinition2);
         file_put_contents(vfsStream::url('someSavePath/noForm.txt'), 'this should be skipped');
 
-        $expectedResult = array(
-            array(
-                'identifier' => 'formFixture1',
-                'name' => 'Form Fixture1',
+        $expectedResult = [
+            [
+                'identifier'            => 'formFixture1',
+                'name'                  => 'Form Fixture1',
                 'persistenceIdentifier' => 'mockForm1',
-            ),
-            array(
-                'identifier' => 'formFixture2',
-                'name' => 'Form Fixture2',
+            ],
+            [
+                'identifier'            => 'formFixture2',
+                'name'                  => 'Form Fixture2',
                 'persistenceIdentifier' => 'mockForm2',
-            ),
-        );
+            ],
+        ];
         $this->assertEquals($expectedResult, $this->yamlPersistenceManager->listForms());
     }
 }

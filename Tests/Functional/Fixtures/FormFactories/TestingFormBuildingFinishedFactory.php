@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional\Fixtures\FormFactories;
 
 /*
@@ -14,29 +15,30 @@ namespace Neos\Form\Tests\Functional\Fixtures\FormFactories;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * Simple form for testing
+ * Simple form for testing.
  */
 class TestingFormBuildingFinishedFactory extends \Neos\Form\Factory\ArrayFormFactory
 {
     public function build(array $configuration, $presetName)
     {
-        $configuration = array(
-            'type' => 'Neos.Form:Form',
-            'identifier' => 'testing',
-            'label' => 'My Label',
-            'renderables' => array(
-                array(
-                    'type' => 'Neos.Form:Page',
-                    'identifier' => 'general',
-                    'renderables' => array(
-                        array(
-                            'type' => 'Neos.Form:TestingFormElementWithSubElements',
+        $configuration = [
+            'type'        => 'Neos.Form:Form',
+            'identifier'  => 'testing',
+            'label'       => 'My Label',
+            'renderables' => [
+                [
+                    'type'        => 'Neos.Form:Page',
+                    'identifier'  => 'general',
+                    'renderables' => [
+                        [
+                            'type'       => 'Neos.Form:TestingFormElementWithSubElements',
                             'identifier' => 'subel',
-                        )
-                    )
-                )
-            )
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         return parent::build($configuration, $presetName);
     }
 }

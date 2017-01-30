@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Finishers;
 
 /*
@@ -11,11 +12,11 @@ namespace Neos\Form\Finishers;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Error\Messages\Message;
+use Neos\Flow\Annotations as Flow;
 
 /**
- * A simple finisher that adds a message to the FlashMessageContainer
+ * A simple finisher that adds a message to the FlashMessageContainer.
  *
  * Usage:
  * //...
@@ -35,6 +36,7 @@ class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
 {
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Mvc\FlashMessageContainer
      */
     protected $flashMessageContainer;
@@ -42,20 +44,22 @@ class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
     /**
      * @var array
      */
-    protected $defaultOptions = array(
-        'messageBody' => null,
-        'messageTitle' => '',
-        'messageArguments' => array(),
-        'messageCode' => null,
-        'severity' => Message::SEVERITY_OK,
-    );
+    protected $defaultOptions = [
+        'messageBody'      => null,
+        'messageTitle'     => '',
+        'messageArguments' => [],
+        'messageCode'      => null,
+        'severity'         => Message::SEVERITY_OK,
+    ];
 
     /**
-     * Executes this finisher
+     * Executes this finisher.
+     *
      * @see AbstractFinisher::execute()
      *
-     * @return void
      * @throws \Neos\Form\Exception\FinisherException
+     *
+     * @return void
      */
     protected function executeInternal()
     {

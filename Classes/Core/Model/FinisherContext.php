@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Core\Model;
 
 /*
@@ -22,23 +23,26 @@ use Neos\Form\Core\Runtime\FormRuntime;
 class FinisherContext
 {
     /**
-     * If TRUE further finishers won't be invoked
+     * If TRUE further finishers won't be invoked.
      *
-     * @var boolean
+     * @var bool
+     *
      * @internal
      */
     protected $cancelled = false;
 
     /**
-     * A reference to the Form Runtime that the finisher belongs to
+     * A reference to the Form Runtime that the finisher belongs to.
      *
      * @var \Neos\Form\Core\Runtime\FormRuntime
+     *
      * @internal
      */
     protected $formRuntime;
 
     /**
      * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     *
      * @internal
      */
     public function __construct(FormRuntime $formRuntime)
@@ -47,9 +51,10 @@ class FinisherContext
     }
 
     /**
-     * Cancels the finisher invocation after the current finisher
+     * Cancels the finisher invocation after the current finisher.
      *
      * @return void
+     *
      * @api
      */
     public function cancel()
@@ -58,9 +63,10 @@ class FinisherContext
     }
 
     /**
-     * TRUE if no futher finishers should be invoked. Defaults to FALSE
+     * TRUE if no futher finishers should be invoked. Defaults to FALSE.
      *
-     * @return boolean
+     * @return bool
+     *
      * @internal
      */
     public function isCancelled()
@@ -69,9 +75,10 @@ class FinisherContext
     }
 
     /**
-     * The Form Runtime that is associated with the current finisher
+     * The Form Runtime that is associated with the current finisher.
      *
      * @return \Neos\Form\Core\Runtime\FormRuntime
+     *
      * @api
      */
     public function getFormRuntime()
@@ -80,9 +87,10 @@ class FinisherContext
     }
 
     /**
-     * The values of the submitted form (after validation and property mapping)
+     * The values of the submitted form (after validation and property mapping).
      *
      * @return array
+     *
      * @api
      */
     public function getFormValues()

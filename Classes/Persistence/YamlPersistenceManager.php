@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Persistence;
 
 /*
@@ -14,7 +15,7 @@ namespace Neos\Form\Persistence;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * persistence identifier is some resource:// uri probably
+ * persistence identifier is some resource:// uri probably.
  *
  * @Flow\Scope("singleton")
  */
@@ -39,11 +40,13 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
     }
 
     /**
-     * Load the array form representation identified by $persistenceIdentifier, and return it
+     * Load the array form representation identified by $persistenceIdentifier, and return it.
      *
      * @param string $persistenceIdentifier
-     * @return array
+     *
      * @throws \Neos\Form\Exception\PersistenceManagerException
+     *
+     * @return array
      */
     public function load($persistenceIdentifier)
     {
@@ -51,14 +54,15 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
             throw new \Neos\Form\Exception\PersistenceManagerException(sprintf('The form identified by "%s" could not be loaded in "%s".', $persistenceIdentifier, $this->getFormPathAndFilename($persistenceIdentifier)), 1329307034);
         }
         $formPathAndFilename = $this->getFormPathAndFilename($persistenceIdentifier);
+
         return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($formPathAndFilename));
     }
 
     /**
-     * Save the array form representation identified by $persistenceIdentifier
+     * Save the array form representation identified by $persistenceIdentifier.
      *
      * @param string $persistenceIdentifier
-     * @param array $formDefinition
+     * @param array  $formDefinition
      */
     public function save($persistenceIdentifier, array $formDefinition)
     {
@@ -67,10 +71,11 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
     }
 
     /**
-     * Check whether a form with the specified $persistenceIdentifier exists
+     * Check whether a form with the specified $persistenceIdentifier exists.
      *
      * @param string $persistenceIdentifier
-     * @return boolean TRUE if a form with the given $persistenceIdentifier can be loaded, otherwise FALSE
+     *
+     * @return bool TRUE if a form with the given $persistenceIdentifier can be loaded, otherwise FALSE
      */
     public function exists($persistenceIdentifier)
     {
@@ -88,7 +93,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
      */
     public function listForms()
     {
-        $forms = array();
+        $forms = [];
         $directoryIterator = new \DirectoryIterator($this->savePath);
 
         foreach ($directoryIterator as $fileObject) {
@@ -101,25 +106,28 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
             }
             $persistenceIdentifier = $fileInfo['filename'];
             $form = $this->load($persistenceIdentifier);
-            $forms[] = array(
-                'identifier' => $form['identifier'],
-                'name' => isset($form['label']) ? $form['label'] : $form['identifier'],
-                'persistenceIdentifier' => $persistenceIdentifier
-            );
+            $forms[] = [
+                'identifier'            => $form['identifier'],
+                'name'                  => isset($form['label']) ? $form['label'] : $form['identifier'],
+                'persistenceIdentifier' => $persistenceIdentifier,
+            ];
         }
+
         return $forms;
     }
 
     /**
      * Returns the absolute path and filename of the form with the specified $persistenceIdentifier
-     * Note: This (intentionally) does not check whether the file actually exists
+     * Note: This (intentionally) does not check whether the file actually exists.
      *
      * @param string $persistenceIdentifier
+     *
      * @return string the absolute path and filename of the form with the specified $persistenceIdentifier
      */
     protected function getFormPathAndFilename($persistenceIdentifier)
     {
         $formFileName = sprintf('%s.yaml', $persistenceIdentifier);
-        return \Neos\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
+
+        return \Neos\Utility\Files::concatenatePaths([$this->savePath, $formFileName]);
     }
 }

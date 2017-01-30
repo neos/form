@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Unit\Factory;
 
 /*
@@ -11,75 +12,75 @@ namespace Neos\Form\Tests\Unit\Factory;
  * source code.
  */
 
-use Neos\Form\Utility\SupertypeResolver;
-
 /**
- * Test for Supertype Resolver
+ * Test for Supertype Resolver.
+ *
  * @covers \Neos\Form\Factory\AbstractFormFactory<extended>
  */
 class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 {
     public function dataProviderForConfigurationMerging()
     {
-        $presets = array(
-            'default' => array(
-                'formElementTypes' => array(
-                    'Neos.Form:Base' => array()
-                )
-            ),
-            'special' => array(
+        $presets = [
+            'default' => [
+                'formElementTypes' => [
+                    'Neos.Form:Base' => [],
+                ],
+            ],
+            'special' => [
                 'parentPreset' => 'default',
-                'foo' => 'bar',
-                'baz' => array(
-                    'test' => 'yeah'
-                )
-            ),
-            'specialSub' => array(
+                'foo'          => 'bar',
+                'baz'          => [
+                    'test' => 'yeah',
+                ],
+            ],
+            'specialSub' => [
                 'parentPreset' => 'special',
-                'baz' => array(
-                    'test' => 42
-                )
-            )
-        );
-        return array(
-            'preset without parent present' => array(
-                'presets' => $presets,
+                'baz'          => [
+                    'test' => 42,
+                ],
+            ],
+        ];
+
+        return [
+            'preset without parent present' => [
+                'presets'    => $presets,
                 'presetName' => 'default',
-                'expected' => array(
-                    'formElementTypes' => array(
-                        'Neos.Form:Base' => array()
-                    )
-                )
-            ),
+                'expected'   => [
+                    'formElementTypes' => [
+                        'Neos.Form:Base' => [],
+                    ],
+                ],
+            ],
 
-            'preset with one parent preset' => array(
-                'presets' => $presets,
+            'preset with one parent preset' => [
+                'presets'    => $presets,
                 'presetName' => 'special',
-                'expected' => array(
-                    'formElementTypes' => array(
-                        'Neos.Form:Base' => array()
-                    ),
+                'expected'   => [
+                    'formElementTypes' => [
+                        'Neos.Form:Base' => [],
+                    ],
                     'foo' => 'bar',
-                    'baz' => array(
-                        'test' => 'yeah'
-                    )
-                )
-            ),
+                    'baz' => [
+                        'test' => 'yeah',
+                    ],
+                ],
+            ],
 
-            'preset with two parent presets' => array(
-                'presets' => $presets,
+            'preset with two parent presets' => [
+                'presets'    => $presets,
                 'presetName' => 'specialSub',
-                'expected' => array(
-                    'formElementTypes' => array(
-                        'Neos.Form:Base' => array()
-                    ),
+                'expected'   => [
+                    'formElementTypes' => [
+                        'Neos.Form:Base' => [],
+                    ],
                     'foo' => 'bar',
-                    'baz' => array(
-                        'test' => 42
-                    )
-                )
-            )
-        );
+                    'baz' => [
+                        'test' => 42,
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -89,9 +90,9 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     public function getPresetConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $abstractFormFactory->_set('formSettings', array(
-            'presets' => $presets
-        ));
+        $abstractFormFactory->_set('formSettings', [
+            'presets' => $presets,
+        ]);
 
         $actual = $abstractFormFactory->_call('getPresetConfiguration', $presetName);
         $this->assertSame($expected, $actual);
@@ -130,7 +131,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
      */
     protected function getAbstractFormFactory()
     {
-        return $this->getAccessibleMock(\Neos\Form\Factory\AbstractFormFactory::class, array('build'));
+        return $this->getAccessibleMock(\Neos\Form\Factory\AbstractFormFactory::class, ['build']);
     }
 
     /**
@@ -140,11 +141,11 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     public function getPresetsWorks($presets, $presetName, $expected)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $abstractFormFactory->_set('formSettings', array(
-            'presets' => $presets
-        ));
+        $abstractFormFactory->_set('formSettings', [
+            'presets' => $presets,
+        ]);
 
         $actual = $abstractFormFactory->getPresetNames();
-        $this->assertSame(array('default', 'special', 'specialSub'), $actual);
+        $this->assertSame(['default', 'special', 'specialSub'], $actual);
     }
 }

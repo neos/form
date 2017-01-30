@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\FormElements;
 
 /*
@@ -11,10 +12,8 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
- * A password with confirmation form element
+ * A password with confirmation form element.
  */
 class PasswordWithConfirmation extends \Neos\Form\Core\Model\AbstractFormElement
 {

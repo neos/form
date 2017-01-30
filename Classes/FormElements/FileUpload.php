@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\FormElements;
 
 /*
@@ -11,10 +12,8 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
- * A generic file upload form element
+ * A generic file upload form element.
  */
 class FileUpload extends \Neos\Form\Core\Model\AbstractFormElement
 {
@@ -24,7 +23,7 @@ class FileUpload extends \Neos\Form\Core\Model\AbstractFormElement
     public function initializeFormElement()
     {
         $this->setDataType(\Neos\Flow\ResourceManagement\PersistentResource::class);
-        $fileTypeValidator = new \Neos\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
+        $fileTypeValidator = new \Neos\Form\Validation\FileTypeValidator(['allowedExtensions' => $this->properties['allowedExtensions']]);
         $this->addValidator($fileTypeValidator);
     }
 }

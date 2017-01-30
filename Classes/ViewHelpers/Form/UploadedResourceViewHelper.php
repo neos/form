@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers\Form;
 
 /*
@@ -11,11 +12,10 @@ namespace Neos\Form\ViewHelpers\Form;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
-use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMapper;
 use Neos\Flow\ResourceManagement\PersistentResource;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
  * This ViewHelper makes the specified PersistentResource available for its
@@ -49,7 +49,9 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
      * Initialize the arguments.
      *
      * @return void
+     *
      * @author Sebastian Kurfürst <sebastian@typo3.org>
+     *
      * @api
      */
     public function initializeArguments()
@@ -59,8 +61,11 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * @param string $as
+     *
      * @return string
+     *
      * @author Sebastian Kurfürst <sebastian@typo3.org>
+     *
      * @api
      */
     public function render($as = 'resource')
@@ -74,19 +79,20 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * Returns a previously uploaded resource.
-     * If errors occurred during property mapping for this property, NULL is returned
+     * If errors occurred during property mapping for this property, NULL is returned.
      *
      * @return PersistentResource
      */
     protected function getUploadedResource()
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
-            return null;
+            return;
         }
         $resourceObject = $this->getValue(false);
         if ($resourceObject instanceof PersistentResource) {
             return $resourceObject;
         }
+
         return $this->propertyMapper->convert($resourceObject, PersistentResource::class);
     }
 }

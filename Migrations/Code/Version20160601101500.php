@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Flow\Core\Migrations;
 
 /*
@@ -15,11 +16,10 @@ use Neos\Flow\Configuration\ConfigurationManager;
 use Neos\Utility\ObjectAccess;
 
 /**
- * Adjust "Settings.yaml" to use validationErrorTranslationPackage instead of translationPackage
+ * Adjust "Settings.yaml" to use validationErrorTranslationPackage instead of translationPackage.
  */
 class Version20160601101500 extends AbstractMigration
 {
-
     public function getIdentifier()
     {
         return 'TYPO3.Form-20160601101500';
@@ -46,9 +46,10 @@ class Version20160601101500 extends AbstractMigration
     }
 
     /**
-     * Recurse into the given preset and rename translationPackage to validationErrorTranslationPackage
+     * Recurse into the given preset and rename translationPackage to validationErrorTranslationPackage.
      *
      * @param array $preset
+     *
      * @return array
      */
     public function renameTranslationPackage(array &$preset)

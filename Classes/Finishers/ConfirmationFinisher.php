@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Finishers;
 
 /*
@@ -19,7 +20,7 @@ use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 
 /**
- * A simple finisher that outputs a given text
+ * A simple finisher that outputs a given text.
  *
  * Options:
  *
@@ -45,6 +46,7 @@ class ConfirmationFinisher extends AbstractFinisher
 {
     /**
      * @Flow\Inject
+     *
      * @var Translator
      */
     protected $translator;
@@ -52,20 +54,22 @@ class ConfirmationFinisher extends AbstractFinisher
     /**
      * @var array
      */
-    protected $defaultOptions = array(
-        'translation.id' => null,
-        'translation.locale' => null,
-        'translation.source' => 'Main',
+    protected $defaultOptions = [
+        'translation.id'      => null,
+        'translation.locale'  => null,
+        'translation.source'  => 'Main',
         'translation.package' => null,
-        'message' => '<p>The form has been submitted.</p>',
-    );
+        'message'             => '<p>The form has been submitted.</p>',
+    ];
 
     /**
-     * Executes this finisher
+     * Executes this finisher.
+     *
      * @see AbstractFinisher::execute()
      *
-     * @return void
      * @throws FinisherException
+     *
+     * @return void
      */
     protected function executeInternal()
     {
@@ -87,7 +91,7 @@ class ConfirmationFinisher extends AbstractFinisher
                 $renderingOptions = $formRuntime->getRenderingOptions();
                 $messagePackageKey = $renderingOptions['translationPackage'];
             }
-            $message = $this->translator->translateById($labelId, array(), null, $locale, $this->parseOption('translation.source'), $messagePackageKey);
+            $message = $this->translator->translateById($labelId, [], null, $locale, $this->parseOption('translation.source'), $messagePackageKey);
         } else {
             $message = $this->parseOption('message');
         }

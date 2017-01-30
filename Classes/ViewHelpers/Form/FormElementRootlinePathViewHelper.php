@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers\Form;
 
 /*
@@ -12,24 +13,25 @@ namespace Neos\Form\ViewHelpers\Form;
  */
 
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\Flow\Annotations as Flow;
 use Neos\Form\Core\Model\Renderable\RenderableInterface;
 
 /**
- * Form Element Rootline Path
+ * Form Element Rootline Path.
  */
 class FormElementRootlinePathViewHelper extends AbstractViewHelper
 {
     /**
      * @param RenderableInterface $renderable
+     *
      * @return string
      */
     public function render(RenderableInterface $renderable)
     {
         $path = $renderable->getIdentifier();
         while ($renderable = $renderable->getParentRenderable()) {
-            $path = $renderable->getIdentifier() . '/' . $path;
+            $path = $renderable->getIdentifier().'/'.$path;
         }
+
         return $path;
     }
 }

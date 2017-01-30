@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers;
 
 /*
@@ -12,28 +13,29 @@ namespace Neos\Form\ViewHelpers;
  */
 
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\Flow\Annotations as Flow;
 use Neos\Form\Core\Model\Renderable\RenderableInterface;
 use Neos\Form\Core\Renderer\RendererInterface;
 
 /**
- * Render a renderable
+ * Render a renderable.
  */
 class RenderRenderableViewHelper extends AbstractViewHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
     /**
      * @param RenderableInterface $renderable
+     *
      * @return string
      */
     public function render(RenderableInterface $renderable)
     {
         /** @var RendererInterface $view */
         $view = $this->viewHelperVariableContainer->getView();
+
         return $view->renderRenderable($renderable);
     }
 }

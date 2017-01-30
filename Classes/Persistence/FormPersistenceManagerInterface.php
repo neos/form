@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Persistence;
 
 /*
@@ -11,35 +12,35 @@ namespace Neos\Form\Persistence;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
  * Note: PersistenceIdentifier can be a file name, or anything else depending on the
- * currently active Form Persistence Mananger
+ * currently active Form Persistence Mananger.
  */
 interface FormPersistenceManagerInterface
 {
     /**
-     * Load the array form representation identified by $persistenceIdentifier, and return it
+     * Load the array form representation identified by $persistenceIdentifier, and return it.
      *
      * @param string $persistenceIdentifier
+     *
      * @return array
      */
     public function load($persistenceIdentifier);
 
     /**
-     * Save the array form representation identified by $persistenceIdentifier
+     * Save the array form representation identified by $persistenceIdentifier.
      *
      * @param string $persistenceIdentifier
-     * @param array $formDefinition
+     * @param array  $formDefinition
      */
     public function save($persistenceIdentifier, array $formDefinition);
 
     /**
-     * Check whether a form with the specified $persistenceIdentifier exists
+     * Check whether a form with the specified $persistenceIdentifier exists.
      *
      * @param string $persistenceIdentifier
-     * @return boolean TRUE if a form with the given $persistenceIdentifier can be loaded, otherwise FALSE
+     *
+     * @return bool TRUE if a form with the given $persistenceIdentifier can be loaded, otherwise FALSE
      */
     public function exists($persistenceIdentifier);
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Exception;
 
 /*
@@ -12,7 +13,7 @@ namespace Neos\Form\Exception;
  */
 
 /**
- * Generic Peristence Manager Exception, to be thrown f.e. if a given form is not loadable
+ * Generic Peristence Manager Exception, to be thrown f.e. if a given form is not loadable.
  *
  * @api
  */

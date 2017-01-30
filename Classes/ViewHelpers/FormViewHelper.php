@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers;
 
 /*
@@ -11,18 +12,19 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
-use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
- * Custom form ViewHelper that renders the form state instead of referrer fields
+ * Custom form ViewHelper that renders the form state instead of referrer fields.
  */
 class FormViewHelper extends FluidFormViewHelper
 {
     /**
      * @Flow\Inject
+     *
      * @var \Neos\Flow\Security\Cryptography\HashService
      */
     protected $hashService;
@@ -40,6 +42,7 @@ class FormViewHelper extends FluidFormViewHelper
         $tagBuilder->addAttribute('name', $this->prefixFieldName('__state'));
         $serializedFormState = base64_encode(serialize($this->arguments['object']->getFormState()));
         $tagBuilder->addAttribute('value', $this->hashService->appendHmac($serializedFormState));
+
         return $tagBuilder->render();
     }
 
@@ -56,7 +59,7 @@ class FormViewHelper extends FluidFormViewHelper
     }
 
     /**
-     * Overrides the forms action URI to be the same as the currently requested URI
+     * Overrides the forms action URI to be the same as the currently requested URI.
      *
      * @return string
      */
@@ -66,8 +69,9 @@ class FormViewHelper extends FluidFormViewHelper
         $actionRequest = $this->controllerContext->getRequest();
         $uri = $actionRequest->getHttpRequest()->getUri();
         if ($this->hasArgument('section')) {
-            $uri = preg_replace('/#.*$/', '', $uri) . '#' . $this->arguments['section'];
+            $uri = preg_replace('/#.*$/', '', $uri).'#'.$this->arguments['section'];
         }
-        return (string)$uri;
+
+        return (string) $uri;
     }
 }

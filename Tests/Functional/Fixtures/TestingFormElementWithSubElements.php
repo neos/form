@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional\Fixtures;
 
 /*
@@ -14,7 +15,7 @@ namespace Neos\Form\Tests\Functional\Fixtures;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * Form element that amends itself with another field having a validator
+ * Form element that amends itself with another field having a validator.
  */
 class TestingFormElementWithSubElements extends \Neos\Form\FormElements\Section
 {
@@ -22,6 +23,7 @@ class TestingFormElementWithSubElements extends \Neos\Form\FormElements\Section
      * This is a callback that is invoked by the Form Factory after the whole form has been built.
      *
      * @return void
+     *
      * @api
      */
     public function onBuildingFinished()

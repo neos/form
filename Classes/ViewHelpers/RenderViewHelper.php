@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\ViewHelpers;
 
 /*
@@ -11,14 +12,14 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
-use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Http\Response;
-use Neos\Utility\Arrays;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Form\Persistence\FormPersistenceManagerInterface;
+use Neos\Utility\Arrays;
 
 /**
- * Main Entry Point to render a Form into a Fluid Template
+ * Main Entry Point to render a Form into a Fluid Template.
  *
  * <pre>
  * {namespace form=Neos\Form\ViewHelpers}
@@ -32,21 +33,23 @@ use Neos\Form\Persistence\FormPersistenceManagerInterface;
 class RenderViewHelper extends AbstractViewHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
     /**
      * @Flow\Inject
+     *
      * @var FormPersistenceManagerInterface
      */
     protected $formPersistenceManager;
 
     /**
      * @param string $persistenceIdentifier the persistence identifier for the form.
-     * @param string $factoryClass The fully qualified class name of the factory (which has to implement \Neos\Form\Factory\FormFactoryInterface)
-     * @param string $presetName name of the preset to use
-     * @param array $overrideConfiguration factory specific configuration
+     * @param string $factoryClass          The fully qualified class name of the factory (which has to implement \Neos\Form\Factory\FormFactoryInterface)
+     * @param string $presetName            name of the preset to use
+     * @param array  $overrideConfiguration factory specific configuration
+     *
      * @return string the rendered form
      */
     public function render($persistenceIdentifier = null, $factoryClass = \Neos\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = null)
@@ -59,6 +62,7 @@ class RenderViewHelper extends AbstractViewHelper
         $formDefinition = $factory->build($overrideConfiguration, $presetName);
         $response = new Response($this->controllerContext->getResponse());
         $form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
+
         return $form->render();
     }
 }
