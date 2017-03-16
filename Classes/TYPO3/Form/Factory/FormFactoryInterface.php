@@ -41,5 +41,5 @@ interface FormFactoryInterface
      * @return \TYPO3\Form\Core\Model\FormDefinition a newly built form definition
      * @api
      */
-    public function build(array $configuration, $presetName);
+    public function build(array $configuration = [], $presetName);
 }
