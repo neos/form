@@ -62,7 +62,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\IdentifierNotValidException
+     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
@@ -123,7 +123,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function aFormElementCanOnlyBeAttachedToASinglePage()
     {
@@ -181,7 +181,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function createElementThrowsExceptionIfPageIsNotAttachedToParentForm()
     {
@@ -191,7 +191,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\TypeDefinitionNotFoundException
+     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function createElementThrowsExceptionIfImplementationClassNameNotFound()
     {
@@ -202,7 +202,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\TypeDefinitionNotValidException
+     * @expectedException \Neos\Form\Exception\TypeDefinitionNotValidException
      */
     public function createElementThrowsExceptionIfImplementationClassNameDoesNotImplementFormElementInterface()
     {
@@ -213,7 +213,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\TypeDefinitionNotValidException
+     * @expectedException \Neos\Form\Exception\TypeDefinitionNotValidException
      */
     public function createElementThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
@@ -239,7 +239,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function moveElementBeforeThrowsExceptionIfElementsAreNotOnSamePage()
     {
@@ -270,7 +270,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function moveElementAfterThrowsExceptionIfElementsAreNotOnSamePage()
     {
@@ -303,7 +303,7 @@ class PageTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\FormDefinitionConsistencyException
+     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function removeElementThrowsExceptionIfElementIsNotOnCurrentPage()
     {

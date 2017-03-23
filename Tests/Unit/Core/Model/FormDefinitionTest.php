@@ -46,7 +46,7 @@ class FormDefinitionTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\IdentifierNotValidException
+     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
