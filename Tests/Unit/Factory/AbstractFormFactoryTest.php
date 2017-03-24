@@ -99,7 +99,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\PresetNotFoundException
+     * @expectedException \Neos\Form\Exception\PresetNotFoundException
      */
     public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound()
     {

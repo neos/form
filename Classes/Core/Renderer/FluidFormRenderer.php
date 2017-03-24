@@ -317,8 +317,7 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
      *
      * @param string $renderableType
      * @param string $renderablePathAndFilename
-     * @return \Neos\FluidAdaptor\Core\Parser\ParsedTemplateInterface
-     * @return \Neos\FluidAdaptor\Core\Parser\ParsedTemplateInterface
+     * @return \TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface
      * @throws \Neos\Form\Exception
      * @internal
      */

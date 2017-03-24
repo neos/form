@@ -133,7 +133,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException Neos\Form\Exception\TypeDefinitionNotFoundException
+     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {
