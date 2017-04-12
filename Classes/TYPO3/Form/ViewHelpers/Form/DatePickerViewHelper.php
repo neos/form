@@ -12,6 +12,7 @@ namespace TYPO3\Form\ViewHelpers\Form;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Utility\Algorithms;
 
 /**
  * Display a jQuery date picker.
@@ -73,7 +74,7 @@ class DatePickerViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFie
         if ($this->hasArgument('id')) {
             $id = $this->arguments['id'];
         } else {
-            $id = 'field' . md5(uniqid());
+            $id = 'field' . md5(Algorithms::generateRandomString(13));
             $this->tag->addAttribute('id', $id);
         }
         $this->setErrorClassAttribute();
