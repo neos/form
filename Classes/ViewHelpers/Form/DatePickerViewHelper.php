@@ -12,6 +12,7 @@ namespace Neos\Form\ViewHelpers\Form;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Utility\Algorithms;
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
@@ -74,7 +75,7 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
         if ($this->hasArgument('id')) {
             $id = $this->arguments['id'];
         } else {
-            $id = 'field' . md5(uniqid());
+            $id = 'field' . md5(Algorithms::generateRandomString(13));
             $this->tag->addAttribute('id', $id);
         }
         $this->setErrorClassAttribute();
