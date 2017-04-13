@@ -39,7 +39,7 @@ class Version20160601101500 extends AbstractMigration
 
                 $presetsConfiguration = $this->renameTranslationPackage($presetsConfiguration);
 
-                $configuration['TYPO3']['Form']['presets'] = $presetsConfiguration;
+                $configuration['Neos']['Form']['presets'] = $presetsConfiguration;
             },
             true
         );
