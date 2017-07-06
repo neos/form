@@ -11,6 +11,7 @@ namespace Neos\Form\Tests\Unit\Persistence;
  * source code.
  */
 
+use Neos\Form\Persistence\YamlPersistenceManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamWrapper;
 
@@ -20,14 +21,14 @@ use org\bovigo\vfs\vfsStreamWrapper;
 class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
-     * @var \Neos\Form\Persistence\YamlPersistenceManager
+     * @var YamlPersistenceManager
      */
     protected $yamlPersistenceManager;
 
     public function setUp()
     {
         vfsStream::setup('someSavePath');
-        $this->yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
+        $this->yamlPersistenceManager = new YamlPersistenceManager();
         $this->yamlPersistenceManager->injectSettings(array(
                 'yamlPersistenceManager' =>
                     array('savePath' => vfsStream::url('someSavePath')
@@ -42,7 +43,7 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
     public function injectSettingsCreatesSaveDirectoryIfItDoesntExist()
     {
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
-        $yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
+        $yamlPersistenceManager = new YamlPersistenceManager();
         $settings = array(
             'yamlPersistenceManager' =>
                 array('savePath' => vfsStream::url('someSavePath/foo/bar')
@@ -58,7 +59,7 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function loadThrowsExceptionIfSpecifiedFormDoesNotExist()
     {
-        $yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
+        $yamlPersistenceManager = new YamlPersistenceManager();
         $settings = array(
             'yamlPersistenceManager' =>
                 array('savePath' => vfsStream::url('someSavePath/foo/bar')
