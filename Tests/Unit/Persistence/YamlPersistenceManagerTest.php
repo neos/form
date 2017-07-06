@@ -59,6 +59,12 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
     public function loadThrowsExceptionIfSpecifiedFormDoesNotExist()
     {
         $yamlPersistenceManager = new \Neos\Form\Persistence\YamlPersistenceManager();
+        $settings = array(
+            'yamlPersistenceManager' =>
+                array('savePath' => vfsStream::url('someSavePath/foo/bar')
+                )
+        );
+        $yamlPersistenceManager->injectSettings($settings);
         $yamlPersistenceManager->load('someNonExistingPersistenceIdentifier');
     }
 
