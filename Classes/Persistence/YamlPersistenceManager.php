@@ -90,6 +90,8 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
      */
     public function listForms()
     {
+        $this->assertSavePathIsValid();
+
         $forms = array();
         $directoryIterator = new \DirectoryIterator($this->savePath);
 
@@ -121,7 +123,22 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
      */
     protected function getFormPathAndFilename($persistenceIdentifier)
     {
+        $this->assertSavePathIsValid();
+
         $formFileName = sprintf('%s.yaml', $persistenceIdentifier);
         return \Neos\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
+    }
+
+    /**
+     * Check if the save path is set and points to a directory.
+     *
+     * @return void
+     * @throws PersistenceManagerException
+     */
+    protected function assertSavePathIsValid()
+    {
+        if ($this->savePath === null || !is_dir($this->savePath)) {
+            throw new PersistenceManagerException(sprintf('The savePath "%s" is not usable.', $this->savePath), 1499347363);
+        }
     }
 }

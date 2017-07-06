@@ -53,6 +53,17 @@ class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
         $this->assertTrue(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
     }
 
+
+    /**
+     * @test
+     * @expectedException \Neos\Form\Exception\PersistenceManagerException
+     */
+    public function loadThrowsExceptionIfSavePathIsNotSet()
+    {
+        $yamlPersistenceManager = new YamlPersistenceManager();
+        $yamlPersistenceManager->load('dummy');
+    }
+
     /**
      * @test
      * @expectedException \Neos\Form\Exception\PersistenceManagerException
@@ -130,6 +141,17 @@ label: \'Form Fixture\'
         file_put_contents(vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
         $this->assertTrue($this->yamlPersistenceManager->exists('mockFormPersistenceIdentifier'));
     }
+
+    /**
+     * @test
+     * @expectedException \Neos\Form\Exception\PersistenceManagerException
+     */
+    public function listFormsThrowsExceptionIfSavePathIsNotSet()
+    {
+        $yamlPersistenceManager = new YamlPersistenceManager();
+        $yamlPersistenceManager->listForms();
+    }
+
 
     /**
      * @test
