@@ -25,6 +25,9 @@ Neos:
             rendererClassName: Neos\Form\Core\Renderer\FluidFormRenderer
             renderingOptions:
               renderableNameInTemplate: form
+          'Neos.Form:FormEditMode':
+            superTypes:
+              'Neos.Form:Form': true
           'Neos.Form:RemovableMixin': {  }
           'Neos.Form:ReadOnlyFormElement':
             superTypes:
