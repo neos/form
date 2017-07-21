@@ -11,9 +11,9 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
-use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
-use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
+use Neos\Form\Core\Runtime\FormRuntime;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
@@ -21,12 +21,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  */
 class FormViewHelper extends FluidFormViewHelper
 {
-    /**
-     * @Flow\Inject
-     * @var \Neos\Flow\Security\Cryptography\HashService
-     */
-    protected $hashService;
-
     /**
      * Renders hidden form fields for referrer information about
      * the current request.
@@ -38,8 +32,9 @@ class FormViewHelper extends FluidFormViewHelper
         $tagBuilder = new TagBuilder('input');
         $tagBuilder->addAttribute('type', 'hidden');
         $tagBuilder->addAttribute('name', $this->prefixFieldName('__state'));
-        $serializedFormState = base64_encode(serialize($this->arguments['object']->getFormState()));
-        $tagBuilder->addAttribute('value', $this->hashService->appendHmac($serializedFormState));
+        /** @var FormRuntime $formRuntime */
+        $formRuntime = $this->arguments['object'];
+        $tagBuilder->addAttribute('value', $formRuntime->getSerializedFormState());
         return $tagBuilder->render();
     }
 
