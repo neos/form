@@ -164,6 +164,7 @@ list. A Form Element Renderer must implement the ``RendererInterface`` interface
 	    * @return string
 	    */
 	   public function renderRenderable(\Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
+	      $renderable->beforeRendering($this->formRuntime);
 	      $items = array();
 	      if ($renderable instanceof \Neos\Form\Core\Model\FormElementInterface) {
 	         $elementProperties = $renderable->getProperties();
@@ -177,9 +178,13 @@ list. A Form Element Renderer must implement the ``RendererInterface`` interface
 	         $content .= sprintf('<li>%s</li>', htmlspecialchars($item));
 	      }
 	      $content .= '</ul>';
+	      $content = $this->formRuntime->invokeRenderCallbacks($content, $renderable);
 	      return $content;
 	   }
 	}
+
+.. note::  Don't forget to invoke ``RootRenderableInterface::beforeRendering()`` and ``FormRuntime::invokeRenderCallbacks()``
+   as shown above.
 
 .. tip:: If you write your own Renderer make sure to sanitize values with ``htmlspecialchars()`` before outputting
    them to prevent invalid HTML and XSS vulnerabilities.

@@ -13,6 +13,7 @@ namespace Neos\Form\Core\Runtime;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
 
 /**
  * This class implements the *runtime logic* of a form, i.e. deciding which
@@ -116,6 +117,11 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      * @internal
      */
     protected $flashMessageContainer;
+
+    /**
+     * @var callable[]
+     */
+    protected $renderCallbacks = [];
 
     /**
      * @param \Neos\Form\Core\Model\FormDefinition $formDefinition
@@ -594,5 +600,32 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      */
     public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime)
     {
+    }
+
+    /**
+     * Registers a callback that is called just before a Form Element is rendered.
+     * The callback will be invoked with the rendered element and an instance of the RootRenderableInterface as
+     * arguments and is expected to return the (possibly altered) rendered element
+     *
+     * @param callable $callback
+     * @return void
+     * @api
+     */
+    public function registerRenderCallback(callable $callback)
+    {
+        $this->renderCallbacks[] = $callback;
+    }
+
+    /**
+     * @param string $renderedElement
+     * @param RootRenderableInterface $renderable
+     * @return string
+     */
+    public function invokeRenderCallbacks($renderedElement, RootRenderableInterface $renderable)
+    {
+        foreach ($this->renderCallbacks as $renderCallback) {
+            $renderedElement = call_user_func($renderCallback, $renderedElement, $renderable);
+        }
+        return $renderedElement;
     }
 }

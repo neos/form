@@ -194,6 +194,7 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
         }
 
         $this->baseRenderingContext->setTemplatePaths($currentTemplatePathsResolver);
+        $output = $this->formRuntime->invokeRenderCallbacks($output, $renderable);
         return $output;
     }
 
