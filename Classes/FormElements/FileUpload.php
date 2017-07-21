@@ -24,6 +24,17 @@ class FileUpload extends \Neos\Form\Core\Model\AbstractFormElement
     public function initializeFormElement()
     {
         $this->setDataType(\Neos\Flow\ResourceManagement\PersistentResource::class);
+    }
+
+    /**
+     * Add FileTypeValidator just before submitting so that the "allowedExtension" can be changed at runtime
+     *
+     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param mixed $elementValue
+     * @return void
+     */
+    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    {
         $fileTypeValidator = new \Neos\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
         $this->addValidator($fileTypeValidator);
     }
