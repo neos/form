@@ -161,8 +161,6 @@ class FluidFormRenderer extends TemplateView implements RendererInterface
         $newTemplatePathsResolver = $this->createTemplatePathsResolverWithRenderingOptions($renderingOptions);
         $this->baseRenderingContext->setTemplatePaths($newTemplatePathsResolver);
 
-        isset($renderingOptions['templatePathPattern']);
-
         if ($this->getCurrentRenderingContext() === null) {
             // We do not have a "current" rendering context yet, so we use the base rendering context
             $this->baseRenderingContext->setControllerContext($this->controllerContext);
