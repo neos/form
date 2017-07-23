@@ -37,6 +37,4 @@ class DatePicker extends \Neos\Form\Core\Model\AbstractFormElement
 
         $propertyMappingConfiguration->setTypeConverterOption(DateTimeConverter::class, DateTimeConverter::CONFIGURATION_DATE_FORMAT, $this->properties['dateFormat']);
     }
-
-
 }
