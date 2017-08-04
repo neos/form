@@ -1,15 +1,15 @@
 <?php
-namespace TYPO3\Form\Tests\Functional;
+namespace Neos\Form\Tests\Functional;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Neos.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
@@ -107,7 +107,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
 
         // 2. TEST SETUP: BUILD GET REQUEST ONLY CONTAINING FORM STATE
         $form = $this->browser->getForm();
-        \TYPO3\Flow\Reflection\ObjectAccess::setProperty($form, 'method', 'GET', true);
+        \Neos\Utility\ObjectAccess::setProperty($form, 'method', 'GET', true);
 
         // we want to stay on the current page, that's why we send __currentPage = 1. (== 2nd page of the form)
         $doc = new \DOMDocument();

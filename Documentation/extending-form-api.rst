@@ -19,20 +19,20 @@ This is where you want to get your hands dirty and create custom Form Element im
 Examples for such custom Form Elements are:
 
 * A *DatePicker* that converts the input to a ``DateTime`` object
-* A *File upload* that validates and converts an uploaded file to a ``Resource``
+* A *File upload* that validates and converts an uploaded file to a ``PersistentResource``
 * A *Captcha* image
 
 A Form Element must implement the ``FormElementInterface`` interface located in
-``TYPO3.Form/Classes/Core/Model/FormElementInterface.php``.
+``Neos.Form/Classes/Core/Model/FormElementInterface.php``.
 
 .. tip:: Usually you want to extend the provided ``AbstractFormElement`` which already implements
    most of the methods of the interface.
 
 Most commonly you create custom Form elements in order to preconfigure the so called ``Processing Rule``
 which defines validation and property mapping instructions for an element.
-Lets have a look at the ``DatePicker`` Form Element located in ``TYPO3.Form/Classes/FormElements/DatePicker.php``::
+Lets have a look at the ``DatePicker`` Form Element located in ``Neos.Form/Classes/FormElements/DatePicker.php``::
 
-	class DatePicker extends \TYPO3\Form\Core\Model\AbstractFormElement {
+	class DatePicker extends \Neos\Form\Core\Model\AbstractFormElement {
 	   public function initializeFormElement() {
 	      $this->setDataType('DateTime');
 	   }
@@ -51,26 +51,26 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 
 	namespace Your\Package\FormElements;
 
-	class ConditionalRequired extends \TYPO3\Form\Core\Model\AbstractFormElement {
+	class ConditionalRequired extends \Neos\Form\Core\Model\AbstractFormElement {
 
 	   /**
 	    * Executed before the current element is outputted to the client
 	    *
-	    * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	    * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
 	    * @return void
 	    */
-	   public function beforeRendering(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime) {
+	   public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime) {
 	      $this->requireIfTriggerIsSet($formRuntime->getFormState());
 	   }
 
 	   /**
 	    * Executed after the page containing the current element has been submitted
 	    *
-	    * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
+	    * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
 	    * @param mixed $elementValue raw value of the submitted element
 	    * @return void
 	    */
-	   public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
+	   public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
 	      $this->requireIfTriggerIsSet($formRuntime->getFormState());
 	   }
 
@@ -78,10 +78,10 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 	    * Adds a NotEmptyValidator to the current element if the "trigger" value is not empty.
 	    * The trigger can be configured with $this->properties['triggerPropertyPath']
 	    *
-	    * @param \TYPO3\Form\Core\Runtime\FormState $formState
+	    * @param \Neos\Form\Core\Runtime\FormState $formState
 	    * @return void
 	    */
-	   protected function requireIfTriggerIsSet(\TYPO3\Form\Core\Runtime\FormState $formState) {
+	   protected function requireIfTriggerIsSet(\Neos\Form\Core\Runtime\FormState $formState) {
 	      if (!isset($this->properties['triggerPropertyPath'])) {
 	         return;
 	      }
@@ -89,7 +89,7 @@ For this create a new PHP class at ``Your.Package/Classes/FormElements/Condition
 	      if ($triggerValue === NULL || $triggerValue === '') {
 	         return;
 	      }
-	      $this->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+	      $this->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
 	   }
 	}
 
@@ -106,30 +106,30 @@ In order to use the new Form Element type you first have to extend the Form Defi
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      somePreset:
 	        # ...
 	        formElementTypes:
-	          'TYPO3.FormExample:ConditionalRequired':
+	          'Neos.FormExample:ConditionalRequired':
 	            superTypes:
-	              'TYPO3.Form:FormElement': TRUE
-	            implementationClassName: 'TYPO3\FormExample\FormElements\ConditionalRequired'
+	              'Neos.Form:FormElement': TRUE
+	            implementationClassName: 'Neos\FormExample\FormElements\ConditionalRequired'
 	            renderingOptions:
-	              templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleLineText.html'
+	              templatePathPattern: 'resource://Neos.Form/Private/Form/SingleLineText.html'
 
-This makes the new Form Element ``TYPO3.FormExample:ConditionalRequired`` available in the preset
+This makes the new Form Element ``Neos.FormExample:ConditionalRequired`` available in the preset
 ``somePreset`` and you can use it as follows::
 
 	$form = new FormDefinition('myForm', $formDefaults);
 
 	$page1 = $form->createPage('page1');
 
-	$newsletter = $page1->createElement('newsletter', 'TYPO3.Form:Checkbox');
+	$newsletter = $page1->createElement('newsletter', 'Neos.Form:Checkbox');
 	$newsletter->setLabel('Subscribe for Newsletter');
 
-	$email = $page1->createElement('email', 'TYPO3.FormExample:ConditionalRequired');
+	$email = $page1->createElement('email', 'Neos.FormExample:ConditionalRequired');
 	$email->setLabel('E-Mail');
 	$email->setProperty('triggerPropertyPath', 'newsletter');
 
@@ -152,20 +152,21 @@ own Renderer and use it either for the complete form or for certain Form Element
 
 As a basic example we want to implement a ``ListRenderer`` that simply outputs specified items as unordered
 list. A Form Element Renderer must implement the ``RendererInterface`` interface located in
-``TYPO3.Form/Classes/Core/Renderer/RendererInterface.php`` and usually you want to extend the provided
+``Neos.Form/Classes/Core/Renderer/RendererInterface.php`` and usually you want to extend the provided
 ``AbstractRenderer`` which already implements most of the methods of the interface::
 
 	namespace Your\Package\Renderers;
 
-	class ListRenderer extends \TYPO3\Form\Core\Renderer\AbstractElementRenderer {
+	class ListRenderer extends \Neos\Form\Core\Renderer\AbstractElementRenderer {
 
 	   /**
-	    * @param \TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable
+	    * @param \Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable
 	    * @return string
 	    */
-	   public function renderRenderable(\TYPO3\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
+	   public function renderRenderable(\Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable) {
+	      $renderable->beforeRendering($this->formRuntime);
 	      $items = array();
-	      if ($renderable instanceof \TYPO3\Form\Core\Model\FormElementInterface) {
+	      if ($renderable instanceof \Neos\Form\Core\Model\FormElementInterface) {
 	         $elementProperties = $renderable->getProperties();
 	         if (isset($elementProperties['items'])) {
 	            $items = $elementProperties['items'];
@@ -177,9 +178,13 @@ list. A Form Element Renderer must implement the ``RendererInterface`` interface
 	         $content .= sprintf('<li>%s</li>', htmlspecialchars($item));
 	      }
 	      $content .= '</ul>';
+	      $content = $this->formRuntime->invokeRenderCallbacks($content, $renderable);
 	      return $content;
 	   }
 	}
+
+.. note::  Don't forget to invoke ``RootRenderableInterface::beforeRendering()`` and ``FormRuntime::invokeRenderCallbacks()``
+   as shown above.
 
 .. tip:: If you write your own Renderer make sure to sanitize values with ``htmlspecialchars()`` before outputting
    them to prevent invalid HTML and XSS vulnerabilities.

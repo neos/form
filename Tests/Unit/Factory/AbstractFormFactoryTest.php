@@ -1,30 +1,30 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Factory;
+namespace Neos\Form\Tests\Unit\Factory;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Neos.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
-use TYPO3\Form\Utility\SupertypeResolver;
+use Neos\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
- * @covers \TYPO3\Form\Factory\AbstractFormFactory<extended>
+ * @covers \Neos\Form\Factory\AbstractFormFactory<extended>
  */
-class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
+class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 {
     public function dataProviderForConfigurationMerging()
     {
         $presets = array(
             'default' => array(
                 'formElementTypes' => array(
-                    'TYPO3.Form:Base' => array()
+                    'Neos.Form:Base' => array()
                 )
             ),
             'special' => array(
@@ -47,7 +47,7 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
                 'presetName' => 'default',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Base' => array()
+                        'Neos.Form:Base' => array()
                     )
                 )
             ),
@@ -57,7 +57,7 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
                 'presetName' => 'special',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Base' => array()
+                        'Neos.Form:Base' => array()
                     ),
                     'foo' => 'bar',
                     'baz' => array(
@@ -71,7 +71,7 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
                 'presetName' => 'specialSub',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'TYPO3.Form:Base' => array()
+                        'Neos.Form:Base' => array()
                     ),
                     'foo' => 'bar',
                     'baz' => array(
@@ -99,7 +99,7 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\PresetNotFoundException
+     * @expectedException \Neos\Form\Exception\PresetNotFoundException
      */
     public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound()
     {
@@ -113,11 +113,11 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function initializeObjectLoadsSettings()
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $mockConfigurationManager = $this->getMockBuilder('TYPO3\Flow\Configuration\ConfigurationManager')->disableOriginalConstructor()->getMock();
+        $mockConfigurationManager = $this->getMockBuilder(\Neos\Flow\Configuration\ConfigurationManager::class)->disableOriginalConstructor()->getMock();
         $mockConfigurationManager
             ->expects($this->once())
             ->method('getConfiguration')
-            ->with(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Form')
+            ->with(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form')
             ->will($this->returnValue('MyConfig'));
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
@@ -126,11 +126,11 @@ class AbstractFormFactoryTest extends \TYPO3\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \TYPO3\Form\Factory\AbstractFormFactory
+     * @return \Neos\Form\Factory\AbstractFormFactory
      */
     protected function getAbstractFormFactory()
     {
-        return $this->getAccessibleMock('TYPO3\Form\Factory\AbstractFormFactory', array('build'));
+        return $this->getAccessibleMock(\Neos\Form\Factory\AbstractFormFactory::class, array('build'));
     }
 
     /**

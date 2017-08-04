@@ -1,6 +1,6 @@
-{namespace form=TYPO3\Form\ViewHelpers}
-{namespace m=TYPO3\Media\ViewHelpers}
-<f:layout name="TYPO3.Form:Field" />
+{namespace form=Neos\Form\ViewHelpers}
+{namespace m=Neos\Media\ViewHelpers}
+<f:layout name="Neos.Form:Field" />
 <f:section name="field">
 	<form:form.uploadedImage property="{element.identifier}" as="image">
 		<div id="{element.uniqueIdentifier}-uploadfields"{f:if(condition:image, then: ' style="display:none"')}>

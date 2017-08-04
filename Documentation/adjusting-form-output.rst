@@ -35,13 +35,13 @@ file, like in the following example:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      preset1:
 	        title: 'My First Preset'
 	        formElementTypes:
-	          'TYPO3.Form:SingleLineTextfield':
+	          'Neos.Form:SingleLineTextfield':
 	            # configuration for the single line textfield
 	      preset2:
 	        title: 'My Second Preset'
@@ -53,8 +53,8 @@ The above example defines two presets (``preset1`` and ``preset2``). Because
 ``preset2`` defines a ``parentPreset``, it **inherits** all options from ``preset1``
 if not specified otherwise.
 
-.. tip:: The TYPO3.Form package already defines a preset with the name ``default``
-   which contains all standard form elements. Look into ``TYPO3.Form/Configuration/Settings.yaml``
+.. tip:: The Neos.Form package already defines a preset with the name ``default``
+   which contains all standard form elements. Look into ``Neos.Form/Configuration/Settings.yaml``
    for the details on the defined form elements.
 
    In most cases, you will create a sub-preset of the ``default`` preset, modifying
@@ -73,16 +73,16 @@ is the *form element type* definition, which configures each form element correc
 
 As an example, let's create a text field with the following snippet::
 
-	$name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
+	$name = $page1->createElement('name', 'Neos.Form:SingleLineText');
 	$name->setLabel('Name');
 
-In the above example, the form element type is ``TYPO3.Form:SingleLineText``, and
+In the above example, the form element type is ``Neos.Form:SingleLineText``, and
 when creating the form element, it *applies all default values* being set inside
 the form element type. As an example, take the following type definition:
 
 .. code-block:: yaml
 
-	'TYPO3.Form:SingleLineText':
+	'Neos.Form:SingleLineText':
 	  defaultValue: 'My Default Text'
 	  properties:
 	    placeholder: 'My Placeholder Text'
@@ -98,11 +98,11 @@ the *form element definition* on the newly created form object before returning 
 
 .. tip:: The defaults are not only applied on single form elements, but also
    on the FormDefinition and Page objects. The FormDefinition object has, by
-   convention, the *form element type* ``TYPO3.Form:Form``, but you can also
+   convention, the *form element type* ``Neos.Form:Form``, but you can also
    override it by passing the to-be-used type as third parameter to the
    constructor of :api-core-model:`FormDefinition`.
 
-   A *page* has, by default, the *form element type* ``TYPO3.Form:Page``, and you can
+   A *page* has, by default, the *form element type* ``Neos.Form:Page``, and you can
    override it by supplying a second parameter to the ``createPage()`` method of
    :api-core-model:`FormDefinition`.
 
@@ -119,13 +119,13 @@ The following example demonstrates this:
 .. code-block:: yaml
 
 
-	'TYPO3.Form:SingleLineText':
+	'Neos.Form:SingleLineText':
 	  defaultValue: 'My Default Text'
 	  properties:
 	    placeholder: 'My Placeholder Text'
-	'TYPO3.Form:SpecialText':
+	'Neos.Form:SpecialText':
 	  superTypes:
-	    'TYPO3.Form:SingleLineText' : TRUE
+	    'Neos.Form:SingleLineText' : TRUE
 	  defaultValue: 'My special text'
 
 Here, the ``SpecialText`` inherits the ``placeholder`` property from the ``SingleLineText``
@@ -143,9 +143,9 @@ Previously the superTypes configuration was just a simple list of strings:
 
 .. code-block:: yaml
 
-	'TYPO3.Form:SpecialText':
+	'Neos.Form:SpecialText':
 	  superTypes:
-	    'TYPO3.Form:SingleLineText': TRUE
+	    'Neos.Form:SingleLineText': TRUE
 	  defaultValue: 'My special text'
 
 But this made it impossible to *unset* a super type from a 3rd party package.
@@ -160,7 +160,7 @@ contents:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      myCustom:
@@ -180,13 +180,13 @@ Now we are set up to modify the custom preset, and can adjust the form output.
 Adjusting a Form Element Template
 ---------------------------------
 
-The templates of the default Form Elements are located in ``TYPO3.Form/Resources/Private/Form/``.
+The templates of the default Form Elements are located in ``Neos.Form/Resources/Private/Form/``.
 They are standard Fluid templates and most of them are really simple. Open up the
 ``Single-Line Text`` template for example:
 
 .. code-block:: xml
 
-	<f:layout name="TYPO3.Form:Field" />
+	<f:layout name="Neos.Form:Field" />
 	<f:section name="field">
 	   <f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}"
 	                     placeholder="{element.properties.placeholder}" errorClass="error" />
@@ -205,7 +205,7 @@ and adjust it as follows:
 
 .. code-block:: xml
 
-	<f:layout name="TYPO3.Form:Field" />
+	<f:layout name="Neos.Form:Field" />
 	<f:section name="field">
 	   <f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}"
 	                     placeholder="{element.properties.placeholder}" errorClass="error"
@@ -221,14 +221,14 @@ Adjust ``Your.Package/Configuration/Settings.yaml`` accordingly:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      myCustom:
 	        title: 'Custom Elements'
 	        parentPreset: 'default'
 	        formElementTypes:
-	          'TYPO3.Form:SingleLineText':
+	          'Neos.Form:SingleLineText':
 	            renderingOptions:
 	              templatePathPattern: 'resource://Your.Package/Private/CustomElements/SingleLineText.html'
 
@@ -244,13 +244,13 @@ Changing The Form Layout
 By default, validation errors are rendered next to each form element. Imagine you want to render validation errors of the
 current page *above* the form instead. For this you need to adjust the previously mentioned **field layout**.
 
-The provided default field layout located in ``TYPO3.Form/Resources/Private/Form/Layouts/Field.html`` is a bit more verbose
+The provided default field layout located in ``Neos.Form/Resources/Private/Form/Layouts/Field.html`` is a bit more verbose
 as it renders the label, validation errors and an asterisk if the element is required (we slightly reformatted the template
 here to improve readability):
 
 .. code-block:: xml
 
-	{namespace form=TYPO3\Form\ViewHelpers}
+	{namespace form=Neos\Form\ViewHelpers}
 	<f:form.validationResults for="{element.identifier}">
 	   <!-- wrapping div for the form element; contains an identifier for the form element if we are
               in preview mode -->
@@ -262,7 +262,7 @@ here to improve readability):
 	      <!-- Label for the form element, and required indicator -->
 	      <label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}
 	         <f:if condition="{element.required}">
-	            <f:render partial="TYPO3.Form:Field/Required" />
+	            <f:render partial="Neos.Form:Field/Required" />
 	         </f:if>
 	       </label>
 
@@ -275,7 +275,7 @@ here to improve readability):
 	            <span class="help-inline">
 	               <f:for each="{validationResults.errors}" as="error">
 	                  {error -> f:translate(id: error.code, arguments: error.arguments,
-	                                        package: 'TYPO3.Form', source: 'ValidationErrors')}
+	                                        package: 'Neos.Form', source: 'ValidationErrors')}
 	                  <br />
 	               </f:for>
 	            </span>
@@ -288,7 +288,7 @@ Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/
 
 .. code-block:: xml
 
-	{namespace form=TYPO3\Form\ViewHelpers}
+	{namespace form=Neos\Form\ViewHelpers}
 	<f:form.validationResults for="{element.identifier}">
 	   <!-- wrapping div for the form element; contains an identifier for the form element if we are
               in preview mode -->
@@ -300,7 +300,7 @@ Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/
 	      <!-- Label for the form element, and required indicator -->
 	      <label for="{element.uniqueIdentifier}">{element.label -> f:format.nl2br()}
 	         <f:if condition="{element.required}">
-	            <f:render partial="TYPO3.Form:Field/Required" />
+	            <f:render partial="Neos.Form:Field/Required" />
 	         </f:if>
 	       </label>
 
@@ -311,18 +311,18 @@ Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/
 	   </div>
 	</f:form.validationResults>
 
-Additionally you need to adjust the default form template located in ``TYPO3.Form/Resources/Private/Form/Form.html`` (remember
-that a :api-core-model:`FormDefinition` also has a form element type, by default of ``TYPO3.Form:Form``), which looks
+Additionally you need to adjust the default form template located in ``Neos.Form/Resources/Private/Form/Form.html`` (remember
+that a :api-core-model:`FormDefinition` also has a form element type, by default of ``Neos.Form:Form``), which looks
 as follows by default:
 
 .. code-block:: xml
 
-	{namespace form=TYPO3\Form\ViewHelpers}
+	{namespace form=Neos\Form\ViewHelpers}
 	<form:form object="{form}" action="index" method="post" id="{form.identifier}"
 	           enctype="multipart/form-data">
 	   <form:renderRenderable renderable="{form.currentPage}" />
 	   <div class="actions">
-	      <f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
+	      <f:render partial="Neos.Form:Form/Navigation" arguments="{form: form}" />
 	   </div>
 	</form:form>
 
@@ -331,7 +331,7 @@ rendering:
 
 .. code-block:: xml
 
-	{namespace form=TYPO3\Form\ViewHelpers}
+	{namespace form=Neos\Form\ViewHelpers}
 	<form:form object="{form}" action="index" method="post" id="{form.identifier}"
 	           enctype="multipart/form-data">
 	   <f:form.validationResults>
@@ -353,7 +353,7 @@ rendering:
 	   </f:form.validationResults>
 	   <form:renderRenderable renderable="{form.currentPage}" />
 	   <div class="actions">
-	      <f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
+	      <f:render partial="Neos.Form:Form/Navigation" arguments="{form: form}" />
 	   </div>
 	</form:form>
 
@@ -361,27 +361,27 @@ Now, you only need to adjust the form definition in order to use the new templat
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
-	  presets:
-	    ########### CUSTOM PRESETS ###########
+	    presets:
+	      ########### CUSTOM PRESETS ###########
 
-	    myCustom:
-	      title: 'Custom Elements'
-	      parentPreset: 'default'
-	      formElementTypes:
+	      myCustom:
+	        title: 'Custom Elements'
+	        parentPreset: 'default'
+	        formElementTypes:
 
-	         # ...
+	           # ...
 
-	         ### override template path of TYPO3.Form:Form ###
-	        'TYPO3.Form:Form':
-	          renderingOptions:
-	            templatePathPattern: 'resource://TYPO3.FormExample/Private/CustomElements/Form.html'
+	           ### override template path of Neos.Form:Form ###
+	          'Neos.Form:Form':
+	            renderingOptions:
+	              templatePathPattern: 'resource://Neos.FormExample/Private/CustomElements/Form.html'
 
-	         ### override default layout path ###
-	        'TYPO3.Form:Base':
-	          renderingOptions:
-	            layoutPathPattern: 'resource://TYPO3.FormExample/Private/CustomElements/Layouts/{@type}.html'
+	           ### override default layout path ###
+	          'Neos.Form:Base':
+	            renderingOptions:
+	              layoutPathPattern: 'resource://Neos.FormExample/Private/CustomElements/Layouts/{@type}.html'
 
 .. tip:: You can use **placeholders** in ``templatePathPattern``, ``partialPathPattern`` and ``layoutPathPattern``:
    ``{@package}`` will be replaced by the package key and ``{@type}`` by the current form element type
@@ -397,12 +397,12 @@ Creating a New Form Element
 ---------------------------
 
 With the Form Framework it is really easy to create additional Form Element types.
-Lets say you want to create a specialized version of the ``TYPO3.Form:SingleSelectRadiobuttons`` that already provides
+Lets say you want to create a specialized version of the ``Neos.Form:SingleSelectRadiobuttons`` that already provides
 two radio buttons for ``Female`` and ``Male``. That's just a matter of a few lines of yaml:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	       ########### CUSTOM PRESETS ###########
@@ -416,9 +416,9 @@ two radio buttons for ``Female`` and ``Male``. That's just a matter of a few lin
 
 	          'Your.Package:GenderSelect':
 	            superTypes:
-	              'TYPO3.Form:SingleSelectRadiobuttons': TRUE
+	              'Neos.Form:SingleSelectRadiobuttons': TRUE
 	            renderingOptions:
-	              templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleSelectRadiobuttons.html'
+	              templatePathPattern: 'resource://Neos.Form/Private/Form/SingleSelectRadiobuttons.html'
 	            properties:
 	              options:
 	                f: 'Female'

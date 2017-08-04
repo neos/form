@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Flow\Core\Migrations;
+namespace Neos\Flow\Core\Migrations;
 
 /*
- * This file is part of the TYPO3.Flow package.
+ * This file is part of the Neos.Flow package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -11,13 +11,19 @@ namespace TYPO3\Flow\Core\Migrations;
  * source code.
  */
 
-use TYPO3\Flow\Configuration\ConfigurationManager;
+use Neos\Flow\Configuration\ConfigurationManager;
+use Neos\Utility\ObjectAccess;
 
 /**
  * Adjust "Settings.yaml" to use validationErrorTranslationPackage instead of translationPackage
  */
 class Version20160601101500 extends AbstractMigration
 {
+
+    public function getIdentifier()
+    {
+        return 'TYPO3.Form-20160601101500';
+    }
 
     /**
      * @return void
@@ -26,14 +32,14 @@ class Version20160601101500 extends AbstractMigration
     {
         $this->processConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
             function (array &$configuration) {
-                $presetsConfiguration = \TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($configuration, 'TYPO3.Form.presets');
+                $presetsConfiguration = ObjectAccess::getPropertyPath($configuration, 'Neos.Form.presets');
                 if (!is_array($presetsConfiguration)) {
                     return;
                 }
 
                 $presetsConfiguration = $this->renameTranslationPackage($presetsConfiguration);
 
-                $configuration['TYPO3']['Form']['presets'] = $presetsConfiguration;
+                $configuration['Neos']['Form']['presets'] = $presetsConfiguration;
             },
             true
         );

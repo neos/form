@@ -1,27 +1,27 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Runtime;
+namespace Neos\Form\Tests\Unit\Core\Runtime;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Neos.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 require_once(__DIR__ . '/Fixture/DummyFinisher.php');
 
 /**
  * Test for Form Runtime
  *
- * @covers \TYPO3\Form\Core\Runtime\FormRuntime<extended>
+ * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
  */
-class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
+class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
      * @test
@@ -29,10 +29,10 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function valuesSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
-        $mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
 
-        $formRuntime = $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        $formRuntime = $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
 
         $this->assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
         $this->assertSame($mockHttpResponse, $formRuntime->getResponse());
@@ -46,7 +46,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame('TYPO3.Form:Form', $formRuntime->getType());
+        $this->assertSame('Neos.Form:Form', $formRuntime->getType());
     }
 
     /**
@@ -124,7 +124,7 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \TYPO3\Form\Core\Model\FinisherInterface
+     * @return \Neos\Form\Core\Model\FinisherInterface
      */
     protected function getMockFinisher(\Closure $closureToExecute)
     {
@@ -174,12 +174,12 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $page1 = new Page('p1');
         $formDefinition->addPage($page1);
-        $element1 = new \TYPO3\Form\FormElements\GenericFormElement('foo', 'Bar');
+        $element1 = new \Neos\Form\FormElements\GenericFormElement('foo', 'Bar');
         $page1->addElement($element1);
 
         $element1->setDefaultValue('My Default');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $formState = new \TYPO3\Form\Core\Runtime\FormState();
+        $formState = new \Neos\Form\Core\Runtime\FormState();
         $formRuntime->_set('formState', $formState);
         $this->assertSame($formState, $formRuntime->getFormState());
 
@@ -200,13 +200,13 @@ class FormRuntimeTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     /**
      * @param FormDefinition $formDefinition
-     * @return \TYPO3\Form\Core\Runtime\FormRuntime
+     * @return \Neos\Form\Core\Runtime\FormRuntime
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {
-        $mockActionRequest = $this->getMockBuilder('TYPO3\Flow\Mvc\ActionRequest')->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder('TYPO3\Flow\Http\Response')->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
 
-        return $this->getAccessibleMock('TYPO3\Form\Core\Runtime\FormRuntime', ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        return $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
     }
 }

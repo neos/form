@@ -1,42 +1,42 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Core\Model;
+namespace Neos\Form\Tests\Unit\Core\Model;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Neos.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
-use TYPO3\Form\Core\Model\FormDefinition;
-use TYPO3\Form\Core\Model\Page;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Page;
 
 /**
  * Test for ProcessingRule Domain Model
- * @covers \TYPO3\Form\Core\Model\ProcessingRule
+ * @covers \Neos\Form\Core\Model\ProcessingRule
  */
-class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
+class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
 {
     /**
-     * @var \TYPO3\Flow\Property\PropertyMapper
+     * @var \Neos\Flow\Property\PropertyMapper
      */
     protected $mockPropertyMapper;
 
     /**
-     * @var \TYPO3\Form\Core\Model\ProcessingRule
+     * @var \Neos\Form\Core\Model\ProcessingRule
      */
     protected $processingRule;
 
     public function setUp()
     {
-        $this->mockPropertyMapper = $this->getMockBuilder('TYPO3\Flow\Property\PropertyMapper')->getMock();
-        $this->processingRule = $this->getAccessibleMock('TYPO3\Form\Core\Model\ProcessingRule', array('dummy'));
+        $this->mockPropertyMapper = $this->getMockBuilder(\Neos\Flow\Property\PropertyMapper::class)->getMock();
+        $this->processingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
-        $this->processingRule->_set('validator', new \TYPO3\Flow\Validation\Validator\ConjunctionValidator());
-        $this->processingRule->_set('processingMessages', new \TYPO3\Flow\Error\Result());
+        $this->processingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
+        $this->processingRule->_set('processingMessages', new \Neos\Error\Messages\Result());
     }
 
     /**
@@ -69,9 +69,9 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
-        $mockValidator1 = $this->createMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
+        $mockValidator1 = $this->createMock(\Neos\Flow\Validation\Validator\ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator1);
-        $mockValidator2 = $this->createMock('TYPO3\Flow\Validation\Validator\ValidatorInterface');
+        $mockValidator2 = $this->createMock(\Neos\Flow\Validation\Validator\ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator2);
 
         $validators = $this->processingRule->getValidators();
@@ -93,7 +93,7 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
      */
     public function processingMessagesCanBeModifiedBeforeProcessing()
     {
-        $this->processingRule->getProcessingMessages()->addError(new \TYPO3\Flow\Error\Error('Test'));
+        $this->processingRule->getProcessingMessages()->addError(new \Neos\Error\Messages\Error('Test'));
         $this->processingRule->process('Some Value');
         $this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
     }
@@ -113,11 +113,11 @@ class ProcessingRuleTest extends \TYPO3\Flow\Tests\UnitTestCase
     public function processConvertsValueIfDataTypeIsSpecified()
     {
         $this->processingRule->setDataType('SomeDataType');
-        $mockPropertyMappingConfiguration = $this->getMockBuilder('TYPO3\Flow\Property\PropertyMappingConfiguration')->getMock();
+        $mockPropertyMappingConfiguration = $this->getMockBuilder(\Neos\Flow\Property\PropertyMappingConfiguration::class)->getMock();
         $this->processingRule->_set('propertyMappingConfiguration', $mockPropertyMappingConfiguration);
 
         $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));
-        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \TYPO3\Flow\Error\Result()));
+        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \Neos\Error\Messages\Result()));
         $this->assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
 }

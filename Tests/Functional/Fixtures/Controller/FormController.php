@@ -1,22 +1,22 @@
 <?php
-namespace TYPO3\Form\Tests\Functional\Fixtures\Controller;
+namespace Neos\Form\Tests\Functional\Fixtures\Controller;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Neos.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Controller for rendering a form defined in
  */
-class FormController extends \TYPO3\Flow\Mvc\Controller\ActionController
+class FormController extends \Neos\Flow\Mvc\Controller\ActionController
 {
     /**
      * render the form identified by $formFactoryClassName
@@ -25,8 +25,8 @@ class FormController extends \TYPO3\Flow\Mvc\Controller\ActionController
      */
     public function indexAction($formFactoryClassName)
     {
-        $formFactoryClassName = 'TYPO3\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
-        /* @var $formFactory \TYPO3\Form\Factory\FormFactoryInterface */
+        $formFactoryClassName = 'Neos\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
+        /* @var $formFactory \Neos\Form\Factory\FormFactoryInterface */
         $formFactory = new $formFactoryClassName();
         $formDefinition = $formFactory->build(array(), 'default');
 

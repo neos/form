@@ -1,249 +1,203 @@
-TYPO3:
+
+Neos:
   Form:
     yamlPersistenceManager:
       savePath: '%FLOW_PATH_DATA%Forms/'
     supertypeResolver:
-      hiddenProperties: []
+      hiddenProperties: {  }
     presets:
       default:
-        title: 'Default'
-
-        ########### Required CSS / JavaScripts ###########
-
-        stylesheets: []
-        javaScripts: []
-
-        ########### DEFAULT FORM ELEMENT DEFINITIONS ###########
+        title: Default
+        stylesheets: {  }
+        javaScripts: {  }
         formElementTypes:
-
-          ### BASE ELEMENTS ###
-
-          # NAMING: base class for everything is RENDERABLE
-          'TYPO3.Form:Base':
+          'Neos.Form:Base':
             renderingOptions:
               templatePathPattern: 'resource://{@package}/Private/Form/{@type}.html'
               partialPathPattern: 'resource://{@package}/Private/Form/Partials/{@type}.html'
               layoutPathPattern: 'resource://{@package}/Private/Form/Layouts/{@type}.html'
-              # set this to TRUE if you want to avoid exceptions for FormElements without definitions
-              skipUnknownElements: FALSE
-              # Package with XLIFF files for translation of form labels, placeholders, ...
-              # If you need custom messages, copy Resources/Private/Translations/en/Main.xlf to your package and adjust this setting
-              translationPackage: 'TYPO3.Form'
-              # Package with XLIFF files for translatable error messages (validation errors)
-              # If you need custom messages, copy Resources/Private/Translations/en/ValidationErrors.xlf to your package and adjust this setting
-              validationErrorTranslationPackage: 'TYPO3.Flow'
-
-          'TYPO3.Form:Form':
+              skipUnknownElements: false
+              translationPackage: Neos.Form
+              validationErrorTranslationPackage: Neos.Flow
+          'Neos.Form:Form':
             superTypes:
-              'TYPO3.Form:Base': TRUE
-            rendererClassName: 'TYPO3\Form\Core\Renderer\FluidFormRenderer'
+              'Neos.Form:Base': true
+            rendererClassName: Neos\Form\Core\Renderer\FluidFormRenderer
             renderingOptions:
-              renderableNameInTemplate: 'form'
-
-          'TYPO3.Form:RemovableMixin': {} # empty "removable" mixin for all form elements which can be removed (i.e. everything except the root form object)
-
-          'TYPO3.Form:ReadOnlyFormElement':
+              renderableNameInTemplate: form
+          'Neos.Form:FormEditMode':
             superTypes:
-              'TYPO3.Form:Base': TRUE
-              'TYPO3.Form:RemovableMixin': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
+              'Neos.Form:Form': true
+          'Neos.Form:RemovableMixin': {  }
+          'Neos.Form:ReadOnlyFormElement':
+            superTypes:
+              'Neos.Form:Base': true
+              'Neos.Form:RemovableMixin': true
+            implementationClassName: Neos\Form\FormElements\GenericFormElement
             renderingOptions:
-              renderableNameInTemplate: 'element'
-
-          'TYPO3.Form:FormElement':
+              renderableNameInTemplate: element
+          'Neos.Form:FormElement':
             superTypes:
-              'TYPO3.Form:Base': TRUE
-              'TYPO3.Form:RemovableMixin': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\GenericFormElement'
+              'Neos.Form:Base': true
+              'Neos.Form:RemovableMixin': true
+            implementationClassName: Neos\Form\FormElements\GenericFormElement
             properties:
-              containerClassAttribute: 'input'
+              containerClassAttribute: input
               elementClassAttribute: ''
-              elementErrorClassAttribute: 'error'
+              elementErrorClassAttribute: error
             renderingOptions:
-              renderableNameInTemplate: 'element'
-
-          ### FORM ELEMENTS: CONTAINER ###
-          'TYPO3.Form:Page':
+              renderableNameInTemplate: element
+          'Neos.Form:Page':
             superTypes:
-              'TYPO3.Form:Base': TRUE
-              'TYPO3.Form:RemovableMixin': TRUE
-            implementationClassName: 'TYPO3\Form\Core\Model\Page'
+              'Neos.Form:Base': true
+              'Neos.Form:RemovableMixin': true
+            implementationClassName: Neos\Form\Core\Model\Page
             renderingOptions:
-              renderableNameInTemplate: 'page'
-
-          'TYPO3.Form:PreviewPage':
+              renderableNameInTemplate: page
+          'Neos.Form:PreviewPage':
             superTypes:
-              'TYPO3.Form:Page': TRUE
-
-          'TYPO3.Form:Section':
+              'Neos.Form:Page': true
+          'Neos.Form:Section':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\Section'
+              'Neos.Form:FormElement': true
+            implementationClassName: Neos\Form\FormElements\Section
             renderingOptions:
-              renderableNameInTemplate: 'section'
-
-
-          ### FORM ELEMENTS: INPUT ###
-          'TYPO3.Form:TextMixin': []
-
-          'TYPO3.Form:SingleLineText':
+              renderableNameInTemplate: section
+          'Neos.Form:TextMixin': {  }
+          'Neos.Form:SingleLineText':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:TextMixin': TRUE
-          'TYPO3.Form:Password':
+              'Neos.Form:FormElement': true
+              'Neos.Form:TextMixin': true
+          'Neos.Form:Password':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:TextMixin': TRUE
-          'TYPO3.Form:PasswordWithConfirmation':
+              'Neos.Form:FormElement': true
+              'Neos.Form:TextMixin': true
+          'Neos.Form:PasswordWithConfirmation':
             superTypes:
-              'TYPO3.Form:Password': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\PasswordWithConfirmation'
+              'Neos.Form:Password': true
+            implementationClassName: Neos\Form\FormElements\PasswordWithConfirmation
             properties:
-              elementClassAttribute: 'input-medium'
-              # Optional description (hint) for the first password input element
-              #   passwordDescription: 'Use at least 8 characters'
-              confirmationLabel: 'Confirmation'
-              confirmationClassAttribute: 'input-medium'
-          'TYPO3.Form:MultiLineText':
+              elementClassAttribute: input-medium
+              confirmationLabel: Confirmation
+              confirmationClassAttribute: input-medium
+          'Neos.Form:MultiLineText':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:TextMixin': TRUE
+              'Neos.Form:FormElement': true
+              'Neos.Form:TextMixin': true
             properties:
-              elementClassAttribute: 'xxlarge'
-
-          ### FORM ELEMENTS: SELECT ###
-          'TYPO3.Form:SelectionMixin': []
-          'TYPO3.Form:SingleSelectionMixin':
+              elementClassAttribute: xxlarge
+          'Neos.Form:SelectionMixin': {  }
+          'Neos.Form:SingleSelectionMixin':
             superTypes:
-              'TYPO3.Form:SelectionMixin': TRUE
-          'TYPO3.Form:MultiSelectionMixin':
+              'Neos.Form:SelectionMixin': true
+          'Neos.Form:MultiSelectionMixin':
             superTypes:
-              'TYPO3.Form:SelectionMixin': TRUE
-
-          'TYPO3.Form:Checkbox':
+              'Neos.Form:SelectionMixin': true
+          'Neos.Form:Checkbox':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
+              'Neos.Form:FormElement': true
             properties:
-              elementClassAttribute: 'add-on'
+              elementClassAttribute: add-on
               value: 1
-          'TYPO3.Form:MultipleSelectCheckboxes':
+          'Neos.Form:MultipleSelectCheckboxes':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:MultiSelectionMixin': TRUE
-          'TYPO3.Form:MultipleSelectDropdown':
+              'Neos.Form:FormElement': true
+              'Neos.Form:MultiSelectionMixin': true
+          'Neos.Form:MultipleSelectDropdown':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:MultiSelectionMixin': TRUE
+              'Neos.Form:FormElement': true
+              'Neos.Form:MultiSelectionMixin': true
             properties:
-              elementClassAttribute: 'xlarge'
-          'TYPO3.Form:SingleSelectRadiobuttons':
+              elementClassAttribute: xlarge
+          'Neos.Form:SingleSelectRadiobuttons':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:SingleSelectionMixin': TRUE
+              'Neos.Form:FormElement': true
+              'Neos.Form:SingleSelectionMixin': true
             properties:
-              elementClassAttribute: 'xlarge'
-          'TYPO3.Form:SingleSelectDropdown':
+              elementClassAttribute: xlarge
+          'Neos.Form:SingleSelectDropdown':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-              'TYPO3.Form:SingleSelectionMixin': TRUE
-
-          ### FORM ELEMENTS: CUSTOM ###
-          'TYPO3.Form:DatePicker':
+              'Neos.Form:FormElement': true
+              'Neos.Form:SingleSelectionMixin': true
+          'Neos.Form:DatePicker':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\DatePicker'
+              'Neos.Form:FormElement': true
+            implementationClassName: Neos\Form\FormElements\DatePicker
             properties:
-              elementClassAttribute: 'small'
-              timeSelectorClassAttribute: 'mini'
-              dateFormat: 'Y-m-d'
+              elementClassAttribute: small
+              timeSelectorClassAttribute: mini
+              dateFormat: Y-m-d
               enableDatePicker: true
               displayTimeSelector: false
-          'TYPO3.Form:FileUpload':
+          'Neos.Form:FileUpload':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\FileUpload'
+              'Neos.Form:FormElement': true
+            implementationClassName: Neos\Form\FormElements\FileUpload
             properties:
-              allowedExtensions: ['pdf', 'doc']
-          'TYPO3.Form:ImageUpload':
+              allowedExtensions:
+                - pdf
+                - doc
+          'Neos.Form:ImageUpload':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-            implementationClassName: 'TYPO3\Form\FormElements\ImageUpload'
+              'Neos.Form:FormElement': true
+            implementationClassName: Neos\Form\FormElements\ImageUpload
             properties:
-              allowedTypes: ['jpeg', 'png', 'bmp']
-          'TYPO3.Form:StaticText':
+              allowedTypes:
+                - jpeg
+                - png
+                - bmp
+          'Neos.Form:StaticText':
             superTypes:
-              'TYPO3.Form:ReadOnlyFormElement': TRUE
+              'Neos.Form:ReadOnlyFormElement': true
             properties:
               text: ''
-          'TYPO3.Form:HiddenField':
+          'Neos.Form:HiddenField':
             superTypes:
-              'TYPO3.Form:FormElement': TRUE
-
-
-        ### FINISHERS ###
+              'Neos.Form:FormElement': true
         finisherPresets:
-          'TYPO3.Form:Closure':
-            implementationClassName: 'TYPO3\Form\Finishers\ClosureFinisher'
-            options: {}
-          'TYPO3.Form:Confirmation':
-            implementationClassName: 'TYPO3\Form\Finishers\ConfirmationFinisher'
-            options: {}
-          'TYPO3.Form:Email':
-            implementationClassName: 'TYPO3\Form\Finishers\EmailFinisher'
-            options: {}
-          'TYPO3.Form:FlashMessage':
-            implementationClassName: 'TYPO3\Form\Finishers\FlashMessageFinisher'
-            options: {}
-          'TYPO3.Form:Redirect':
-            implementationClassName: 'TYPO3\Form\Finishers\RedirectFinisher'
-            options: {}
-
-
-        ### VALIDATORS ###
+          'Neos.Form:Closure':
+            implementationClassName: Neos\Form\Finishers\ClosureFinisher
+            options: {  }
+          'Neos.Form:Confirmation':
+            implementationClassName: Neos\Form\Finishers\ConfirmationFinisher
+            options: {  }
+          'Neos.Form:Email':
+            implementationClassName: Neos\Form\Finishers\EmailFinisher
+            options: {  }
+          'Neos.Form:FlashMessage':
+            implementationClassName: Neos\Form\Finishers\FlashMessageFinisher
+            options: {  }
+          'Neos.Form:Redirect':
+            implementationClassName: Neos\Form\Finishers\RedirectFinisher
+            options: {  }
         validatorPresets:
-          'TYPO3.Flow:NotEmpty':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\NotEmptyValidator'
-          'TYPO3.Flow:DateTimeRange':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\DateTimeRangeValidator'
-          'TYPO3.Flow:Alphanumeric':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\AlphanumericValidator'
-          'TYPO3.Flow:Text':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\TextValidator'
-          'TYPO3.Flow:StringLength':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\StringLengthValidator'
-          'TYPO3.Flow:EmailAddress':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\EmailAddressValidator'
-          'TYPO3.Flow:Integer':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\IntegerValidator'
-          'TYPO3.Flow:Float':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\FloatValidator'
-          'TYPO3.Flow:NumberRange':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\NumberRangeValidator'
-          'TYPO3.Flow:RegularExpression':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\RegularExpressionValidator'
-          'TYPO3.Flow:Count':
-            implementationClassName: 'TYPO3\Flow\Validation\Validator\CountValidator'
-
-        ########### CUSTOM PRESETS ###########
-#      somePresetName:
-#        parentPreset: 'default'
-#        title: 'Some Preset'
-#        stylesheets:
-#          css1:
-#            source: 'resource://SomePackage/Public/Css/File1.css'
-#        javaScripts:
-#          js1:
-#            source: 'resource://SomePackage/Public/JavaScript/File1.js'
-#            skipInFormBuilder: true
-#        formElementTypes:
-#          'TYPO3.Form:Base':
-#            renderingOptions:
-#              templatePathPattern: 'resource://TYPO3.SomePackage/Private/Form/{@type}.html'
-
+          'Neos.Flow:NotEmpty':
+            implementationClassName: Neos\Flow\Validation\Validator\NotEmptyValidator
+          'Neos.Flow:DateTimeRange':
+            implementationClassName: Neos\Flow\Validation\Validator\DateTimeRangeValidator
+          'Neos.Flow:Alphanumeric':
+            implementationClassName: Neos\Flow\Validation\Validator\AlphanumericValidator
+          'Neos.Flow:Text':
+            implementationClassName: Neos\Flow\Validation\Validator\TextValidator
+          'Neos.Flow:StringLength':
+            implementationClassName: Neos\Flow\Validation\Validator\StringLengthValidator
+          'Neos.Flow:EmailAddress':
+            implementationClassName: Neos\Flow\Validation\Validator\EmailAddressValidator
+          'Neos.Flow:Integer':
+            implementationClassName: Neos\Flow\Validation\Validator\IntegerValidator
+          'Neos.Flow:Float':
+            implementationClassName: Neos\Flow\Validation\Validator\FloatValidator
+          'Neos.Flow:NumberRange':
+            implementationClassName: Neos\Flow\Validation\Validator\NumberRangeValidator
+          'Neos.Flow:RegularExpression':
+            implementationClassName: Neos\Flow\Validation\Validator\RegularExpressionValidator
+          'Neos.Flow:Count':
+            implementationClassName: Neos\Flow\Validation\Validator\CountValidator
+TYPO3:
   DocTools:
     bundles:
       Form:
-        documentationRootPath: '%FLOW_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source'
+        documentationRootPath: '%FLOW_PATH_PACKAGES%Application/Neos.Form/Documentation/Guide/source'
         renderedDocumentationRootPath: '%FLOW_PATH_DATA%Temporary/Documentation/Form'
-        configurationRootPath: '%FLOW_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/source'
-        imageRootPath: '%FLOW_PATH_PACKAGES%Application/TYPO3.Form/Documentation/Guide/Images/'
+        configurationRootPath: '%FLOW_PATH_PACKAGES%Application/Neos.Form/Documentation/Guide/source'
+        imageRootPath: '%FLOW_PATH_PACKAGES%Application/Neos.Form/Documentation/Guide/Images/'

@@ -1,0 +1,6 @@
+{namespace form=Neos\Form\ViewHelpers}
+<form:form action="index" object="{form}" method="post" id="{form.identifier}" section="{form.identifier}" enctype="multipart/form-data">
+	<f:for each="{form.pages}" as="page">
+		<form:renderRenderable renderable="{page}" />
+	</f:for>
+</form:form>

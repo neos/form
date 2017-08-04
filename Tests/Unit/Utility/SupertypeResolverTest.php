@@ -1,23 +1,23 @@
 <?php
-namespace TYPO3\Form\Tests\Unit\Utility;
+namespace Neos\Form\Tests\Unit\Utility;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.Form".            *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Neos.Form package.
+ *
+ * (c) Contributors of the Neos Project - www.neos.io
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
-use TYPO3\Form\Utility\SupertypeResolver;
+use Neos\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
- * @covers \TYPO3\Form\Utility\SupertypeResolver<extended>
+ * @covers \Neos\Form\Utility\SupertypeResolver<extended>
  */
-class SupertypeResolverTest extends \TYPO3\Flow\Tests\UnitTestCase
+class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
 {
     public function dataProviderForTypeResolving()
     {
@@ -133,7 +133,7 @@ class SupertypeResolverTest extends \TYPO3\Flow\Tests\UnitTestCase
 
     /**
      * @test
-     * @expectedException TYPO3\Form\Exception\TypeDefinitionNotFoundException
+     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {

@@ -61,15 +61,15 @@ If you want to build a form with PHP, the skeleton for building a form looks as 
 
 	namespace Your\Package;
 
-	use TYPO3\Flow\Annotations as Flow;
-	use TYPO3\Form\Core\Model\FormDefinition;
+	use Neos\Flow\Annotations as Flow;
+	use Neos\Form\Core\Model\FormDefinition;
 
-	class QuickstartFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
+	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory {
 
 		/**
 		 * @param array $factorySpecificConfiguration
 		 * @param string $presetName
-		 * @return \TYPO3\Form\Core\Model\FormDefinition
+		 * @return \Neos\Form\Core\Model\FormDefinition
 		 */
 		public function build(array $factorySpecificConfiguration, $presetName) {
 			$formConfiguration = $this->getPresetConfiguration($presetName);
@@ -90,13 +90,13 @@ Lets add the one page and input fields for *name*, *email* and *message* of our 
 
 		$page1 = $form->createPage('page1');
 
-		$name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
+		$name = $page1->createElement('name', 'Neos.Form:SingleLineText');
 		$name->setLabel('Name');
 
-		$email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
+		$email = $page1->createElement('email', 'Neos.Form:SingleLineText');
 		$email->setLabel('Email');
 
-		$comments = $page1->createElement('message', 'TYPO3.Form:MultiLineText');
+		$comments = $page1->createElement('message', 'Neos.Form:MultiLineText');
 		$comments->setLabel('Message');
 
 		return $form;
@@ -112,7 +112,7 @@ across the whole form. ``$type`` references an **Element Type**.
 .. note:: By default the ``$identifier`` is part of the `id` attribute of the rendered Form Element so it should be lowerCamelCased and must not contain special characters.
 
 .. tip:: As you will learn in the next guide, you can define your own **Element Types** easily.
-   The element types referenced above (``TYPO3.Form:SingleLineText`` and ``TYPO3.Form:MultiLineText``)
+   The element types referenced above (``Neos.Form:SingleLineText`` and ``Neos.Form:MultiLineText``)
    are just element types which are delivered by default by the framework.
 
 Render a form
@@ -123,7 +123,7 @@ That is really easy with the provided :api-viewhelpers:`form:render <Render>` Vi
 
 ::
 
-	{namespace form=TYPO3\Form\ViewHelpers}
+	{namespace form=Neos\Form\ViewHelpers}
 	<form:render factoryClass="Your\Package\YourFactory" />
 
 If you put that snippet in your Fluid template and replace `Your\Package` with your package
@@ -137,15 +137,15 @@ Validation
 ----------
 
 Every :api-core-model:`FormElement <AbstractFormElement>` implements the :api-core-model:`FormElementInterface`
-which provides a convenient way to work with TYPO3 Flow validators::
+which provides a convenient way to work with Neos Flow validators::
 
-	$name->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+	$name->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
 
-	$email->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-	$email->addValidator(new \TYPO3\Flow\Validation\Validator\EmailAddressValidator());
+	$email->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+	$email->addValidator(new \Neos\Flow\Validation\Validator\EmailAddressValidator());
 
-	$comments->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-	$comments->addValidator(new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
+	$comments->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+	$comments->addValidator(new \Neos\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
 With the ``addValidator($validator)`` method you can attach one or more validators to a form element.
 If you save the changes and reload the page where you embedded the form, you can see that
@@ -168,7 +168,7 @@ You can attach multiple finishers to a form.
 For this example we might want to send the data to an email address, and we can use
 the :api-finishers:`EmailFinisher` for that::
 
-	$emailFinisher = new \TYPO3\Form\Finishers\EmailFinisher();
+	$emailFinisher = new \Neos\Form\Finishers\EmailFinisher();
 	$emailFinisher->setOptions(array(
 		'templatePathAndFilename' => 'resource://Your.Package/Private/Templates/ContactForm/NotificationEmail.txt',
 		'recipientAddress' => 'your@example.com',
@@ -177,14 +177,14 @@ the :api-finishers:`EmailFinisher` for that::
 		'carbonCopyAddress' => 'copy@example.com',
 		'blindCarbonCopyAddress' => 'blindcopy@example.com',
 		'subject' => 'Contact Request',
-		'format' => \TYPO3\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
+		'format' => \Neos\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
 	));
 	$form->addFinisher($emailFinisher);
 
 And afterwards we want to redirect the user to some confirmation action, thus
 we add the :api-finishers:`RedirectFinisher`::
 
-	$redirectFinisher = new \TYPO3\Form\Finishers\RedirectFinisher();
+	$redirectFinisher = new \Neos\Form\Finishers\RedirectFinisher();
 	$redirectFinisher->setOptions(
 		array('action' => 'confirmation')
 	);
@@ -199,18 +199,18 @@ That's it for the quickstart. The complete code of your form factory should look
 
 	namespace Your\Package;
 
-	use TYPO3\Flow\Annotations as Flow;
-	use TYPO3\Form\Core\Model\FormDefinition;
+	use Neos\Flow\Annotations as Flow;
+	use Neos\Form\Core\Model\FormDefinition;
 
 	/**
 	 * Flow\Scope("singleton")
 	 */
-	class QuickstartFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
+	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory {
 
 		/**
 		 * @param array $factorySpecificConfiguration
 		 * @param string $presetName
-		 * @return \TYPO3\Form\Core\Model\FormDefinition
+		 * @return \Neos\Form\Core\Model\FormDefinition
 		 */
 		public function build(array $factorySpecificConfiguration, $presetName) {
 			$formConfiguration = $this->getPresetConfiguration($presetName);
@@ -218,21 +218,21 @@ That's it for the quickstart. The complete code of your form factory should look
 
 			$page1 = $form->createPage('page1');
 
-			$name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
+			$name = $page1->createElement('name', 'Neos.Form:SingleLineText');
 			$name->setLabel('Name');
-			$name->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
+			$name->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
 
-			$email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
+			$email = $page1->createElement('email', 'Neos.Form:SingleLineText');
 			$email->setLabel('Email');
-			$email->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-			$email->addValidator(new \TYPO3\Flow\Validation\Validator\EmailAddressValidator());
+			$email->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+			$email->addValidator(new \Neos\Flow\Validation\Validator\EmailAddressValidator());
 
-			$comments = $page1->createElement('message', 'TYPO3.Form:MultiLineText');
+			$comments = $page1->createElement('message', 'Neos.Form:MultiLineText');
 			$comments->setLabel('Message');
-			$comments->addValidator(new \TYPO3\Flow\Validation\Validator\NotEmptyValidator());
-			$comments->addValidator(new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
+			$comments->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+			$comments->addValidator(new \Neos\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
-			$emailFinisher = new \TYPO3\Form\Finishers\EmailFinisher();
+			$emailFinisher = new \Neos\Form\Finishers\EmailFinisher();
 			$emailFinisher->setOptions(array(
 				'templatePathAndFilename' => 'resource://Your.Package/Private/Templates/ContactForm/NotificationEmail.txt',
 				'recipientAddress' => 'your@example.com',
@@ -241,11 +241,11 @@ That's it for the quickstart. The complete code of your form factory should look
 				'carbonCopyAddress' => 'copy@example.com',
 				'blindCarbonCopyAddress' => 'blindcopy@example.com',
 				'subject' => 'Contact Request',
-				'format' => \TYPO3\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
+				'format' => \Neos\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
 			));
 			$form->addFinisher($emailFinisher);
 
-			$redirectFinisher = new \TYPO3\Form\Finishers\RedirectFinisher();
+			$redirectFinisher = new \Neos\Form\Finishers\RedirectFinisher();
 			$redirectFinisher->setOptions(
 				array('action' => 'confirmation')
 			);

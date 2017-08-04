@@ -10,7 +10,7 @@ Let's say you have created your form element, and want to make it available insi
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
 	  'Your.Package:YourFormElement':
 	    # the definitions for your form element
@@ -35,7 +35,7 @@ All form element groups are defined inside ``formElementGroups`` inside the pres
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementGroups:
 	  specialCustom:
 	    sorting: 500
@@ -50,17 +50,17 @@ When a form element is created, you can define some default values which are dir
 
 In this case, we want to define some default programming languages, but the integrator who builds the form should be able to add custom options as well. These default options can be set in ``Settings.yaml`` using the ``formBuilder:predefinedDefaults`` key.
 
-Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which is an example taken from the ``TYPO3.FormExample`` package):
+Here follows the full configuration for the ``ProgrammingLanguageSelect`` (which is an example taken from the ``Neos.FormExample`` package):
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
-	  'TYPO3.FormExample:ProgrammingLanguageSelect':
+	  'Neos.FormExample:ProgrammingLanguageSelect':
 	    superTypes:
-	      'TYPO3.Form:SingleSelectRadiobuttons': TRUE
+	      'Neos.Form:SingleSelectRadiobuttons': TRUE
 	    renderingOptions:
-	      templatePathPattern: 'resource://TYPO3.Form/Private/Form/SingleSelectRadiobuttons.html'
+	      templatePathPattern: 'resource://Neos.Form/Private/Form/SingleSelectRadiobuttons.html'
 
 	      # here follow the form builder specific options
 	      formBuilder:
@@ -100,9 +100,9 @@ Choosing which strategy to use depends mostly on the expected usage patterns:
 
 	.. code-block:: yaml
 
-		# we are now inside TYPO3:Form:presets:[presetName]
+		# we are now inside Neos:Form:presets:[presetName]
 		formElementTypes:
-		  'TYPO3.FormExample:GenderSelect':
+		  'Neos.FormExample:GenderSelect':
 		    formBuilder:
 		      editors:
 		        # Disable "options" editor
@@ -123,14 +123,14 @@ This can be configured as follows:
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
-	  'TYPO3.Form:TextMixin': # or any other type here
+	  'Neos.Form:TextMixin': # or any other type here
 	    formBuilder:
 	      editors:
 	        validation:
 	          availableValidators:
-	            'TYPO3.Flow:StringLength': # or any other validator
+	            'Neos.Flow:StringLength': # or any other validator
 	              # mark this validator required such that it is always shown.
 	              required: true
 
@@ -141,14 +141,14 @@ The same works for Finishers, for example the following configuration makes the 
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]
+	# we are now inside Neos:Form:presets:[presetName]
 	formElementTypes:
-	  'TYPO3.Form:Form':
+	  'Neos.Form:Form':
 	    formBuilder:
 	      editors:
 	        finishers:
 	          availableFinishers:
-	            'TYPO3.Form:Email': # or any other finisher
+	            'Neos.Form:Email': # or any other finisher
 	              # mark this finisher required such that it is always shown.
 	              required: true
 

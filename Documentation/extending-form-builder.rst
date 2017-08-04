@@ -21,7 +21,7 @@ Let's say you want to adjust the form builder with a custom CSS file inside ``Yo
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  FormBuilder:
 	    stylesheets:
 	      customAdjustments:
@@ -44,24 +44,24 @@ Let's say we want to adjust the header of the form builder, such that it display
    has been released! Modification of handlebars templates is useful for **unplanned extensibility**, but you should only
    do it as last resort!
 
-The default template is located inside ``TYPO3.FormBuilder/Resources/Private/FormBuilderTemplates/Header.html`` and looks as follows:
+The default template is located inside ``Neos.FormBuilder/Resources/Private/FormBuilderTemplates/Header.html`` and looks as follows:
 
 .. code-block:: html
 
-	<h1>Form Builder - {{TYPO3.FormBuilder.Model.Form.formDefinition.label}}</h1>
-	{{#if TYPO3.FormBuilder.Model.Form.currentlyLoadingPreview}}
-	   <span id="typo3-formbuilder-loading">Loading..</span>
+	<h1>Form Builder - {{Neos.FormBuilder.Model.Form.formDefinition.label}}</h1>
+	{{#if Neos.FormBuilder.Model.Form.currentlyLoadingPreview}}
+	   <span id="neos-formbuilder-loading">Loading..</span>
 	{{/if}}
 
-	<ul id="typo3-formbuilder-toolbar">
-	   <li class="typo3-formbuilder-preset">
-	      {{view TYPO3.FormBuilder.View.Header.PresetSelector}}
+	<ul id="neos-formbuilder-toolbar">
+	   <li class="neos-formbuilder-preset">
+	      {{view Neos.FormBuilder.View.Header.PresetSelector}}
 	   </li>
-	   <li class="typo3-formbuilder-preview">
-	      {{#view TYPO3.FormBuilder.View.Header.PreviewButton class="typo3-formbuilder-button icon"}}Preview{{/view}}
+	   <li class="neos-formbuilder-preview">
+	      {{#view Neos.FormBuilder.View.Header.PreviewButton class="neos-formbuilder-button icon"}}Preview{{/view}}
 	   </li>
-	   <li class="typo3-formbuilder-save">
-		{{#view TYPO3.FormBuilder.View.Header.SaveButton class="typo3-formbuilder-button icon"}}Save{{/view}}
+	   <li class="neos-formbuilder-save">
+		{{#view Neos.FormBuilder.View.Header.SaveButton class="neos-formbuilder-button icon"}}Save{{/view}}
 	   </li>
 	</ul>
 
@@ -69,13 +69,13 @@ We can just copy it to ``Your.Package/Resources/Private/FormBuilderTemplates/Hea
 
 .. code-block:: html
 
-	<h1>Your Company Form Builder - {{TYPO3.FormBuilder.Model.Form.formDefinition.label}}</h1>
+	<h1>Your Company Form Builder - {{Neos.FormBuilder.Model.Form.formDefinition.label}}</h1>
 
 Then, we need to tell the form builder that we want to use a different handlebars template for the header. For that, we need the following ``Settings.yaml``:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  FormBuilder:
 	    handlebarsTemplates:
 	      Header: resource://Your.Package/Private/FormBuilderTemplates/Header.html
@@ -91,8 +91,8 @@ All editors for a given form element are defined inside the ``formElementTypes``
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]:formElementTypes
-	'TYPO3.Form:TextMixin':
+	# we are now inside Neos:Form:presets:[presetName]:formElementTypes
+	'Neos.Form:TextMixin':
 	  formBuilder:
 	    editors:
 	      placeholder: # an arbitrary key for identifying the editor instance
@@ -101,7 +101,7 @@ All editors for a given form element are defined inside the ``formElementTypes``
 	        # additionally, you can define view-specific options here
             # here, you can define some more editors.
 
-We will now create a custom editor for rendering a *select* box, and will add it to the *File Upload* form element such that a user can choose the file types he allows. The finished editor is part of the standard FormBuilder distribution inside ``TYPO3.FormBuilder/Resources/Private/CoffeeScript/elementOptionsPanelEditors/basic.coffee``.
+We will now create a custom editor for rendering a *select* box, and will add it to the *File Upload* form element such that a user can choose the file types he allows. The finished editor is part of the standard FormBuilder distribution inside ``Neos.FormBuilder/Resources/Private/CoffeeScript/elementOptionsPanelEditors/basic.coffee``.
 
 .. note:: If you want to create your completely own editor, you need to include the additional JavaScript file. How this is done is explained in detail inside :ref:`adjusting-form-builder-with-custom-css`
 
@@ -110,11 +110,11 @@ The Basic Setup
 
 .. note:: We'll develop the editor in `CoffeeScript <http://coffeescript.org>`_, but you are of course free to also use JavaScript.
 
-We will extend our editor from ``TYPO3.FormBuilder.View.ElementOptionsPanel.Editor.AbstractPropertyEditor``:
+We will extend our editor from ``Neos.FormBuilder.View.ElementOptionsPanel.Editor.AbstractPropertyEditor``:
 
 .. code-block:: coffeescript
 
-	TYPO3.FormBuilder.View.ElementOptionsPanel.Editor.SelectEditor = AbstractPropertyEditor.extend {
+	Neos.FormBuilder.View.ElementOptionsPanel.Editor.SelectEditor = AbstractPropertyEditor.extend {
 	   templateName: 'ElementOptionsPanel-SelectEditor'
 	}
 
@@ -122,26 +122,26 @@ Then, we will create a basic handlebars template and register it underneath ``El
 
 .. code-block:: html
 
-	<div class="typo3-formbuilder-controlGroup">
+	<div class="neos-formbuilder-controlGroup">
 	   <label>{{label}}:</label>
-	   <div class="typo3-formbuilder-controls">
+	   <div class="neos-formbuilder-controls">
 	      [select should come here]
 	   </div>
 	</div>
 
 .. note:: Don't forget to register the handlebars template ``ElementOptionsPanel-SelectEditor`` inside your ``Settings.yaml``.
 
-Now that we have all the pieces ready, let's actually use the editor inside the ``TYPO3.Form:FileUpload`` form element:
+Now that we have all the pieces ready, let's actually use the editor inside the ``Neos.Form:FileUpload`` form element:
 
 .. code-block:: yaml
 
-	# we are now inside TYPO3:Form:presets:[presetName]:formElementTypes
-	'TYPO3.Form:FileUpload':
+	# we are now inside Neos:Form:presets:[presetName]:formElementTypes
+	'Neos.Form:FileUpload':
          formBuilder:
            editors:
 	       allowedExtensions:
 	         sorting: 200
-	         viewName: 'TYPO3.FormBuilder.View.ElementOptionsPanel.Editor.SelectEditor'
+	         viewName: 'Neos.FormBuilder.View.ElementOptionsPanel.Editor.SelectEditor'
 
 After reloading the form builder, you will see that the file upload field has a field: ``[select should come here]`` displayed inside the element options panel.
 
@@ -160,7 +160,7 @@ We somehow need to configure the available options inside the editor, and come u
 	  sorting: 200
 	  label: 'Allowed File Types'
 	  propertyPath: 'properties.allowedExtensions'
-	  viewName: 'TYPO3.FormBuilder.View.ElementOptionsPanel.Editor.SelectEditor'
+	  viewName: 'Neos.FormBuilder.View.ElementOptionsPanel.Editor.SelectEditor'
 	  availableElements:
 	    0:
 	      value: ['doc', 'docx', 'odt', 'pdf']
@@ -228,7 +228,7 @@ You need to do three things:
 
 .. code-block:: yaml
 
-	TYPO3:
+	Neos:
 	  Form:
 	    presets:
 	      yourPresetName: # fill in your preset name here, or "default"
@@ -237,7 +237,7 @@ You need to do three things:
 	          'Your.Package:DatabaseFinisher':
 	             implementationClassName: 'Your\Package\Finishers\DatabaseFinisher'
 	        formElementTypes:
-	          'TYPO3.Form:Form':
+	          'Neos.Form:Form':
 	            formBuilder:
 	              editors:
 	                finishers:
@@ -260,12 +260,12 @@ Now, you only need to include the appropriate Handlebars template, which could l
 	   {{label}}
 	   {{#view Ember.Button target="parentView" action="remove"
 	                        isVisibleBinding="notRequired"
-	                        class="typo3-formbuilder-removeButton"}}Remove{{/view}}
+	                        class="neos-formbuilder-removeButton"}}Remove{{/view}}
 	</h4>
 
-	<div class="typo3-formbuilder-controlGroup">
+	<div class="neos-formbuilder-controlGroup">
 	   <label>Database Table</label>
-	   <div class="typo3-formbuilder-controls">
+	   <div class="neos-formbuilder-controls">
 	      {{view Ember.TextField valueBinding="currentCollectionElement.options.databaseTable"}}
 	   </div>
 	</div>
