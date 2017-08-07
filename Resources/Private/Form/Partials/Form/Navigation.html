@@ -2,18 +2,18 @@
 	<ul>
 		<f:if condition="{form.previousPage}">
 			<li class="previous">
-				<f:form.button name="__currentPage" value="{form.previousPage.index}" formnovalidate="formnovalidate" class="btn btn-cancel">{f:translate(id: 'forms.navigation.previousPage', package: '{form.renderingOptions.translationPackage}', value: 'Previous page')}</f:form.button>
+				<f:form.button name="__currentPage" value="{form.previousPage.index}" formnovalidate="formnovalidate" class="{form.renderingOptions.previousButtonClassAttribute}">{f:translate(id: 'forms.navigation.previousPage', package: '{form.renderingOptions.translationPackage}', value: 'Previous page')}</f:form.button>
 			</li>
 		</f:if>
 		<f:if condition="{form.nextPage}">
 			<f:then>
 				<li class="next">
-					<f:form.button name="__currentPage" value="{form.nextPage.index}" class="btn btn-primary">{f:translate(id: 'forms.navigation.nextPage', package: '{form.renderingOptions.translationPackage}', value: 'Next page')}</f:form.button>
+					<f:form.button name="__currentPage" value="{form.nextPage.index}" class="{form.renderingOptions.nextButtonClassAttribute}">{f:translate(id: 'forms.navigation.nextPage', package: '{form.renderingOptions.translationPackage}', value: 'Next page')}</f:form.button>
 				</li>
 			</f:then>
 			<f:else>
 				<li class="next submit">
-					<f:form.button name="__currentPage" value="{form.pages -> f:count()}" class="btn btn-primary">
+					<f:form.button name="__currentPage" value="{form.pages -> f:count()}" class="{form.renderingOptions.submitButtonClassAttribute}">
 						<f:if condition="{form.renderingOptions.submitButtonLabel}">
 							<f:then>
 								{f:translate(id: 'forms.navigation.submit', package: '{form.renderingOptions.translationPackage}', value: form.renderingOptions.submitButtonLabel)}

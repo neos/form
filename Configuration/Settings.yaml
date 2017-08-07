@@ -25,6 +25,9 @@ Neos:
             rendererClassName: Neos\Form\Core\Renderer\FluidFormRenderer
             renderingOptions:
               renderableNameInTemplate: form
+              previousButtonClassAttribute: 'btn btn-cancel'
+              nextButtonClassAttribute: 'btn btn-primary'
+              submitButtonClassAttribute: 'btn btn-primary'
           'Neos.Form:FormEditMode':
             superTypes:
               'Neos.Form:Form': true
