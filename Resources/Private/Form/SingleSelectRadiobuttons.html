@@ -5,7 +5,7 @@
 			<li>
 				<label>
 					<f:form.radio property="{element.identifier}" class="{element.properties.elementClassAttribute}" value="{value}" errorClass="{element.properties.elementErrorClassAttribute}" />
-					<span>{label -> f:translate(id: 'forms.elements.{element.identifier}.options.{value}', package: '{element.renderingOptions.translationPackage}')}</span>
+					<span>{f:translate(id: 'forms.elements.{element.identifier}.options.{value}', package: '{element.renderingOptions.translationPackage}', value: label)}</span>
 				</label>
 			</li>
 		</f:for>

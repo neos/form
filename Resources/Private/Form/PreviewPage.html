@@ -2,13 +2,13 @@
 {namespace media=Neos\Media\ViewHelpers}
 <fieldset>
 	<f:if condition="{page.label}">
-		<legend>{page.label -> f:translate(id: 'forms.pages.{page.identifier}.label', package: '{page.renderingOptions.translationPackage}')}</legend>
+		<legend>{f:translate(id: 'forms.pages.{page.identifier}.label', package: '{page.renderingOptions.translationPackage}', value: page.label)}</legend>
 	</f:if>
 	<output>
 		<table>
 			<tr>
-				<th style="width: 170px">Label</th>
-				<th>Value</th>
+				<th style="width: 170px">{f:translate(id: 'forms.pages.labelTitle', package: '{page.renderingOptions.translationPackage}', value: 'Label')}</th>
+				<th>{f:translate(id: 'forms.pages.valueTitle', package: '{page.renderingOptions.translationPackage}', value: 'Value')}</th>
 			</tr>
 			<form:renderValues renderable="{page.rootForm}">
 				<tr>

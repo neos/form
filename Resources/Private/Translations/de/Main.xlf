@@ -14,6 +14,14 @@
                 <source>Submit</source>
                 <target>Abschicken</target>
             </trans-unit>
+            <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
+                <source>Label</source>
+                <target>Bezeichnung</target>
+            </trans-unit>
+            <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
+                <source>Value</source>
+                <target>Wert</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

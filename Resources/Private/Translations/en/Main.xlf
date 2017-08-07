@@ -11,6 +11,12 @@
             <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
             </trans-unit>
+            <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
+                <source>Label</source>
+            </trans-unit>
+            <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
+                <source>Value</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

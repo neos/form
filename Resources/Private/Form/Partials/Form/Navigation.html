@@ -16,7 +16,7 @@
 					<f:form.button name="__currentPage" value="{form.pages -> f:count()}" class="btn btn-primary">
 						<f:if condition="{form.renderingOptions.submitButtonLabel}">
 							<f:then>
-								{form.renderingOptions.submitButtonLabel -> f:translate(package: '{form.renderingOptions.translationPackage}')}
+								{f:translate(id: 'forms.navigation.submit', package: '{form.renderingOptions.translationPackage}', value: form.renderingOptions.submitButtonLabel)}
 							</f:then>
 							<f:else>
 								{f:translate(id: 'forms.navigation.submit', package: '{form.renderingOptions.translationPackage}', value: 'Submit')}
