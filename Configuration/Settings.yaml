@@ -196,7 +196,7 @@ Neos:
             implementationClassName: Neos\Flow\Validation\Validator\RegularExpressionValidator
           'Neos.Flow:Count':
             implementationClassName: Neos\Flow\Validation\Validator\CountValidator
-TYPO3:
+Neos:
   DocTools:
     bundles:
       Form:
