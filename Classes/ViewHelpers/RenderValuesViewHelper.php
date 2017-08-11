@@ -17,6 +17,7 @@ use Neos\Form\Core\Model\FormElementInterface;
 use Neos\Form\Core\Model\Renderable\CompositeRenderableInterface;
 use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
 use Neos\Form\Core\Renderer\RendererInterface;
+use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Media\Domain\Model\Image;
 
 /**
@@ -30,21 +31,27 @@ class RenderValuesViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * @param RootRenderableInterface $renderable
+     * @param RootRenderableInterface $renderable If specified, only the values of the given renderable are rendered, otherwise all form elements are rendered
+     * @param FormRuntime $formRuntime If not set, the Form Runtime will be fetched from the View, which only works within the FluidFormRenderer
      * @param string $as
      * @return string the rendered form values
      */
-    public function render(RootRenderableInterface $renderable, $as = 'formValue')
+    public function render(RootRenderableInterface $renderable = null, FormRuntime $formRuntime = null, $as = 'formValue')
     {
+        if ($formRuntime === null) {
+            /** @var RendererInterface $fluidFormRenderer */
+            $fluidFormRenderer = $this->viewHelperVariableContainer->getView();
+            $formRuntime = $fluidFormRenderer->getFormRuntime();
+        }
+        if ($renderable === null) {
+            $renderable = $formRuntime->getFormDefinition();
+        }
         if ($renderable instanceof CompositeRenderableInterface) {
             $elements = $renderable->getRenderablesRecursively();
         } else {
             $elements = [$renderable];
         }
 
-        /** @var RendererInterface $fluidFormRenderer */
-        $fluidFormRenderer = $this->viewHelperVariableContainer->getView();
-        $formRuntime = $fluidFormRenderer->getFormRuntime();
         $formState = $formRuntime->getFormState();
         $output = '';
         foreach ($elements as $element) {
@@ -71,7 +78,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      *
      * @param FormElementInterface $element
      * @param mixed $value
-     * @return string
+     * @return string|array
      */
     protected function processElementValue(FormElementInterface $element, $value)
     {
@@ -96,7 +103,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      *
      * @param array $value
      * @param array $options
-     * @return string
+     * @return array
      */
     protected function mapValuesToOptions(array $value, array $options)
     {
