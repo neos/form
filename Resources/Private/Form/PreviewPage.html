@@ -10,7 +10,7 @@
 				<th style="width: 170px">{f:translate(id: 'forms.pages.labelTitle', package: '{page.renderingOptions.translationPackage}', value: 'Label')}</th>
 				<th>{f:translate(id: 'forms.pages.valueTitle', package: '{page.renderingOptions.translationPackage}', value: 'Value')}</th>
 			</tr>
-			<form:renderValues renderable="{page.rootForm}">
+			<form:renderValues formRuntime="{form}">
 				<tr>
 					<th>{formValue.element.label}</th>
 					<td>
