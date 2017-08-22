@@ -10,9 +10,12 @@ namespace Neos\Form\Finishers;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+
+use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
+use Neos\SwiftMailer\Message as SwiftMailerMessage;
 
 /**
  * This finisher sends an email to one or more recipients
@@ -39,6 +42,8 @@ use Neos\Form\Exception\FinisherException;
  * - carbonCopyAddress: Email address of the copy recipient (use multiple addresses with an array)
  * - blindCarbonCopyAddress: Email address of the blind copy recipient (use multiple addresses with an array)
  * - format: format of the email (one of the FORMAT_* constants). By default mails are sent as HTML
+ * - attachAllPersistentResources: if TRUE all FormElements that are converted to a PersistendResource (e.g. the FileUpload element) are added to the mail as attachments
+ * - attachments: array of explicit files to be attached. Every item in the array has to be either "resource" being the path to a file, or "formElement" referring to the identifier of an Form Element that contains the PersistentResource to attach. This can be combined with the "attachAllPersistentResources" option
  * - testMode: if TRUE the email is not actually sent but outputted for debugging purposes. Defaults to FALSE
  */
 class EmailFinisher extends AbstractFinisher
@@ -53,6 +58,8 @@ class EmailFinisher extends AbstractFinisher
         'recipientName' => '',
         'senderName' => '',
         'format' => self::FORMAT_HTML,
+        'attachAllPersistentResources' => false,
+        'attachments' => [],
         'testMode' => false,
     );
 
@@ -65,6 +72,9 @@ class EmailFinisher extends AbstractFinisher
      */
     protected function executeInternal()
     {
+        if (!class_exists(SwiftMailerMessage::class)) {
+            throw new FinisherException('The "neos/swiftmailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
+        }
         $formRuntime = $this->finisherContext->getFormRuntime();
         $standaloneView = $this->initializeStandaloneView();
         $standaloneView->assign('form', $formRuntime);
@@ -96,7 +106,7 @@ class EmailFinisher extends AbstractFinisher
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
 
-        $mail = new \Neos\SwiftMailer\Message();
+        $mail = new SwiftMailerMessage();
 
         $mail
             ->setFrom(array($senderAddress => $senderName))
@@ -125,6 +135,7 @@ class EmailFinisher extends AbstractFinisher
         } else {
             $mail->setBody($message, 'text/html');
         }
+        $this->addAttachments($mail);
 
         if ($testMode === true) {
             \Neos\Flow\var_dump(
@@ -168,5 +179,39 @@ class EmailFinisher extends AbstractFinisher
             $standaloneView->assignMultiple($this->options['variables']);
         }
         return $standaloneView;
+    }
+
+    /**
+     * @param SwiftMailerMessage $mail
+     * @return void
+     * @throws FinisherException
+     */
+    protected function addAttachments(SwiftMailerMessage $mail)
+    {
+        $formValues = $this->finisherContext->getFormValues();
+        if ($this->parseOption('attachAllPersistentResources')) {
+            foreach ($formValues as $formValue) {
+                if ($formValue instanceof PersistentResource) {
+                    $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($formValue->getStream()), $formValue->getFilename(), $formValue->getMediaType()));
+                }
+            }
+        }
+        foreach ($this->parseOption('attachments') as $attachmentConfiguration) {
+            if (isset($attachmentConfiguration['resource'])) {
+                $mail->attach(\Swift_Attachment::fromPath($attachmentConfiguration['resource']));
+                continue;
+            }
+            if (!isset($attachmentConfiguration['formElement'])) {
+                throw new FinisherException('The "attachments" options need to specify a "resource" path or a "formElement" containing the resource to attach', 1503396636);
+            }
+            if (!isset($formValues[$attachmentConfiguration['formElement']])) {
+                continue;
+            }
+            $resource = $formValues[$attachmentConfiguration['formElement']];
+            if (!$resource instanceof PersistentResource) {
+                continue;
+            }
+            $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
+        }
     }
 }
