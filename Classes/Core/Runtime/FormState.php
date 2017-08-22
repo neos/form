@@ -20,6 +20,7 @@ use Neos\Flow\Annotations as Flow;
  * **This class is not meant to be subclassed by developers.**
  *
  * @internal
+ * @Flow\Proxy(false)
  */
 class FormState
 {
