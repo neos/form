@@ -16,6 +16,7 @@ use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 use Neos\SwiftMailer\Message as SwiftMailerMessage;
+use Neos\Utility\ObjectAccess;
 
 /**
  * This finisher sends an email to one or more recipients
@@ -204,10 +205,7 @@ class EmailFinisher extends AbstractFinisher
             if (!isset($attachmentConfiguration['formElement'])) {
                 throw new FinisherException('The "attachments" options need to specify a "resource" path or a "formElement" containing the resource to attach', 1503396636);
             }
-            if (!isset($formValues[$attachmentConfiguration['formElement']])) {
-                continue;
-            }
-            $resource = $formValues[$attachmentConfiguration['formElement']];
+            $resource = ObjectAccess::getPropertyPath($formValues, $attachmentConfiguration['formElement']);
             if (!$resource instanceof PersistentResource) {
                 continue;
             }
