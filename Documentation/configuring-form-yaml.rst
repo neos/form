@@ -95,7 +95,7 @@ File Uploads
 
 The ``default`` preset comes with an ``FileUpload`` form element that allows the user of the form to upload arbitrary
 files.
-With the latest version, the ``EmailFinisher`` allows these files to be sent as attachments:
+The ``EmailFinisher`` allows these files to be sent as attachments:
 
 .. code-block:: yaml
 
@@ -145,3 +145,5 @@ With the latest version, the ``EmailFinisher`` allows these files to be sent as 
           format: html
           attachments:
             - resource: 'resource://AcmeCom.SomePackage/Private/Form/EmailTemplates/Attachments/TermsAndConditions.pdf'
+
+.. note:: attachments can also referenced via `formElement` paths explicitly, for example: ``- formElement: 'image-field.resource'``
