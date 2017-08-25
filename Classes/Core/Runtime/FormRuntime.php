@@ -550,7 +550,7 @@ class FormRuntime implements \Neos\Form\Core\Model\Renderable\RootRenderableInte
      */
     public function getSerializedFormState()
     {
-        $serializedFormState = base64_encode(serialize($this->getFormState()));
+        $serializedFormState = base64_encode(serialize(clone $this->getFormState()));
         return $this->hashService->appendHmac($serializedFormState);
     }
 
