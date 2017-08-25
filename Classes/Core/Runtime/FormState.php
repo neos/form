@@ -11,8 +11,6 @@ namespace Neos\Form\Core\Runtime;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
  * The current state of the form which is attached to the {@link FormRuntime}
  * and saved in a session or the client.
