@@ -88,3 +88,62 @@ The following YAML is stored as ``contact.yaml``:
           senderAddress: '{email}'
           senderName: '{name}'
           format: plaintext
+
+
+File Uploads
+------------
+
+The ``default`` preset comes with an ``FileUpload`` form element that allows the user of the form to upload arbitrary
+files.
+The ``EmailFinisher`` allows these files to be sent as attachments:
+
+.. code-block:: yaml
+
+    type: 'Neos.Form:Form'
+    identifier: 'application'
+    label: 'Example application form'
+    renderables:
+      -
+        type: 'Neos.Form:Page'
+        identifier: 'page-one'
+        renderables:
+          -
+            type: 'Neos.Form:SingleLineText'
+            identifier: email
+            label: 'Email'
+            validators:
+              - identifier: 'Neos.Flow:NotEmpty'
+              - identifier: 'Neos.Flow:EmailAddress'
+          -
+            type: 'Neos.Form:FileUpload'
+            identifier: applicationform
+            label: 'Application Form (PDF)'
+            properties:
+              allowedExtensions:
+                - pdf
+            validators:
+              - identifier: 'Neos.Flow:NotEmpty'
+    finishers:
+      -
+        # Application email that is sent to "customer care" with all uploaded files attached
+        identifier: 'Neos.Form:Email'
+        options:
+          templatePathAndFilename: 'resource://AcmeCom.SomePackage/Private/Form/EmailTemplates/Application.html'
+          subject: 'New Application'
+          recipientAddress: 'application@acme.com'
+          senderAddress: '{email}'
+          format: html
+          attachAllPersistentResources: true
+      -
+        # Confirmation email that is sent to the user with a static file attachment
+        identifier: 'Neos.Form:Email'
+        options:
+          templatePathAndFilename: 'resource://AcmeCom.SomePackage/Private/Form/EmailTemplates/Confirmation.html'
+          subject: 'Your Application'
+          recipientAddress: '{email}'
+          senderAddress: 'application@acme.com'
+          format: html
+          attachments:
+            - resource: 'resource://AcmeCom.SomePackage/Private/Form/EmailTemplates/Attachments/TermsAndConditions.pdf'
+
+.. note:: attachments can also referenced via `formElement` paths explicitly, for example: ``- formElement: 'image-field.resource'``
