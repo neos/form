@@ -14,7 +14,6 @@ namespace Neos\Form\Validation;
 use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Flow\Validation\Validator\AbstractValidator;
 
-
 /**
  * The given $value is valid if it is an \Neos\Flow\ResourceManagement\PersistentResource of the configured resolution
  * Note: a value of NULL or empty string ('') is considered valid

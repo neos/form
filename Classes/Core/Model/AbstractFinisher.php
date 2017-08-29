@@ -13,7 +13,6 @@ namespace Neos\Form\Core\Model;
 
 use Neos\Utility\ObjectAccess;
 
-
 /**
  * Finisher base class.
  *
