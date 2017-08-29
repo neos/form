@@ -188,3 +188,6 @@ list. A Form Element Renderer must implement the ``RendererInterface`` interface
 
 .. tip:: If you write your own Renderer make sure to sanitize values with ``htmlspecialchars()`` before outputting
    them to prevent invalid HTML and XSS vulnerabilities.
+
+Make sure to have a look at the `FusionRenderer Package<https://packagist.org/packages/neos/form-fusionrenderer>`_ that
+provides Fusion based rendering for arbitrary Form Elements!
