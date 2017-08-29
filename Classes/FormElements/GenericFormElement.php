@@ -11,11 +11,11 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Form\Core\Model\AbstractFormElement;
 
 /**
  * A generic form element
  */
-class GenericFormElement extends \Neos\Form\Core\Model\AbstractFormElement
+class GenericFormElement extends AbstractFormElement
 {
 }

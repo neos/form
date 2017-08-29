@@ -11,31 +11,34 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ResourceManagement\PersistentResource;
+use Neos\Form\Core\Model\AbstractFormElement;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Validation\FileTypeValidator;
 
 /**
  * A generic file upload form element
  */
-class FileUpload extends \Neos\Form\Core\Model\AbstractFormElement
+class FileUpload extends AbstractFormElement
 {
     /**
      * @return void
      */
     public function initializeFormElement()
     {
-        $this->setDataType(\Neos\Flow\ResourceManagement\PersistentResource::class);
+        $this->setDataType(PersistentResource::class);
     }
 
     /**
      * Add FileTypeValidator just before submitting so that the "allowedExtension" can be changed at runtime
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @param mixed $elementValue
      * @return void
      */
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue)
     {
-        $fileTypeValidator = new \Neos\Form\Validation\FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
+        $fileTypeValidator = new FileTypeValidator(array('allowedExtensions' => $this->properties['allowedExtensions']));
         $this->addValidator($fileTypeValidator);
     }
 }

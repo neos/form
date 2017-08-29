@@ -11,6 +11,9 @@ namespace Neos\Form\Core\Renderer;
  * source code.
  */
 
+use Neos\Flow\Mvc\Controller\ControllerContext;
+use Neos\Form\Core\Runtime\FormRuntime;
+
 /**
  * Abstract renderer which can be used as base class for custom renderers.
  *
@@ -21,13 +24,13 @@ abstract class AbstractElementRenderer implements RendererInterface
     /**
      * The assigned controller context which might be needed by the renderer.
      *
-     * @var \Neos\Flow\Mvc\Controller\ControllerContext
+     * @var ControllerContext
      * @api
      */
     protected $controllerContext;
 
     /**
-     * @var \Neos\Form\Core\Runtime\FormRuntime
+     * @var FormRuntime
      * @api
      */
     protected $formRuntime;
@@ -35,26 +38,26 @@ abstract class AbstractElementRenderer implements RendererInterface
     /**
      * Set the controller context which should be used
      *
-     * @param \Neos\Flow\Mvc\Controller\ControllerContext $controllerContext
+     * @param ControllerContext $controllerContext
      * @api
      */
-    public function setControllerContext(\Neos\Flow\Mvc\Controller\ControllerContext $controllerContext)
+    public function setControllerContext(ControllerContext $controllerContext)
     {
         $this->controllerContext = $controllerContext;
     }
 
     /**
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @return void
      * @api
      */
-    public function setFormRuntime(\Neos\Form\Core\Runtime\FormRuntime $formRuntime)
+    public function setFormRuntime(FormRuntime $formRuntime)
     {
         $this->formRuntime = $formRuntime;
     }
 
     /**
-     * @return \Neos\Form\Core\Runtime\FormRuntime
+     * @return FormRuntime
      * @api
      */
     public function getFormRuntime()

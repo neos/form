@@ -11,6 +11,8 @@ namespace Neos\Form\Utility;
  * source code.
  */
 
+use Neos\Form\Exception\TypeDefinitionNotFoundException;
+
 /**
  * Merges configuration based on the "superTypes" property of a so-called "type definition".
  *
@@ -50,15 +52,15 @@ class SupertypeResolver
      * @param string $type
      * @param boolean $showHiddenProperties if TRUE, the hidden properties are shown as configured in settings "supertypeResolver.hiddenProperties" are shown as well. FALSE by default
      * @return array
-     * @throws \Neos\Form\Exception\TypeDefinitionNotFoundException if a type definition was not found
+     * @throws TypeDefinitionNotFoundException if a type definition was not found
      * @internal
      */
     public function getMergedTypeDefinition($type, $showHiddenProperties = false)
     {
         if (!isset($this->configuration[$type])) {
-            throw new \Neos\Form\Exception\TypeDefinitionNotFoundException(sprintf('Type "%s" not found. Probably some configuration is missing.', $type), 1325686909);
+            throw new TypeDefinitionNotFoundException(sprintf('Type "%s" not found. Probably some configuration is missing.', $type), 1325686909);
         }
-        $mergedTypeDefinition = array();
+        $mergedTypeDefinition = [];
         if (isset($this->configuration[$type]['superTypes'])) {
             foreach ($this->configuration[$type]['superTypes'] as $superTypeName => $enabled) {
                 // Skip unset node types
@@ -93,7 +95,7 @@ class SupertypeResolver
      */
     public function getCompleteMergedTypeDefinition($showHiddenProperties = false)
     {
-        $configuration = array();
+        $configuration = [];
         foreach (array_keys($this->configuration) as $type) {
             $configuration[$type] = $this->getMergedTypeDefinition($type, $showHiddenProperties);
         }

@@ -11,7 +11,9 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
+use Neos\Error\Messages\Result;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Validation\Validator\ValidatorInterface;
 
 /**
  * A processing Rule contains information for property mapping and validation.
@@ -40,7 +42,7 @@ class ProcessingRule
     protected $validator;
 
     /**
-     * @var \Neos\Error\Messages\Result
+     * @var Result
      */
     protected $processingMessages;
 
@@ -56,7 +58,7 @@ class ProcessingRule
      */
     public function __construct()
     {
-        $this->processingMessages = new \Neos\Error\Messages\Result();
+        $this->processingMessages = new Result();
     }
 
     /**
@@ -95,10 +97,10 @@ class ProcessingRule
     }
 
     /**
-     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param ValidatorInterface $validator
      * @return void
      */
-    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
+    public function addValidator(ValidatorInterface $validator)
     {
         $this->validator->addValidator($validator);
     }
@@ -113,7 +115,7 @@ class ProcessingRule
             $value = $this->propertyMapper->convert($value, $this->dataType, $this->propertyMappingConfiguration);
             $messages = $this->propertyMapper->getMessages();
         } else {
-            $messages = new \Neos\Error\Messages\Result();
+            $messages = new Result();
         }
 
         $validationResult = $this->validator->validate($value);
@@ -124,7 +126,7 @@ class ProcessingRule
     }
 
     /**
-     * @return \Neos\Error\Messages\Result
+     * @return Result
      */
     public function getProcessingMessages()
     {

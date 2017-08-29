@@ -11,11 +11,10 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
-use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Flow\ResourceManagement\Exception as ResourceException;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Form\Core\Model\FormElementInterface;
 
 /**

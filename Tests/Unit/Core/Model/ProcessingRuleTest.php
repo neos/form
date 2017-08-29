@@ -11,32 +11,41 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
-use Neos\Form\Core\Model\Page;
+use Neos\Error\Messages\Error;
+use Neos\Error\Messages\Result;
+use Neos\Flow\Property\PropertyMapper;
+use Neos\Flow\Property\PropertyMappingConfiguration;
+use Neos\Flow\Tests\UnitTestCase;
+use Neos\Flow\Validation\Validator\ConjunctionValidator;
+use Neos\Flow\Validation\Validator\ValidatorInterface;
+use Neos\Form\Core\Model\ProcessingRule;
 
 /**
  * Test for ProcessingRule Domain Model
  * @covers \Neos\Form\Core\Model\ProcessingRule
  */
-class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
+class ProcessingRuleTest extends UnitTestCase
 {
     /**
-     * @var \Neos\Flow\Property\PropertyMapper
+     * @var PropertyMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mockPropertyMapper;
 
     /**
-     * @var \Neos\Form\Core\Model\ProcessingRule
+     * @var ProcessingRule
      */
     protected $processingRule;
 
     public function setUp()
     {
-        $this->mockPropertyMapper = $this->getMockBuilder(\Neos\Flow\Property\PropertyMapper::class)->getMock();
-        $this->processingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
+        $this->mockPropertyMapper = $this->getMockBuilder(PropertyMapper::class)->getMock();
+        $this->processingRule = $this->getAccessibleMock(ProcessingRule::class, array('dummy'));
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
-        $this->processingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
-        $this->processingRule->_set('processingMessages', new \Neos\Error\Messages\Result());
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->processingRule->_set('validator', new ConjunctionValidator());
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->processingRule->_set('processingMessages', new Result());
     }
 
     /**
@@ -69,9 +78,11 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
-        $mockValidator1 = $this->createMock(\Neos\Flow\Validation\Validator\ValidatorInterface::class);
+        /** @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject $mockValidator1 */
+        $mockValidator1 = $this->createMock(ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator1);
-        $mockValidator2 = $this->createMock(\Neos\Flow\Validation\Validator\ValidatorInterface::class);
+        /** @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject $mockValidator2 */
+        $mockValidator2 = $this->createMock(ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator2);
 
         $validators = $this->processingRule->getValidators();
@@ -93,7 +104,7 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function processingMessagesCanBeModifiedBeforeProcessing()
     {
-        $this->processingRule->getProcessingMessages()->addError(new \Neos\Error\Messages\Error('Test'));
+        $this->processingRule->getProcessingMessages()->addError(new Error('Test'));
         $this->processingRule->process('Some Value');
         $this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
     }
@@ -113,11 +124,12 @@ class ProcessingRuleTest extends \Neos\Flow\Tests\UnitTestCase
     public function processConvertsValueIfDataTypeIsSpecified()
     {
         $this->processingRule->setDataType('SomeDataType');
-        $mockPropertyMappingConfiguration = $this->getMockBuilder(\Neos\Flow\Property\PropertyMappingConfiguration::class)->getMock();
+        $mockPropertyMappingConfiguration = $this->getMockBuilder(PropertyMappingConfiguration::class)->getMock();
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->processingRule->_set('propertyMappingConfiguration', $mockPropertyMappingConfiguration);
 
         $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));
-        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new \Neos\Error\Messages\Result()));
+        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new Result()));
         $this->assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
 }

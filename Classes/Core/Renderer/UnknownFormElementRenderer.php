@@ -11,6 +11,7 @@ namespace Neos\Form\Core\Renderer;
  * source code.
  */
 
+use Neos\Form\Core\Model\Renderable\RenderableInterface;
 use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
 use Neos\Form\Exception\TypeDefinitionNotFoundException;
 
@@ -56,7 +57,7 @@ class UnknownFormElementRenderer extends AbstractElementRenderer
     protected function getRenderablePath(RootRenderableInterface $renderable)
     {
         $path = $renderable->getIdentifier();
-        while ($renderable = $renderable->getParentRenderable()) {
+        while ($renderable instanceof RenderableInterface && $renderable = $renderable->getParentRenderable()) {
             $path = $renderable->getIdentifier() . '/' . $path;
         }
         return $path;

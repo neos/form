@@ -11,6 +11,8 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This Exception is thrown in the FormRuntime if the PropertyMapper throws
  * a \Neos\Flow\Property\Exception. It adds some more Information to
@@ -18,6 +20,6 @@ namespace Neos\Form\Exception;
  *
  * @api
  */
-class PropertyMappingException extends \Neos\Form\Exception
+class PropertyMappingException extends FormException
 {
 }

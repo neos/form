@@ -13,6 +13,7 @@ namespace Neos\Form\Persistence;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Form\Exception\PersistenceManagerException;
+use Neos\Utility\Files;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -35,7 +36,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
         if (isset($settings['yamlPersistenceManager']['savePath'])) {
             $this->savePath = $settings['yamlPersistenceManager']['savePath'];
             if (!is_dir($this->savePath)) {
-                \Neos\Utility\Files::createDirectoryRecursively($this->savePath);
+                Files::createDirectoryRecursively($this->savePath);
             }
         }
     }
@@ -92,7 +93,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
     {
         $this->assertSavePathIsValid();
 
-        $forms = array();
+        $forms = [];
         $directoryIterator = new \DirectoryIterator($this->savePath);
 
         foreach ($directoryIterator as $fileObject) {
@@ -126,7 +127,7 @@ class YamlPersistenceManager implements FormPersistenceManagerInterface
         $this->assertSavePathIsValid();
 
         $formFileName = sprintf('%s.yaml', $persistenceIdentifier);
-        return \Neos\Utility\Files::concatenatePaths(array($this->savePath, $formFileName));
+        return Files::concatenatePaths(array($this->savePath, $formFileName));
     }
 
     /**

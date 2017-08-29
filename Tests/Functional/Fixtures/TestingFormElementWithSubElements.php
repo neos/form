@@ -11,12 +11,13 @@ namespace Neos\Form\Tests\Functional\Fixtures;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Validation\Validator\IntegerValidator;
+use Neos\Form\FormElements\Section;
 
 /**
  * Form element that amends itself with another field having a validator
  */
-class TestingFormElementWithSubElements extends \Neos\Form\FormElements\Section
+class TestingFormElementWithSubElements extends Section
 {
     /**
      * This is a callback that is invoked by the Form Factory after the whole form has been built.
@@ -27,6 +28,6 @@ class TestingFormElementWithSubElements extends \Neos\Form\FormElements\Section
     public function onBuildingFinished()
     {
         $element = $this->createElement('myInteger', 'Neos.Form:SingleLineText');
-        $element->addValidator(new \Neos\Flow\Validation\Validator\IntegerValidator());
+        $element->addValidator(new IntegerValidator());
     }
 }

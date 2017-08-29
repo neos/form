@@ -11,14 +11,15 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FinisherContext;
+use Neos\Utility\ObjectAccess;
+
 
 /**
  * Finisher base class.
  *
  * **This class is meant to be subclassed by developers**
  */
-abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterface
+abstract class AbstractFinisher implements FinisherInterface
 {
     /**
      * The options which have been set from the outside. Instead of directly
@@ -27,7 +28,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
      * @var array
      * @internal
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * These are the default options of the finisher.
@@ -37,7 +38,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
      * @var array
      * @api
      */
-    protected $defaultOptions = array();
+    protected $defaultOptions = [];
 
     /**
      * @var \Neos\Form\Core\Model\FinisherContext
@@ -117,7 +118,7 @@ abstract class AbstractFinisher implements \Neos\Form\Core\Model\FinisherInterfa
         }
         $formRuntime = $this->finisherContext->getFormRuntime();
         return preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
-            return \Neos\Utility\ObjectAccess::getPropertyPath($formRuntime, $match[1]);
+            return ObjectAccess::getPropertyPath($formRuntime, $match[1]);
         }, $option);
     }
 }

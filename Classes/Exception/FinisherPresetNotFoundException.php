@@ -11,12 +11,14 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if a Finisher Preset was not found,
  * or if the implementationClassName was not set.
  *
  * @api
  */
-class FinisherPresetNotFoundException extends \Neos\Form\Exception
+class FinisherPresetNotFoundException extends FormException
 {
 }

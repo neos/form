@@ -11,11 +11,13 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * Generic Peristence Manager Exception, to be thrown f.e. if a given form is not loadable
  *
  * @api
  */
-class PersistenceManagerException extends \Neos\Form\Exception
+class PersistenceManagerException extends FormException
 {
 }

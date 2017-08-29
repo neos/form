@@ -11,12 +11,12 @@ namespace Neos\Form\Tests\Functional\Fixtures\FormFactories;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Form\Factory\ArrayFormFactory;
 
 /**
  * Simple form for testing
  */
-class TestingFormBuildingFinishedFactory extends \Neos\Form\Factory\ArrayFormFactory
+class TestingFormBuildingFinishedFactory extends ArrayFormFactory
 {
     public function build(array $configuration, $presetName)
     {

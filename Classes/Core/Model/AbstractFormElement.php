@@ -11,7 +11,9 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Validation\Validator\NotEmptyValidator;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Exception\IdentifierNotValidException;
 
 /**
  * A base form element, which is the starting point for creating custom (PHP-based)
@@ -34,9 +36,23 @@ use Neos\Flow\Annotations as Flow;
 abstract class AbstractFormElement extends Renderable\AbstractRenderable implements FormElementInterface
 {
     /**
+     * The identifier of this Form Element
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
+     * Abstract "type" of this Form Element
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * Constructor. Needs this FormElement's identifier and the FormElement type
@@ -44,12 +60,12 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
      * @param string $identifier The FormElement's identifier
      * @param string $type The Form Element Type
      * @api
-     * @throws \Neos\Form\Exception\IdentifierNotValidException
+     * @throws IdentifierNotValidException
      */
     public function __construct($identifier, $type)
     {
         if (!is_string($identifier) || strlen($identifier) === 0) {
-            throw new \Neos\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
+            throw new IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
         }
         $this->identifier = $identifier;
         $this->type = $type;
@@ -108,7 +124,7 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     public function isRequired()
     {
         foreach ($this->getValidators() as $validator) {
-            if ($validator instanceof \Neos\Flow\Validation\Validator\NotEmptyValidator) {
+            if ($validator instanceof NotEmptyValidator) {
                 return true;
             }
         }
@@ -139,11 +155,11 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     /**
      * Override this method in your custom FormElements if needed
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @param mixed $elementValue
      * @return void
      */
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue)
     {
     }
 }

@@ -11,6 +11,8 @@ namespace Neos\Form\Core\Runtime;
  * source code.
  */
 
+use Neos\Utility\Arrays;
+
 /**
  * The current state of the form which is attached to the {@link FormRuntime}
  * and saved in a session or the client.
@@ -37,7 +39,7 @@ class FormState
     /**
      * @var array
      */
-    protected $formValues = array();
+    protected $formValues = [];
 
     /**
      * @return boolean FALSE if the form has never been submitted before, TRUE otherwise
@@ -79,7 +81,7 @@ class FormState
      */
     public function setFormValue($propertyPath, $value)
     {
-        $this->formValues = \Neos\Utility\Arrays::setValueByPath($this->formValues, $propertyPath, $value);
+        $this->formValues = Arrays::setValueByPath($this->formValues, $propertyPath, $value);
     }
 
     /**
@@ -88,6 +90,6 @@ class FormState
      */
     public function getFormValue($propertyPath)
     {
-        return \Neos\Utility\Arrays::getValueByPath($this->formValues, $propertyPath);
+        return Arrays::getValueByPath($this->formValues, $propertyPath);
     }
 }

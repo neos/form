@@ -11,7 +11,7 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Form\Exception;
 
 /**
  * A Page, being part of a bigger FormDefinition. It contains numerous FormElements
@@ -47,12 +47,12 @@ class Page extends AbstractSection
      *
      * @param Renderable\CompositeRenderableInterface $parentRenderable
      * @return void
-     * @throws \Neos\Form\Exception
+     * @throws Exception
      */
     public function setParentRenderable(Renderable\CompositeRenderableInterface $parentRenderable)
     {
         if (!($parentRenderable instanceof FormDefinition)) {
-            throw new \Neos\Form\Exception(sprintf('The specified parentRenderable must be a FormDefinition, got "%s"', is_object($parentRenderable) ? get_class($parentRenderable) : gettype($parentRenderable)), 1329233747);
+            throw new Exception(sprintf('The specified parentRenderable must be a FormDefinition, got "%s"', is_object($parentRenderable) ? get_class($parentRenderable) : gettype($parentRenderable)), 1329233747);
         }
         parent::setParentRenderable($parentRenderable);
     }

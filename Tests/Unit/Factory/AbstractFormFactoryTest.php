@@ -11,20 +11,22 @@ namespace Neos\Form\Tests\Unit\Factory;
  * source code.
  */
 
-use Neos\Form\Utility\SupertypeResolver;
+use Neos\Flow\Configuration\ConfigurationManager;
+use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Factory\AbstractFormFactory;
 
 /**
  * Test for Supertype Resolver
  * @covers \Neos\Form\Factory\AbstractFormFactory<extended>
  */
-class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
+class AbstractFormFactoryTest extends UnitTestCase
 {
     public function dataProviderForConfigurationMerging()
     {
         $presets = array(
             'default' => array(
                 'formElementTypes' => array(
-                    'Neos.Form:Base' => array()
+                    'Neos.Form:Base' => []
                 )
             ),
             'special' => array(
@@ -47,7 +49,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 'presetName' => 'default',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'Neos.Form:Base' => array()
+                        'Neos.Form:Base' => []
                     )
                 )
             ),
@@ -57,7 +59,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 'presetName' => 'special',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'Neos.Form:Base' => array()
+                        'Neos.Form:Base' => []
                     ),
                     'foo' => 'bar',
                     'baz' => array(
@@ -71,7 +73,7 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 'presetName' => 'specialSub',
                 'expected' => array(
                     'formElementTypes' => array(
-                        'Neos.Form:Base' => array()
+                        'Neos.Form:Base' => []
                     ),
                     'foo' => 'bar',
                     'baz' => array(
@@ -113,11 +115,11 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     public function initializeObjectLoadsSettings()
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $mockConfigurationManager = $this->getMockBuilder(\Neos\Flow\Configuration\ConfigurationManager::class)->disableOriginalConstructor()->getMock();
+        $mockConfigurationManager = $this->getMockBuilder(ConfigurationManager::class)->disableOriginalConstructor()->getMock();
         $mockConfigurationManager
             ->expects($this->once())
             ->method('getConfiguration')
-            ->with(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form')
+            ->with(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form')
             ->will($this->returnValue('MyConfig'));
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
@@ -126,18 +128,18 @@ class AbstractFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \Neos\Form\Factory\AbstractFormFactory
+     * @return AbstractFormFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getAbstractFormFactory()
     {
-        return $this->getAccessibleMock(\Neos\Form\Factory\AbstractFormFactory::class, array('build'));
+        return $this->getAccessibleMock(AbstractFormFactory::class, array('build'));
     }
 
     /**
      * @dataProvider dataProviderForConfigurationMerging
      * @test
      */
-    public function getPresetsWorks($presets, $presetName, $expected)
+    public function getPresetsWorks($presets)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
         $abstractFormFactory->_set('formSettings', array(

@@ -11,12 +11,14 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if two Form Elements with the same Identifier are added
  * to a form.
  *
  * @api
  */
-class DuplicateFormElementException extends \Neos\Form\Exception
+class DuplicateFormElementException extends FormException
 {
 }

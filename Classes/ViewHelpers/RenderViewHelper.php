@@ -11,9 +11,13 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\Flow\Mvc\ActionRequest;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Http\Response;
+use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Factory\ArrayFormFactory;
 use Neos\Utility\Arrays;
 use Neos\Form\Persistence\FormPersistenceManagerInterface;
 
@@ -48,8 +52,9 @@ class RenderViewHelper extends AbstractViewHelper
      * @param string $presetName name of the preset to use
      * @param array $overrideConfiguration factory specific configuration
      * @return string the rendered form
+     * @throws ViewHelperException
      */
-    public function render($persistenceIdentifier = null, $factoryClass = \Neos\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = [])
+    public function render($persistenceIdentifier = null, $factoryClass = ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = [])
     {
         if (isset($persistenceIdentifier)) {
             $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
@@ -57,8 +62,15 @@ class RenderViewHelper extends AbstractViewHelper
 
         $factory = $this->objectManager->get($factoryClass);
         $formDefinition = $factory->build($overrideConfiguration, $presetName);
+        if (!$formDefinition instanceof FormDefinition) {
+            throw new ViewHelperException(sprintf('The factory method %s::build() has to return an instance of FormDefinition, got "%s"', $factoryClass, is_object($formDefinition) ? get_class($formDefinition) : gettype($formDefinition)), 1504024351);
+        }
+        $request = $this->controllerContext->getRequest();
+        if (!$request instanceof ActionRequest) {
+            throw new ViewHelperException(sprintf('This ViewHelper only works with an ActionRequest, got "%s"', is_object($request) ? get_class($request) : gettype($request)), 1504024356);
+        }
         $response = new Response($this->controllerContext->getResponse());
-        $form = $formDefinition->bind($this->controllerContext->getRequest(), $response);
+        $form = $formDefinition->bind($request, $response);
         return $form->render();
     }
 }

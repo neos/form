@@ -10,6 +10,7 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+use Neos\Utility\ObjectAccess;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
@@ -107,7 +108,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
 
         // 2. TEST SETUP: BUILD GET REQUEST ONLY CONTAINING FORM STATE
         $form = $this->browser->getForm();
-        \Neos\Utility\ObjectAccess::setProperty($form, 'method', 'GET', true);
+        ObjectAccess::setProperty($form, 'method', 'GET', true);
 
         // we want to stay on the current page, that's why we send __currentPage = 1. (== 2nd page of the form)
         $doc = new \DOMDocument();

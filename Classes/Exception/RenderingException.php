@@ -11,11 +11,13 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if a rendering error occurs
  *
  * @api
  */
-class RenderingException extends \Neos\Form\Exception
+class RenderingException extends FormException
 {
 }

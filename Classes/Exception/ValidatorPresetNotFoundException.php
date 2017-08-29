@@ -11,12 +11,14 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if a Validator Preset was not found,
  * or if the implementationClassName was not set.
  *
  * @api
  */
-class ValidatorPresetNotFoundException extends \Neos\Form\Exception
+class ValidatorPresetNotFoundException extends FormException
 {
 }

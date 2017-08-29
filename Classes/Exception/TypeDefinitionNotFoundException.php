@@ -11,12 +11,14 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if a Type Definition for a form element was not found,
  * or if the implementationClassName was not set.
  *
  * @api
  */
-class TypeDefinitionNotFoundException extends \Neos\Form\Exception
+class TypeDefinitionNotFoundException extends FormException
 {
 }
