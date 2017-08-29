@@ -89,6 +89,9 @@ The following YAML is stored as ``contact.yaml``:
           senderName: '{name}'
           format: plaintext
 
+.. note:: Instead of setting the ``templatePathAndFilename`` option to specify the Fluid template file for the EmailFinisher,
+          the template source can also be set directly via the ``templateSource`` option.
+
 
 File Uploads
 ------------

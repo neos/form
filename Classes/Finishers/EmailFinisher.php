@@ -23,7 +23,8 @@ use Neos\Utility\ObjectAccess;
  *
  * Options:
  *
- * - templatePathAndFilename (mandatory): Template path and filename for the mail body
+ * - templatePathAndFilename (mandatory if "templateSource" option is not set): Template path and filename for the mail body
+ * - templateSource (mandatory if "templatePathAndFilename" option is not set): The raw Fluid template
  * - layoutRootPath: root path for the layouts
  * - partialRootPath: root path for the partials
  * - variables: associative array of variables which are available inside the Fluid template
@@ -163,10 +164,14 @@ class EmailFinisher extends AbstractFinisher
     protected function initializeStandaloneView()
     {
         $standaloneView = new StandaloneView();
-        if (!isset($this->options['templatePathAndFilename'])) {
-            throw new FinisherException('The option "templatePathAndFilename" must be set for the EmailFinisher.', 1327058829);
+        if (isset($this->options['templatePathAndFilename'])) {
+            $standaloneView->setTemplatePathAndFilename($this->options['templatePathAndFilename']);
+        } elseif (isset($this->options['templateSource'])) {
+            $standaloneView->setTemplateSource($this->options['templateSource']);
+        } else {
+            throw new FinisherException('The option "templatePathAndFilename" or "templateSource" must be set for the EmailFinisher.', 1327058829);
         }
-        $standaloneView->setTemplatePathAndFilename($this->options['templatePathAndFilename']);
+
 
         if (isset($this->options['partialRootPath'])) {
             $standaloneView->setPartialRootPath($this->options['partialRootPath']);
@@ -175,6 +180,8 @@ class EmailFinisher extends AbstractFinisher
         if (isset($this->options['layoutRootPath'])) {
             $standaloneView->setLayoutRootPath($this->options['layoutRootPath']);
         }
+
+        $standaloneView->assign('formValues', $this->finisherContext->getFormValues());
 
         if (isset($this->options['variables'])) {
             $standaloneView->assignMultiple($this->options['variables']);
