@@ -80,10 +80,10 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;
         }
-        $image = $this->getValue(false);
+        $image = $this->getPropertyValue();
         if ($image instanceof Image) {
             return $image;
         }
-        return $this->propertyMapper->convert($image, Image::class);
+        return $this->propertyMapper->convert($this->getValueAttribute(), Image::class);
     }
 }

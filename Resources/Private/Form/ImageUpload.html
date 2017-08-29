@@ -23,18 +23,16 @@
 		</f:if>
 		<script type="text/javascript">
 		//<![CDATA[
-			var resourcePointers = [];
 			function enableUpload(property) {
 				document.getElementById(property + '-preview').style.display = 'none';
 				document.getElementById(property + '-uploadfields').style.display = 'block';
-				resourcePointers[property] = document.getElementById(property + '-resourcePointer').value;
-				document.getElementById(property + '-resourcePointer').value = '';
+				document.getElementById(property + '-resource-identity').setAttribute('disabled', true);
 				return true;
 			}
 			function disableUpload(property) {
 				document.getElementById(property + '-preview').style.display = 'block';
 				document.getElementById(property + '-uploadfields').style.display = 'none';
-				document.getElementById(property + '-resourcePointer').value = resourcePointers[property];
+				document.getElementById(property + '-resource-identity').removeAttribute('disabled');
 				return true;
 			}
 		//]]></script>
