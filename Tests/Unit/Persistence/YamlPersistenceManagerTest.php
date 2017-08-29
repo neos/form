@@ -11,6 +11,7 @@ namespace Neos\Form\Tests\Unit\Persistence;
  * source code.
  */
 
+use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Persistence\YamlPersistenceManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamWrapper;
@@ -18,7 +19,7 @@ use org\bovigo\vfs\vfsStreamWrapper;
 /**
  * @covers \Neos\Form\Persistence\YamlPersistenceManager<extended>
  */
-class YamlPersistenceManagerTest extends \Neos\Flow\Tests\UnitTestCase
+class YamlPersistenceManagerTest extends UnitTestCase
 {
     /**
      * @var YamlPersistenceManager

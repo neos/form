@@ -24,7 +24,7 @@ interface CompositeRenderableInterface extends RenderableInterface
     /**
      * Returns all RenderableInterface instances of this composite renderable recursively
      *
-     * @return array<Neos\Form\Core\Model\RenderableInterface>
+     * @return RenderableInterface[]
      * @internal
      */
     public function getRenderablesRecursively();

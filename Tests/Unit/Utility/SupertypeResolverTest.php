@@ -11,13 +11,14 @@ namespace Neos\Form\Tests\Unit\Utility;
  * source code.
  */
 
+use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Utility\SupertypeResolver;
 
 /**
  * Test for Supertype Resolver
  * @covers \Neos\Form\Utility\SupertypeResolver<extended>
  */
-class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
+class SupertypeResolverTest extends UnitTestCase
 {
     public function dataProviderForTypeResolving()
     {
@@ -64,7 +65,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
                     'config1' => 'val1'
                 )
             ),
-            'with a list of supertypes' => array(
+            'with a list of supertypes a' => array(
                 'types' => $types,
                 'typeName' => 'typeWithSupertypes',
                 'expected' => array(
@@ -73,7 +74,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
                     'config2' => 'val2'
                 )
             ),
-            'with a list of supertypes' => array(
+            'with a list of supertypes b' => array(
                 'types' => $types,
                 'typeName' => 'typeWithSupertypes2',
                 'expected' => array(
@@ -100,7 +101,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
                     'config2' => 'val2'
                 )
             ),
-            'with a list of supertypes' => array(
+            'with a list of supertypes c' => array(
                 'types' => $types,
                 'typeName' => 'typeWithSupertypes2InArraySyntax',
                 'expected' => array(
@@ -109,7 +110,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
                     'config2' => 'val2'
                 )
             ),
-            'with recursive supertypes' => array(
+            'with recursive supertypes d' => array(
                 'types' => $types,
                 'typeName' => 'subTypeWithSupertypes2InArraySyntax',
                 'expected' => array(
@@ -137,7 +138,7 @@ class SupertypeResolverTest extends \Neos\Flow\Tests\UnitTestCase
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {
-        $supertypeResolver = new SupertypeResolver(array());
+        $supertypeResolver = new SupertypeResolver([]);
         $supertypeResolver->getMergedTypeDefinition('nonExistingType');
     }
 }

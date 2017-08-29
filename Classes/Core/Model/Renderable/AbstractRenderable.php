@@ -11,6 +11,15 @@ namespace Neos\Form\Core\Model\Renderable;
  * source code.
  */
 
+use Neos\Flow\Validation\Validator\ValidatorInterface;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\FormElementInterface;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Exception\FormDefinitionConsistencyException;
+use Neos\Form\Exception\ValidatorPresetNotFoundException;
+use Neos\Form\Utility\Arrays as FormArrays;
+use Neos\Utility\Arrays;
+
 /**
  * Convenience base class which implements common functionality for most
  * classes which implement RenderableInterface.
@@ -55,7 +64,7 @@ abstract class AbstractRenderable implements RenderableInterface
      *
      * @var array
      */
-    protected $renderingOptions = array();
+    protected $renderingOptions = [];
 
     /**
      * Renderer class name to be used for this renderable.
@@ -110,13 +119,15 @@ abstract class AbstractRenderable implements RenderableInterface
             $this->setLabel($options['label']);
         }
 
-        if (isset($options['defaultValue'])) {
-            $this->setDefaultValue($options['defaultValue']);
-        }
+        if ($this instanceof FormElementInterface) {
+            if (isset($options['defaultValue'])) {
+                $this->setDefaultValue($options['defaultValue']);
+            }
 
-        if (isset($options['properties'])) {
-            foreach ($options['properties'] as $key => $value) {
-                $this->setProperty($key, $value);
+            if (isset($options['properties'])) {
+                foreach ($options['properties'] as $key => $value) {
+                    $this->setProperty($key, $value);
+                }
             }
         }
 
@@ -132,11 +143,11 @@ abstract class AbstractRenderable implements RenderableInterface
 
         if (isset($options['validators'])) {
             foreach ($options['validators'] as $validatorConfiguration) {
-                $this->createValidator($validatorConfiguration['identifier'], isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array());
+                $this->createValidator($validatorConfiguration['identifier'], isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : []);
             }
         }
 
-        \Neos\Form\Utility\Arrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions', 'validators'));
+        FormArrays::assertAllArrayKeysAreValid($options, array('label', 'defaultValue', 'properties', 'rendererClassName', 'renderingOptions', 'validators'));
     }
 
     /**
@@ -145,32 +156,32 @@ abstract class AbstractRenderable implements RenderableInterface
      * @param string $validatorIdentifier
      * @param array $options
      * @return mixed
-     * @throws \Neos\Form\Exception\ValidatorPresetNotFoundException
+     * @throws ValidatorPresetNotFoundException
      */
-    public function createValidator($validatorIdentifier, array $options = array())
+    public function createValidator($validatorIdentifier, array $options = [])
     {
         $validatorPresets = $this->getRootForm()->getValidatorPresets();
         if (isset($validatorPresets[$validatorIdentifier]) && is_array($validatorPresets[$validatorIdentifier]) && isset($validatorPresets[$validatorIdentifier]['implementationClassName'])) {
             $implementationClassName = $validatorPresets[$validatorIdentifier]['implementationClassName'];
-            $defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : array();
+            $defaultOptions = isset($validatorPresets[$validatorIdentifier]['options']) ? $validatorPresets[$validatorIdentifier]['options'] : [];
 
-            $options = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
+            $options = Arrays::arrayMergeRecursiveOverrule($defaultOptions, $options);
 
             $validator = new $implementationClassName($options);
             $this->addValidator($validator);
             return $validator;
         } else {
-            throw new \Neos\Form\Exception\ValidatorPresetNotFoundException('The validator preset identified by "' . $validatorIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328710202);
+            throw new ValidatorPresetNotFoundException('The validator preset identified by "' . $validatorIdentifier . '" could not be found, or the implementationClassName was not specified.', 1328710202);
         }
     }
 
     /**
      * Add a validator to the element
      *
-     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param ValidatorInterface $validator
      * @return void
      */
-    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
+    public function addValidator(ValidatorInterface $validator)
     {
         $formDefinition = $this->getRootForm();
         $formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
@@ -237,7 +248,7 @@ abstract class AbstractRenderable implements RenderableInterface
      * @param string $key
      * @param mixed $value
      * @api
-     * @return mixed
+     * @return void
      */
     public function setRenderingOption($key, $value)
     {
@@ -271,17 +282,17 @@ abstract class AbstractRenderable implements RenderableInterface
      * Get the root form this element belongs to
      *
      * @internal
-     * @throws \Neos\Form\Exception\FormDefinitionConsistencyException
-     * @return \Neos\Form\Core\Model\FormDefinition
+     * @throws FormDefinitionConsistencyException
+     * @return FormDefinition
      */
     public function getRootForm()
     {
         $rootRenderable = $this->parentRenderable;
-        while ($rootRenderable !== null && !($rootRenderable instanceof \Neos\Form\Core\Model\FormDefinition)) {
+        while ($rootRenderable !== null && !($rootRenderable instanceof FormDefinition)) {
             $rootRenderable = $rootRenderable->getParentRenderable();
         }
         if ($rootRenderable === null) {
-            throw new \Neos\Form\Exception\FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form.', $this->identifier), 1326803398);
+            throw new FormDefinitionConsistencyException(sprintf('The form element "%s" is not attached to a parent form.', $this->identifier), 1326803398);
         }
 
         return $rootRenderable;
@@ -298,7 +309,7 @@ abstract class AbstractRenderable implements RenderableInterface
         try {
             $rootForm = $this->getRootForm();
             $rootForm->registerRenderable($this);
-        } catch (\Neos\Form\Exception\FormDefinitionConsistencyException $exception) {
+        } catch (FormDefinitionConsistencyException $exception) {
         }
     }
 
@@ -312,7 +323,7 @@ abstract class AbstractRenderable implements RenderableInterface
         try {
             $rootForm = $this->getRootForm();
             $rootForm->unregisterRenderable($this);
-        } catch (\Neos\Form\Exception\FormDefinitionConsistencyException $exception) {
+        } catch (FormDefinitionConsistencyException $exception) {
         }
         $this->parentRenderable = null;
     }
@@ -363,10 +374,10 @@ abstract class AbstractRenderable implements RenderableInterface
     /**
      * Override this method in your custom Renderable if needed
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @return void
      */
-    public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime)
+    public function beforeRendering(FormRuntime $formRuntime)
     {
     }
 

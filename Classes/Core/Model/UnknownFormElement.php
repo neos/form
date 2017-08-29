@@ -11,7 +11,6 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Form\Core\Renderer\UnknownFormElementRenderer;
 use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Exception\IdentifierNotValidException;
@@ -23,6 +22,20 @@ use Neos\Form\Exception\IdentifierNotValidException;
  */
 class UnknownFormElement extends Renderable\AbstractRenderable implements FormElementInterface
 {
+    /**
+     * The identifier of this Element
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
+     * Abstract "type" of this Element (which couldn't be resolved)
+     *
+     * @var string
+     */
+    protected $type;
+
     /**
      * Constructor. Needs this FormElement's identifier and the FormElement type
      *
@@ -106,7 +119,7 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
      */
     public function getProperties()
     {
-        return array();
+        return [];
     }
 
     /**

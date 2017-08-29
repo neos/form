@@ -11,8 +11,13 @@ namespace Neos\Form\Finishers;
  * source code.
  */
 
+use Neos\Error\Messages\Error;
+use Neos\Error\Messages\Notice;
+use Neos\Error\Messages\Warning;
 use Neos\Flow\Annotations as Flow;
 use Neos\Error\Messages\Message;
+use Neos\Form\Core\Model\AbstractFinisher;
+use Neos\Form\Exception\FinisherException;
 
 /**
  * A simple finisher that adds a message to the FlashMessageContainer
@@ -31,7 +36,7 @@ use Neos\Error\Messages\Message;
  * $formDefinition->addFinisher($flashMessageFinisher);
  * // ...
  */
-class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
+class FlashMessageFinisher extends AbstractFinisher
 {
     /**
      * @Flow\Inject
@@ -45,7 +50,7 @@ class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
     protected $defaultOptions = array(
         'messageBody' => null,
         'messageTitle' => '',
-        'messageArguments' => array(),
+        'messageArguments' => [],
         'messageCode' => null,
         'severity' => Message::SEVERITY_OK,
     );
@@ -55,13 +60,13 @@ class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
      * @see AbstractFinisher::execute()
      *
      * @return void
-     * @throws \Neos\Form\Exception\FinisherException
+     * @throws FinisherException
      */
     protected function executeInternal()
     {
         $messageBody = $this->parseOption('messageBody');
         if (!is_string($messageBody)) {
-            throw new \Neos\Form\Exception\FinisherException(sprintf('The message body must be of type string, "%s" given.', gettype($messageBody)), 1335980069);
+            throw new FinisherException(sprintf('The message body must be of type string, "%s" given.', gettype($messageBody)), 1335980069);
         }
         $messageTitle = $this->parseOption('messageTitle');
         $messageArguments = $this->parseOption('messageArguments');
@@ -69,13 +74,13 @@ class FlashMessageFinisher extends \Neos\Form\Core\Model\AbstractFinisher
         $severity = $this->parseOption('severity');
         switch ($severity) {
             case Message::SEVERITY_NOTICE:
-                $message = new \Neos\Error\Messages\Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
+                $message = new Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
                 break;
             case Message::SEVERITY_WARNING:
-                $message = new \Neos\Error\Messages\Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
+                $message = new Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
                 break;
             case Message::SEVERITY_ERROR:
-                $message = new \Neos\Error\Messages\Error($messageBody, $messageCode, $messageArguments, $messageTitle);
+                $message = new Error($messageBody, $messageCode, $messageArguments, $messageTitle);
                 break;
             default:
                 $message = new Message($messageBody, $messageCode, $messageArguments, $messageTitle);

@@ -11,11 +11,13 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if a form preset for a given name was not found.
  *
  * @api
  */
-class PresetNotFoundException extends \Neos\Form\Exception
+class PresetNotFoundException extends FormException
 {
 }

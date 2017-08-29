@@ -11,10 +11,9 @@ namespace Neos\Form\ViewHelpers\Form;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
-use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMapper;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Media\Domain\Model\Image;
 
 /**

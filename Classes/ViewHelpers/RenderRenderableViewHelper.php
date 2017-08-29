@@ -12,7 +12,6 @@ namespace Neos\Form\ViewHelpers;
  */
 
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
-use Neos\Flow\Annotations as Flow;
 use Neos\Form\Core\Model\Renderable\RenderableInterface;
 use Neos\Form\Core\Renderer\RendererInterface;
 

@@ -26,7 +26,7 @@
 			function enableUpload(property) {
 				document.getElementById(property + '-preview').style.display = 'none';
 				document.getElementById(property + '-uploadfields').style.display = 'block';
-				document.getElementById(property + '-resource-identity').setAttribute('disabled', true);
+				document.getElementById(property + '-resource-identity').setAttribute('disabled', '');
 				return true;
 			}
 			function disableUpload(property) {

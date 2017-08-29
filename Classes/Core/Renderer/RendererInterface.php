@@ -11,6 +11,10 @@ namespace Neos\Form\Core\Renderer;
  * source code.
  */
 
+use Neos\Flow\Mvc\Controller\ControllerContext;
+use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
+use Neos\Form\Core\Runtime\FormRuntime;
+
 /**
  * Base interface for Renderers. A Renderer is used to render a renderable.
  *
@@ -22,30 +26,30 @@ interface RendererInterface
     /**
      * Set the controller context which should be used
      *
-     * @param \Neos\Flow\Mvc\Controller\ControllerContext $controllerContext
+     * @param ControllerContext $controllerContext
      * @api
      */
-    public function setControllerContext(\Neos\Flow\Mvc\Controller\ControllerContext $controllerContext);
+    public function setControllerContext(ControllerContext $controllerContext);
 
     /**
      * Render the passed $renderable and return the rendered Renderable.
      * Note: This method is expected to invoke the beforeRendering() callback on the $renderable
      *
-     * @param \Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable
+     * @param RootRenderableInterface $renderable
      * @return string the rendered $renderable
      * @api
      */
-    public function renderRenderable(\Neos\Form\Core\Model\Renderable\RootRenderableInterface $renderable);
+    public function renderRenderable(RootRenderableInterface $renderable);
 
     /**
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @return void
      * @api
      */
-    public function setFormRuntime(\Neos\Form\Core\Runtime\FormRuntime $formRuntime);
+    public function setFormRuntime(FormRuntime $formRuntime);
 
     /**
-     * @return \Neos\Form\Core\Runtime\FormRuntime
+     * @return FormRuntime
      * @api
      */
     public function getFormRuntime();

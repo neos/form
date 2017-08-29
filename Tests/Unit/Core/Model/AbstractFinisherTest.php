@@ -11,8 +11,11 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
-use Neos\Form\Core\Model\Page;
+use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Core\Model\AbstractFinisher;
+use Neos\Form\Core\Model\FinisherContext;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Core\Runtime\FormState;
 
 /**
  * Test for AbstractFinisher
@@ -21,8 +24,11 @@ use Neos\Form\Core\Model\Page;
  * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
  * @covers \Neos\Form\Core\Runtime\FormState<extended>
  */
-class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
+class AbstractFinisherTest extends UnitTestCase
 {
+    /**
+     * @var FormRuntime|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $formRuntime = null;
 
     /**
@@ -154,7 +160,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $finisher = $this->getAbstractFinisher();
         $finisherContext = $this->getFinisherContext();
-        $formState = new \Neos\Form\Core\Runtime\FormState();
+        $formState = new FormState();
         foreach ($formValues as $key => $value) {
             $formState->setFormValue($key, $value);
         }
@@ -174,7 +180,7 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
     {
         $finisher = $this->getAbstractFinisher();
         $finisherContext = $this->getFinisherContext();
-        $formState = new \Neos\Form\Core\Runtime\FormState();
+        $formState = new FormState();
         foreach ($formValues as $key => $value) {
             $formState->setFormValue($key, $value);
         }
@@ -198,19 +204,19 @@ class AbstractFinisherTest extends \Neos\Flow\Tests\UnitTestCase
     }
 
     /**
-     * @return \Neos\Form\Core\Model\AbstractFinisher
+     * @return AbstractFinisher|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getAbstractFinisher()
     {
-        return $this->getAccessibleMock(\Neos\Form\Core\Model\AbstractFinisher::class, array('executeInternal'));
+        return $this->getAccessibleMock(AbstractFinisher::class, array('executeInternal'));
     }
 
     /**
-     * @return \Neos\Form\Core\Model\FinisherContext
+     * @return FinisherContext
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, array('dummy'), array(), '', false);
-        return new \Neos\Form\Core\Model\FinisherContext($this->formRuntime);
+        $this->formRuntime = $this->getAccessibleMock(FormRuntime::class, array('dummy'), [], '', false);
+        return new FinisherContext($this->formRuntime);
     }
 }

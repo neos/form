@@ -11,14 +11,19 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
+use Neos\Flow\Tests\UnitTestCase;
+use Neos\Flow\Validation\Validator\ConjunctionValidator;
+use Neos\Flow\Validation\Validator\NotEmptyValidator;
+use Neos\Form\Core\Model\AbstractFormElement;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
+use Neos\Form\Core\Model\ProcessingRule;
 
 /**
  * Test for AbstractFormElement Domain Model
  * @covers \Neos\Form\Core\Model\AbstractFormElement<extended>
  */
-class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
+class AbstractFormElementTest extends UnitTestCase
 {
     /**
      * @test
@@ -81,7 +86,7 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
     public function renderingOptionsCanBeSetAndGet()
     {
         $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
-        $this->assertSame(array(), $formElement->getRenderingOptions());
+        $this->assertSame([], $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option1', 'value1');
         $this->assertSame(array('option1' => 'value1'), $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option2', 'value2');
@@ -168,29 +173,29 @@ class AbstractFormElementTest extends \Neos\Flow\Tests\UnitTestCase
         $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
         $page->addElement($myFormElement);
 
-        $myFormElement->addValidator(new \Neos\Flow\Validation\Validator\NotEmptyValidator());
+        $myFormElement->addValidator(new NotEmptyValidator());
         $this->assertTrue($myFormElement->isRequired());
     }
 
     /**
      * @param array $constructorArguments
-     * @return \Neos\Form\Core\Model\AbstractFormElement
+     * @return AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMockBuilder(\Neos\Form\Core\Model\AbstractFormElement::class)->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
+        return $this->getMockBuilder(AbstractFormElement::class)->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
      * @param string $formElementIdentifier
-     * @return FormDefinition
+     * @return FormDefinition|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {
-        $mockProcessingRule = $this->getAccessibleMock(\Neos\Form\Core\Model\ProcessingRule::class, array('dummy'));
-        $mockProcessingRule->_set('validator', new \Neos\Flow\Validation\Validator\ConjunctionValidator());
+        $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, array('dummy'));
+        $mockProcessingRule->_set('validator', new ConjunctionValidator());
 
-        $formDefinition = $this->getMockBuilder(\Neos\Form\Core\Model\FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
+        $formDefinition = $this->getMockBuilder(FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
         $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
 
         return $formDefinition;

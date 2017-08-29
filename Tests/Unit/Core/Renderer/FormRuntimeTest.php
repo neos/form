@@ -11,8 +11,14 @@ namespace Neos\Form\Tests\Unit\Core\Runtime;
  * source code.
  */
 
+use Neos\Flow\Http\Response;
+use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Core\Runtime\FormState;
+use Neos\Form\FormElements\GenericFormElement;
 
 require_once(__DIR__ . '/Fixture/DummyFinisher.php');
 
@@ -21,7 +27,7 @@ require_once(__DIR__ . '/Fixture/DummyFinisher.php');
  *
  * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
  */
-class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
+class FormRuntimeTest extends UnitTestCase
 {
     /**
      * @test
@@ -29,10 +35,10 @@ class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
     public function valuesSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
-        $mockActionRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 
-        $formRuntime = $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        $formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
 
         $this->assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
         $this->assertSame($mockHttpResponse, $formRuntime->getResponse());
@@ -174,12 +180,12 @@ class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $page1 = new Page('p1');
         $formDefinition->addPage($page1);
-        $element1 = new \Neos\Form\FormElements\GenericFormElement('foo', 'Bar');
+        $element1 = new GenericFormElement('foo', 'Bar');
         $page1->addElement($element1);
 
         $element1->setDefaultValue('My Default');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $formState = new \Neos\Form\Core\Runtime\FormState();
+        $formState = new FormState();
         $formRuntime->_set('formState', $formState);
         $this->assertSame($formState, $formRuntime->getFormState());
 
@@ -200,13 +206,13 @@ class FormRuntimeTest extends \Neos\Flow\Tests\UnitTestCase
 
     /**
      * @param FormDefinition $formDefinition
-     * @return \Neos\Form\Core\Runtime\FormRuntime
+     * @return FormRuntime|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {
-        $mockActionRequest = $this->getMockBuilder(\Neos\Flow\Mvc\ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder(\Neos\Flow\Http\Response::class)->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
+        $mockHttpResponse = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 
-        return $this->getAccessibleMock(\Neos\Form\Core\Runtime\FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        return $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
     }
 }

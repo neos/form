@@ -11,6 +11,9 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
+use Neos\Flow\Validation\Validator\ValidatorInterface;
+use Neos\Form\Core\Runtime\FormRuntime;
+
 /**
  * A base form element interface, which can be the starting point for creating
  * custom (PHP-based) Form Elements.
@@ -98,11 +101,11 @@ interface FormElementInterface extends Renderable\RenderableInterface
     /**
      * Registers a validator for this element
      *
-     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param ValidatorInterface $validator
      * @return void
      * @api
      */
-    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator);
+    public function addValidator(ValidatorInterface $validator);
 
     /**
      * Set the target data type for this element
@@ -125,11 +128,11 @@ interface FormElementInterface extends Renderable\RenderableInterface
      * This callback is invoked by the FormRuntime whenever values are mapped and validated
      * (after a form page was submitted)
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @param mixed $elementValue submitted value of the element *before post processing*
      * @return void
      * @see \Neos\Form\Core\Runtime\FormRuntime::mapAndValidate()
      * @api
      */
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue);
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue);
 }

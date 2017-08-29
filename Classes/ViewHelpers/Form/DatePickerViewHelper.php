@@ -103,11 +103,11 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     protected function getSelectedDate()
     {
-        $date = $this->getValue();
+        $date = $this->getPropertyValue();
         if ($date instanceof \DateTime) {
             return $date;
         }
@@ -118,9 +118,10 @@ class DatePickerViewHelper extends AbstractFormFieldViewHelper
             }
             return $date;
         }
-        if ($this->hasArgument('initialDate')) {
-            return new \DateTime($this->arguments['initialDate']);
+        if (!$this->hasArgument('initialDate')) {
+            return null;
         }
+        return new \DateTime($this->arguments['initialDate']);
     }
 
     /**

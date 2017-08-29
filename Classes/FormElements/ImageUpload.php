@@ -11,15 +11,18 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMappingConfiguration;
 use Neos\Flow\Property\TypeConverter\PersistentObjectConverter;
+use Neos\Form\Core\Model\AbstractFormElement;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Media\Domain\Model\Image;
 use Neos\Media\TypeConverter\AssetInterfaceConverter;
+use Neos\Media\Validator\ImageTypeValidator;
 
 /**
  * An image upload form element
  */
-class ImageUpload extends \Neos\Form\Core\Model\AbstractFormElement
+class ImageUpload extends AbstractFormElement
 {
     /**
      * @return void
@@ -33,19 +36,19 @@ class ImageUpload extends \Neos\Form\Core\Model\AbstractFormElement
         $propertyMappingConfiguration->setTypeConverterOption(AssetInterfaceConverter::class, AssetInterfaceConverter::CONFIGURATION_ONE_PER_RESOURCE, true);
         $propertyMappingConfiguration->allowProperties('resource');
 
-        $this->setDataType(\Neos\Media\Domain\Model\Image::class);
+        $this->setDataType(Image::class);
     }
 
     /**
      * Add ImageTypeValidator just before submitting so that the "allowedTypes" can be changed at runtime
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @param mixed $elementValue
      * @return void
      */
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue)
     {
-        $imageTypeValidator = new \Neos\Media\Validator\ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
+        $imageTypeValidator = new ImageTypeValidator(array('allowedTypes' => $this->properties['allowedTypes']));
         $this->addValidator($imageTypeValidator);
     }
 }

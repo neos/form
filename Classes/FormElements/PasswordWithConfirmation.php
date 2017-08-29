@@ -11,18 +11,20 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Error\Messages\Error;
+use Neos\Form\Core\Model\AbstractFormElement;
+use Neos\Form\Core\Runtime\FormRuntime;
 
 /**
  * A password with confirmation form element
  */
-class PasswordWithConfirmation extends \Neos\Form\Core\Model\AbstractFormElement
+class PasswordWithConfirmation extends AbstractFormElement
 {
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue)
     {
         if ($elementValue['password'] !== $elementValue['confirmation']) {
             $processingRule = $this->getRootForm()->getProcessingRule($this->getIdentifier());
-            $processingRule->getProcessingMessages()->addError(new \Neos\Error\Messages\Error('Password doesn\'t match confirmation', 1334768052));
+            $processingRule->getProcessingMessages()->addError(new Error('Password doesn\'t match confirmation', 1334768052));
         }
         $elementValue = $elementValue['password'];
     }

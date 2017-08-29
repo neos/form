@@ -11,12 +11,14 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if a Type Definition for a form element was not valid,
  * i.e. it has properties which are not supported.
  *
  * @api
  */
-class TypeDefinitionNotValidException extends \Neos\Form\Exception
+class TypeDefinitionNotValidException extends FormException
 {
 }

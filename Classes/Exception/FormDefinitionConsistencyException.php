@@ -11,6 +11,8 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown if the form definition would get an inconsistent state, like:
  *
@@ -19,6 +21,6 @@ namespace Neos\Form\Exception;
  *
  * @api
  */
-class FormDefinitionConsistencyException extends \Neos\Form\Exception
+class FormDefinitionConsistencyException extends FormException
 {
 }

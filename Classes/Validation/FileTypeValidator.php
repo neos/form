@@ -11,31 +11,33 @@ namespace Neos\Form\Validation;
  * source code.
  */
 
+use Neos\Flow\ResourceManagement\PersistentResource;
+use Neos\Flow\Validation\Validator\AbstractValidator;
 
 /**
  * The given $value is valid if it is an \Neos\Flow\ResourceManagement\PersistentResource of the configured resolution
  * Note: a value of NULL or empty string ('') is considered valid
  */
-class FileTypeValidator extends \Neos\Flow\Validation\Validator\AbstractValidator
+class FileTypeValidator extends AbstractValidator
 {
     /**
      * @var array
      */
     protected $supportedOptions = array(
-        'allowedExtensions' => array(array(), 'Array of allowed file extensions', 'array', true)
+        'allowedExtensions' => array([], 'Array of allowed file extensions', 'array', true)
     );
 
     /**
      * The given $value is valid if it is an \Neos\Flow\ResourceManagement\PersistentResource of the configured resolution
      * Note: a value of NULL or empty string ('') is considered valid
      *
-     * @param \Neos\Flow\ResourceManagement\PersistentResource $resource The resource object that should be validated
+     * @param PersistentResource $resource The resource object that should be validated
      * @return void
      * @api
      */
     protected function isValid($resource)
     {
-        if (!$resource instanceof \Neos\Flow\ResourceManagement\PersistentResource) {
+        if (!$resource instanceof PersistentResource) {
             $this->addError('The given value was not a PersistentResource instance.', 1327865587);
             return;
         }

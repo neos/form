@@ -12,6 +12,10 @@ namespace Neos\Form\Factory;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Configuration\ConfigurationManager;
+use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Exception\PresetNotFoundException;
+use Neos\Utility\Arrays;
 
 /**
  * Base class for custom *Form Factories*. A Form Factory is responsible for building
@@ -105,7 +109,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
 
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Configuration\ConfigurationManager
+     * @var ConfigurationManager
      * @internal
      */
     protected $configurationManager;
@@ -115,7 +119,7 @@ abstract class AbstractFormFactory implements FormFactoryInterface
      */
     public function initializeObject()
     {
-        $this->formSettings = $this->configurationManager->getConfiguration(\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form');
+        $this->formSettings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form');
     }
 
     /**
@@ -124,19 +128,19 @@ abstract class AbstractFormFactory implements FormFactoryInterface
      *
      * @param string $presetName name of the preset to get the configuration for
      * @return array the preset configuration
-     * @throws \Neos\Form\Exception\PresetNotFoundException if preset with the name $presetName was not found
+     * @throws PresetNotFoundException if preset with the name $presetName was not found
      * @api
      */
     public function getPresetConfiguration($presetName)
     {
         if (!isset($this->formSettings['presets'][$presetName])) {
-            throw new \Neos\Form\Exception\PresetNotFoundException(sprintf('The Preset "%s" was not found underneath Neos: Form: presets.', $presetName), 1325685498);
+            throw new PresetNotFoundException(sprintf('The Preset "%s" was not found underneath Neos: Form: presets.', $presetName), 1325685498);
         }
         $preset = $this->formSettings['presets'][$presetName];
         if (isset($preset['parentPreset'])) {
             $parentPreset = $this->getPresetConfiguration($preset['parentPreset']);
             unset($preset['parentPreset']);
-            $preset = \Neos\Utility\Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
+            $preset = Arrays::arrayMergeRecursiveOverrule($parentPreset, $preset);
         }
         return $preset;
     }
@@ -145,11 +149,11 @@ abstract class AbstractFormFactory implements FormFactoryInterface
      * Helper to be called by every AbstractFormFactory after everything has been built to trigger the "onBuildingFinished"
      * template method on all form elements.
      *
-     * @param \Neos\Form\Core\Model\FormDefinition $form
+     * @param FormDefinition $form
      * @return void
      * @api
      */
-    protected function triggerFormBuildingFinished(\Neos\Form\Core\Model\FormDefinition $form)
+    protected function triggerFormBuildingFinished(FormDefinition $form)
     {
         foreach ($form->getRenderablesRecursively() as $renderable) {
             $renderable->onBuildingFinished();

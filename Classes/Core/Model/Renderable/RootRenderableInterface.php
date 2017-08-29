@@ -11,6 +11,8 @@ namespace Neos\Form\Core\Model\Renderable;
  * source code.
  */
 
+use Neos\Form\Core\Runtime\FormRuntime;
+
 /**
  * Base interface which all parts of a form must adhere to.
  *
@@ -50,11 +52,11 @@ interface RootRenderableInterface
      * Use this to access previously submitted values and/or modify the $formRuntime before an element
      * is outputted to the browser.
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @return void
      * @api
      */
-    public function beforeRendering(\Neos\Form\Core\Runtime\FormRuntime $formRuntime);
+    public function beforeRendering(FormRuntime $formRuntime);
 
     /**
      * Get the renderer class name to be used to display this renderable;

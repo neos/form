@@ -13,11 +13,13 @@ namespace Neos\Form\FormElements;
 
 use Neos\Flow\Property\PropertyMappingConfiguration;
 use Neos\Flow\Property\TypeConverter\DateTimeConverter;
+use Neos\Form\Core\Model\AbstractFormElement;
+use Neos\Form\Core\Runtime\FormRuntime;
 
 /**
  * A date picker form element
  */
-class DatePicker extends \Neos\Form\Core\Model\AbstractFormElement
+class DatePicker extends AbstractFormElement
 {
     /**
      * @return void
@@ -27,7 +29,7 @@ class DatePicker extends \Neos\Form\Core\Model\AbstractFormElement
         $this->setDataType('DateTime');
     }
 
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue)
     {
         if (!isset($this->properties['dateFormat'])) {
             return;

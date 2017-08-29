@@ -11,7 +11,13 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Form\Core\Model\Renderable\AbstractRenderable;
+use Neos\Form\Core\Model\Renderable\RenderableInterface;
+use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Exception\FormDefinitionConsistencyException;
+use Neos\Form\Exception\IdentifierNotValidException;
+use Neos\Form\Exception\TypeDefinitionNotFoundException;
+use Neos\Form\Exception\TypeDefinitionNotValidException;
 
 /**
  * A base class for "section-like" form parts like "Page" or "Section" (which
@@ -27,17 +33,39 @@ use Neos\Flow\Annotations as Flow;
 abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
 {
     /**
+     * The identifier of this Section
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
+     * Abstract "type" of this Section
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * Form Elements of this Section
+     *
+     * @var FormElementInterface[]
+     * @api
+     */
+    protected $renderables = [];
+
+    /**
      * Constructor. Needs the identifier and type of this element
      *
      * @param string $identifier The Section identifier
      * @param string $type The Section type
-     * @throws \Neos\Form\Exception\IdentifierNotValidException if the identifier was no non-empty string
+     * @throws IdentifierNotValidException if the identifier was no non-empty string
      * @api
      */
     public function __construct($identifier, $type)
     {
         if (!is_string($identifier) || strlen($identifier) === 0) {
-            throw new \Neos\Form\Exception\IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
+            throw new IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
         }
 
         $this->identifier = $identifier;
@@ -47,7 +75,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     /**
      * Get the child Form Elements
      *
-     * @return array<\Neos\Form\Core\Model\FormElementInterface> The Page's elements
+     * @return FormElementInterface[] The Page's elements
      * @api
      */
     public function getElements()
@@ -58,7 +86,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
     /**
      * Get the child Form Elements
      *
-     * @return array<\Neos\Form\Core\Model\FormElementInterface> The Page's elements
+     * @return RenderableInterface[] The Page's elements
      * @api
      */
     public function getElementsRecursively()
@@ -71,7 +99,7 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
      *
      * @param FormElementInterface $formElement The form element to add
      * @return void
-     * @throws \Neos\Form\Exception\FormDefinitionConsistencyException if FormElement is already added to a section
+     * @throws FormDefinitionConsistencyException if FormElement is already added to a section
      * @api
      */
     public function addElement(FormElementInterface $formElement)
@@ -90,9 +118,9 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
      *
      * @param string $identifier Identifier of the new form element
      * @param string $typeName type of the new form element
-     * @return \Neos\Form\Core\Model\FormElementInterface the newly created form element
-     * @throws \Neos\Form\Exception\TypeDefinitionNotFoundException
-     * @throws \Neos\Form\Exception\TypeDefinitionNotValidException
+     * @return FormElementInterface the newly created form element
+     * @throws TypeDefinitionNotFoundException
+     * @throws TypeDefinitionNotValidException
      * @api
      */
     public function createElement($identifier, $typeName)
@@ -101,23 +129,25 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
 
         try {
             $typeDefinition = $formDefinition->getFormFieldTypeManager()->getMergedTypeDefinition($typeName);
-        } catch (\Neos\Form\Exception\TypeDefinitionNotFoundException $exception) {
+        } catch (TypeDefinitionNotFoundException $exception) {
             $element = new UnknownFormElement($identifier, $typeName);
             $this->addElement($element);
             return $element;
         }
         if (!isset($typeDefinition['implementationClassName'])) {
-            throw new \Neos\Form\Exception\TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
+            throw new TypeDefinitionNotFoundException(sprintf('The "implementationClassName" was not set in type definition "%s".', $typeName), 1325689855);
         }
         $implementationClassName = $typeDefinition['implementationClassName'];
         $element = new $implementationClassName($identifier, $typeName);
-        if (!$element instanceof \Neos\Form\Core\Model\FormElementInterface) {
-            throw new \Neos\Form\Exception\TypeDefinitionNotValidException(sprintf('The "implementationClassName" for element "%s" ("%s") does not implement the FormElementInterface.', $identifier, $implementationClassName), 1327318156);
+        if (!$element instanceof FormElementInterface) {
+            throw new TypeDefinitionNotValidException(sprintf('The "implementationClassName" for element "%s" ("%s") does not implement the FormElementInterface.', $identifier, $implementationClassName), 1327318156);
         }
         unset($typeDefinition['implementationClassName']);
 
         $this->addElement($element);
-        $element->setOptions($typeDefinition);
+        if ($element instanceof AbstractRenderable) {
+            $element->setOptions($typeDefinition);
+        }
 
         $element->initializeFormElement();
         return $element;
@@ -170,12 +200,12 @@ abstract class AbstractSection extends Renderable\AbstractCompositeRenderable
      * (after a form page was submitted)
      * @see \Neos\Form\Core\Runtime\FormRuntime::mapAndValidate()
      *
-     * @param \Neos\Form\Core\Runtime\FormRuntime $formRuntime
+     * @param FormRuntime $formRuntime
      * @param mixed $elementValue submitted value of the element *before post processing*
      * @return void
      * @api
      */
-    public function onSubmit(\Neos\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue)
+    public function onSubmit(FormRuntime $formRuntime, &$elementValue)
     {
     }
 }

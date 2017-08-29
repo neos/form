@@ -11,7 +11,10 @@ namespace Neos\Form\FormElements;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Validation\Validator\NotEmptyValidator;
+use Neos\Flow\Validation\Validator\ValidatorInterface;
+use Neos\Form\Core\Model\AbstractSection;
+use Neos\Form\Core\Model\FormElementInterface;
 
 /**
  * A Section, being part of a bigger Page
@@ -24,12 +27,12 @@ use Neos\Flow\Annotations as Flow;
  *
  * Once we support traits, the duplicated code between AbstractFormElement and Section could be extracted to a Trait.
  */
-class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\Form\Core\Model\FormElementInterface
+class Section extends AbstractSection implements FormElementInterface
 {
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * Will be called as soon as the element is (tried to be) added to a form
@@ -112,7 +115,7 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
      * @param string $key
      * @param mixed $value
      * @api
-     * @return mixed
+     * @return void
      */
     public function setRenderingOption($key, $value)
     {
@@ -133,10 +136,10 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
     /**
      * Add a validator to the element
      *
-     * @param \Neos\Flow\Validation\Validator\ValidatorInterface $validator
+     * @param ValidatorInterface $validator
      * @return void
      */
-    public function addValidator(\Neos\Flow\Validation\Validator\ValidatorInterface $validator)
+    public function addValidator(ValidatorInterface $validator)
     {
         $formDefinition = $this->getRootForm();
         $formDefinition->getProcessingRule($this->getIdentifier())->addValidator($validator);
@@ -151,7 +154,7 @@ class Section extends \Neos\Form\Core\Model\AbstractSection implements \Neos\For
     public function isRequired()
     {
         foreach ($this->getValidators() as $validator) {
-            if ($validator instanceof \Neos\Flow\Validation\Validator\NotEmptyValidator) {
+            if ($validator instanceof NotEmptyValidator) {
                 return true;
             }
         }

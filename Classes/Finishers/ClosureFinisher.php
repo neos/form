@@ -11,6 +11,9 @@ namespace Neos\Form\Finishers;
  * source code.
  */
 
+use Neos\Form\Core\Model\AbstractFinisher;
+use Neos\Form\Exception\FinisherException;
+
 /**
  * A simple finisher that invokes a closure when executed
  *
@@ -24,7 +27,7 @@ namespace Neos\Form\Finishers;
  * $formDefinition->addFinisher($closureFinisher);
  * // ...
  */
-class ClosureFinisher extends \Neos\Form\Core\Model\AbstractFinisher
+class ClosureFinisher extends AbstractFinisher
 {
     /**
      * @var array
@@ -38,7 +41,7 @@ class ClosureFinisher extends \Neos\Form\Core\Model\AbstractFinisher
      * @see AbstractFinisher::execute()
      *
      * @return void
-     * @throws \Neos\Form\Exception\FinisherException
+     * @throws FinisherException
      */
     protected function executeInternal()
     {
@@ -48,7 +51,7 @@ class ClosureFinisher extends \Neos\Form\Core\Model\AbstractFinisher
             return;
         }
         if (!$closure instanceof \Closure) {
-            throw new \Neos\Form\Exception\FinisherException(sprintf('The option "closure" must be of type Closure, "%s" given.', gettype($closure)), 1332155239);
+            throw new FinisherException(sprintf('The option "closure" must be of type Closure, "%s" given.', gettype($closure)), 1332155239);
         }
         $closure($this->finisherContext);
     }

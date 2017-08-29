@@ -11,8 +11,6 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FinisherContext;
-
 /**
  * Finisher that can be attached to a form in order to be invoked
  * as soon as the complete form is submitted

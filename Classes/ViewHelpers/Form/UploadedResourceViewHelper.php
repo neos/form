@@ -11,11 +11,10 @@ namespace Neos\Form\ViewHelpers\Form;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
-use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMapper;
 use Neos\Flow\ResourceManagement\PersistentResource;
+use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 
 /**
  * This ViewHelper makes the specified PersistentResource available for its
@@ -83,10 +82,10 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;
         }
-        $resourceObject = $this->getValue(false);
+        $resourceObject = $this->getPropertyValue();
         if ($resourceObject instanceof PersistentResource) {
             return $resourceObject;
         }
-        return $this->propertyMapper->convert($resourceObject, PersistentResource::class);
+        return $this->propertyMapper->convert($this->getValueAttribute(), PersistentResource::class);
     }
 }

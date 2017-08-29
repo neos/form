@@ -12,7 +12,12 @@ namespace Neos\Form\Factory;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Form\Core\Model\AbstractSection;
 use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Renderable\CompositeRenderableInterface;
+use Neos\Form\Core\Model\Renderable\RenderableInterface;
+use Neos\Form\Exception;
+use Neos\Form\Exception\IdentifierNotValidException;
 
 /**´
  *
@@ -51,25 +56,27 @@ class ArrayFormFactory extends AbstractFormFactory
 
     /**
      * @param array $nestedRenderableConfiguration
-     * @param \Neos\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable
-     * @return mixed
-     * @throws \Neos\Form\Exception\IdentifierNotValidException
+     * @param CompositeRenderableInterface $parentRenderable
+     * @return RenderableInterface
+     * @throws Exception|IdentifierNotValidException
      */
-    protected function addNestedRenderable(array $nestedRenderableConfiguration, \Neos\Form\Core\Model\Renderable\CompositeRenderableInterface $parentRenderable)
+    protected function addNestedRenderable(array $nestedRenderableConfiguration, CompositeRenderableInterface $parentRenderable)
     {
         if (!isset($nestedRenderableConfiguration['identifier'])) {
-            throw new \Neos\Form\Exception\IdentifierNotValidException('Identifier not set.', 1329289436);
+            throw new IdentifierNotValidException('Identifier not set.', 1329289436);
         }
         if ($parentRenderable instanceof FormDefinition) {
             $renderable = $parentRenderable->createPage($nestedRenderableConfiguration['identifier'], $nestedRenderableConfiguration['type']);
-        } else {
+        } elseif ($parentRenderable instanceof AbstractSection) {
             $renderable = $parentRenderable->createElement($nestedRenderableConfiguration['identifier'], $nestedRenderableConfiguration['type']);
+        } else {
+            throw new Exception(sprintf('parentRenderable has to be an instance of FormDefinition or AbstractSection, got "%s"', is_object($parentRenderable) ? get_class($parentRenderable) : gettype($parentRenderable)), 1504024050);
         }
 
         if (isset($nestedRenderableConfiguration['renderables']) && is_array($nestedRenderableConfiguration['renderables'])) {
             $childRenderables = $nestedRenderableConfiguration['renderables'];
         } else {
-            $childRenderables = array();
+            $childRenderables = [];
         }
 
         unset($nestedRenderableConfiguration['type']);
@@ -92,7 +99,7 @@ class ArrayFormFactory extends AbstractFormFactory
      */
     protected function convertJsonArrayToAssociativeArray(array $input)
     {
-        $output = array();
+        $output = [];
         foreach ($input as $key => $value) {
             if (is_integer($key) && is_array($value) && isset($value['_key']) && isset($value['_value'])) {
                 $key = $value['_key'];

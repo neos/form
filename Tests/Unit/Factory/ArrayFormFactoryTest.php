@@ -11,12 +11,15 @@ namespace Neos\Form\Tests\Unit\Factory;
  * source code.
  */
 
-use Neos\Form\Utility\SupertypeResolver;
+use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Core\Model\Page;
+use Neos\Form\Factory\ArrayFormFactory;
+use Neos\Form\FormElements\GenericFormElement;
 
 /**
  * @covers \Neos\Form\Factory\ArrayFormFactory<extended>
  */
-class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
+class ArrayFormFactoryTest extends UnitTestCase
 {
     /**
      * @test
@@ -86,11 +89,11 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
                 )
             )
         );
-        $form = $factory->build($configuration, 'default');
+        $factory->build($configuration, 'default');
     }
 
     /**
-     * @return \Neos\Form\Factory\ArrayFormFactory
+     * @return ArrayFormFactory
      */
     protected function getArrayFormFactory()
     {
@@ -102,17 +105,17 @@ class ArrayFormFactoryTest extends \Neos\Flow\Tests\UnitTestCase
 
                         ),
                         'Neos.Form:Page' => array(
-                            'implementationClassName' => \Neos\Form\Core\Model\Page::class
+                            'implementationClassName' => Page::class
                         ),
                         'Neos.Form:TestElement' => array(
-                            'implementationClassName' => \Neos\Form\FormElements\GenericFormElement::class
+                            'implementationClassName' => GenericFormElement::class
                         )
                     )
                 )
             )
         );
 
-        $accessibleFactory = $this->buildAccessibleProxy(\Neos\Form\Factory\ArrayFormFactory::class);
+        $accessibleFactory = $this->buildAccessibleProxy(ArrayFormFactory::class);
         $factory = new $accessibleFactory;
         $factory->_set('formSettings', $settings);
         return $factory;

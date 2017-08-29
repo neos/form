@@ -11,11 +11,13 @@ namespace Neos\Form\Exception;
  * source code.
  */
 
+use Neos\Form\Exception as FormException;
+
 /**
  * This exception is thrown in Form Finishers
  *
  * @api
  */
-class FinisherException extends \Neos\Form\Exception
+class FinisherException extends FormException
 {
 }

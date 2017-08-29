@@ -11,29 +11,30 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Form\Core\Model\FormDefinition;
-use Neos\Form\Core\Model\Page;
+use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Core\Model\FinisherContext;
+use Neos\Form\Core\Runtime\FormRuntime;
 
 /**
  * Test for FinisherContext Domain Model
  * @covers \Neos\Form\Core\Model\FinisherContext
  */
-class FinisherContextTest extends \Neos\Flow\Tests\UnitTestCase
+class FinisherContextTest extends UnitTestCase
 {
     /**
-     * @var \Neos\Form\Core\Runtime\FormRuntime
+     * @var FormRuntime
      */
     protected $mockFormRuntime;
 
     /**
-     * @var \Neos\Form\Core\Model\FinisherContext
+     * @var FinisherContext
      */
     protected $finisherContext;
 
     public function setUp()
     {
-        $this->mockFormRuntime = $this->getMockBuilder(\Neos\Form\Core\Runtime\FormRuntime::class)->disableOriginalConstructor()->getMock();
-        $this->finisherContext = new \Neos\Form\Core\Model\FinisherContext($this->mockFormRuntime);
+        $this->mockFormRuntime = $this->getMockBuilder(FormRuntime::class)->disableOriginalConstructor()->getMock();
+        $this->finisherContext = new FinisherContext($this->mockFormRuntime);
     }
 
     /**

@@ -10,7 +10,6 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
  * Testcase for onBuildingFinished

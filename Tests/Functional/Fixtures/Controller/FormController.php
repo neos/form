@@ -11,24 +11,25 @@ namespace Neos\Form\Tests\Functional\Fixtures\Controller;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Mvc\Controller\ActionController;
 
 /**
  * Controller for rendering a form defined in
  */
-class FormController extends \Neos\Flow\Mvc\Controller\ActionController
+class FormController extends ActionController
 {
     /**
      * render the form identified by $formFactoryClassName
      *
      * @param string $formFactoryClassName
+     * @return string
      */
     public function indexAction($formFactoryClassName)
     {
         $formFactoryClassName = 'Neos\Form\Tests\Functional\Fixtures\FormFactories\\' . $formFactoryClassName . 'Factory';
         /* @var $formFactory \Neos\Form\Factory\FormFactoryInterface */
         $formFactory = new $formFactoryClassName();
-        $formDefinition = $formFactory->build(array(), 'default');
+        $formDefinition = $formFactory->build([], 'default');
 
         $formRuntime = $formDefinition->bind($this->request, $this->response);
 

@@ -10,14 +10,17 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+use Neos\Flow\Mvc\Routing\Route;
+use Neos\Flow\Tests\FunctionalTestCase;
 use Symfony\Component\DomCrawler\Field\InputFormField;
+use Symfony\Component\DomCrawler\Form;
 
 /**
  * Testcase for Simple Form
  *
  * @group large
  */
-abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTestCase
+abstract class AbstractFunctionalTestCase extends FunctionalTestCase
 {
     /**
      * @var \Neos\Flow\Http\Client\Browser
@@ -31,7 +34,7 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
     {
         parent::setUp();
 
-        $route = new \Neos\Flow\Mvc\Routing\Route();
+        $route = new Route();
         $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
         $route->setDefaults(array(
             '@package' => 'Neos.Form',
@@ -47,14 +50,16 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
     /**
      * Go to the next form page
      *
-     * @param \Symfony\Component\DomCrawler\Form $form
+     * @param Form $form
      * @return \Neos\Flow\Http\Response
      */
-    protected function gotoNextFormPage(\Symfony\Component\DomCrawler\Form $form)
+    protected function gotoNextFormPage(Form $form)
     {
         $nextButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[contains(@class, "next")]/button');
         $nextButton->rewind();
-        $form->set(new InputFormField($nextButton->current()));
+        /** @var \DOMElement $node */
+        $node = $nextButton->current();
+        $form->set(new InputFormField($node));
 
         return $this->browser->submit($form);
     }
@@ -62,14 +67,16 @@ abstract class AbstractFunctionalTestCase extends \Neos\Flow\Tests\FunctionalTes
     /**
      * Go to the previous form page
      *
-     * @param \Symfony\Component\DomCrawler\Form $form
+     * @param Form $form
      * @return \Neos\Flow\Http\Response
      */
-    protected function gotoPreviousFormPage(\Symfony\Component\DomCrawler\Form $form)
+    protected function gotoPreviousFormPage(Form $form)
     {
         $previousButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[contains(@class, "previous")]/button');
         $previousButton->rewind();
-        $form->set(new InputFormField($previousButton->current()));
+        /** @var \DOMElement $node */
+        $node = $previousButton->current();
+        $form->set(new InputFormField($node));
 
         return $this->browser->submit($form);
     }

@@ -12,12 +12,16 @@ namespace Neos\Form\Tests\Unit\Core\Runtime\Renderer\Fixture;
  */
 
 use Neos\Form\Core\Model\FinisherContext;
+use Neos\Form\Core\Model\FinisherInterface;
 
 /**
 * Dummy finisher for testing
 */
-class DummyFinisher implements \Neos\Form\Core\Model\FinisherInterface
+class DummyFinisher implements FinisherInterface
 {
+    /**
+     * @var callable
+     */
     public $cb = null;
 
     /**

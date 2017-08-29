@@ -11,8 +11,6 @@ namespace Neos\Form\Persistence;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
  * Note: PersistenceIdentifier can be a file name, or anything else depending on the
  * currently active Form Persistence Mananger
