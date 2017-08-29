@@ -49,10 +49,10 @@ class RenderViewHelper extends AbstractViewHelper
      * @param array $overrideConfiguration factory specific configuration
      * @return string the rendered form
      */
-    public function render($persistenceIdentifier = null, $factoryClass = \Neos\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = null)
+    public function render($persistenceIdentifier = null, $factoryClass = \Neos\Form\Factory\ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = [])
     {
         if (isset($persistenceIdentifier)) {
-            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration ?: []);
+            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
         }
 
         $factory = $this->objectManager->get($factoryClass);
