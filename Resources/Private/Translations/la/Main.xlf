@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                 <source>Previous page</source>
-            <target xml:lang="la-LA">crwdns6393:0crwdne6393:0</target></trans-unit>
+            <target xml:lang="la-LA">crwdns2310:0crwdne2310:0</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve">
                 <source>Next page</source>
-            <target xml:lang="la-LA">crwdns6394:0crwdne6394:0</target></trans-unit>
+            <target xml:lang="la-LA">crwdns2311:0crwdne2311:0</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
-            <target xml:lang="la-LA">crwdns6395:0crwdne6395:0</target></trans-unit>
+            <target xml:lang="la-LA">crwdns2312:0crwdne2312:0</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target xml:lang="la-LA">crwdns6396:0crwdne6396:0</target></trans-unit>
+            <target xml:lang="la-LA">crwdns2313:0crwdne2313:0</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="la-LA">crwdns6397:0crwdne6397:0</target></trans-unit>
+            <target xml:lang="la-LA">crwdns2314:0crwdne2314:0</target></trans-unit>
     </body>
   </file>
 </xliff>

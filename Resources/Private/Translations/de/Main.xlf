@@ -16,7 +16,7 @@
             <target xml:lang="de">Bezeichnung</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="de" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="de" state="translated">Wert</target></trans-unit>
     </body>
   </file>
 </xliff>
