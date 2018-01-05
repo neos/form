@@ -16,7 +16,7 @@
             <target xml:lang="ja" state="translated">ラベル</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="ja" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="ja" state="translated">値</target></trans-unit>
     </body>
   </file>
 </xliff>
