@@ -16,7 +16,7 @@
             <target xml:lang="sr" state="translated">Ознака</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="sr" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="sr" state="translated">Вредност</target></trans-unit>
     </body>
   </file>
 </xliff>
