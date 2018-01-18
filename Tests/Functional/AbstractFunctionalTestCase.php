@@ -56,9 +56,8 @@ abstract class AbstractFunctionalTestCase extends FunctionalTestCase
     protected function gotoNextFormPage(Form $form)
     {
         $nextButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[contains(@class, "next")]/button');
-        $nextButton->rewind();
         /** @var \DOMElement $node */
-        $node = $nextButton->current();
+        $node = $nextButton->getNode(0);
         $form->set(new InputFormField($node));
 
         return $this->browser->submit($form);
@@ -73,9 +72,8 @@ abstract class AbstractFunctionalTestCase extends FunctionalTestCase
     protected function gotoPreviousFormPage(Form $form)
     {
         $previousButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[contains(@class, "previous")]/button');
-        $previousButton->rewind();
         /** @var \DOMElement $node */
-        $node = $previousButton->current();
+        $node = $previousButton->getNode(0);
         $form->set(new InputFormField($node));
 
         return $this->browser->submit($form);
