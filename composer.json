@@ -1,7 +1,7 @@
 {
     "name": "typo3/form",
     "type": "typo3-flow-package",
-    "license": "LGPL-3.0+",
+    "license": ["LGPL-3.0-or-later"],
     "description": "Extensible and flexible API for building web forms",
     "require": {
         "typo3/flow": "~3.0"
