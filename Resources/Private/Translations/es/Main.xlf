@@ -14,9 +14,9 @@
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
             <target xml:lang="es-ES" state="translated">Etiqueta</target></trans-unit>
-      <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
+      <trans-unit id="forms.pages.valueTitle" xml:space="preserve" approved="yes">
                 <source>Value</source>
-            <target xml:lang="es-ES" state="translated">Valor</target></trans-unit>
+            <target xml:lang="es-ES">Valor</target></trans-unit>
     </body>
   </file>
 </xliff>
