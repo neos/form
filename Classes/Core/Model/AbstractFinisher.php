@@ -95,7 +95,8 @@ abstract class AbstractFinisher implements FinisherInterface
      * Read the option called $optionName from $this->options, and parse {...}
      * as object accessors.
      *
-     * if $optionName was not found, the corresponding default option is returned (from $this->defaultOptions)
+     * if $optionName was not found, the corresponding default option is returned (from $this->defaultOptions).
+     * If the final value is an empty string, `null` is returned.
      *
      * @param string $optionName
      * @return mixed
@@ -103,21 +104,31 @@ abstract class AbstractFinisher implements FinisherInterface
      */
     protected function parseOption($optionName)
     {
-        if (!isset($this->options[$optionName]) || $this->options[$optionName] === '') {
-            if (isset($this->defaultOptions[$optionName])) {
-                $option = $this->defaultOptions[$optionName];
-            } else {
-                return null;
-            }
-        } else {
-            $option = $this->options[$optionName];
-        }
-        if (!is_string($option)) {
-            return $option;
-        }
         $formRuntime = $this->finisherContext->getFormRuntime();
-        return preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
-            return ObjectAccess::getPropertyPath($formRuntime, $match[1]);
-        }, $option);
+        if (isset($this->options[$optionName])) {
+            $option = $this->options[$optionName];
+            if (!is_string($option)) {
+                return $option;
+            }
+            $option = preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
+                return ObjectAccess::getPropertyPath($formRuntime, $match[1]);
+            }, $option);
+            if ($option !== '') {
+                return $option;
+            }
+        }
+        if (isset($this->defaultOptions[$optionName])) {
+            $option = $this->defaultOptions[$optionName];
+            if (!is_string($option)) {
+                return $option;
+            }
+            $option = preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
+                return ObjectAccess::getPropertyPath($formRuntime, $match[1]);
+            }, $option);
+            if ($option !== '') {
+                return $option;
+            }
+        }
+        return null;
     }
 }
