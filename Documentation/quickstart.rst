@@ -181,6 +181,18 @@ the :api-finishers:`EmailFinisher` for that::
 	));
 	$form->addFinisher($emailFinisher);
 
+
+The corresponding ``NotificationEmail.txt`` template could look like this::
+
+    New contact form mail:
+
+    From: {formValues.name} ({formValues.email})
+    Message:
+
+    {formValues.message}
+
+.. note:: Form values can be accessed via `formValues.*`
+
 And afterwards we want to redirect the user to some confirmation action, thus
 we add the :api-finishers:`RedirectFinisher`::
 
