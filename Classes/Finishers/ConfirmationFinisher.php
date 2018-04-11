@@ -87,7 +87,7 @@ class ConfirmationFinisher extends AbstractFinisher
                 $renderingOptions = $formRuntime->getRenderingOptions();
                 $messagePackageKey = $renderingOptions['translationPackage'];
             }
-            $message = $this->translator->translateById($labelId, [], null, $locale, $this->parseOption('translation.source'), $messagePackageKey);
+            $message = $this->translator->translateById($labelId, $this->finisherContext->getFormValues(), null, $locale, $this->parseOption('translation.source'), $messagePackageKey);
         } else {
             $message = $this->parseOption('message');
         }
