@@ -107,9 +107,9 @@ abstract class AbstractFinisher implements FinisherInterface
         if (!isset($this->options[$optionName]) || $this->options[$optionName] === '') {
             if (!is_null(Arrays::getValueByPath($this->options, $optionName)) && Arrays::getValueByPath($this->options, $optionName) !== '') {
                 $option = Arrays::getValueByPath($this->options, $optionName);
-            } else if (!is_null(Arrays::getValueByPath($this->defaultOptions, $optionName)) && Arrays::getValueByPath($this->defaultOptions, $optionName) !== '') {
+            } elseif (!is_null(Arrays::getValueByPath($this->defaultOptions, $optionName)) && Arrays::getValueByPath($this->defaultOptions, $optionName) !== '') {
                 $option = Arrays::getValueByPath($this->defaultOptions, $optionName);
-            } else if (isset($this->defaultOptions[$optionName])) {
+            } elseif (isset($this->defaultOptions[$optionName])) {
                 $option = $this->defaultOptions[$optionName];
             } else {
                 return null;
