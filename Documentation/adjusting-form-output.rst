@@ -251,7 +251,7 @@ here to improve readability):
 .. code-block:: xml
 
 	{namespace form=Neos\Form\ViewHelpers}
-	<f:form.validationResults for="{element.identifier}">
+	<f:validation.results for="{element.identifier}">
 	   <!-- wrapping div for the form element; contains an identifier for the form element if we are
               in preview mode -->
 	   <div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"
@@ -282,14 +282,14 @@ here to improve readability):
 	         </f:if>
 	      </div>
 	   </div>
-	</f:form.validationResults>
+	</f:validation.results>
 
 Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/Field.html`` and remove the validation related lines:
 
 .. code-block:: xml
 
 	{namespace form=Neos\Form\ViewHelpers}
-	<f:form.validationResults for="{element.identifier}">
+	<f:validation.results for="{element.identifier}">
 	   <!-- wrapping div for the form element; contains an identifier for the form element if we are
               in preview mode -->
 	   <div class="clearfix{f:if(condition: validationResults.flattenedErrors, then: ' error')}"
@@ -309,7 +309,7 @@ Copy the layout file to ``Your.Package/Private/Resources/CustomElements/Layouts/
 	         <f:render section="field" />
 	      </div>
 	   </div>
-	</f:form.validationResults>
+	</f:validation.results>
 
 Additionally you need to adjust the default form template located in ``Neos.Form/Resources/Private/Form/Form.html`` (remember
 that a :api-core-model:`FormDefinition` also has a form element type, by default of ``Neos.Form:Form``), which looks
@@ -334,7 +334,7 @@ rendering:
 	{namespace form=Neos\Form\ViewHelpers}
 	<form:form object="{form}" action="index" method="post" id="{form.identifier}"
 	           enctype="multipart/form-data">
-	   <f:form.validationResults>
+	   <f:validation.results>
 	      <f:if condition="{validationResults.flattenedErrors}">
 	         <ul class="error">
 	            <f:for each="{validationResults.flattenedErrors}" as="elementErrors"
@@ -350,7 +350,7 @@ rendering:
 	            </f:for>
 	         </ul>
 	      </f:if>
-	   </f:form.validationResults>
+	   </f:validation.results>
 	   <form:renderRenderable renderable="{form.currentPage}" />
 	   <div class="actions">
 	      <f:render partial="Neos.Form:Form/Navigation" arguments="{form: form}" />
