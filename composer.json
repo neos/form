@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Extensible and flexible API for building web forms",
     "require": {
-        "neos/flow": "~4.0 || dev-master"
+        "neos/flow": ">=4.0 <6.0 || dev-master"
     },
     "replace": {
         "typo3/form": "self.version"
