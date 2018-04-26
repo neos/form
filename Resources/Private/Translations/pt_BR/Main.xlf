@@ -16,7 +16,7 @@
             <target xml:lang="pt-BR" state="translated">Rótulo</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="pt-BR" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="pt-BR" state="translated">Valor</target></trans-unit>
     </body>
   </file>
 </xliff>
