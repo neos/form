@@ -16,7 +16,7 @@
             <target xml:lang="km">ស្លាក</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="km" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="km" state="translated">តម្លៃ</target></trans-unit>
     </body>
   </file>
 </xliff>
