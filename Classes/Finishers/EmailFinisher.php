@@ -213,9 +213,9 @@ class EmailFinisher extends AbstractFinisher
                 }
             }
         }
-
-        if ($this->parseOption('attachments')) {
-            foreach ($this->parseOption('attachments') as $attachmentConfiguration) {
+        $attachmentConfigurations = $this->parseOption('attachments');
+        if (is_array($attachmentConfigurations)) {
+            foreach ($attachmentConfigurations as $attachmentConfiguration) {
                 if (isset($attachmentConfiguration['resource'])) {
                     $mail->attach(\Swift_Attachment::fromPath($attachmentConfiguration['resource']));
                     continue;
