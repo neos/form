@@ -213,19 +213,22 @@ class EmailFinisher extends AbstractFinisher
                 }
             }
         }
-        foreach ($this->parseOption('attachments') as $attachmentConfiguration) {
-            if (isset($attachmentConfiguration['resource'])) {
-                $mail->attach(\Swift_Attachment::fromPath($attachmentConfiguration['resource']));
-                continue;
+
+        if ($this->parseOption('attachments')) {
+            foreach ($this->parseOption('attachments') as $attachmentConfiguration) {
+                if (isset($attachmentConfiguration['resource'])) {
+                    $mail->attach(\Swift_Attachment::fromPath($attachmentConfiguration['resource']));
+                    continue;
+                }
+                if (!isset($attachmentConfiguration['formElement'])) {
+                    throw new FinisherException('The "attachments" options need to specify a "resource" path or a "formElement" containing the resource to attach', 1503396636);
+                }
+                $resource = ObjectAccess::getPropertyPath($formValues, $attachmentConfiguration['formElement']);
+                if (!$resource instanceof PersistentResource) {
+                    continue;
+                }
+                $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
             }
-            if (!isset($attachmentConfiguration['formElement'])) {
-                throw new FinisherException('The "attachments" options need to specify a "resource" path or a "formElement" containing the resource to attach', 1503396636);
-            }
-            $resource = ObjectAccess::getPropertyPath($formValues, $attachmentConfiguration['formElement']);
-            if (!$resource instanceof PersistentResource) {
-                continue;
-            }
-            $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
         }
     }
 }
