@@ -16,7 +16,7 @@
             <target xml:lang="he" state="needs-translation">Label</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="he" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="he" state="translated">ערך</target></trans-unit>
     </body>
   </file>
 </xliff>
