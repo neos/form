@@ -11,6 +11,7 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
+use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
 
 /**
@@ -104,7 +105,11 @@ abstract class AbstractFinisher implements FinisherInterface
     protected function parseOption($optionName)
     {
         if (!isset($this->options[$optionName]) || $this->options[$optionName] === '') {
-            if (isset($this->defaultOptions[$optionName])) {
+            if (!is_null(Arrays::getValueByPath($this->options, $optionName)) && Arrays::getValueByPath($this->options, $optionName) !== '') {
+                $option = Arrays::getValueByPath($this->options, $optionName);
+            } elseif (!is_null(Arrays::getValueByPath($this->defaultOptions, $optionName)) && Arrays::getValueByPath($this->defaultOptions, $optionName) !== '') {
+                $option = Arrays::getValueByPath($this->defaultOptions, $optionName);
+            } elseif (isset($this->defaultOptions[$optionName])) {
                 $option = $this->defaultOptions[$optionName];
             } else {
                 return null;
