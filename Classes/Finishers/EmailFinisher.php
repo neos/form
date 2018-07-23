@@ -116,37 +116,6 @@ class EmailFinisher extends AbstractFinisher
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
 
-        $mail = new SwiftMailerMessage();
-
-        $mail
-            ->setFrom(array($senderAddress => $senderName))
-            ->setSubject($subject);
-
-        if (is_array($recipientAddress)) {
-            $mail->setTo($recipientAddress);
-        } else {
-            $mail->setTo(array($recipientAddress => $recipientName));
-        }
-
-        if ($replyToAddress !== null) {
-            $mail->setReplyTo($replyToAddress);
-        }
-
-        if ($carbonCopyAddress !== null) {
-            $mail->setCc($carbonCopyAddress);
-        }
-
-        if ($blindCarbonCopyAddress !== null) {
-            $mail->setBcc($blindCarbonCopyAddress);
-        }
-
-        if ($format === self::FORMAT_PLAINTEXT) {
-            $mail->setBody($message, 'text/plain');
-        } else {
-            $mail->setBody($message, 'text/html');
-        }
-        $this->addAttachments($mail);
-
         if ($testMode === true) {
             \Neos\Flow\var_dump(
                 array(
@@ -161,7 +130,8 @@ class EmailFinisher extends AbstractFinisher
                 'E-Mail "' . $subject . '"'
             );
         } else {
-            $mail->send();
+            $mail = $this->createMail($senderAddress, $senderName, $subject, $recipientAddress, $recipientName, $replyToAddress, $carbonCopyAddress, $blindCarbonCopyAddress, $format, $message);
+            $this->sendMail($mail);
         }
     }
 
@@ -196,6 +166,66 @@ class EmailFinisher extends AbstractFinisher
             $standaloneView->assignMultiple($this->options['variables']);
         }
         return $standaloneView;
+    }
+
+    /**
+     * Create the SwiftMailerMessage
+     *
+     * @param $senderAddress
+     * @param $senderName
+     * @param $subject
+     * @param $recipientAddress
+     * @param $recipientName
+     * @param $replyToAddress
+     * @param $carbonCopyAddress
+     * @param $blindCarbonCopyAddress
+     * @param $format
+     * @param $message
+     * @return SwiftMailerMessage
+     */
+    protected function createMail($senderAddress, $senderName, $subject, $recipientAddress, $recipientName, $replyToAddress, $carbonCopyAddress, $blindCarbonCopyAddress, $format, $message)
+    {
+        $mail = new SwiftMailerMessage();
+
+        $mail
+            ->setFrom(array($senderAddress => $senderName))
+            ->setSubject($subject);
+
+        if (is_array($recipientAddress)) {
+            $mail->setTo($recipientAddress);
+        } else {
+            $mail->setTo(array($recipientAddress => $recipientName));
+        }
+
+        if ($replyToAddress !== null) {
+            $mail->setReplyTo($replyToAddress);
+        }
+
+        if ($carbonCopyAddress !== null) {
+            $mail->setCc($carbonCopyAddress);
+        }
+
+        if ($blindCarbonCopyAddress !== null) {
+            $mail->setBcc($blindCarbonCopyAddress);
+        }
+
+        if ($format === self::FORMAT_PLAINTEXT) {
+            $mail->setBody($message, 'text/plain');
+        } else {
+            $mail->setBody($message, 'text/html');
+        }
+        $this->addAttachments($mail);
+        return $mail;
+    }
+
+    /**
+     * Send the SwiftMailerMessage
+     *
+     * @param SwiftMailerMessage $mail
+     */
+    protected function sendMail(SwiftMailerMessage $mail)
+    {
+        $mail->send();
     }
 
     /**
