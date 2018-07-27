@@ -13,10 +13,10 @@
             <target xml:lang="pt-PT" state="needs-translation">Submit</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target xml:lang="pt-PT" state="needs-translation">Label</target></trans-unit>
+            <target xml:lang="pt-PT" state="translated">Etiqueta</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="pt-PT" state="needs-translation">Value</target></trans-unit>
+            <target xml:lang="pt-PT" state="translated">Valor</target></trans-unit>
     </body>
   </file>
 </xliff>
