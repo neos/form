@@ -196,10 +196,3 @@ Neos:
             implementationClassName: Neos\Flow\Validation\Validator\RegularExpressionValidator
           'Neos.Flow:Count':
             implementationClassName: Neos\Flow\Validation\Validator\CountValidator
-  DocTools:
-    bundles:
-      Form:
-        documentationRootPath: '%FLOW_PATH_PACKAGES%Application/Neos.Form/Documentation/Guide/source'
-        renderedDocumentationRootPath: '%FLOW_PATH_DATA%Temporary/Documentation/Form'
-        configurationRootPath: '%FLOW_PATH_PACKAGES%Application/Neos.Form/Documentation/Guide/source'
-        imageRootPath: '%FLOW_PATH_PACKAGES%Application/Neos.Form/Documentation/Guide/Images/'
