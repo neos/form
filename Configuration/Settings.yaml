@@ -17,6 +17,7 @@ Neos:
               partialPathPattern: 'resource://{@package}/Private/Form/Partials/{@type}.html'
               layoutPathPattern: 'resource://{@package}/Private/Form/Layouts/{@type}.html'
               skipUnknownElements: false
+              translationSource: Main
               translationPackage: Neos.Form
               validationErrorTranslationPackage: Neos.Flow
           'Neos.Form:Form':

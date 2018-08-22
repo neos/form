@@ -1,7 +1,7 @@
 {namespace form=Neos\Form\ViewHelpers}
 <fieldset>
 	<f:if condition="{page.label}">
-		<legend>{f:translate(id: 'forms.pages.{page.identifier}.label', package: '{page.renderingOptions.translationPackage}', value: page.label)}</legend>
+		<legend>{f:translate(id: 'forms.pages.{page.identifier}.label', source: '{page.renderingOptions.translationSource}', package: '{page.renderingOptions.translationPackage}', value: page.label)}</legend>
 	</f:if>
 	<f:for each="{page.elements}" as="element">
 		<form:renderRenderable renderable="{element}" />

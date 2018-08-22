@@ -2,13 +2,13 @@
 	<ul>
 		<f:if condition="{form.previousPage}">
 			<li class="previous">
-				<f:form.button name="__currentPage" value="{form.previousPage.index}" formnovalidate="formnovalidate" class="{form.renderingOptions.previousButtonClassAttribute}">{f:translate(id: 'forms.navigation.previousPage', package: '{form.renderingOptions.translationPackage}', value: 'Previous page')}</f:form.button>
+				<f:form.button name="__currentPage" value="{form.previousPage.index}" formnovalidate="formnovalidate" class="{form.renderingOptions.previousButtonClassAttribute}">{f:translate(id: 'forms.navigation.previousPage', source: '{form.renderingOptions.translationSource}', package: '{form.renderingOptions.translationPackage}', value: 'Previous page')}</f:form.button>
 			</li>
 		</f:if>
 		<f:if condition="{form.nextPage}">
 			<f:then>
 				<li class="next">
-					<f:form.button name="__currentPage" value="{form.nextPage.index}" class="{form.renderingOptions.nextButtonClassAttribute}">{f:translate(id: 'forms.navigation.nextPage', package: '{form.renderingOptions.translationPackage}', value: 'Next page')}</f:form.button>
+					<f:form.button name="__currentPage" value="{form.nextPage.index}" class="{form.renderingOptions.nextButtonClassAttribute}">{f:translate(id: 'forms.navigation.nextPage', source: '{form.renderingOptions.translationSource}', package: '{form.renderingOptions.translationPackage}', value: 'Next page')}</f:form.button>
 				</li>
 			</f:then>
 			<f:else>
@@ -16,10 +16,10 @@
 					<f:form.button name="__currentPage" value="{form.pages -> f:count()}" class="{form.renderingOptions.submitButtonClassAttribute}">
 						<f:if condition="{form.renderingOptions.submitButtonLabel}">
 							<f:then>
-								{f:translate(id: 'forms.navigation.submit', package: '{form.renderingOptions.translationPackage}', value: form.renderingOptions.submitButtonLabel)}
+								{f:translate(id: 'forms.navigation.submit', source: '{form.renderingOptions.translationSource}', package: '{form.renderingOptions.translationPackage}', value: form.renderingOptions.submitButtonLabel)}
 							</f:then>
 							<f:else>
-								{f:translate(id: 'forms.navigation.submit', package: '{form.renderingOptions.translationPackage}', value: 'Submit')}
+								{f:translate(id: 'forms.navigation.submit', source: '{form.renderingOptions.translationSource}', package: '{form.renderingOptions.translationPackage}', value: 'Submit')}
 							</f:else>
 						</f:if>
 					</f:form.button>

@@ -58,13 +58,14 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
         } else {
             $defaultValue = isset($element->getProperties()[$property]) ? (string)$element->getProperties()[$property] : '';
         }
+
         $renderingOptions = $element->getRenderingOptions();
-        if (!isset($renderingOptions['translationPackage'])) {
+        if (!isset($renderingOptions['translationSource']) || !isset($renderingOptions['translationPackage'])) {
             return $defaultValue;
         }
         $translationId = sprintf('forms.elements.%s.%s', $element->getIdentifier(), $property);
         try {
-            $translation = $this->translator->translateById($translationId, [], null, null, 'Main', $renderingOptions['translationPackage']);
+            $translation = $this->translator->translateById($translationId, [], null, null, $renderingOptions['translationSource'], $renderingOptions['translationPackage']);
         } catch (ResourceException $exception) {
             return $defaultValue;
         }

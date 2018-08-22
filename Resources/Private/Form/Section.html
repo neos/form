@@ -1,7 +1,7 @@
 {namespace form=Neos\Form\ViewHelpers}
 <fieldset id="{section.uniqueIdentifier}"{f:if(condition: section.properties.elementClassAttribute, then: ' class="{section.properties.elementClassAttribute}"')}>
 	<f:if condition="{section.label}">
-		<legend>{f:translate(id: 'forms.sections.{section.identifier}.label', package: '{section.renderingOptions.translationPackage}', value: section.label)}</legend>
+		<legend>{f:translate(id: 'forms.sections.{section.identifier}.label', source: '{section.renderingOptions.translationSource}', package: '{section.renderingOptions.translationPackage}', value: section.label)}</legend>
 	</f:if>
 	<f:for each="{section.elements}" as="element">
 		<form:renderRenderable renderable="{element}" />
