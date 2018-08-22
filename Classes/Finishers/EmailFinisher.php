@@ -16,6 +16,7 @@ use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
+use Neos\FluidAdaptor\Exception;
 use Neos\SwiftMailer\Message as SwiftMailerMessage;
 use Neos\Utility\ObjectAccess;
 use Neos\Flow\Annotations as Flow;
@@ -78,6 +79,7 @@ class EmailFinisher extends AbstractFinisher
      * @see AbstractFinisher::execute()
      *
      * @return void
+     * @throws Exception
      * @throws FinisherException
      */
     protected function executeInternal()
@@ -85,23 +87,15 @@ class EmailFinisher extends AbstractFinisher
         if (!class_exists(SwiftMailerMessage::class)) {
             throw new FinisherException('The "neos/swiftmailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
         }
-        $formRuntime = $this->finisherContext->getFormRuntime();
-        $standaloneView = $this->initializeStandaloneView();
-        $standaloneView->assign('form', $formRuntime);
-        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
-        $standaloneView->assign('referrer', $referrer);
-        $message = $standaloneView->render();
 
-        $subject = $this->parseOption('subject');
-        $recipientAddress = $this->parseOption('recipientAddress');
-        $recipientName = $this->parseOption('recipientName');
-        $senderAddress = $this->parseOption('senderAddress');
-        $senderName = $this->parseOption('senderName');
-        $replyToAddress = $this->parseOption('replyToAddress');
-        $carbonCopyAddress = $this->parseOption('carbonCopyAddress');
-        $blindCarbonCopyAddress = $this->parseOption('blindCarbonCopyAddress');
-        $format = $this->parseOption('format');
-        $testMode = $this->parseOption('testMode');
+        $subject = $this->getSubject();
+        $recipientAddress = $this->getRecipientAddress();
+        $recipientName = $this->getRecipientName();
+        $senderAddress = $this->getSenderAddress();
+        $senderName = $this->getSenderName();
+        $replyToAddress = $this->getReplyToAddress();
+        $carbonCopyAddress = $this->getCarbonCopyAddress();
+        $blindCarbonCopyAddress = $this->getBlindCarbonCopyAddress();
 
         if ($subject === null) {
             throw new FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
@@ -109,12 +103,111 @@ class EmailFinisher extends AbstractFinisher
         if ($recipientAddress === null) {
             throw new FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
         }
-        if (is_array($recipientAddress) && $recipientName !== '') {
+        if (is_array($recipientAddress) && $recipientName !== null) {
             throw new FinisherException('The option "recipientName" cannot be used with multiple recipients in the EmailFinisher.', 1483365977);
         }
         if ($senderAddress === null) {
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
+
+        $this->sendMail($subject, $senderAddress, $senderName, $recipientAddress, $recipientName, $replyToAddress, $carbonCopyAddress, $blindCarbonCopyAddress);
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     * @throws FinisherException
+     */
+    protected function getMailTemplate()
+    {
+        $formRuntime = $this->finisherContext->getFormRuntime();
+        $standaloneView = $this->initializeStandaloneView();
+        $standaloneView->assign('form', $formRuntime);
+        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
+        $standaloneView->assign('referrer', $referrer);
+        return $standaloneView->render();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSubject()
+    {
+        return $this->parseOption('subject');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRecipientAddress()
+    {
+        return $this->parseOption('recipientAddress');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRecipientName()
+    {
+        return $this->parseOption('recipientName');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSenderAddress()
+    {
+        return $this->parseOption('senderAddress');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSenderName()
+    {
+        return $this->parseOption('senderName');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getReplyToAddress()
+    {
+        return $this->parseOption('replyToAddress');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCarbonCopyAddress()
+    {
+        return $this->parseOption('carbonCopyAddress');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getBlindCarbonCopyAddress()
+    {
+        return $this->parseOption('blindCarbonCopyAddress');
+    }
+
+    /**
+     * @param string $subject
+     * @param string $senderAddress
+     * @param string $senderName
+     * @param array|string $recipientAddress
+     * @param string $recipientName
+     * @param string $replyToAddress
+     * @param string $carbonCopyAddress
+     * @param string $blindCarbonCopyAddress
+     * @throws Exception
+     * @throws FinisherException
+     */
+    protected function sendMail($subject, $senderAddress, $senderName, $recipientAddress, $recipientName, $replyToAddress, $carbonCopyAddress, $blindCarbonCopyAddress)
+    {
+        $format = $this->parseOption('format');
+        $message = $this->getMailTemplate();
 
         $mail = new SwiftMailerMessage();
 
@@ -147,18 +240,17 @@ class EmailFinisher extends AbstractFinisher
         }
         $this->addAttachments($mail);
 
-        if ($testMode === true) {
-            \Neos\Flow\var_dump(
-                array(
-                    'sender' => array($senderAddress => $senderName),
-                    'recipients' => is_array($recipientAddress) ? $recipientAddress : array($recipientAddress => $recipientName),
+        if ($this->parseOption('testMode') === true) {
+            exit(
+                \Neos\Flow\var_dump([
+                    'sender' => [$senderAddress => $senderName],
+                    'recipients' => is_array($recipientAddress) ? $recipientAddress : [$recipientAddress => $recipientName],
                     'replyToAddress' => $replyToAddress,
                     'carbonCopyAddress' => $carbonCopyAddress,
                     'blindCarbonCopyAddress' => $blindCarbonCopyAddress,
-                    'message' => $message,
-                    'format' => $format,
-                ),
-                'E-Mail "' . $subject . '"'
+                    'format' => $format
+                ], 'E-Mail "' . $subject . '"', true).
+                $message
             );
         } else {
             $mail->send();
@@ -168,6 +260,7 @@ class EmailFinisher extends AbstractFinisher
     /**
      * @return StandaloneView
      * @throws FinisherException
+     * @throws Exception
      */
     protected function initializeStandaloneView()
     {
