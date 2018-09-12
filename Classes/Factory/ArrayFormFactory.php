@@ -36,7 +36,7 @@ class ArrayFormFactory extends AbstractFormFactory
     {
         $formDefaults = $this->getPresetConfiguration($presetName);
 
-        $form = new FormDefinition($configuration['identifier'], $formDefaults);
+        $form = new FormDefinition($configuration['identifier'], $formDefaults, $configuration['type'] ?? null);
         if (isset($configuration['renderables'])) {
             foreach ($configuration['renderables'] as $pageConfiguration) {
                 $this->addNestedRenderable($pageConfiguration, $form);
