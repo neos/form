@@ -4,16 +4,16 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve" approved="yes">
                 <source>Previous page</source>
-            <target xml:lang="km">ទំព័រមុន</target></trans-unit>
+            <target xml:lang="km" state="translated">ទំព័រមុន</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve" approved="yes">
                 <source>Next page</source>
-            <target xml:lang="km">ទំព័របន្ទាប់</target></trans-unit>
+            <target xml:lang="km" state="translated">ទំព័របន្ទាប់</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve" approved="yes">
                 <source>Submit</source>
-            <target xml:lang="km">ដាក់ស្នើ</target></trans-unit>
+            <target xml:lang="km" state="translated">ដាក់ស្នើ</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target xml:lang="km">ស្លាក</target></trans-unit>
+            <target xml:lang="km" state="translated">ស្លាក</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
             <target xml:lang="km" state="translated">តម្លៃ</target></trans-unit>

@@ -4,16 +4,16 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve" approved="yes">
                 <source>Previous page</source>
-            <target xml:lang="fi">Edellinen sivu</target></trans-unit>
+            <target xml:lang="fi" state="translated">Edellinen sivu</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve" approved="yes">
                 <source>Next page</source>
-            <target xml:lang="fi">Seuraava sivu</target></trans-unit>
+            <target xml:lang="fi" state="translated">Seuraava sivu</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve" approved="yes">
                 <source>Submit</source>
-            <target xml:lang="fi">Lähetä</target></trans-unit>
+            <target xml:lang="fi" state="translated">Lähetä</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target xml:lang="fi">Nimike</target></trans-unit>
+            <target xml:lang="fi" state="translated">Nimike</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
             <target xml:lang="fi" state="needs-translation">Value</target></trans-unit>
