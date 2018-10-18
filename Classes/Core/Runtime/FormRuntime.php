@@ -338,6 +338,12 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     {
         if ($this->isAfterLastPage()) {
             $this->invokeFinishers();
+            $parentResponse = $this->response->getParentResponse();
+            if ($parentResponse !== null) {
+                foreach ($this->response->getHeaders()->getAll() as $key => $value) {
+                    $parentResponse->getHeaders()->set($key, $value, true);
+                }
+            }
             return $this->response->getContent();
         }
 
