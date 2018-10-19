@@ -54,7 +54,7 @@ class EmailFinisher extends AbstractFinisher
 {
     const FORMAT_PLAINTEXT = 'plaintext';
     const FORMAT_HTML = 'html';
-    
+
     /**
      * @var Service
      * @Flow\Inject
@@ -109,7 +109,7 @@ class EmailFinisher extends AbstractFinisher
         if ($recipientAddress === null) {
             throw new FinisherException('The option "recipientAddress" must be set for the EmailFinisher.', 1327060200);
         }
-        if (is_array($recipientAddress) && $recipientName !== '') {
+        if (is_array($recipientAddress) && !empty($recipientName)) {
             throw new FinisherException('The option "recipientName" cannot be used with multiple recipients in the EmailFinisher.', 1483365977);
         }
         if ($senderAddress === null) {
