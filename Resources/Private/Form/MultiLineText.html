@@ -1,5 +1,5 @@
 {namespace form=Neos\Form\ViewHelpers}
 <f:layout name="Neos.Form:Field" />
 <f:section name="field">
-	<f:form.textarea property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" additionalAttributes="{placeholder: '{element -> form:translateElementProperty(property: \'placeholder\')}'}" rows="{element.properties.rows}" cols="{element.properties.cols}" errorClass="{element.properties.elementErrorClassAttribute}" maxlength="{element.properties.maxlength}"/>
+	<f:form.textarea property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" additionalAttributes="{placeholder: '{element -> form:translateElementProperty(property: \'placeholder\')}', maxlength: element.properties.maxlength}" rows="{element.properties.rows}" cols="{element.properties.cols}" errorClass="{element.properties.elementErrorClassAttribute}"/>
 </f:section>
