@@ -25,7 +25,6 @@
 									<f:else>
 										<f:if condition="{formValue.isMultiValue}">
 											<f:then>
-												{formValue.processedValue -> f:debug()}
 												<ul>
 													<f:for each="{formValue.processedValue}" as="value">
 														<li>{value}</li>
