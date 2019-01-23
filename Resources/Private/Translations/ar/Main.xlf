@@ -13,7 +13,7 @@
             <target xml:lang="ar" state="translated">إعتماد</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target xml:lang="ar" state="needs-translation">Label</target></trans-unit>
+            <target xml:lang="ar" state="translated">التسمية</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
             <target xml:lang="ar" state="translated">القيمة</target></trans-unit>
