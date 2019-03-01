@@ -167,7 +167,7 @@ class EmailFinisher extends AbstractFinisher
         }
     }
 
-    protected function addMessages(SwiftMailerMessage $mail, $messages): void
+    protected function addMessages(SwiftMailerMessage $mail, array $messages): void
     {
         foreach ($messages as $messageFormat => $message) {
             if (count($messages) === 1) {
