@@ -184,7 +184,7 @@ class EmailFinisher extends AbstractFinisher
         if ($format === self::FORMAT_MULTIPART) {
             $messages[self::FORMAT_HTML] = $this->createMessage(self::FORMAT_HTML);
             $messages[self::FORMAT_PLAINTEXT] = $this->createMessage(self::FORMAT_PLAINTEXT);
-        } else if ($format === self::FORMAT_PLAINTEXT) {
+        } elseif ($format === self::FORMAT_PLAINTEXT) {
             $messages[self::FORMAT_PLAINTEXT] = $this->createMessage(self::FORMAT_PLAINTEXT);
         } else {
             $messages[self::FORMAT_HTML] = $this->createMessage(self::FORMAT_HTML);
