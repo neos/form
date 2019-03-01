@@ -27,6 +27,10 @@ use Neos\Flow\Annotations as Flow;
  *
  * - templatePathAndFilename (mandatory if "templateSource" option is not set): Template path and filename for the mail body
  * - templateSource (mandatory if "templatePathAndFilename" option is not set): The raw Fluid template
+ * - htmlTemplatePathAndFilename (mandatory if "htmlTemplateSource" option is not set): Template path and filename for the html mail body
+ * - htmlTemplateSource (mandatory if "htmlTemplatePathAndFilename" option is not set): The raw Fluid template for html mail body
+ * - plaintextTemplatePathAndFilename (mandatory if "plaintextTemplateSource" option is not set): Template path and filename for the plaintext mail body
+ * - plaintextTemplateSource (mandatory if "plaintextTemplatePathAndFilename" option is not set): The raw Fluid template for plaintext mail body
  * - layoutRootPath: root path for the layouts
  * - partialRootPath: root path for the partials
  * - variables: associative array of variables which are available inside the Fluid template
@@ -54,12 +58,20 @@ class EmailFinisher extends AbstractFinisher
 {
     const FORMAT_PLAINTEXT = 'plaintext';
     const FORMAT_HTML = 'html';
+    const FORMAT_MULTIPART = 'multipart';
+    const CONTENT_TYPE_PLAINTEXT = 'text/plain';
+    const CONTENT_TYPE_HTML = 'text/html';
 
     /**
      * @var Service
      * @Flow\Inject
      */
     protected $i18nService;
+
+    protected $formatContentTypes = [
+        self::FORMAT_HTML => self::CONTENT_TYPE_HTML,
+        self::FORMAT_PLAINTEXT => self::CONTENT_TYPE_PLAINTEXT,
+    ];
 
     /**
      * @var array
@@ -85,13 +97,6 @@ class EmailFinisher extends AbstractFinisher
         if (!class_exists(SwiftMailerMessage::class)) {
             throw new FinisherException('The "neos/swiftmailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
         }
-        $formRuntime = $this->finisherContext->getFormRuntime();
-        $standaloneView = $this->initializeStandaloneView();
-        $standaloneView->assign('form', $formRuntime);
-        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
-        $standaloneView->assign('referrer', $referrer);
-        $message = $standaloneView->render();
-
         $subject = $this->parseOption('subject');
         $recipientAddress = $this->parseOption('recipientAddress');
         $recipientName = $this->parseOption('recipientName');
@@ -102,6 +107,7 @@ class EmailFinisher extends AbstractFinisher
         $blindCarbonCopyAddress = $this->parseOption('blindCarbonCopyAddress');
         $format = $this->parseOption('format');
         $testMode = $this->parseOption('testMode');
+        $messages = $this->getMessages($format);
 
         if ($subject === null) {
             throw new FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
@@ -140,11 +146,7 @@ class EmailFinisher extends AbstractFinisher
             $mail->setBcc($blindCarbonCopyAddress);
         }
 
-        if ($format === self::FORMAT_PLAINTEXT) {
-            $mail->setBody($message, 'text/plain');
-        } else {
-            $mail->setBody($message, 'text/html');
-        }
+        $this->addMessages($mail, $messages);
         $this->addAttachments($mail);
 
         if ($testMode === true) {
@@ -155,7 +157,7 @@ class EmailFinisher extends AbstractFinisher
                     'replyToAddress' => $replyToAddress,
                     'carbonCopyAddress' => $carbonCopyAddress,
                     'blindCarbonCopyAddress' => $blindCarbonCopyAddress,
-                    'message' => $message,
+                    'message' => $messages,
                     'format' => $format,
                 ),
                 'E-Mail "' . $subject . '"'
@@ -165,20 +167,76 @@ class EmailFinisher extends AbstractFinisher
         }
     }
 
+    protected function addMessages(SwiftMailerMessage $mail, $messages): void
+    {
+        foreach ($messages as $messageFormat => $message) {
+            if (count($messages) === 1) {
+                $mail->setBody($message, $this->formatContentTypes[$messageFormat]);
+            } else {
+                $mail->addPart($message, $this->formatContentTypes[$messageFormat]);
+            }
+        }
+    }
+
+    protected function getMessages(string $format): array
+    {
+        $messages = [];
+        if ($format === self::FORMAT_MULTIPART) {
+            $messages[self::FORMAT_HTML] = $this->createMessage(self::FORMAT_HTML);
+            $messages[self::FORMAT_PLAINTEXT] = $this->createMessage(self::FORMAT_PLAINTEXT);
+        } else if ($format === self::FORMAT_PLAINTEXT) {
+            $messages[self::FORMAT_PLAINTEXT] = $this->createMessage(self::FORMAT_PLAINTEXT);
+        } else {
+            $messages[self::FORMAT_HTML] = $this->createMessage(self::FORMAT_HTML);
+        }
+
+        return $messages;
+    }
+
+    protected function createMessage(string $format): string
+    {
+        $formRuntime = $this->finisherContext->getFormRuntime();
+        $standaloneView = $this->initializeStandaloneView($format);
+        $standaloneView->assign('form', $formRuntime);
+        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
+        $standaloneView->assign('referrer', $referrer);
+
+        return $standaloneView->render();
+    }
+
     /**
+     * @param string $format
      * @return StandaloneView
      * @throws FinisherException
+     * @throws \Neos\FluidAdaptor\Exception
      */
-    protected function initializeStandaloneView()
+    protected function initializeStandaloneView(string $format = ''): StandaloneView
     {
+        $templatePathAndFilenameOption = 'templatePathAndFilename';
+        $templateSourceOption = 'templateSource';
+        $isSingleTemplate = isset($this->options[$templatePathAndFilenameOption]) || isset($this->options[$templateSourceOption]);
+
+        if (!$isSingleTemplate && in_array($format, [self::FORMAT_PLAINTEXT, self::FORMAT_HTML])) {
+            $templatePathAndFilenameOption = $format . ucfirst($templatePathAndFilenameOption);
+            $templateSourceOption = $format . ucfirst($templateSourceOption);
+        }
+
         $standaloneView = new StandaloneView();
-        if (isset($this->options['templatePathAndFilename'])) {
-            $templatePathAndFilename = $this->i18nService->getLocalizedFilename($this->options['templatePathAndFilename']);
+        if (isset($this->options[$templatePathAndFilenameOption])) {
+            $templatePathAndFilename = $this->i18nService->getLocalizedFilename($this->options[$templatePathAndFilenameOption]);
             $standaloneView->setTemplatePathAndFilename($templatePathAndFilename[0]);
-        } elseif (isset($this->options['templateSource'])) {
-            $standaloneView->setTemplateSource($this->options['templateSource']);
+        } elseif (isset($this->options[$templateSourceOption])) {
+            $standaloneView->setTemplateSource($this->options[$templateSourceOption]);
         } else {
-            throw new FinisherException('The option "templatePathAndFilename" or "templateSource" must be set for the EmailFinisher.', 1327058829);
+            $options = [
+                'templatePathAndFilename',
+                'templateSource',
+                self::FORMAT_PLAINTEXT . 'TemplatePathAndFilename',
+                self::FORMAT_PLAINTEXT . 'TemplateSource',
+                self::FORMAT_HTML . 'TemplatePathAndFilename',
+                self::FORMAT_HTML . 'TemplateSource'
+            ];
+            throw new FinisherException(sprintf('One of the option "%s" must be set for the EmailFinisher.', implode('", "', $options)), 1551371435);
         }
 
 
