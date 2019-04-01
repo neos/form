@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve" approved="yes">
                 <source>Previous page</source>
-            <target xml:lang="ru" state="translated">Предыдущая страница</target></trans-unit>
+            <target state="translated">Предыдущая страница</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve" approved="yes">
                 <source>Next page</source>
-            <target xml:lang="ru" state="translated">Следующая страница</target></trans-unit>
+            <target state="translated">Следующая страница</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve" approved="yes">
                 <source>Submit</source>
-            <target xml:lang="ru" state="translated">Отправить</target></trans-unit>
+            <target state="translated">Отправить</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target xml:lang="ru" state="translated">Обозначение</target><alt-trans><target xml:lang="ru">Этикетка</target></alt-trans><alt-trans><target xml:lang="ru">Подпись</target></alt-trans><alt-trans><target xml:lang="ru">Метка</target></alt-trans></trans-unit>
+            <target state="translated">Обозначение</target><alt-trans><target>Этикетка</target></alt-trans><alt-trans><target>Подпись</target></alt-trans><alt-trans><target>Метка</target></alt-trans></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve" approved="yes">
                 <source>Value</source>
-            <target xml:lang="ru" state="translated">Значение</target></trans-unit>
+            <target state="translated">Значение</target></trans-unit>
     </body>
   </file>
 </xliff>

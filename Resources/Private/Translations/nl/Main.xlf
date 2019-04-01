@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                 <source>Previous page</source>
-            <target xml:lang="nl" state="translated">Vorige pagina</target></trans-unit>
+            <target state="translated">Vorige pagina</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve">
                 <source>Next page</source>
-            <target xml:lang="nl" state="translated">Volgende pagina</target></trans-unit>
+            <target state="translated">Volgende pagina</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve" approved="yes">
                 <source>Submit</source>
-            <target xml:lang="nl" state="translated">Verstuur</target></trans-unit>
+            <target state="translated">Verstuur</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target xml:lang="nl" state="translated">Label</target></trans-unit>
+            <target state="translated">Label</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="nl" state="translated">Main. xlf</target></trans-unit>
+            <target state="translated">Main. xlf</target></trans-unit>
     </body>
   </file>
 </xliff>

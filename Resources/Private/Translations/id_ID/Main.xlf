@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                 <source>Previous page</source>
-            <target xml:lang="id" state="translated">Halaman sebelumnya</target><alt-trans><target xml:lang="id">Previous page</target></alt-trans><alt-trans><target xml:lang="id">Halaman Sebelumnya</target></alt-trans></trans-unit>
+            <target state="translated">Halaman sebelumnya</target><alt-trans><target>Previous page</target></alt-trans><alt-trans><target>Halaman Sebelumnya</target></alt-trans></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve">
                 <source>Next page</source>
-            <target xml:lang="id" state="translated">Halaman berikutnya</target></trans-unit>
+            <target state="translated">Halaman berikutnya</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
-            <target xml:lang="id" state="translated">Kirim</target><alt-trans><target xml:lang="id">Masukkan</target></alt-trans></trans-unit>
+            <target state="translated">Kirim</target><alt-trans><target>Masukkan</target></alt-trans></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target xml:lang="id" state="translated">Label</target></trans-unit>
+            <target state="translated">Label</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="id" state="translated">Nilai</target></trans-unit>
+            <target state="translated">Nilai</target></trans-unit>
     </body>
   </file>
 </xliff>

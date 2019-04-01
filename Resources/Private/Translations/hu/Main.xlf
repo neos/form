@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                 <source>Previous page</source>
-            <target xml:lang="hu" state="translated">Előző oldal</target></trans-unit>
+            <target state="translated">Előző oldal</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve">
                 <source>Next page</source>
-            <target xml:lang="hu" state="translated">Következő oldal</target></trans-unit>
+            <target state="translated">Következő oldal</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
-            <target xml:lang="hu" state="translated">Küldés</target></trans-unit>
+            <target state="translated">Küldés</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target xml:lang="hu" state="translated">Címke</target></trans-unit>
+            <target state="translated">Címke</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="hu" state="needs-translation">Value</target></trans-unit>
+            <target state="needs-translation">Value</target></trans-unit>
     </body>
   </file>
 </xliff>

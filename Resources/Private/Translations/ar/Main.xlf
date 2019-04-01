@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                 <source>Previous page</source>
-            <target xml:lang="ar" state="translated">الصفحة السابقة</target></trans-unit>
+            <target state="translated">الصفحة السابقة</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve">
                 <source>Next page</source>
-            <target xml:lang="ar" state="translated">الصفحة التالية</target></trans-unit>
+            <target state="translated">الصفحة التالية</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
-            <target xml:lang="ar" state="translated">إعتماد</target></trans-unit>
+            <target state="translated">إعتماد</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target xml:lang="ar" state="translated">التسمية</target></trans-unit>
+            <target state="translated">التسمية</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="ar" state="translated">القيمة</target></trans-unit>
+            <target state="translated">القيمة</target></trans-unit>
     </body>
   </file>
 </xliff>

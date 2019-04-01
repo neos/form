@@ -4,19 +4,19 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve" approved="yes">
                 <source>Previous page</source>
-            <target xml:lang="lv" state="translated">Iepriekšējā lapa</target></trans-unit>
+            <target state="translated">Iepriekšējā lapa</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve" approved="yes">
                 <source>Next page</source>
-            <target xml:lang="lv" state="translated">Nākamā lapa</target></trans-unit>
+            <target state="translated">Nākamā lapa</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve" approved="yes">
                 <source>Submit</source>
-            <target xml:lang="lv" state="translated">Apstiprināt</target></trans-unit>
+            <target state="translated">Apstiprināt</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target xml:lang="lv" state="translated">Marķējums</target></trans-unit>
+            <target state="translated">Marķējums</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
-            <target xml:lang="lv" state="translated">Vērtība</target></trans-unit>
+            <target state="translated">Vērtība</target></trans-unit>
     </body>
   </file>
 </xliff>
