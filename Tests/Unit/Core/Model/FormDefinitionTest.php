@@ -21,7 +21,16 @@ use Neos\Form\Core\Model\FormElementInterface;
 use Neos\Form\Core\Model\Page;
 use Neos\Form\Core\Model\ProcessingRule;
 use Neos\Form\Core\Runtime\FormRuntime;
+use Neos\Form\Exception;
+use Neos\Form\Exception\DuplicateFormElementException;
+use Neos\Form\Exception\FinisherPresetNotFoundException;
+use Neos\Form\Exception\FormDefinitionConsistencyException;
+use Neos\Form\Exception\IdentifierNotValidException;
+use Neos\Form\Exception\TypeDefinitionNotFoundException;
+use Neos\Form\Exception\TypeDefinitionNotValidException;
 use Neos\Form\Utility\SupertypeResolver;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\MockObject\MockObject;
 
 require_once(__DIR__ . '/Fixture/EmptyFinisher.php');
 
@@ -38,129 +47,136 @@ class FormDefinitionTest extends UnitTestCase
     public function identifierSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
-        $this->assertSame('foo', $formDefinition->getIdentifier());
+        Assert::assertSame('foo', $formDefinition->getIdentifier());
 
         $formDefinition = new FormDefinition('bar');
-        $this->assertSame('bar', $formDefinition->getIdentifier());
+        Assert::assertSame('bar', $formDefinition->getIdentifier());
     }
 
     public function invalidIdentifiers()
     {
-        return array(
-            'Null Identifier' => array(null),
-            'Integer Identifier' => array(42),
-            'Empty String Identifier' => array('')
-        );
+        return [
+            'Null Identifier' => [null],
+            'Integer Identifier' => [42],
+            'Empty String Identifier' => ['']
+        ];
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
+     * @param $identifier
+     * @throws IdentifierNotValidException
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
+        $this->expectException(IdentifierNotValidException::class);
         new FormDefinition($identifier);
     }
 
     /**
      * @test
+     * @throws IdentifierNotValidException
      */
     public function constructorSetsRendererClassName()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
                     'rendererClassName' => 'FooRenderer'
-                )
-            )
-        ));
-        $this->assertSame('FooRenderer', $formDefinition->getRendererClassName());
+                ]
+            ]
+        ]);
+        Assert::assertSame('FooRenderer', $formDefinition->getRendererClassName());
     }
 
     /**
      * @test
+     * @throws IdentifierNotValidException
      */
     public function constructorSetsFinishers()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'finisherPresets' => array(
-                'myFinisher' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'finisherPresets' => [
+                'myFinisher' => [
                     'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class),
-                    'options' => array(
+                    'options' => [
                         'foo' => 'bar',
                         'test' => 'asdf'
-                    )
-                )
-            ),
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'finishers' => array(
-                        array(
+                    ]
+                ]
+            ],
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'finishers' => [
+                        [
                             'identifier' => 'myFinisher',
-                            'options' => array(
+                            'options' => [
                                 'foo' => 'baz'
-                            )
-                        )
-                    )
-                )
-            )
-        ));
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
         $finishers = $formDefinition->getFinishers();
-        $this->assertSame(1, count($finishers));
+        Assert::assertSame(1, count($finishers));
         $finisher = $finishers[0];
         $this->assertInstanceOf(Fixture\EmptyFinisher::class, $finisher);
         /** @noinspection PhpUndefinedMethodInspection */
-        $this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
+        Assert::assertSame(['foo' => 'baz', 'test' => 'asdf'], $finisher->_get('options'));
     }
 
     /**
      * @test
+     * @throws IdentifierNotValidException
      */
     public function constructorSetsRenderingOptions()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'renderingOptions' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'renderingOptions' => [
                         'foo' => 'bar',
                         'baz' => 'test'
-                    )
-                )
-            )
-        ));
-        $this->assertSame(array('foo' => 'bar', 'baz' => 'test'), $formDefinition->getRenderingOptions());
+                    ]
+                ]
+            ]
+        ]);
+        Assert::assertSame(['foo' => 'bar', 'baz' => 'test'], $formDefinition->getRenderingOptions());
     }
 
     /**
      * @test
+     * @throws IdentifierNotValidException
      */
     public function constructorMakesValidatorPresetsAvailable()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'validatorPresets' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'validatorPresets' => [
                 'foo' => 'bar'
-            ),
-            'formElementTypes' => array(
+            ],
+            'formElementTypes' => [
                 'Neos.Form:Form' => []
-            )
-        ));
-        $this->assertSame(array('foo' => 'bar'), $formDefinition->getValidatorPresets());
+            ]
+        ]);
+        Assert::assertSame(['foo' => 'bar'], $formDefinition->getValidatorPresets());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotValidException
+     * @throws IdentifierNotValidException
      */
     public function constructorThrowsExceptionIfUnknownPropertySet()
     {
-        new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        $this->expectException(TypeDefinitionNotValidException::class);
+        new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
                     'unknownFormProperty' => 'val'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -169,15 +185,15 @@ class FormDefinitionTest extends UnitTestCase
     public function getPagesReturnsEmptyArrayByDefault()
     {
         $formDefinition = new FormDefinition('foo');
-        $this->assertSame([], $formDefinition->getPages());
+        Assert::assertSame([], $formDefinition->getPages());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception
      */
     public function getPageByIndexThrowsExceptionIfSpecifiedIndexDoesNotExist()
     {
+        $this->expectException(Exception::class);
         $formDefinition = new FormDefinition('foo');
         $formDefinition->getPageByIndex(0);
     }
@@ -190,19 +206,21 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $page = new Page('bar');
         $formDefinition->addPage($page);
-        $this->assertTrue($formDefinition->hasPageWithIndex(0));
+        Assert::assertTrue($formDefinition->hasPageWithIndex(0));
     }
 
     /**
      * @test
+     * @throws FormDefinitionConsistencyException
+     * @throws IdentifierNotValidException
      */
     public function hasPageWithIndexReturnsFalseIfTheSpecifiedIndexDoesNotExist()
     {
         $formDefinition = new FormDefinition('foo');
-        $this->assertFalse($formDefinition->hasPageWithIndex(0));
+        Assert::assertFalse($formDefinition->hasPageWithIndex(0));
         $page = new Page('bar');
         $formDefinition->addPage($page);
-        $this->assertFalse($formDefinition->hasPageWithIndex(1));
+        Assert::assertFalse($formDefinition->hasPageWithIndex(1));
     }
 
     /**
@@ -213,10 +231,10 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $page = new Page('bar');
         $formDefinition->addPage($page);
-        $this->assertSame(array($page), $formDefinition->getPages());
-        $this->assertSame($formDefinition, $page->getParentRenderable());
+        Assert::assertSame([$page], $formDefinition->getPages());
+        Assert::assertSame($formDefinition, $page->getParentRenderable());
 
-        $this->assertSame($page, $formDefinition->getPageByIndex(0));
+        Assert::assertSame($page, $formDefinition->getPageByIndex(0));
     }
 
     /**
@@ -231,12 +249,14 @@ class FormDefinitionTest extends UnitTestCase
         $page2 = new Page('bar2');
         $formDefinition->addPage($page2);
 
-        $this->assertSame(0, $page1->getIndex());
-        $this->assertSame(1, $page2->getIndex());
+        Assert::assertSame(0, $page1->getIndex());
+        Assert::assertSame(1, $page2->getIndex());
     }
 
     /**
      * @test
+     * @throws FormDefinitionConsistencyException
+     * @throws IdentifierNotValidException
      */
     public function getElementByIdentifierReturnsElementsWhichAreAlreadyAttachedToThePage()
     {
@@ -247,7 +267,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $formDefinition->addPage($page);
 
-        $this->assertSame($mockFormElement, $formDefinition->getElementByIdentifier('myFormElementIdentifier'));
+        Assert::assertSame($mockFormElement, $formDefinition->getElementByIdentifier('myFormElementIdentifier'));
     }
 
     /**
@@ -262,7 +282,7 @@ class FormDefinitionTest extends UnitTestCase
 
         $mockFormElement = $this->getMockFormElement('myFormElementIdentifier');
         $page->addElement($mockFormElement);
-        $this->assertSame($mockFormElement, $formDefinition->getElementByIdentifier('myFormElementIdentifier'));
+        Assert::assertSame($mockFormElement, $formDefinition->getElementByIdentifier('myFormElementIdentifier'));
     }
 
     /**
@@ -272,21 +292,22 @@ class FormDefinitionTest extends UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
 
-        /** @var ActionRequest|\PHPUnit_Framework_MockObject_MockObject $mockRequest */
+        /** @var ActionRequest|MockObject $mockRequest */
         $mockRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
-        /** @var Response|\PHPUnit_Framework_MockObject_MockObject $mockResponse */
+        /** @var Response|MockObject $mockResponse */
         $mockResponse = $this->getMockBuilder(Response::class)->getMock();
 
         $form = $formDefinition->bind($mockRequest, $mockResponse);
-        $this->assertInstanceOf(FormRuntime::class, $form);
+        Assert::assertInstanceOf(FormRuntime::class, $form);
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\DuplicateFormElementException
      */
     public function attachingTwoElementsWithSameIdentifierToFormThrowsException1()
     {
+        $this->expectException(DuplicateFormElementException::class);
+
         $mockFormElement1 = $this->getMockFormElement('myFormElementIdentifier');
         $mockFormElement2 = $this->getMockFormElement('myFormElementIdentifier');
 
@@ -300,10 +321,11 @@ class FormDefinitionTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\DuplicateFormElementException
      */
     public function attachingTwoElementsWithSameIdentifierToFormThrowsException2()
     {
+        $this->expectException(DuplicateFormElementException::class);
+
         $mockFormElement1 = $this->getMockFormElement('myFormElementIdentifier');
         $mockFormElement2 = $this->getMockFormElement('myFormElementIdentifier');
 
@@ -318,10 +340,11 @@ class FormDefinitionTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function aPageCanOnlyBeAttachedToASingleFormDefinition()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
+
         $page = new Page('bar');
 
         $formDefinition1 = new FormDefinition('foo1');
@@ -333,110 +356,130 @@ class FormDefinitionTest extends UnitTestCase
 
     /**
      * @test
+     * @throws Exception
+     * @throws IdentifierNotValidException
+     * @throws TypeDefinitionNotFoundException
      */
     public function createPageCreatesPageAndAddsItToForm()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
-        $this->assertSame('myPage', $page->getIdentifier());
-        $this->assertSame($page, $formDefinition->getPageByIndex(0));
-        $this->assertSame(0, $page->getIndex());
+        Assert::assertSame('myPage', $page->getIdentifier());
+        Assert::assertSame($page, $formDefinition->getPageByIndex(0));
+        Assert::assertSame(0, $page->getIndex());
     }
 
     /**
      * @test
+     * @throws Exception
+     * @throws IdentifierNotValidException
+     * @throws TypeDefinitionNotFoundException
      */
     public function createPageSetsLabelFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
                     'label' => 'My Label'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
-        $this->assertSame('My Label', $page->getLabel());
+        Assert::assertSame('My Label', $page->getLabel());
     }
 
     /**
      * @test
+     * @throws Exception
+     * @throws IdentifierNotValidException
+     * @throws TypeDefinitionNotFoundException
      */
     public function createPageSetsRendererClassNameFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
                     'rendererClassName' => 'MyRenderer'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
-        $this->assertSame('MyRenderer', $page->getRendererClassName());
+        Assert::assertSame('MyRenderer', $page->getRendererClassName());
     }
 
     /**
      * @test
+     * @throws Exception
+     * @throws IdentifierNotValidException
+     * @throws TypeDefinitionNotFoundException
      */
     public function createPageSetsRenderingOptionsFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
-                    'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
-                )
-            )
-        ));
+                    'renderingOptions' => ['foo' => 'bar', 'baz' => 'asdf']
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
-        $this->assertSame(array('foo' => 'bar', 'baz' => 'asdf'), $page->getRenderingOptions());
+        Assert::assertSame(['foo' => 'bar', 'baz' => 'asdf'], $page->getRenderingOptions());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotValidException
+     * @throws Exception
+     * @throws IdentifierNotValidException
+     * @throws TypeDefinitionNotFoundException
      */
     public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $this->expectException(TypeDefinitionNotValidException::class);
+
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
                     'label' => 'My Label',
                     'unknownProperty' => 'this is an unknown property'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $formDefinition->createPage('myPage');
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
+     * @throws Exception
+     * @throws IdentifierNotValidException
+     * @throws TypeDefinitionNotFoundException
      */
     public function createPageThrowsExceptionIfImplementationClassNameNotFound()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        $this->expectException(TypeDefinitionNotFoundException::class);
 
-                ),
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+
+                ],
                 'Neos.Form:Page2' => []
-            )
-        ));
+            ]
+        ]);
         $formDefinition->createPage('myPage', 'Neos.Form:Page2');
     }
 
@@ -446,7 +489,7 @@ class FormDefinitionTest extends UnitTestCase
     public function formFieldTypeManagerIsReturned()
     {
         $formDefinition = new FormDefinition('myForm');
-        $this->assertInstanceOf(SupertypeResolver::class, $formDefinition->getFormFieldTypeManager());
+        Assert::assertInstanceOf(SupertypeResolver::class, $formDefinition->getFormFieldTypeManager());
     }
 
     /**
@@ -462,25 +505,26 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition->addPage($page2);
         $formDefinition->addPage($page3);
 
-        $this->assertSame(0, $page1->getIndex());
-        $this->assertSame(1, $page2->getIndex());
-        $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
+        Assert::assertSame(0, $page1->getIndex());
+        Assert::assertSame(1, $page2->getIndex());
+        Assert::assertSame(2, $page3->getIndex());
+        Assert::assertSame([$page1, $page2, $page3], $formDefinition->getPages());
 
         $formDefinition->movePageBefore($page2, $page1);
 
-        $this->assertSame(1, $page1->getIndex());
-        $this->assertSame(0, $page2->getIndex());
-        $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
+        Assert::assertSame(1, $page1->getIndex());
+        Assert::assertSame(0, $page2->getIndex());
+        Assert::assertSame(2, $page3->getIndex());
+        Assert::assertSame([$page2, $page1, $page3], $formDefinition->getPages());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function movePageBeforeThrowsExceptionIfPagesDoNotBelongToSameForm()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
+
         $formDefinition = new FormDefinition('foo1');
         $page1 = new Page('bar1');
         $page2 = new Page('bar2');
@@ -502,25 +546,26 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition->addPage($page2);
         $formDefinition->addPage($page3);
 
-        $this->assertSame(0, $page1->getIndex());
-        $this->assertSame(1, $page2->getIndex());
-        $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
+        Assert::assertSame(0, $page1->getIndex());
+        Assert::assertSame(1, $page2->getIndex());
+        Assert::assertSame(2, $page3->getIndex());
+        Assert::assertSame([$page1, $page2, $page3], $formDefinition->getPages());
 
         $formDefinition->movePageAfter($page1, $page2);
 
-        $this->assertSame(1, $page1->getIndex());
-        $this->assertSame(0, $page2->getIndex());
-        $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
+        Assert::assertSame(1, $page1->getIndex());
+        Assert::assertSame(0, $page2->getIndex());
+        Assert::assertSame(2, $page3->getIndex());
+        Assert::assertSame([$page2, $page1, $page3], $formDefinition->getPages());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function movePageAfterThrowsExceptionIfPagesDoNotBelongToSameForm()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
+
         $formDefinition = new FormDefinition('foo1');
         $page1 = new Page('bar1');
         $page2 = new Page('bar2');
@@ -531,6 +576,8 @@ class FormDefinitionTest extends UnitTestCase
 
     /**
      * @test
+     * @throws FormDefinitionConsistencyException
+     * @throws IdentifierNotValidException
      */
     public function removePageRemovesPageFromForm()
     {
@@ -542,11 +589,13 @@ class FormDefinitionTest extends UnitTestCase
 
         $formDefinition->removePage($page1);
         $this->assertNull($page1->getParentRenderable());
-        $this->assertSame(array($page2), $formDefinition->getPages());
+        Assert::assertSame([$page2], $formDefinition->getPages());
     }
 
     /**
      * @test
+     * @throws FormDefinitionConsistencyException
+     * @throws IdentifierNotValidException
      */
     public function removePageRemovesFormElementsOnPageFromForm()
     {
@@ -558,8 +607,8 @@ class FormDefinitionTest extends UnitTestCase
         $element2 = $this->getMockFormElement('el2');
         $page1->addElement($element2);
 
-        $this->assertSame($element1, $formDefinition->getElementByIdentifier('el1'));
-        $this->assertSame($element2, $formDefinition->getElementByIdentifier('el2'));
+        Assert::assertSame($element1, $formDefinition->getElementByIdentifier('el1'));
+        Assert::assertSame($element2, $formDefinition->getElementByIdentifier('el2'));
 
         $formDefinition->removePage($page1);
 
@@ -569,10 +618,11 @@ class FormDefinitionTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function removePageThrowsExceptionIfPageIsNotOnForm()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
+
         $formDefinition = new FormDefinition('foo1');
         $page1 = new Page('bar1');
         $formDefinition->removePage($page1);
@@ -588,9 +638,9 @@ class FormDefinitionTest extends UnitTestCase
         $processingRule2 = $formDefinition->getProcessingRule('foo');
 
         $this->assertInstanceOf(ProcessingRule::class, $processingRule1);
-        $this->assertSame($processingRule1, $processingRule2);
+        Assert::assertSame($processingRule1, $processingRule2);
 
-        $this->assertSame(array('foo' => $processingRule1), $formDefinition->getProcessingRules());
+        Assert::assertSame(['foo' => $processingRule1], $formDefinition->getProcessingRules());
     }
 
     /**
@@ -599,28 +649,30 @@ class FormDefinitionTest extends UnitTestCase
     public function addFinisherAddsFinishersToList()
     {
         $formDefinition = new FormDefinition('foo1');
-        $this->assertSame([], $formDefinition->getFinishers());
+        Assert::assertSame([], $formDefinition->getFinishers());
         $finisher = $this->getMockFinisher();
         $formDefinition->addFinisher($finisher);
-        $this->assertSame(array($finisher), $formDefinition->getFinishers());
+        Assert::assertSame([$finisher], $formDefinition->getFinishers());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FinisherPresetNotFoundException
      */
     public function createFinisherThrowsExceptionIfFinisherPresetNotFound()
     {
+        $this->expectException(FinisherPresetNotFoundException::class);
+
         $formDefinition = new FormDefinition('foo1');
         $formDefinition->createFinisher('asdf');
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FinisherPresetNotFoundException
      */
     public function createFinisherThrowsExceptionIfImplementationClassNameIsEmpty()
     {
+        $this->expectException(FinisherPresetNotFoundException::class);
+
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $formDefinition->createFinisher('asdf');
     }
@@ -633,7 +685,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('email');
         $this->assertInstanceOf(Fixture\EmptyFinisher::class, $finisher);
-        $this->assertSame(array($finisher), $formDefinition->getFinishers());
+        Assert::assertSame([$finisher], $formDefinition->getFinishers());
     }
 
     /**
@@ -644,7 +696,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('emailWithOptions');
         /** @noinspection PhpUndefinedMethodInspection */
-        $this->assertSame(array('foo' => 'bar', 'name' => 'asdf'), $finisher->_get('options'));
+        Assert::assertSame(['foo' => 'bar', 'name' => 'asdf'], $finisher->_get('options'));
     }
 
     /**
@@ -653,41 +705,41 @@ class FormDefinitionTest extends UnitTestCase
     public function createFinisherSetsOptionsCorrectlyAndMergesThemWithPassedOptions()
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
-        $finisher = $formDefinition->createFinisher('emailWithOptions', array('foo' => 'baz'));
-        $this->assertSame(array('foo' => 'baz', 'name' => 'asdf'), $finisher->_get('options'));
+        $finisher = $formDefinition->createFinisher('emailWithOptions', ['foo' => 'baz']);
+        Assert::assertSame(['foo' => 'baz', 'name' => 'asdf'], $finisher->_get('options'));
     }
 
 
     /**
-     * @return \Neos\Form\Core\Model\FormDefinition
+     * @return FormDefinition
      */
     protected function getFormDefinitionWithFinisherConfiguration()
     {
-        $formDefinition = new FormDefinition('foo1', array(
-            'finisherPresets' => array(
-                'asdf' => array(
+        $formDefinition = new FormDefinition('foo1', [
+            'finisherPresets' => [
+                'asdf' => [
                     'assd' => 'as'
-                ),
-                'email' => array(
+                ],
+                'email' => [
                     'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class)
-                ),
-                'emailWithOptions' => array(
+                ],
+                'emailWithOptions' => [
                     'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class),
-                    'options' => array(
+                    'options' => [
                         'foo' => 'bar',
                         'name' => 'asdf'
-                    )
-                )
-            ),
-            'formElementTypes' => array(
+                    ]
+                ]
+            ],
+            'formElementTypes' => [
                 'Neos.Form:Form' => []
-            )
-        ));
+            ]
+        ]);
         return $formDefinition;
     }
 
     /**
-     * @return FinisherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FinisherInterface|MockObject
      */
     protected function getMockFinisher()
     {
@@ -696,11 +748,11 @@ class FormDefinitionTest extends UnitTestCase
 
     /**
      * @param string $identifier
-     * @return FormElementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FormElementInterface|MockObject
      */
     protected function getMockFormElement($identifier)
     {
-        $mockFormElement = $this->getMockBuilder(AbstractFormElement::class)->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
+        $mockFormElement = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['getIdentifier'])->disableOriginalConstructor()->getMock();
         $mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
         return $mockFormElement;

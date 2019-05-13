@@ -12,7 +12,9 @@ namespace Neos\Form\Tests\Unit\Utility;
  */
 
 use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Exception\TypeDefinitionNotFoundException;
 use Neos\Form\Utility\SupertypeResolver;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for Supertype Resolver
@@ -22,104 +24,104 @@ class SupertypeResolverTest extends UnitTestCase
 {
     public function dataProviderForTypeResolving()
     {
-        $types = array(
-            'typeFoo' => array(
+        $types = [
+            'typeFoo' => [
                 'config1' => 'val1'
-            ),
-            'typeBar' => array(
+            ],
+            'typeBar' => [
                 'config3' => 'val3'
-            ),
-            'typeBar2' => array(
+            ],
+            'typeBar2' => [
                 'config3' => 'val3a'
-            ),
-            'typeWithSupertypes' => array(
-                'superTypes' => array('typeFoo' => true, 'typeBar' => true),
+            ],
+            'typeWithSupertypes' => [
+                'superTypes' => ['typeFoo' => true, 'typeBar' => true],
                 'config2' => 'val2'
-            ),
-            'typeWithSupertypes2' => array(
-                'superTypes' => array('typeFoo' => true, 'typeBar' => true, 'typeBar2' => true),
+            ],
+            'typeWithSupertypes2' => [
+                'superTypes' => ['typeFoo' => true, 'typeBar' => true, 'typeBar2' => true],
                 'config2' => 'val2'
-            ),
-            'subTypeWithSupertypes2' => array(
-                'superTypes' => array('typeWithSupertypes2' => true),
+            ],
+            'subTypeWithSupertypes2' => [
+                'superTypes' => ['typeWithSupertypes2' => true],
                 'config2' => 'val2a'
-            ),
-            'typeWithSupertypesInArraySyntax' => array(
-                'superTypes' => array('typeFoo', 'typeBar'),
+            ],
+            'typeWithSupertypesInArraySyntax' => [
+                'superTypes' => ['typeFoo', 'typeBar'],
                 'config2' => 'val2'
-            ),
-            'typeWithSupertypes2InArraySyntax' => array(
-                'superTypes' => array('typeFoo', 'typeBar', 'typeBar2'),
+            ],
+            'typeWithSupertypes2InArraySyntax' => [
+                'superTypes' => ['typeFoo', 'typeBar', 'typeBar2'],
                 'config2' => 'val2'
-            ),
-            'subTypeWithSupertypes2InArraySyntax' => array(
-                'superTypes' => array('typeWithSupertypes2InArraySyntax'),
+            ],
+            'subTypeWithSupertypes2InArraySyntax' => [
+                'superTypes' => ['typeWithSupertypes2InArraySyntax'],
                 'config2' => 'val2a'
-            ),
-        );
-        return array(
-            'without supertype' => array(
+            ],
+        ];
+        return [
+            'without supertype' => [
                 'types' => $types,
                 'typeName' => 'typeFoo',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1'
-                )
-            ),
-            'with a list of supertypes a' => array(
+                ]
+            ],
+            'with a list of supertypes a' => [
                 'types' => $types,
                 'typeName' => 'typeWithSupertypes',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3',
                     'config2' => 'val2'
-                )
-            ),
-            'with a list of supertypes b' => array(
+                ]
+            ],
+            'with a list of supertypes b' => [
                 'types' => $types,
                 'typeName' => 'typeWithSupertypes2',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
                     'config2' => 'val2'
-                )
-            ),
-            'with recursive supertypes' => array(
+                ]
+            ],
+            'with recursive supertypes' => [
                 'types' => $types,
                 'typeName' => 'subTypeWithSupertypes2',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
                     'config2' => 'val2a'
-                )
-            ),
-            'with a list of supertypes' => array(
+                ]
+            ],
+            'with a list of supertypes' => [
                 'types' => $types,
                 'typeName' => 'typeWithSupertypesInArraySyntax',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3',
                     'config2' => 'val2'
-                )
-            ),
-            'with a list of supertypes c' => array(
+                ]
+            ],
+            'with a list of supertypes c' => [
                 'types' => $types,
                 'typeName' => 'typeWithSupertypes2InArraySyntax',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
                     'config2' => 'val2'
-                )
-            ),
-            'with recursive supertypes d' => array(
+                ]
+            ],
+            'with recursive supertypes d' => [
                 'types' => $types,
                 'typeName' => 'subTypeWithSupertypes2InArraySyntax',
-                'expected' => array(
+                'expected' => [
                     'config1' => 'val1',
                     'config3' => 'val3a',
                     'config2' => 'val2a'
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 
     /**
@@ -129,15 +131,16 @@ class SupertypeResolverTest extends UnitTestCase
     public function getMergedTypeDefinitionWorks($types, $typeName, $expected)
     {
         $supertypeResolver = new SupertypeResolver($types);
-        $this->assertSame($expected, $supertypeResolver->getMergedTypeDefinition($typeName));
+        Assert::assertSame($expected, $supertypeResolver->getMergedTypeDefinition($typeName));
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {
+        $this->expectException(TypeDefinitionNotFoundException::class);
+
         $supertypeResolver = new SupertypeResolver([]);
         $supertypeResolver->getMergedTypeDefinition('nonExistingType');
     }

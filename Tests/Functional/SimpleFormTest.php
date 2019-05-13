@@ -11,6 +11,7 @@ namespace Neos\Form\Tests\Functional;
  * source code.
  */
 use Neos\Utility\ObjectAccess;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
@@ -35,7 +36,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         $this->gotoPreviousFormPage($this->browser->getForm());
 
         $form = $this->browser->getForm();
-        $this->assertSame('My Text on the first page', $form['--three-page-form-with-validation']['text1-1']->getValue());
+        Assert::assertSame('My Text on the first page', $form['--three-page-form-with-validation']['text1-1']->getValue());
     }
 
     /**
@@ -53,7 +54,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         $this->gotoNextFormPage($this->browser->getForm());
 
         $form = $this->browser->getForm();
-        $this->assertSame('My Text on the second page', $form['--three-page-form-with-validation']['text2-1']->getValue());
+        Assert::assertSame('My Text on the second page', $form['--three-page-form-with-validation']['text2-1']->getValue());
     }
 
     /**
@@ -71,13 +72,13 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         $this->gotoNextFormPage($this->browser->getForm());
         $this->gotoNextFormPage($this->browser->getForm());
 
-        $this->assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="three-page-form-with-validation-text2-1"]')->attr('class'));
+        Assert::assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="three-page-form-with-validation-text2-1"]')->attr('class'));
         $form = $this->browser->getForm();
         $form['--three-page-form-with-validation']['text2-1']->setValue('42');
         $this->gotoNextFormPage($form);
 
         $form = $this->browser->getForm();
-        $this->assertSame('', $form['--three-page-form-with-validation']['text3-1']->getValue());
+        Assert::assertSame('', $form['--three-page-form-with-validation']['text3-1']->getValue());
     }
 
 
@@ -125,6 +126,6 @@ class SimpleFormTest extends AbstractFunctionalTestCase
 
         // now, make sure the text2-1 (which has been persisted in the form state) gets reconstituted and shown properly.
         $form = $this->browser->getForm();
-        $this->assertSame('My Text on the second page', $form['--three-page-form-with-validation']['text2-1']->getValue());
+        Assert::assertSame('My Text on the second page', $form['--three-page-form-with-validation']['text2-1']->getValue());
     }
 }

@@ -13,7 +13,9 @@ namespace Neos\Form\Tests\Unit\Factory;
 
 use Neos\Flow\Configuration\ConfigurationManager;
 use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Exception\PresetNotFoundException;
 use Neos\Form\Factory\AbstractFormFactory;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for Supertype Resolver
@@ -23,65 +25,65 @@ class AbstractFormFactoryTest extends UnitTestCase
 {
     public function dataProviderForConfigurationMerging()
     {
-        $presets = array(
-            'default' => array(
-                'formElementTypes' => array(
+        $presets = [
+            'default' => [
+                'formElementTypes' => [
                     'Neos.Form:Base' => []
-                )
-            ),
-            'special' => array(
+                ]
+            ],
+            'special' => [
                 'parentPreset' => 'default',
                 'foo' => 'bar',
-                'baz' => array(
+                'baz' => [
                     'test' => 'yeah'
-                )
-            ),
-            'specialSub' => array(
+                ]
+            ],
+            'specialSub' => [
                 'parentPreset' => 'special',
-                'baz' => array(
+                'baz' => [
                     'test' => 42
-                )
-            )
-        );
-        return array(
-            'preset without parent present' => array(
+                ]
+            ]
+        ];
+        return [
+            'preset without parent present' => [
                 'presets' => $presets,
                 'presetName' => 'default',
-                'expected' => array(
-                    'formElementTypes' => array(
+                'expected' => [
+                    'formElementTypes' => [
                         'Neos.Form:Base' => []
-                    )
-                )
-            ),
+                    ]
+                ]
+            ],
 
-            'preset with one parent preset' => array(
+            'preset with one parent preset' => [
                 'presets' => $presets,
                 'presetName' => 'special',
-                'expected' => array(
-                    'formElementTypes' => array(
+                'expected' => [
+                    'formElementTypes' => [
                         'Neos.Form:Base' => []
-                    ),
+                    ],
                     'foo' => 'bar',
-                    'baz' => array(
+                    'baz' => [
                         'test' => 'yeah'
-                    )
-                )
-            ),
+                    ]
+                ]
+            ],
 
-            'preset with two parent presets' => array(
+            'preset with two parent presets' => [
                 'presets' => $presets,
                 'presetName' => 'specialSub',
-                'expected' => array(
-                    'formElementTypes' => array(
+                'expected' => [
+                    'formElementTypes' => [
                         'Neos.Form:Base' => []
-                    ),
+                    ],
                     'foo' => 'bar',
-                    'baz' => array(
+                    'baz' => [
                         'test' => 42
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -91,20 +93,20 @@ class AbstractFormFactoryTest extends UnitTestCase
     public function getPresetConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $abstractFormFactory->_set('formSettings', array(
+        $abstractFormFactory->_set('formSettings', [
             'presets' => $presets
-        ));
+        ]);
 
         $actual = $abstractFormFactory->_call('getPresetConfiguration', $presetName);
-        $this->assertSame($expected, $actual);
+        Assert::assertSame($expected, $actual);
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\PresetNotFoundException
      */
     public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound()
     {
+        $this->expectException(PresetNotFoundException::class);
         $abstractFormFactory = $this->getAbstractFormFactory();
         $abstractFormFactory->_call('getPresetConfiguration', 'NonExistingPreset');
     }
@@ -124,15 +126,15 @@ class AbstractFormFactoryTest extends UnitTestCase
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
         $abstractFormFactory->_call('initializeObject');
-        $this->assertSame('MyConfig', $abstractFormFactory->_get('formSettings'));
+        Assert::assertSame('MyConfig', $abstractFormFactory->_get('formSettings'));
     }
 
     /**
-     * @return AbstractFormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractFormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAbstractFormFactory()
     {
-        return $this->getAccessibleMock(AbstractFormFactory::class, array('build'));
+        return $this->getAccessibleMock(AbstractFormFactory::class, ['build']);
     }
 
     /**
@@ -142,11 +144,11 @@ class AbstractFormFactoryTest extends UnitTestCase
     public function getPresetsWorks($presets)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
-        $abstractFormFactory->_set('formSettings', array(
+        $abstractFormFactory->_set('formSettings', [
             'presets' => $presets
-        ));
+        ]);
 
         $actual = $abstractFormFactory->getPresetNames();
-        $this->assertSame(array('default', 'special', 'specialSub'), $actual);
+        Assert::assertSame(['default', 'special', 'specialSub'], $actual);
     }
 }

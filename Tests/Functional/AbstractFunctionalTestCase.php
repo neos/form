@@ -10,6 +10,8 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+
+use Neos\Flow\Http\Client\Browser;
 use Neos\Flow\Mvc\Routing\Route;
 use Neos\Flow\Tests\FunctionalTestCase;
 use Symfony\Component\DomCrawler\Field\InputFormField;
@@ -23,26 +25,26 @@ use Symfony\Component\DomCrawler\Form;
 abstract class AbstractFunctionalTestCase extends FunctionalTestCase
 {
     /**
-     * @var \Neos\Flow\Http\Client\Browser
+     * @var Browser
      */
     protected $browser;
 
     /**
      * Initializer
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $route = new Route();
         $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
-        $route->setDefaults(array(
+        $route->setDefaults([
             '@package' => 'Neos.Form',
             '@subpackage' => 'Tests\Functional\Fixtures',
             '@controller' => 'Form',
             '@action' => 'index',
             '@format' => 'html'
-        ));
+        ]);
         $route->setAppendExceedingArguments(true);
         $this->router->addRoute($route);
     }

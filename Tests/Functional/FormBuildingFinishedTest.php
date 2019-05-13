@@ -11,6 +11,8 @@ namespace Neos\Form\Tests\Functional;
  * source code.
  */
 
+use PHPUnit\Framework\Assert;
+
 /**
  * Testcase for onBuildingFinished
  *
@@ -29,8 +31,8 @@ class FormBuildingFinishedTest extends AbstractFunctionalTestCase
         $form['--testing']['myInteger']->setValue('no int');
 
         $this->gotoNextFormPage($form);
-        $this->assertSame('no int', $form['--testing']['myInteger']->getValue());
-        $this->assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="testing-myInteger"]')->attr('class'));
+        Assert::assertSame('no int', $form['--testing']['myInteger']->getValue());
+        Assert::assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="testing-myInteger"]')->attr('class'));
 
         $this->browser->getForm();
     }

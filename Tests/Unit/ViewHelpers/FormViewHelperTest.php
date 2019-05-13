@@ -17,6 +17,7 @@ use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\ViewHelpers\FormViewHelper;
+use PHPUnit\Framework\Assert;
 
 /**
  * Tests for the custom FormViewHelper
@@ -29,11 +30,11 @@ class FormViewHelperTest extends UnitTestCase
     protected $formViewHelper;
 
     /**
-     * @var ControllerContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var ControllerContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mockControllerContext;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->formViewHelper = $this->getAccessibleMock(FormViewHelper::class, ['hasArgument']);
 
@@ -70,6 +71,7 @@ class FormViewHelperTest extends UnitTestCase
      * @param string $sectionArgument
      * @param string $expectedResult
      * @dataProvider getFormActionUriDataProvider
+     * @throws \ReflectionException
      */
     public function getFormActionUriTests($requestUri, $sectionArgument, $expectedResult)
     {
@@ -86,6 +88,6 @@ class FormViewHelperTest extends UnitTestCase
         $this->formViewHelper->expects($this->any())->method('hasArgument')->with('section')->will($this->returnValue($sectionArgument !== null));
         $this->formViewHelper->_set('arguments', ['section' => $sectionArgument]);
 
-        $this->assertSame($expectedResult, $this->formViewHelper->_call('getFormActionUri'));
+        Assert::assertSame($expectedResult, $this->formViewHelper->_call('getFormActionUri'));
     }
 }
