@@ -13,7 +13,9 @@ namespace Neos\Form\Tests\Unit\Factory;
 
 use Neos\Flow\Configuration\ConfigurationManager;
 use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Exception\PresetNotFoundException;
 use Neos\Form\Factory\AbstractFormFactory;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for Supertype Resolver
@@ -96,15 +98,15 @@ class AbstractFormFactoryTest extends UnitTestCase
         ]);
 
         $actual = $abstractFormFactory->_call('getPresetConfiguration', $presetName);
-        $this->assertSame($expected, $actual);
+        Assert::assertSame($expected, $actual);
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\PresetNotFoundException
      */
     public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound()
     {
+        $this->expectException(PresetNotFoundException::class);
         $abstractFormFactory = $this->getAbstractFormFactory();
         $abstractFormFactory->_call('getPresetConfiguration', 'NonExistingPreset');
     }
@@ -124,11 +126,11 @@ class AbstractFormFactoryTest extends UnitTestCase
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
         $abstractFormFactory->_call('initializeObject');
-        $this->assertSame('MyConfig', $abstractFormFactory->_get('formSettings'));
+        Assert::assertSame('MyConfig', $abstractFormFactory->_get('formSettings'));
     }
 
     /**
-     * @return AbstractFormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractFormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAbstractFormFactory()
     {
@@ -147,6 +149,6 @@ class AbstractFormFactoryTest extends UnitTestCase
         ]);
 
         $actual = $abstractFormFactory->getPresetNames();
-        $this->assertSame(['default', 'special', 'specialSub'], $actual);
+        Assert::assertSame(['default', 'special', 'specialSub'], $actual);
     }
 }

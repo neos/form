@@ -14,6 +14,7 @@ namespace Neos\Form\Tests\Unit\Core\Model;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\FinisherContext;
 use Neos\Form\Core\Runtime\FormRuntime;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for FinisherContext Domain Model
@@ -31,7 +32,7 @@ class FinisherContextTest extends UnitTestCase
      */
     protected $finisherContext;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockFormRuntime = $this->getMockBuilder(FormRuntime::class)->disableOriginalConstructor()->getMock();
         $this->finisherContext = new FinisherContext($this->mockFormRuntime);
@@ -42,7 +43,7 @@ class FinisherContextTest extends UnitTestCase
      */
     public function getFormRuntimeReturnsTheFormRuntime()
     {
-        $this->assertSame($this->mockFormRuntime, $this->finisherContext->getFormRuntime());
+        Assert::assertSame($this->mockFormRuntime, $this->finisherContext->getFormRuntime());
     }
 
     /**
@@ -50,7 +51,7 @@ class FinisherContextTest extends UnitTestCase
      */
     public function isCancelReturnsFalseByDefault()
     {
-        $this->assertFalse($this->finisherContext->isCancelled());
+        Assert::assertFalse($this->finisherContext->isCancelled());
     }
 
     /**
@@ -59,6 +60,6 @@ class FinisherContextTest extends UnitTestCase
     public function isCancelReturnsTrueIfContextHasBeenCancelled()
     {
         $this->finisherContext->cancel();
-        $this->assertTrue($this->finisherContext->isCancelled());
+        Assert::assertTrue($this->finisherContext->isCancelled());
     }
 }

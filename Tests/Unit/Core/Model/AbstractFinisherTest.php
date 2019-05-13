@@ -16,6 +16,7 @@ use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Core\Model\FinisherContext;
 use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Core\Runtime\FormState;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for AbstractFinisher
@@ -41,7 +42,7 @@ class AbstractFinisherTest extends UnitTestCase
 
         $finisherContext = $this->getFinisherContext();
         $finisher->execute($finisherContext);
-        $this->assertSame($finisherContext, $finisher->_get('finisherContext'));
+        Assert::assertSame($finisherContext, $finisher->_get('finisherContext'));
     }
 
     /**
@@ -54,7 +55,7 @@ class AbstractFinisherTest extends UnitTestCase
         $finisher->execute($finisherContext);
 
         $finisher->setOptions(['foo' => 'bar']);
-        $this->assertSame('bar', $finisher->_call('parseOption', 'foo'));
+        Assert::assertSame('bar', $finisher->_call('parseOption', 'foo'));
     }
 
     /**
@@ -68,8 +69,8 @@ class AbstractFinisherTest extends UnitTestCase
 
         $obj = new \stdClass();
         $finisher->setOptions(['foo' => 42, 'baz' => $obj]);
-        $this->assertSame(42, $finisher->_call('parseOption', 'foo'));
-        $this->assertSame($obj, $finisher->_call('parseOption', 'baz'));
+        Assert::assertSame(42, $finisher->_call('parseOption', 'foo'));
+        Assert::assertSame($obj, $finisher->_call('parseOption', 'baz'));
     }
 
     public function dataProviderForDefaultOptions()
@@ -128,7 +129,7 @@ class AbstractFinisherTest extends UnitTestCase
 
         $finisher->setOptions($options);
         $finisher->_set('defaultOptions', $defaultOptions);
-        $this->assertSame($expected, $finisher->_call('parseOption', $optionKey));
+        Assert::assertSame($expected, $finisher->_call('parseOption', $optionKey));
     }
 
     public function dataProviderForPlaceholderReplacement()
@@ -169,7 +170,7 @@ class AbstractFinisherTest extends UnitTestCase
         $finisher->execute($finisherContext);
 
         $finisher->setOptions(['key1' => $optionValue]);
-        $this->assertSame($expected, $finisher->_call('parseOption', 'key1'));
+        Assert::assertSame($expected, $finisher->_call('parseOption', 'key1'));
     }
 
     /**
@@ -189,7 +190,7 @@ class AbstractFinisherTest extends UnitTestCase
         $finisher->execute($finisherContext);
 
         $finisher->_set('defaultOptions', ['key1' => $optionValue]);
-        $this->assertSame($expected, $finisher->_call('parseOption', 'key1'));
+        Assert::assertSame($expected, $finisher->_call('parseOption', 'key1'));
     }
 
     /**
@@ -204,7 +205,7 @@ class AbstractFinisherTest extends UnitTestCase
     }
 
     /**
-     * @return AbstractFinisher|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractFinisher|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAbstractFinisher()
     {

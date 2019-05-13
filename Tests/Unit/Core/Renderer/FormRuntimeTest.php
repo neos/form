@@ -19,6 +19,7 @@ use Neos\Form\Core\Model\Page;
 use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Core\Runtime\FormState;
 use Neos\Form\FormElements\GenericFormElement;
+use PHPUnit\Framework\Assert;
 
 require_once(__DIR__ . '/Fixture/DummyFinisher.php');
 
@@ -40,9 +41,9 @@ class FormRuntimeTest extends UnitTestCase
 
         $formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
 
-        $this->assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
-        $this->assertSame($mockHttpResponse, $formRuntime->getResponse());
-        $this->assertSame($formDefinition, $formRuntime->_get('formDefinition'));
+        Assert::assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
+        Assert::assertSame($mockHttpResponse, $formRuntime->getResponse());
+        Assert::assertSame($formDefinition, $formRuntime->_get('formDefinition'));
     }
 
     /**
@@ -52,7 +53,7 @@ class FormRuntimeTest extends UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame('Neos.Form:Form', $formRuntime->getType());
+        Assert::assertSame('Neos.Form:Form', $formRuntime->getType());
     }
 
     /**
@@ -62,7 +63,7 @@ class FormRuntimeTest extends UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame('foo', $formRuntime->getIdentifier());
+        Assert::assertSame('foo', $formRuntime->getIdentifier());
     }
 
     /**
@@ -73,7 +74,7 @@ class FormRuntimeTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $formDefinition->setRenderingOption('asdf', 'test');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame(['asdf' => 'test'], $formRuntime->getRenderingOptions());
+        Assert::assertSame(['asdf' => 'test'], $formRuntime->getRenderingOptions());
     }
 
     /**
@@ -84,7 +85,7 @@ class FormRuntimeTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $formDefinition->setRendererClassName('MyRendererClassName');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame('MyRendererClassName', $formRuntime->getRendererClassName());
+        Assert::assertSame('MyRendererClassName', $formRuntime->getRendererClassName());
     }
 
     /**
@@ -95,7 +96,7 @@ class FormRuntimeTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $formDefinition->setLabel('my cool label');
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame('my cool label', $formRuntime->getLabel());
+        Assert::assertSame('my cool label', $formRuntime->getLabel());
     }
 
     /**
@@ -124,9 +125,9 @@ class FormRuntimeTest extends UnitTestCase
         $formRuntime = $this->createFormRuntime($formDefinition);
         $formRuntime->_call('invokeFinishers');
 
-        $this->assertSame(2, count($finisherCalls));
-        $this->assertSame($formRuntime, $finisherCalls[0][0]->getFormRuntime());
-        $this->assertSame($formRuntime, $finisherCalls[0][0]->getFormRuntime());
+        Assert::assertSame(2, count($finisherCalls));
+        Assert::assertSame($formRuntime, $finisherCalls[0][0]->getFormRuntime());
+        Assert::assertSame($formRuntime, $finisherCalls[0][0]->getFormRuntime());
     }
 
     /**
@@ -154,22 +155,22 @@ class FormRuntimeTest extends UnitTestCase
         $formDefinition->addPage($page3);
 
         $formRuntime = $this->createFormRuntime($formDefinition);
-        $this->assertSame([$page1, $page2, $page3], $formRuntime->getPages());
+        Assert::assertSame([$page1, $page2, $page3], $formRuntime->getPages());
 
         $formRuntime->overrideCurrentPage(0);
-        $this->assertSame(null, $formRuntime->getPreviousPage());
-        $this->assertSame($page1, $formRuntime->getCurrentPage());
-        $this->assertSame($page2, $formRuntime->getNextPage());
+        Assert::assertSame(null, $formRuntime->getPreviousPage());
+        Assert::assertSame($page1, $formRuntime->getCurrentPage());
+        Assert::assertSame($page2, $formRuntime->getNextPage());
 
         $formRuntime->overrideCurrentPage(1);
-        $this->assertSame($page1, $formRuntime->getPreviousPage());
-        $this->assertSame($page2, $formRuntime->getCurrentPage());
-        $this->assertSame($page3, $formRuntime->getNextPage());
+        Assert::assertSame($page1, $formRuntime->getPreviousPage());
+        Assert::assertSame($page2, $formRuntime->getCurrentPage());
+        Assert::assertSame($page3, $formRuntime->getNextPage());
 
         $formRuntime->overrideCurrentPage(2);
-        $this->assertSame($page2, $formRuntime->getPreviousPage());
-        $this->assertSame($page3, $formRuntime->getCurrentPage());
-        $this->assertSame(null, $formRuntime->getNextPage());
+        Assert::assertSame($page2, $formRuntime->getPreviousPage());
+        Assert::assertSame($page3, $formRuntime->getCurrentPage());
+        Assert::assertSame(null, $formRuntime->getNextPage());
     }
 
     /**
@@ -187,26 +188,26 @@ class FormRuntimeTest extends UnitTestCase
         $formRuntime = $this->createFormRuntime($formDefinition);
         $formState = new FormState();
         $formRuntime->_set('formState', $formState);
-        $this->assertSame($formState, $formRuntime->getFormState());
+        Assert::assertSame($formState, $formRuntime->getFormState());
 
-        $this->assertSame('My Default', $formRuntime['foo']);
+        Assert::assertSame('My Default', $formRuntime['foo']);
         $formRuntime['foo'] = 'Overridden';
-        $this->assertSame('Overridden', $formRuntime['foo']);
+        Assert::assertSame('Overridden', $formRuntime['foo']);
         $formRuntime['foo'] = null;
-        $this->assertSame('My Default', $formRuntime['foo']);
+        Assert::assertSame('My Default', $formRuntime['foo']);
 
         $formRuntime['foo'] = 'Overridden2';
-        $this->assertSame('Overridden2', $formRuntime['foo']);
+        Assert::assertSame('Overridden2', $formRuntime['foo']);
 
         unset($formRuntime['foo']);
-        $this->assertSame('My Default', $formRuntime['foo']);
+        Assert::assertSame('My Default', $formRuntime['foo']);
 
-        $this->assertSame(null, $formRuntime['nonExisting']);
+        Assert::assertSame(null, $formRuntime['nonExisting']);
     }
 
     /**
      * @param FormDefinition $formDefinition
-     * @return FormRuntime|\PHPUnit_Framework_MockObject_MockObject
+     * @return FormRuntime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {

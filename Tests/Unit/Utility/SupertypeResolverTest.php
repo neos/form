@@ -12,7 +12,9 @@ namespace Neos\Form\Tests\Unit\Utility;
  */
 
 use Neos\Flow\Tests\UnitTestCase;
+use Neos\Form\Exception\TypeDefinitionNotFoundException;
 use Neos\Form\Utility\SupertypeResolver;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for Supertype Resolver
@@ -129,15 +131,16 @@ class SupertypeResolverTest extends UnitTestCase
     public function getMergedTypeDefinitionWorks($types, $typeName, $expected)
     {
         $supertypeResolver = new SupertypeResolver($types);
-        $this->assertSame($expected, $supertypeResolver->getMergedTypeDefinition($typeName));
+        Assert::assertSame($expected, $supertypeResolver->getMergedTypeDefinition($typeName));
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {
+        $this->expectException(TypeDefinitionNotFoundException::class);
+
         $supertypeResolver = new SupertypeResolver([]);
         $supertypeResolver->getMergedTypeDefinition('nonExistingType');
     }

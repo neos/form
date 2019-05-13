@@ -13,8 +13,10 @@ namespace Neos\Form\Tests\Unit\Factory;
 
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\Page;
+use Neos\Form\Exception\IdentifierNotValidException;
 use Neos\Form\Factory\ArrayFormFactory;
 use Neos\Form\FormElements\GenericFormElement;
+use PHPUnit\Framework\Assert;
 
 /**
  * @covers \Neos\Form\Factory\ArrayFormFactory<extended>
@@ -32,7 +34,7 @@ class ArrayFormFactoryTest extends UnitTestCase
             'identifier' => 'myFormIdentifier'
         ];
         $form = $factory->build($configuration, 'default');
-        $this->assertSame('myFormIdentifier', $form->getIdentifier());
+        Assert::assertSame('myFormIdentifier', $form->getIdentifier());
     }
 
     /**
@@ -67,18 +69,18 @@ class ArrayFormFactoryTest extends UnitTestCase
         ];
         $form = $factory->build($configuration, 'default');
         $page1 = $form->getPageByIndex(0);
-        $this->assertSame('page1', $page1->getIdentifier());
+        Assert::assertSame('page1', $page1->getIdentifier());
         $element1 = $form->getElementByIdentifier('element1');
-        $this->assertSame('element1', $element1->getIdentifier());
-        $this->assertSame(['options' => ['MyKey' => 'MyValue']], $element1->getProperties());
+        Assert::assertSame('element1', $element1->getIdentifier());
+        Assert::assertSame(['options' => ['MyKey' => 'MyValue']], $element1->getProperties());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      */
     public function renderableWithoutIdentifierThrowsException()
     {
+        $this->expectException(IdentifierNotValidException::class);
         $factory = $this->getArrayFormFactory();
 
         $configuration = [

@@ -12,12 +12,19 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  */
 
 use Neos\Flow\Tests\UnitTestCase;
+use Neos\Flow\Validation\Exception\InvalidValidationOptionsException;
 use Neos\Flow\Validation\Validator\ConjunctionValidator;
 use Neos\Flow\Validation\Validator\NotEmptyValidator;
 use Neos\Form\Core\Model\AbstractFormElement;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
 use Neos\Form\Core\Model\ProcessingRule;
+use Neos\Form\Exception\FormDefinitionConsistencyException;
+use Neos\Form\Exception\IdentifierNotValidException;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionException;
 
 /**
  * Test for AbstractFormElement Domain Model
@@ -31,8 +38,8 @@ class AbstractFormElementTest extends UnitTestCase
     public function constructorSetsIdentifierAndType()
     {
         $element = $this->getFormElement(['myIdentifier', 'Neos.Form:MyType']);
-        $this->assertSame('myIdentifier', $element->getIdentifier());
-        $this->assertSame('Neos.Form:MyType', $element->getType());
+        Assert::assertSame('myIdentifier', $element->getIdentifier());
+        Assert::assertSame('Neos.Form:MyType', $element->getType());
     }
 
     public function invalidIdentifiers()
@@ -46,11 +53,12 @@ class AbstractFormElementTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
+        $this->expectException(IdentifierNotValidException::class);
+
         $this->getFormElement([$identifier, 'Neos.Form:MyType']);
     }
 
@@ -60,9 +68,9 @@ class AbstractFormElementTest extends UnitTestCase
     public function labelCanBeSetAndGet()
     {
         $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
-        $this->assertSame('', $formElement->getLabel());
+        Assert::assertSame('', $formElement->getLabel());
         $formElement->setLabel('my label');
-        $this->assertSame('my label', $formElement->getLabel());
+        Assert::assertSame('my label', $formElement->getLabel());
     }
 
     /**
@@ -77,7 +85,7 @@ class AbstractFormElementTest extends UnitTestCase
         $page->addElement($formElement);
         $this->assertNull($formElement->getDefaultValue());
         $formElement->setDefaultValue('My Default Value');
-        $this->assertSame('My Default Value', $formElement->getDefaultValue());
+        Assert::assertSame('My Default Value', $formElement->getDefaultValue());
     }
 
     /**
@@ -86,11 +94,11 @@ class AbstractFormElementTest extends UnitTestCase
     public function renderingOptionsCanBeSetAndGet()
     {
         $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
-        $this->assertSame([], $formElement->getRenderingOptions());
+        Assert::assertSame([], $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option1', 'value1');
-        $this->assertSame(['option1' => 'value1'], $formElement->getRenderingOptions());
+        Assert::assertSame(['option1' => 'value1'], $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option2', 'value2');
-        $this->assertSame(['option1' => 'value1', 'option2' => 'value2'], $formElement->getRenderingOptions());
+        Assert::assertSame(['option1' => 'value1', 'option2' => 'value2'], $formElement->getRenderingOptions());
     }
 
     /**
@@ -101,7 +109,7 @@ class AbstractFormElementTest extends UnitTestCase
         $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
         $this->assertNull($formElement->getRendererClassName());
         $formElement->setRendererClassName('MyRendererClassName');
-        $this->assertSame('MyRendererClassName', $formElement->getRendererClassName());
+        Assert::assertSame('MyRendererClassName', $formElement->getRendererClassName());
     }
 
     /**
@@ -115,7 +123,7 @@ class AbstractFormElementTest extends UnitTestCase
         $formDefinition->addPage($page);
 
         $page->addElement($myFormElement);
-        $this->assertSame('foo-bar', $myFormElement->getUniqueIdentifier());
+        Assert::assertSame('foo-bar', $myFormElement->getUniqueIdentifier());
     }
 
     public function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider()
@@ -134,6 +142,8 @@ class AbstractFormElementTest extends UnitTestCase
      * @param string $formIdentifier
      * @param string $elementIdentifier
      * @param string $expectedResult
+     * @throws FormDefinitionConsistencyException
+     * @throws IdentifierNotValidException
      */
     public function getUniqueIdentifierReplacesSpecialCharactersByUnderscores($formIdentifier, $elementIdentifier, $expectedResult)
     {
@@ -143,11 +153,13 @@ class AbstractFormElementTest extends UnitTestCase
         $formDefinition->addPage($page);
 
         $page->addElement($myFormElement);
-        $this->assertSame($expectedResult, $myFormElement->getUniqueIdentifier());
+        Assert::assertSame($expectedResult, $myFormElement->getUniqueIdentifier());
     }
 
     /**
      * @test
+     * @throws FormDefinitionConsistencyException
+     * @throws IdentifierNotValidException
      */
     public function isRequiredReturnsFalseByDefault()
     {
@@ -179,7 +191,8 @@ class AbstractFormElementTest extends UnitTestCase
 
     /**
      * @param array $constructorArguments
-     * @return AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractFormElement
+     * @throws ReflectionException
      */
     protected function getFormElement(array $constructorArguments)
     {
@@ -188,7 +201,9 @@ class AbstractFormElementTest extends UnitTestCase
 
     /**
      * @param string $formElementIdentifier
-     * @return FormDefinition|\PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
+     * @throws InvalidValidationOptionsException
+     * @throws ReflectionException
      */
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {

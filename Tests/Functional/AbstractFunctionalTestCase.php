@@ -10,6 +10,8 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+
+use Neos\Flow\Http\Client\Browser;
 use Neos\Flow\Mvc\Routing\Route;
 use Neos\Flow\Tests\FunctionalTestCase;
 use Symfony\Component\DomCrawler\Field\InputFormField;
@@ -23,14 +25,14 @@ use Symfony\Component\DomCrawler\Form;
 abstract class AbstractFunctionalTestCase extends FunctionalTestCase
 {
     /**
-     * @var \Neos\Flow\Http\Client\Browser
+     * @var Browser
      */
     protected $browser;
 
     /**
      * Initializer
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

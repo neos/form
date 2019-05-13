@@ -20,9 +20,16 @@ use Neos\Form\Core\Model\AbstractFormElement;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
 use Neos\Form\Core\Model\ProcessingRule;
+use Neos\Form\Exception\FormDefinitionConsistencyException;
+use Neos\Form\Exception\IdentifierNotValidException;
+use Neos\Form\Exception\TypeDefinitionNotFoundException;
+use Neos\Form\Exception\TypeDefinitionNotValidException;
+use Neos\Form\Exception\ValidatorPresetNotFoundException;
 use Neos\Form\Factory\ArrayFormFactory;
 use Neos\Form\FormElements\GenericFormElement;
 use Neos\Form\FormElements\Section;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Page Domain Model
@@ -37,10 +44,10 @@ class PageTest extends UnitTestCase
     public function identifierSetInConstructorCanBeReadAgain()
     {
         $page = new Page('foo');
-        $this->assertSame('foo', $page->getIdentifier());
+        Assert::assertSame('foo', $page->getIdentifier());
 
         $page = new Page('bar');
-        $this->assertSame('bar', $page->getIdentifier());
+        Assert::assertSame('bar', $page->getIdentifier());
     }
 
     /**
@@ -49,7 +56,7 @@ class PageTest extends UnitTestCase
     public function defaultTypeIsCorrect()
     {
         $page = new Page('foo');
-        $this->assertSame('Neos.Form:Page', $page->getType());
+        Assert::assertSame('Neos.Form:Page', $page->getType());
     }
 
     /**
@@ -58,7 +65,7 @@ class PageTest extends UnitTestCase
     public function typeCanBeOverridden()
     {
         $page = new Page('foo', 'Neos.Foo:Bar');
-        $this->assertSame('Neos.Foo:Bar', $page->getType());
+        Assert::assertSame('Neos.Foo:Bar', $page->getType());
     }
 
     public function invalidIdentifiers()
@@ -72,12 +79,13 @@ class PageTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\IdentifierNotValidException
      * @dataProvider invalidIdentifiers
      * @param mixed $identifier
+     * @throws IdentifierNotValidException
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
+        $this->expectException(IdentifierNotValidException::class);
         new Page($identifier);
     }
 
@@ -87,7 +95,7 @@ class PageTest extends UnitTestCase
     public function getElementsReturnsEmptyArrayByDefault()
     {
         $page = new Page('foo');
-        $this->assertSame([], $page->getElements());
+        Assert::assertSame([], $page->getElements());
     }
 
     /**
@@ -96,7 +104,7 @@ class PageTest extends UnitTestCase
     public function getElementsRecursivelyReturnsEmptyArrayByDefault()
     {
         $page = new Page('foo');
-        $this->assertSame([], $page->getElementsRecursively());
+        Assert::assertSame([], $page->getElementsRecursively());
     }
 
     /**
@@ -105,13 +113,13 @@ class PageTest extends UnitTestCase
     public function getElementsRecursivelyReturnsFirstLevelFormElements()
     {
         $page = new Page('foo');
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element1 */
+        /** @var AbstractFormElement|MockObject $element1 */
         $element1 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element2 */
+        /** @var AbstractFormElement|MockObject $element2 */
         $element2 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $page->addElement($element1);
         $page->addElement($element2);
-        $this->assertSame([$element1, $element2], $page->getElementsRecursively());
+        Assert::assertSame([$element1, $element2], $page->getElementsRecursively());
     }
 
     /**
@@ -121,32 +129,33 @@ class PageTest extends UnitTestCase
     {
         $page = new Page('foo');
 
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element1 */
+        /** @var AbstractFormElement|MockObject $element1 */
         $element1 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
-        /** @var Section|\PHPUnit_Framework_MockObject_MockObject $element2 */
+        /** @var Section|MockObject $element2 */
         $element2 = $this->getMockBuilder(Section::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element21 */
+        /** @var AbstractFormElement|MockObject $element21 */
         $element21 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element22 */
+        /** @var AbstractFormElement|MockObject $element22 */
         $element22 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $element2->addElement($element21);
         $element2->addElement($element22);
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element3 */
+        /** @var AbstractFormElement|MockObject $element3 */
         $element3 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page->addElement($element1);
         $page->addElement($element2);
         $page->addElement($element3);
-        $this->assertSame([$element1, $element2, $element21, $element22, $element3], $page->getElementsRecursively());
+        Assert::assertSame([$element1, $element2, $element21, $element22, $element3], $page->getElementsRecursively());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function aFormElementCanOnlyBeAttachedToASinglePage()
     {
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element */
+        $this->expectException(FormDefinitionConsistencyException::class);
+
+        /** @var AbstractFormElement|MockObject $element */
         $element = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page1 = new Page('bar1');
@@ -162,11 +171,11 @@ class PageTest extends UnitTestCase
     public function addElementAddsElementAndSetsBackReferenceToPage()
     {
         $page = new Page('bar');
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element */
+        /** @var AbstractFormElement|MockObject $element */
         $element = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $page->addElement($element);
-        $this->assertSame([$element], $page->getElements());
-        $this->assertSame($page, $element->getParentRenderable());
+        Assert::assertSame([$element], $page->getElements());
+        Assert::assertSame($page, $element->getParentRenderable());
     }
 
     /**
@@ -178,10 +187,10 @@ class PageTest extends UnitTestCase
         $page = $formDefinition->createPage('myPage');
         $element = $page->createElement('myElement', 'Neos.Form:MyElementType');
 
-        $this->assertSame('myElement', $element->getIdentifier());
+        Assert::assertSame('myElement', $element->getIdentifier());
         $this->assertInstanceOf(GenericFormElement::class, $element);
-        $this->assertSame('Neos.Form:MyElementType', $element->getType());
-        $this->assertSame([$element], $page->getElements());
+        Assert::assertSame('Neos.Form:MyElementType', $element->getType());
+        Assert::assertSame([$element], $page->getElements());
     }
 
     /**
@@ -193,29 +202,30 @@ class PageTest extends UnitTestCase
         $page = $formDefinition->createPage('myPage');
         $element = $page->createElement('myElement', 'Neos.Form:MyElementTypeWithAdditionalProperties');
 
-        $this->assertSame('my label', $element->getLabel());
-        $this->assertSame('This is the default value', $element->getDefaultValue());
-        $this->assertSame(['property1' => 'val1', 'property2' => 'val2'], $element->getProperties());
-        $this->assertSame(['ro1' => 'rv1', 'ro2' => 'rv2'], $element->getRenderingOptions());
-        $this->assertSame('MyRendererClassName', $element->getRendererClassName());
+        Assert::assertSame('my label', $element->getLabel());
+        Assert::assertSame('This is the default value', $element->getDefaultValue());
+        Assert::assertSame(['property1' => 'val1', 'property2' => 'val2'], $element->getProperties());
+        Assert::assertSame(['ro1' => 'rv1', 'ro2' => 'rv2'], $element->getRenderingOptions());
+        Assert::assertSame('MyRendererClassName', $element->getRendererClassName());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function createElementThrowsExceptionIfPageIsNotAttachedToParentForm()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
         $page = new Page('id');
         $page->createElement('myElement', 'Neos.Form:MyElementType');
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotFoundException
      */
     public function createElementThrowsExceptionIfImplementationClassNameNotFound()
     {
+        $this->expectException(TypeDefinitionNotFoundException::class);
+
         $formDefinition = $this->getDummyFormDefinition();
         $page = $formDefinition->createPage('myPage');
         $page->createElement('myElement', 'Neos.Form:MyElementTypeWithoutImplementationClassName');
@@ -223,10 +233,11 @@ class PageTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotValidException
      */
     public function createElementThrowsExceptionIfImplementationClassNameDoesNotImplementFormElementInterface()
     {
+        $this->expectException(TypeDefinitionNotValidException::class);
+
         $formDefinition = $this->getDummyFormDefinition();
         $page = $formDefinition->createPage('myPage');
         $page->createElement('myElement', 'Neos.Form:MyElementTypeWhichDoesNotImplementFormElementInterface');
@@ -234,10 +245,11 @@ class PageTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\TypeDefinitionNotValidException
      */
     public function createElementThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
+        $this->expectException(TypeDefinitionNotValidException::class);
+
         $formDefinition = $this->getDummyFormDefinition();
         $page = $formDefinition->createPage('myPage');
         $page->createElement('myElement', 'Neos.Form:MyElementTypeWithUnknownProperties');
@@ -253,17 +265,18 @@ class PageTest extends UnitTestCase
         $element1 = $page->createElement('myElement', 'Neos.Form:MyElementType');
         $element2 = $page->createElement('myElement2', 'Neos.Form:MyElementType');
 
-        $this->assertSame([$element1, $element2], $page->getElements());
+        Assert::assertSame([$element1, $element2], $page->getElements());
         $page->moveElementBefore($element2, $element1);
-        $this->assertSame([$element2, $element1], $page->getElements());
+        Assert::assertSame([$element2, $element1], $page->getElements());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function moveElementBeforeThrowsExceptionIfElementsAreNotOnSamePage()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
+
         $formDefinition = $this->getDummyFormDefinition();
         $page1 = $formDefinition->createPage('myPage1');
         $page2 = $formDefinition->createPage('myPage2');
@@ -284,17 +297,18 @@ class PageTest extends UnitTestCase
         $element1 = $page->createElement('myElement', 'Neos.Form:MyElementType');
         $element2 = $page->createElement('myElement2', 'Neos.Form:MyElementType');
 
-        $this->assertSame([$element1, $element2], $page->getElements());
+        Assert::assertSame([$element1, $element2], $page->getElements());
         $page->moveElementAfter($element1, $element2);
-        $this->assertSame([$element2, $element1], $page->getElements());
+        Assert::assertSame([$element2, $element1], $page->getElements());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function moveElementAfterThrowsExceptionIfElementsAreNotOnSamePage()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
+
         $formDefinition = $this->getDummyFormDefinition();
         $page1 = $formDefinition->createPage('myPage1');
         $page2 = $formDefinition->createPage('myPage2');
@@ -312,12 +326,12 @@ class PageTest extends UnitTestCase
     {
         $formDefinition = $this->getDummyFormDefinition();
         $page1 = $formDefinition->createPage('myPage1');
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element1 */
+        /** @var AbstractFormElement|MockObject $element1 */
         $element1 = $page1->createElement('myElement', 'Neos.Form:MyElementType');
 
         $page1->removeElement($element1);
 
-        $this->assertSame([], $page1->getElements());
+        Assert::assertSame([], $page1->getElements());
         $this->assertNull($formDefinition->getElementByIdentifier('myElement'));
 
         $this->assertNull($element1->getParentRenderable());
@@ -325,13 +339,13 @@ class PageTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\FormDefinitionConsistencyException
      */
     public function removeElementThrowsExceptionIfElementIsNotOnCurrentPage()
     {
+        $this->expectException(FormDefinitionConsistencyException::class);
         $formDefinition = $this->getDummyFormDefinition();
         $page1 = $formDefinition->createPage('myPage1');
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element1 */
+        /** @var AbstractFormElement|MockObject $element1 */
         $element1 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page1->removeElement($element1);
@@ -350,24 +364,24 @@ class PageTest extends UnitTestCase
         $formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->will($this->returnValue($mockProcessingRule));
 
         $page1 = $formDefinition->createPage('myPage1');
-        /** @var AbstractFormElement|\PHPUnit_Framework_MockObject_MockObject $element */
+        /** @var AbstractFormElement|MockObject $element */
         $element = $page1->createElement('asdf', 'Neos.Form:MyElementWithValidator');
         $this->assertTrue($element->isRequired());
         $validators = $element->getValidators();
         $validators = iterator_to_array($validators);
         /** @var ValidatorInterface $firstValidator */
         $firstValidator = $validators[0];
-        $this->assertSame(2, count($validators));
+        Assert::assertSame(2, count($validators));
         $this->assertInstanceOf(StringLengthValidator::class, $firstValidator);
-        $this->assertSame(['minimum' => 10, 'maximum' => PHP_INT_MAX], $firstValidator->getOptions());
+        Assert::assertSame(['minimum' => 10, 'maximum' => PHP_INT_MAX], $firstValidator->getOptions());
     }
 
     /**
      * @test
-     * @expectedException \Neos\Form\Exception\ValidatorPresetNotFoundException
      */
     public function validatorKeyThrowsExceptionIfValidatorPresetIsNotFound()
     {
+        $this->expectException(ValidatorPresetNotFoundException::class);
         $formDefinition = $this->getDummyFormDefinition();
 
         $page1 = $formDefinition->createPage('myPage1');
@@ -375,7 +389,7 @@ class PageTest extends UnitTestCase
     }
 
     /**
-     * @return FormDefinition|\PHPUnit_Framework_MockObject_MockObject
+     * @return FormDefinition|MockObject
      */
     protected function getDummyFormDefinition()
     {

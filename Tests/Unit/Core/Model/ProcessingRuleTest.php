@@ -19,6 +19,7 @@ use Neos\Flow\Tests\UnitTestCase;
 use Neos\Flow\Validation\Validator\ConjunctionValidator;
 use Neos\Flow\Validation\Validator\ValidatorInterface;
 use Neos\Form\Core\Model\ProcessingRule;
+use PHPUnit\Framework\Assert;
 
 /**
  * Test for ProcessingRule Domain Model
@@ -27,7 +28,7 @@ use Neos\Form\Core\Model\ProcessingRule;
 class ProcessingRuleTest extends UnitTestCase
 {
     /**
-     * @var PropertyMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var PropertyMapper
      */
     protected $mockPropertyMapper;
 
@@ -36,7 +37,7 @@ class ProcessingRuleTest extends UnitTestCase
      */
     protected $processingRule;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockPropertyMapper = $this->getMockBuilder(PropertyMapper::class)->getMock();
         $this->processingRule = $this->getAccessibleMock(ProcessingRule::class, ['dummy']);
@@ -62,7 +63,7 @@ class ProcessingRuleTest extends UnitTestCase
     public function getDataTypeReturnsSpecifiedDataType()
     {
         $this->processingRule->setDataType('SomeDataType');
-        $this->assertSame('SomeDataType', $this->processingRule->getDataType());
+        Assert::assertSame('SomeDataType', $this->processingRule->getDataType());
     }
 
     /**
@@ -70,24 +71,25 @@ class ProcessingRuleTest extends UnitTestCase
      */
     public function getValidatorsReturnsAnEmptyCollectionByDefault()
     {
-        $this->assertSame(0, count($this->processingRule->getValidators()));
+        Assert::assertSame(0, count($this->processingRule->getValidators()));
     }
 
     /**
      * @test
+     * @throws \ReflectionException
      */
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
-        /** @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject $mockValidator1 */
+        /** @var ValidatorInterface $mockValidator1 */
         $mockValidator1 = $this->createMock(ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator1);
-        /** @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject $mockValidator2 */
+        /** @var ValidatorInterface $mockValidator2 */
         $mockValidator2 = $this->createMock(ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator2);
 
         $validators = $this->processingRule->getValidators();
-        $this->assertTrue($validators->contains($mockValidator1));
-        $this->assertTrue($validators->contains($mockValidator2));
+        Assert::assertTrue($validators->contains($mockValidator1));
+        Assert::assertTrue($validators->contains($mockValidator2));
     }
 
     /**
@@ -96,7 +98,7 @@ class ProcessingRuleTest extends UnitTestCase
     public function processReturnsTheUnchangedValueByDefault()
     {
         $actualResult = $this->processingRule->process('Some Value');
-        $this->assertEquals('Some Value', $actualResult);
+        Assert::assertEquals('Some Value', $actualResult);
     }
 
     /**
@@ -106,7 +108,7 @@ class ProcessingRuleTest extends UnitTestCase
     {
         $this->processingRule->getProcessingMessages()->addError(new Error('Test'));
         $this->processingRule->process('Some Value');
-        $this->assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
+        Assert::assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
     }
 
     /**
@@ -130,6 +132,6 @@ class ProcessingRuleTest extends UnitTestCase
 
         $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));
         $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new Result()));
-        $this->assertEquals('Converted Value', $this->processingRule->process('Some Value'));
+        Assert::assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
 }
