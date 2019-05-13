@@ -28,9 +28,9 @@ class ArrayFormFactoryTest extends UnitTestCase
     {
         $factory = $this->getArrayFormFactory();
 
-        $configuration = array(
+        $configuration = [
             'identifier' => 'myFormIdentifier'
-        );
+        ];
         $form = $factory->build($configuration, 'default');
         $this->assertSame('myFormIdentifier', $form->getIdentifier());
     }
@@ -42,35 +42,35 @@ class ArrayFormFactoryTest extends UnitTestCase
     {
         $factory = $this->getArrayFormFactory();
 
-        $configuration = array(
+        $configuration = [
             'identifier' => 'myFormIdentifier',
-            'renderables' => array(
-                array(
+            'renderables' => [
+                [
                     'identifier' => 'page1',
                     'type' => 'Neos.Form:Page',
-                    'renderables' => array(
-                        array(
+                    'renderables' => [
+                        [
                             'identifier' => 'element1',
                             'type' => 'Neos.Form:TestElement',
-                            'properties' => array(
-                                'options' => array(
-                                    0 => array(
+                            'properties' => [
+                                'options' => [
+                                    0 => [
                                         '_key' => 'MyKey',
                                         '_value' => 'MyValue'
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        );
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
         $form = $factory->build($configuration, 'default');
         $page1 = $form->getPageByIndex(0);
         $this->assertSame('page1', $page1->getIdentifier());
         $element1 = $form->getElementByIdentifier('element1');
         $this->assertSame('element1', $element1->getIdentifier());
-        $this->assertSame(array('options' => array('MyKey' => 'MyValue')), $element1->getProperties());
+        $this->assertSame(['options' => ['MyKey' => 'MyValue']], $element1->getProperties());
     }
 
     /**
@@ -81,14 +81,14 @@ class ArrayFormFactoryTest extends UnitTestCase
     {
         $factory = $this->getArrayFormFactory();
 
-        $configuration = array(
+        $configuration = [
             'identifier' => 'myFormIdentifier',
-            'renderables' => array(
-                array(
+            'renderables' => [
+                [
                     // identifier missing
-                )
-            )
-        );
+                ]
+            ]
+        ];
         $factory->build($configuration, 'default');
     }
 
@@ -97,23 +97,23 @@ class ArrayFormFactoryTest extends UnitTestCase
      */
     protected function getArrayFormFactory()
     {
-        $settings = array(
-            'presets' => array(
-                'default' => array(
-                    'formElementTypes' => array(
-                        'Neos.Form:Form' => array(
+        $settings = [
+            'presets' => [
+                'default' => [
+                    'formElementTypes' => [
+                        'Neos.Form:Form' => [
 
-                        ),
-                        'Neos.Form:Page' => array(
+                        ],
+                        'Neos.Form:Page' => [
                             'implementationClassName' => Page::class
-                        ),
-                        'Neos.Form:TestElement' => array(
+                        ],
+                        'Neos.Form:TestElement' => [
                             'implementationClassName' => GenericFormElement::class
-                        )
-                    )
-                )
-            )
-        );
+                        ]
+                    ]
+                ]
+            ]
+        ];
 
         $accessibleFactory = $this->buildAccessibleProxy(ArrayFormFactory::class);
         $factory = new $accessibleFactory;

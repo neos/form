@@ -36,13 +36,13 @@ abstract class AbstractFunctionalTestCase extends FunctionalTestCase
 
         $route = new Route();
         $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
-        $route->setDefaults(array(
+        $route->setDefaults([
             '@package' => 'Neos.Form',
             '@subpackage' => 'Tests\Functional\Fixtures',
             '@controller' => 'Form',
             '@action' => 'index',
             '@format' => 'html'
-        ));
+        ]);
         $route->setAppendExceedingArguments(true);
         $this->router->addRoute($route);
     }

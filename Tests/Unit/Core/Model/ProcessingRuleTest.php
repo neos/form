@@ -39,7 +39,7 @@ class ProcessingRuleTest extends UnitTestCase
     public function setUp()
     {
         $this->mockPropertyMapper = $this->getMockBuilder(PropertyMapper::class)->getMock();
-        $this->processingRule = $this->getAccessibleMock(ProcessingRule::class, array('dummy'));
+        $this->processingRule = $this->getAccessibleMock(ProcessingRule::class, ['dummy']);
         /** @noinspection PhpUndefinedMethodInspection */
         $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
         /** @noinspection PhpUndefinedMethodInspection */

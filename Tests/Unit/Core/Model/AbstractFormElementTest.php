@@ -30,18 +30,18 @@ class AbstractFormElementTest extends UnitTestCase
      */
     public function constructorSetsIdentifierAndType()
     {
-        $element = $this->getFormElement(array('myIdentifier', 'Neos.Form:MyType'));
+        $element = $this->getFormElement(['myIdentifier', 'Neos.Form:MyType']);
         $this->assertSame('myIdentifier', $element->getIdentifier());
         $this->assertSame('Neos.Form:MyType', $element->getType());
     }
 
     public function invalidIdentifiers()
     {
-        return array(
-            'Null Identifier' => array(null),
-            'Integer Identifier' => array(42),
-            'Empty String Identifier' => array(''),
-        );
+        return [
+            'Null Identifier' => [null],
+            'Integer Identifier' => [42],
+            'Empty String Identifier' => [''],
+        ];
     }
 
     /**
@@ -51,7 +51,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
-        $this->getFormElement(array($identifier, 'Neos.Form:MyType'));
+        $this->getFormElement([$identifier, 'Neos.Form:MyType']);
     }
 
     /**
@@ -59,7 +59,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     public function labelCanBeSetAndGet()
     {
-        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
+        $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
         $this->assertSame('', $formElement->getLabel());
         $formElement->setLabel('my label');
         $this->assertSame('my label', $formElement->getLabel());
@@ -71,7 +71,7 @@ class AbstractFormElementTest extends UnitTestCase
     public function defaultValueCanBeSetAndGet()
     {
         $formDefinition = new FormDefinition('foo');
-        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
+        $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
         $page = new Page('page');
         $formDefinition->addPage($page);
         $page->addElement($formElement);
@@ -85,12 +85,12 @@ class AbstractFormElementTest extends UnitTestCase
      */
     public function renderingOptionsCanBeSetAndGet()
     {
-        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
+        $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
         $this->assertSame([], $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option1', 'value1');
-        $this->assertSame(array('option1' => 'value1'), $formElement->getRenderingOptions());
+        $this->assertSame(['option1' => 'value1'], $formElement->getRenderingOptions());
         $formElement->setRenderingOption('option2', 'value2');
-        $this->assertSame(array('option1' => 'value1', 'option2' => 'value2'), $formElement->getRenderingOptions());
+        $this->assertSame(['option1' => 'value1', 'option2' => 'value2'], $formElement->getRenderingOptions());
     }
 
     /**
@@ -98,7 +98,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     public function rendererClassNameCanBeGetAndSet()
     {
-        $formElement = $this->getFormElement(array('foo', 'Neos.Form:MyType'));
+        $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
         $this->assertNull($formElement->getRendererClassName());
         $formElement->setRendererClassName('MyRendererClassName');
         $this->assertSame('MyRendererClassName', $formElement->getRendererClassName());
@@ -110,7 +110,7 @@ class AbstractFormElementTest extends UnitTestCase
     public function getUniqueIdentifierBuildsIdentifierFromRootFormAndElementIdentifier()
     {
         $formDefinition = new FormDefinition('foo');
-        $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
+        $myFormElement = $this->getFormElement(['bar', 'Neos.Form:MyType']);
         $page = new Page('asdf');
         $formDefinition->addPage($page);
 
@@ -120,12 +120,12 @@ class AbstractFormElementTest extends UnitTestCase
 
     public function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider()
     {
-        return array(
-            array('foo', 'bar', 'foo-bar'),
-            array('foo.bar', 'baz', 'foo_bar-baz'),
-            array('foo', 'bar?baz', 'foo-bar_baz'),
-            array('SomeForm', 'SomeElement', 'someForm-SomeElement'),
-        );
+        return [
+            ['foo', 'bar', 'foo-bar'],
+            ['foo.bar', 'baz', 'foo_bar-baz'],
+            ['foo', 'bar?baz', 'foo-bar_baz'],
+            ['SomeForm', 'SomeElement', 'someForm-SomeElement'],
+        ];
     }
 
     /**
@@ -138,7 +138,7 @@ class AbstractFormElementTest extends UnitTestCase
     public function getUniqueIdentifierReplacesSpecialCharactersByUnderscores($formIdentifier, $elementIdentifier, $expectedResult)
     {
         $formDefinition = new FormDefinition($formIdentifier);
-        $myFormElement = $this->getFormElement(array($elementIdentifier, 'Neos.Form:MyType'));
+        $myFormElement = $this->getFormElement([$elementIdentifier, 'Neos.Form:MyType']);
         $page = new Page('somePage');
         $formDefinition->addPage($page);
 
@@ -155,7 +155,7 @@ class AbstractFormElementTest extends UnitTestCase
         $page = new Page('asdf');
         $formDefinition->addPage($page);
 
-        $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
+        $myFormElement = $this->getFormElement(['bar', 'Neos.Form:MyType']);
         $page->addElement($myFormElement);
 
         $this->assertFalse($myFormElement->isRequired());
@@ -170,7 +170,7 @@ class AbstractFormElementTest extends UnitTestCase
         $page = new Page('asdf');
         $formDefinition->addPage($page);
 
-        $myFormElement = $this->getFormElement(array('bar', 'Neos.Form:MyType'));
+        $myFormElement = $this->getFormElement(['bar', 'Neos.Form:MyType']);
         $page->addElement($myFormElement);
 
         $myFormElement->addValidator(new NotEmptyValidator());
@@ -183,7 +183,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMockBuilder(AbstractFormElement::class)->setMethods(array('dummy'))->setConstructorArgs($constructorArguments)->getMock();
+        return $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
@@ -192,10 +192,10 @@ class AbstractFormElementTest extends UnitTestCase
      */
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {
-        $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, array('dummy'));
+        $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, ['dummy']);
         $mockProcessingRule->_set('validator', new ConjunctionValidator());
 
-        $formDefinition = $this->getMockBuilder(FormDefinition::class)->setMethods(array('getProcessingRule'))->setConstructorArgs(array('foo'))->getMock();
+        $formDefinition = $this->getMockBuilder(FormDefinition::class)->setMethods(['getProcessingRule'])->setConstructorArgs(['foo'])->getMock();
         $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
 
         return $formDefinition;

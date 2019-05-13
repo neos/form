@@ -46,11 +46,11 @@ class FormDefinitionTest extends UnitTestCase
 
     public function invalidIdentifiers()
     {
-        return array(
-            'Null Identifier' => array(null),
-            'Integer Identifier' => array(42),
-            'Empty String Identifier' => array('')
-        );
+        return [
+            'Null Identifier' => [null],
+            'Integer Identifier' => [42],
+            'Empty String Identifier' => ['']
+        ];
     }
 
     /**
@@ -68,13 +68,13 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function constructorSetsRendererClassName()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
                     'rendererClassName' => 'FooRenderer'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $this->assertSame('FooRenderer', $formDefinition->getRendererClassName());
     }
 
@@ -83,35 +83,35 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function constructorSetsFinishers()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'finisherPresets' => array(
-                'myFinisher' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'finisherPresets' => [
+                'myFinisher' => [
                     'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class),
-                    'options' => array(
+                    'options' => [
                         'foo' => 'bar',
                         'test' => 'asdf'
-                    )
-                )
-            ),
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'finishers' => array(
-                        array(
+                    ]
+                ]
+            ],
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'finishers' => [
+                        [
                             'identifier' => 'myFinisher',
-                            'options' => array(
+                            'options' => [
                                 'foo' => 'baz'
-                            )
-                        )
-                    )
-                )
-            )
-        ));
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
         $finishers = $formDefinition->getFinishers();
         $this->assertSame(1, count($finishers));
         $finisher = $finishers[0];
         $this->assertInstanceOf(Fixture\EmptyFinisher::class, $finisher);
         /** @noinspection PhpUndefinedMethodInspection */
-        $this->assertSame(array('foo' => 'baz', 'test' => 'asdf'), $finisher->_get('options'));
+        $this->assertSame(['foo' => 'baz', 'test' => 'asdf'], $finisher->_get('options'));
     }
 
     /**
@@ -119,17 +119,17 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function constructorSetsRenderingOptions()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
-                    'renderingOptions' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
+                    'renderingOptions' => [
                         'foo' => 'bar',
                         'baz' => 'test'
-                    )
-                )
-            )
-        ));
-        $this->assertSame(array('foo' => 'bar', 'baz' => 'test'), $formDefinition->getRenderingOptions());
+                    ]
+                ]
+            ]
+        ]);
+        $this->assertSame(['foo' => 'bar', 'baz' => 'test'], $formDefinition->getRenderingOptions());
     }
 
     /**
@@ -137,15 +137,15 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function constructorMakesValidatorPresetsAvailable()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'validatorPresets' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'validatorPresets' => [
                 'foo' => 'bar'
-            ),
-            'formElementTypes' => array(
+            ],
+            'formElementTypes' => [
                 'Neos.Form:Form' => []
-            )
-        ));
-        $this->assertSame(array('foo' => 'bar'), $formDefinition->getValidatorPresets());
+            ]
+        ]);
+        $this->assertSame(['foo' => 'bar'], $formDefinition->getValidatorPresets());
     }
 
     /**
@@ -154,13 +154,13 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function constructorThrowsExceptionIfUnknownPropertySet()
     {
-        new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
                     'unknownFormProperty' => 'val'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -213,7 +213,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo');
         $page = new Page('bar');
         $formDefinition->addPage($page);
-        $this->assertSame(array($page), $formDefinition->getPages());
+        $this->assertSame([$page], $formDefinition->getPages());
         $this->assertSame($formDefinition, $page->getParentRenderable());
 
         $this->assertSame($page, $formDefinition->getPageByIndex(0));
@@ -336,14 +336,14 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function createPageCreatesPageAndAddsItToForm()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
         $this->assertSame('myPage', $page->getIdentifier());
         $this->assertSame($page, $formDefinition->getPageByIndex(0));
@@ -355,15 +355,15 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function createPageSetsLabelFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
                     'label' => 'My Label'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
         $this->assertSame('My Label', $page->getLabel());
     }
@@ -373,15 +373,15 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function createPageSetsRendererClassNameFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
                     'rendererClassName' => 'MyRenderer'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
         $this->assertSame('MyRenderer', $page->getRendererClassName());
     }
@@ -391,17 +391,17 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function createPageSetsRenderingOptionsFromTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
-                    'renderingOptions' => array('foo' => 'bar', 'baz' => 'asdf')
-                )
-            )
-        ));
+                    'renderingOptions' => ['foo' => 'bar', 'baz' => 'asdf']
+                ]
+            ]
+        ]);
         $page = $formDefinition->createPage('myPage');
-        $this->assertSame(array('foo' => 'bar', 'baz' => 'asdf'), $page->getRenderingOptions());
+        $this->assertSame(['foo' => 'bar', 'baz' => 'asdf'], $page->getRenderingOptions());
     }
 
     /**
@@ -410,16 +410,16 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function createPageThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
                 'Neos.Form:Form' => [],
-                'Neos.Form:Page' => array(
+                'Neos.Form:Page' => [
                     'implementationClassName' => Page::class,
                     'label' => 'My Label',
                     'unknownProperty' => 'this is an unknown property'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $formDefinition->createPage('myPage');
     }
 
@@ -429,14 +429,14 @@ class FormDefinitionTest extends UnitTestCase
      */
     public function createPageThrowsExceptionIfImplementationClassNameNotFound()
     {
-        $formDefinition = new FormDefinition('myForm', array(
-            'formElementTypes' => array(
-                'Neos.Form:Form' => array(
+        $formDefinition = new FormDefinition('myForm', [
+            'formElementTypes' => [
+                'Neos.Form:Form' => [
 
-                ),
+                ],
                 'Neos.Form:Page2' => []
-            )
-        ));
+            ]
+        ]);
         $formDefinition->createPage('myPage', 'Neos.Form:Page2');
     }
 
@@ -465,14 +465,14 @@ class FormDefinitionTest extends UnitTestCase
         $this->assertSame(0, $page1->getIndex());
         $this->assertSame(1, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
+        $this->assertSame([$page1, $page2, $page3], $formDefinition->getPages());
 
         $formDefinition->movePageBefore($page2, $page1);
 
         $this->assertSame(1, $page1->getIndex());
         $this->assertSame(0, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
+        $this->assertSame([$page2, $page1, $page3], $formDefinition->getPages());
     }
 
     /**
@@ -505,14 +505,14 @@ class FormDefinitionTest extends UnitTestCase
         $this->assertSame(0, $page1->getIndex());
         $this->assertSame(1, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page1, $page2, $page3), $formDefinition->getPages());
+        $this->assertSame([$page1, $page2, $page3], $formDefinition->getPages());
 
         $formDefinition->movePageAfter($page1, $page2);
 
         $this->assertSame(1, $page1->getIndex());
         $this->assertSame(0, $page2->getIndex());
         $this->assertSame(2, $page3->getIndex());
-        $this->assertSame(array($page2, $page1, $page3), $formDefinition->getPages());
+        $this->assertSame([$page2, $page1, $page3], $formDefinition->getPages());
     }
 
     /**
@@ -542,7 +542,7 @@ class FormDefinitionTest extends UnitTestCase
 
         $formDefinition->removePage($page1);
         $this->assertNull($page1->getParentRenderable());
-        $this->assertSame(array($page2), $formDefinition->getPages());
+        $this->assertSame([$page2], $formDefinition->getPages());
     }
 
     /**
@@ -590,7 +590,7 @@ class FormDefinitionTest extends UnitTestCase
         $this->assertInstanceOf(ProcessingRule::class, $processingRule1);
         $this->assertSame($processingRule1, $processingRule2);
 
-        $this->assertSame(array('foo' => $processingRule1), $formDefinition->getProcessingRules());
+        $this->assertSame(['foo' => $processingRule1], $formDefinition->getProcessingRules());
     }
 
     /**
@@ -602,7 +602,7 @@ class FormDefinitionTest extends UnitTestCase
         $this->assertSame([], $formDefinition->getFinishers());
         $finisher = $this->getMockFinisher();
         $formDefinition->addFinisher($finisher);
-        $this->assertSame(array($finisher), $formDefinition->getFinishers());
+        $this->assertSame([$finisher], $formDefinition->getFinishers());
     }
 
     /**
@@ -633,7 +633,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('email');
         $this->assertInstanceOf(Fixture\EmptyFinisher::class, $finisher);
-        $this->assertSame(array($finisher), $formDefinition->getFinishers());
+        $this->assertSame([$finisher], $formDefinition->getFinishers());
     }
 
     /**
@@ -644,7 +644,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('emailWithOptions');
         /** @noinspection PhpUndefinedMethodInspection */
-        $this->assertSame(array('foo' => 'bar', 'name' => 'asdf'), $finisher->_get('options'));
+        $this->assertSame(['foo' => 'bar', 'name' => 'asdf'], $finisher->_get('options'));
     }
 
     /**
@@ -653,8 +653,8 @@ class FormDefinitionTest extends UnitTestCase
     public function createFinisherSetsOptionsCorrectlyAndMergesThemWithPassedOptions()
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
-        $finisher = $formDefinition->createFinisher('emailWithOptions', array('foo' => 'baz'));
-        $this->assertSame(array('foo' => 'baz', 'name' => 'asdf'), $finisher->_get('options'));
+        $finisher = $formDefinition->createFinisher('emailWithOptions', ['foo' => 'baz']);
+        $this->assertSame(['foo' => 'baz', 'name' => 'asdf'], $finisher->_get('options'));
     }
 
 
@@ -663,26 +663,26 @@ class FormDefinitionTest extends UnitTestCase
      */
     protected function getFormDefinitionWithFinisherConfiguration()
     {
-        $formDefinition = new FormDefinition('foo1', array(
-            'finisherPresets' => array(
-                'asdf' => array(
+        $formDefinition = new FormDefinition('foo1', [
+            'finisherPresets' => [
+                'asdf' => [
                     'assd' => 'as'
-                ),
-                'email' => array(
+                ],
+                'email' => [
                     'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class)
-                ),
-                'emailWithOptions' => array(
+                ],
+                'emailWithOptions' => [
                     'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class),
-                    'options' => array(
+                    'options' => [
                         'foo' => 'bar',
                         'name' => 'asdf'
-                    )
-                )
-            ),
-            'formElementTypes' => array(
+                    ]
+                ]
+            ],
+            'formElementTypes' => [
                 'Neos.Form:Form' => []
-            )
-        ));
+            ]
+        ]);
         return $formDefinition;
     }
 
@@ -700,7 +700,7 @@ class FormDefinitionTest extends UnitTestCase
      */
     protected function getMockFormElement($identifier)
     {
-        $mockFormElement = $this->getMockBuilder(AbstractFormElement::class)->setMethods(array('getIdentifier'))->disableOriginalConstructor()->getMock();
+        $mockFormElement = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['getIdentifier'])->disableOriginalConstructor()->getMock();
         $mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
 
         return $mockFormElement;

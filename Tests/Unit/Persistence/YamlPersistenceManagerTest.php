@@ -30,11 +30,11 @@ class YamlPersistenceManagerTest extends UnitTestCase
     {
         vfsStream::setup('someSavePath');
         $this->yamlPersistenceManager = new YamlPersistenceManager();
-        $this->yamlPersistenceManager->injectSettings(array(
+        $this->yamlPersistenceManager->injectSettings([
                 'yamlPersistenceManager' =>
-                    array('savePath' => vfsStream::url('someSavePath')
-                )
-            )
+                    ['savePath' => vfsStream::url('someSavePath')
+                    ]
+            ]
         );
     }
 
@@ -45,11 +45,11 @@ class YamlPersistenceManagerTest extends UnitTestCase
     {
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
         $yamlPersistenceManager = new YamlPersistenceManager();
-        $settings = array(
+        $settings = [
             'yamlPersistenceManager' =>
-                array('savePath' => vfsStream::url('someSavePath/foo/bar')
-            )
-        );
+                ['savePath' => vfsStream::url('someSavePath/foo/bar')
+                ]
+        ];
         $yamlPersistenceManager->injectSettings($settings);
         $this->assertTrue(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
     }
@@ -72,11 +72,11 @@ class YamlPersistenceManagerTest extends UnitTestCase
     public function loadThrowsExceptionIfSpecifiedFormDoesNotExist()
     {
         $yamlPersistenceManager = new YamlPersistenceManager();
-        $settings = array(
+        $settings = [
             'yamlPersistenceManager' =>
-                array('savePath' => vfsStream::url('someSavePath/foo/bar')
-                )
-        );
+                ['savePath' => vfsStream::url('someSavePath/foo/bar')
+                ]
+        ];
         $yamlPersistenceManager->injectSettings($settings);
         $yamlPersistenceManager->load('someNonExistingPersistenceIdentifier');
     }
@@ -93,11 +93,11 @@ label: \'Form Fixture\'
         file_put_contents(vfsStream::url('someSavePath/mockFormPersistenceIdentifier.yaml'), $mockYamlFormDefinition);
 
         $actualResult = $this->yamlPersistenceManager->load('mockFormPersistenceIdentifier');
-        $expectedResult = array(
+        $expectedResult = [
             'type' => 'Neos.Form:Form',
             'identifier' => 'formFixture',
             'label' => 'Form Fixture'
-        );
+        ];
         $this->assertEquals($expectedResult, $actualResult);
     }
 
@@ -106,11 +106,11 @@ label: \'Form Fixture\'
      */
     public function saveStoresFormDefinitionAsYaml()
     {
-        $mockArrayFormDefinition = array(
+        $mockArrayFormDefinition = [
             'type' => 'Neos.Form:Form',
             'identifier' => 'formFixture',
             'label' => 'Form Fixture'
-        );
+        ];
         $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild('mockFormPersistenceIdentifier.yaml'));
 
         $this->yamlPersistenceManager->save('mockFormPersistenceIdentifier', $mockArrayFormDefinition);
@@ -159,7 +159,7 @@ label: \'Form Fixture\'
      */
     public function listFormsReturnsAnEmptyArrayIfNoFormsAreAvailable()
     {
-        $this->assertEquals(array(), $this->yamlPersistenceManager->listForms());
+        $this->assertEquals([], $this->yamlPersistenceManager->listForms());
     }
 
     /**
@@ -179,18 +179,18 @@ label: \'Form Fixture2\'
         file_put_contents(vfsStream::url('someSavePath/mockForm2.yaml'), $mockYamlFormDefinition2);
         file_put_contents(vfsStream::url('someSavePath/noForm.txt'), 'this should be skipped');
 
-        $expectedResult = array(
-            array(
+        $expectedResult = [
+            [
                 'identifier' => 'formFixture1',
                 'name' => 'Form Fixture1',
                 'persistenceIdentifier' => 'mockForm1',
-            ),
-            array(
+            ],
+            [
                 'identifier' => 'formFixture2',
                 'name' => 'Form Fixture2',
                 'persistenceIdentifier' => 'mockForm2',
-            ),
-        );
+            ],
+        ];
         $this->assertEquals($expectedResult, $this->yamlPersistenceManager->listForms());
     }
 }

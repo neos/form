@@ -20,23 +20,23 @@ class TestingFormBuildingFinishedFactory extends ArrayFormFactory
 {
     public function build(array $configuration, $presetName)
     {
-        $configuration = array(
+        $configuration = [
             'type' => 'Neos.Form:Form',
             'identifier' => 'testing',
             'label' => 'My Label',
-            'renderables' => array(
-                array(
+            'renderables' => [
+                [
                     'type' => 'Neos.Form:Page',
                     'identifier' => 'general',
-                    'renderables' => array(
-                        array(
+                    'renderables' => [
+                        [
                             'type' => 'Neos.Form:TestingFormElementWithSubElements',
                             'identifier' => 'subel',
-                        )
-                    )
-                )
-            )
-        );
+                        ]
+                    ]
+                ]
+            ]
+        ];
         return parent::build($configuration, $presetName);
     }
 }

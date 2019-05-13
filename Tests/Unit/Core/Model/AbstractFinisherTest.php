@@ -27,7 +27,7 @@ use Neos\Form\Core\Runtime\FormState;
 class AbstractFinisherTest extends UnitTestCase
 {
     /**
-     * @var FormRuntime|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormRuntime
      */
     protected $formRuntime = null;
 
@@ -53,7 +53,7 @@ class AbstractFinisherTest extends UnitTestCase
         $finisherContext = $this->getFinisherContext();
         $finisher->execute($finisherContext);
 
-        $finisher->setOptions(array('foo' => 'bar'));
+        $finisher->setOptions(['foo' => 'bar']);
         $this->assertSame('bar', $finisher->_call('parseOption', 'foo'));
     }
 
@@ -67,53 +67,53 @@ class AbstractFinisherTest extends UnitTestCase
         $finisher->execute($finisherContext);
 
         $obj = new \stdClass();
-        $finisher->setOptions(array('foo' => 42, 'baz' => $obj));
+        $finisher->setOptions(['foo' => 42, 'baz' => $obj]);
         $this->assertSame(42, $finisher->_call('parseOption', 'foo'));
         $this->assertSame($obj, $finisher->_call('parseOption', 'baz'));
     }
 
     public function dataProviderForDefaultOptions()
     {
-        $defaultOptions = array(
+        $defaultOptions = [
             'overridden1' => 'Overridden1Default',
             'nullOption' => 'NullDefault',
             'emptyStringOption' => 'EmptyStringDefault',
             'nonExisting' => 'NonExistingDefault'
-        );
+        ];
 
-        $options = array(
+        $options = [
             'overridden1' => 'MyString',
             'nullOption' => null,
             'emptyStringOption' => '',
             'someOptionWithoutDefault' => ''
-        );
+        ];
 
-        return array(
-            'Empty String is regarded as non-set value' => array(
+        return [
+            'Empty String is regarded as non-set value' => [
                 'defaultOptions' => $defaultOptions,
                 'options' => $options,
                 'optionKey' => 'emptyStringOption',
                 'expected' => 'EmptyStringDefault'
-            ),
-            'null is regarded as non-set value' => array(
+            ],
+            'null is regarded as non-set value' => [
                 'defaultOptions' => $defaultOptions,
                 'options' => $options,
                 'optionKey' => 'nullOption',
                 'expected' => 'NullDefault'
-            ),
-            'non-existing key is regarded as non-set value' => array(
+            ],
+            'non-existing key is regarded as non-set value' => [
                 'defaultOptions' => $defaultOptions,
                 'options' => $options,
                 'optionKey' => 'nonExisting',
                 'expected' => 'NonExistingDefault'
-            ),
-            'empty string is unified to NULL if no default value exists' => array(
+            ],
+            'empty string is unified to NULL if no default value exists' => [
                 'defaultOptions' => $defaultOptions,
                 'options' => $options,
                 'optionKey' => 'someOptionWithoutDefault',
                 'expected' => null
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -133,23 +133,23 @@ class AbstractFinisherTest extends UnitTestCase
 
     public function dataProviderForPlaceholderReplacement()
     {
-        $formValues = array(
+        $formValues = [
             'foo' => 'My Value',
             'bar.baz' => 'Trst'
-        );
+        ];
 
-        return array(
-            'Simple placeholder' => array(
+        return [
+            'Simple placeholder' => [
                 'formValues' => $formValues,
                 'optionValue' => 'test {foo} baz',
                 'expected' => 'test My Value baz'
-            ),
-            'Property Path' => array(
+            ],
+            'Property Path' => [
                 'formValues' => $formValues,
                 'optionValue' => 'test {bar.baz} baz',
                 'expected' => 'test Trst baz'
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -168,7 +168,7 @@ class AbstractFinisherTest extends UnitTestCase
         $this->formRuntime->_set('formState', $formState);
         $finisher->execute($finisherContext);
 
-        $finisher->setOptions(array('key1' => $optionValue));
+        $finisher->setOptions(['key1' => $optionValue]);
         $this->assertSame($expected, $finisher->_call('parseOption', 'key1'));
     }
 
@@ -188,7 +188,7 @@ class AbstractFinisherTest extends UnitTestCase
         $this->formRuntime->_set('formState', $formState);
         $finisher->execute($finisherContext);
 
-        $finisher->_set('defaultOptions', array('key1' => $optionValue));
+        $finisher->_set('defaultOptions', ['key1' => $optionValue]);
         $this->assertSame($expected, $finisher->_call('parseOption', 'key1'));
     }
 
@@ -208,7 +208,7 @@ class AbstractFinisherTest extends UnitTestCase
      */
     protected function getAbstractFinisher()
     {
-        return $this->getAccessibleMock(AbstractFinisher::class, array('executeInternal'));
+        return $this->getAccessibleMock(AbstractFinisher::class, ['executeInternal']);
     }
 
     /**
@@ -216,7 +216,7 @@ class AbstractFinisherTest extends UnitTestCase
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock(FormRuntime::class, array('dummy'), [], '', false);
+        $this->formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [], '', false);
         return new FinisherContext($this->formRuntime);
     }
 }
