@@ -12,6 +12,7 @@ namespace Neos\Form\Tests\Functional;
  */
 
 use Neos\Flow\Http\Client\Browser;
+use Neos\Flow\Http\Response as HttpResponse;
 use Neos\Flow\Mvc\Routing\Route;
 use Neos\Flow\Tests\FunctionalTestCase;
 use Symfony\Component\DomCrawler\Field\InputFormField;
@@ -53,9 +54,9 @@ abstract class AbstractFunctionalTestCase extends FunctionalTestCase
      * Go to the next form page
      *
      * @param Form $form
-     * @return \Neos\Flow\Http\Response
+     * @return HttpResponse
      */
-    protected function gotoNextFormPage(Form $form)
+    protected function gotoNextFormPage(Form $form): HttpResponse
     {
         $nextButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[contains(@class, "next")]/button');
         /** @var \DOMElement $node */
@@ -69,9 +70,9 @@ abstract class AbstractFunctionalTestCase extends FunctionalTestCase
      * Go to the previous form page
      *
      * @param Form $form
-     * @return \Neos\Flow\Http\Response
+     * @return HttpResponse
      */
-    protected function gotoPreviousFormPage(Form $form)
+    protected function gotoPreviousFormPage(Form $form): HttpResponse
     {
         $previousButton = $this->browser->getCrawler()->filterXPath('//nav[@class="form-navigation"]/*/*[contains(@class, "previous")]/button');
         /** @var \DOMElement $node */

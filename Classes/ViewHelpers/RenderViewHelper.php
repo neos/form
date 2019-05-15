@@ -47,23 +47,37 @@ class RenderViewHelper extends AbstractViewHelper
     protected $formPersistenceManager;
 
     /**
-     * @param string $persistenceIdentifier the persistence identifier for the form.
-     * @param string $factoryClass The fully qualified class name of the factory (which has to implement \Neos\Form\Factory\FormFactoryInterface)
-     * @param string $presetName name of the preset to use
-     * @param array $overrideConfiguration factory specific configuration
+     * Initialize the arguments.
+     *
+     * @return void
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('persistenceIdentifier', 'string', 'The persistence identifier for the form');
+        $this->registerArgument('factoryClass', 'string', 'The fully qualified class name of the factory (which has to implement \Neos\Form\Factory\FormFactoryInterface)', false, ArrayFormFactory::class);
+        $this->registerArgument('presetName', 'string', 'Name of the preset to use', false, 'default');
+        $this->registerArgument('overrideConfiguration', 'array', 'Factory specific configuration', false, []);
+    }
+
+    /**
      * @return string the rendered form
      * @throws ViewHelperException
+     * @throws \Neos\Form\Exception\RenderingException
      */
-    public function render($persistenceIdentifier = null, $factoryClass = ArrayFormFactory::class, $presetName = 'default', array $overrideConfiguration = [])
+    public function render(): string
     {
-        if (isset($persistenceIdentifier)) {
-            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($persistenceIdentifier), $overrideConfiguration);
+        if ($this->hasArgument('persistenceIdentifier')) {
+            $overrideConfiguration = Arrays::arrayMergeRecursiveOverrule($this->formPersistenceManager->load($this->arguments['persistenceIdentifier']), $this->arguments['overrideConfiguration']);
+        } else {
+            $overrideConfiguration = $this->arguments['overrideConfiguration'];
         }
 
-        $factory = $this->objectManager->get($factoryClass);
-        $formDefinition = $factory->build($overrideConfiguration, $presetName);
+        $factory = $this->objectManager->get($this->arguments['factoryClass']);
+        $formDefinition = $factory->build($overrideConfiguration, $this->arguments['presetName']);
         if (!$formDefinition instanceof FormDefinition) {
-            throw new ViewHelperException(sprintf('The factory method %s::build() has to return an instance of FormDefinition, got "%s"', $factoryClass, is_object($formDefinition) ? get_class($formDefinition) : gettype($formDefinition)), 1504024351);
+            throw new ViewHelperException(sprintf('The factory method %s::build() has to return an instance of FormDefinition, got "%s"', $this->arguments['factoryClass'], is_object($formDefinition) ? get_class($formDefinition) : gettype($formDefinition)), 1504024351);
         }
         $request = $this->controllerContext->getRequest();
         if (!$request instanceof ActionRequest) {

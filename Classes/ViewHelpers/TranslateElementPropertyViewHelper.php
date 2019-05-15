@@ -44,15 +44,27 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
     protected $escapeChildren = false;
 
     /**
-     * @param string $property
-     * @param FormElementInterface $element
+     * Initialize the arguments.
+     *
+     * @return void
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('property', 'string', 'The property to translate', true);
+        $this->registerArgument('element', FormElementInterface::class, 'Form element');
+    }
+
+    /**
      * @return string the rendered form head
      */
-    public function render($property, FormElementInterface $element = null)
+    public function render(): string
     {
-        if ($element === null) {
+        if (!$this->hasArgument('element')) {
             $element = $this->renderChildren();
         }
+        $property = $this->arguments['property'];
         if ($property === 'label') {
             $defaultValue = $element->getLabel();
         } else {
@@ -68,6 +80,6 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
         } catch (ResourceException $exception) {
             return $defaultValue;
         }
-        return $translation === null ? $defaultValue : $translation;
+        return $translation ?? $defaultValue;
     }
 }

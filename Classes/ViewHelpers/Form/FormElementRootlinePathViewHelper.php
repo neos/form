@@ -20,11 +20,24 @@ use Neos\Form\Core\Model\Renderable\RenderableInterface;
 class FormElementRootlinePathViewHelper extends AbstractViewHelper
 {
     /**
-     * @param RenderableInterface $renderable
+     * Initialize the arguments.
+     *
+     * @return void
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('renderable', RenderableInterface::class, 'The renderable', true);
+    }
+
+    /**
      * @return string
      */
-    public function render(RenderableInterface $renderable)
+    public function render()
     {
+        /** @var RenderableInterface $renderable */
+        $renderable = $this->arguments['renderable'];
         $path = $renderable->getIdentifier();
         while ($renderable = $renderable->getParentRenderable()) {
             $path = $renderable->getIdentifier() . '/' . $path;
