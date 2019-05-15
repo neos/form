@@ -26,13 +26,24 @@ class RenderRenderableViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * @param RenderableInterface $renderable
+     * Initialize the arguments.
+     *
+     * @return void
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('renderable', RenderableInterface::class, '', true);
+    }
+
+    /**
      * @return string
      */
-    public function render(RenderableInterface $renderable)
+    public function render(): string
     {
         /** @var RendererInterface $view */
         $view = $this->viewHelperVariableContainer->getView();
-        return $view->renderRenderable($renderable);
+        return $view->renderRenderable($this->arguments['renderable']);
     }
 }

@@ -48,22 +48,24 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
      * Initialize the arguments.
      *
      * @return void
-     * @author Sebastian Kurfürst <sebastian@typo3.org>
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
      * @api
      */
     public function initializeArguments()
     {
         parent::initializeArguments();
+        $this->registerArgument('as', 'string', 'Variable name to use for the uploaded resource', false, 'resource');
     }
 
     /**
-     * @param string $as
      * @return string
-     * @author Sebastian Kurfürst <sebastian@typo3.org>
+     * @throws \Neos\Flow\Property\Exception
+     * @throws \Neos\Flow\Security\Exception
      * @api
      */
-    public function render($as = 'resource')
+    public function render(): string
     {
+        $as = $this->arguments['as'];
         $this->templateVariableContainer->add($as, $this->getUploadedResource());
         $output = $this->renderChildren();
         $this->templateVariableContainer->remove($as);
@@ -76,8 +78,10 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
      * If errors occurred during property mapping for this property, NULL is returned
      *
      * @return PersistentResource
+     * @throws \Neos\Flow\Property\Exception
+     * @throws \Neos\Flow\Security\Exception
      */
-    protected function getUploadedResource()
+    protected function getUploadedResource(): PersistentResource
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;

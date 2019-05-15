@@ -39,18 +39,30 @@ class RenderHeadViewHelper extends AbstractViewHelper
     protected $formBuilderFactory;
 
     /**
-     * @param string $presetName name of the preset to use
-     * @return string the rendered form head
+     * Initialize the arguments.
+     *
+     * @return void
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
      */
-    public function render($presetName = 'default')
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('presetName', 'string', 'Relative Fusion path to be rendered', false, ' default');
+    }
+
+    /**
+     * @return string the rendered form head
+     * @throws \Neos\Form\Exception\PresetNotFoundException
+     */
+    public function render(): string
     {
         $content = '';
-        $presetConfiguration = $this->formBuilderFactory->getPresetConfiguration($presetName);
-        $stylesheets = isset($presetConfiguration['stylesheets']) ? $presetConfiguration['stylesheets'] : [];
+        $presetConfiguration = $this->formBuilderFactory->getPresetConfiguration($this->arguments['presetName']);
+        $stylesheets = $presetConfiguration['stylesheets'] ?? [];
         foreach ($stylesheets as $stylesheet) {
             $content .= sprintf('<link href="%s" rel="stylesheet">', $this->resourceManager->getPublicPackageResourceUriByPath($stylesheet['source']));
         }
-        $javaScripts = isset($presetConfiguration['javaScripts']) ? $presetConfiguration['javaScripts'] : [];
+        $javaScripts = $presetConfiguration['javaScripts'] ?? [];
         foreach ($javaScripts as $javaScript) {
             $content .= sprintf('<script src="%s"></script>', $this->resourceManager->getPublicPackageResourceUriByPath($javaScript['source']));
         }

@@ -30,19 +30,34 @@ class RenderValuesViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * @param RootRenderableInterface $renderable If specified, only the values of the given renderable are rendered, otherwise all form elements are rendered
-     * @param FormRuntime $formRuntime If not set, the Form Runtime will be fetched from the View, which only works within the FluidFormRenderer
-     * @param string $as
+     * Initialize the arguments.
+     *
+     * @return void
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('renderable', RootRenderableInterface::class, 'Relative Fusion path to be rendered');
+        $this->registerArgument('formRuntime', FormRuntime::class, 'Relative Fusion path to be rendered');
+        $this->registerArgument('as', 'string', 'Relative Fusion path to be rendered', false, 'formValue');
+    }
+
+    /**
      * @return string the rendered form values
      */
-    public function render(RootRenderableInterface $renderable = null, FormRuntime $formRuntime = null, $as = 'formValue')
+    public function render(): string
     {
-        if ($formRuntime === null) {
+        if ($this->hasArgument('formRuntime')) {
+            $formRuntime = $this->arguments['formRuntime'];
+        } else {
             /** @var RendererInterface $fluidFormRenderer */
             $fluidFormRenderer = $this->viewHelperVariableContainer->getView();
             $formRuntime = $fluidFormRenderer->getFormRuntime();
         }
-        if ($renderable === null) {
+        if ($this->hasArgument('renderable')) {
+            $renderable = $this->arguments['renderable'];
+        } else {
             $renderable = $formRuntime->getFormDefinition();
         }
         if ($renderable instanceof CompositeRenderableInterface) {
@@ -65,9 +80,9 @@ class RenderValuesViewHelper extends AbstractViewHelper
                 'processedValue' => $this->processElementValue($element, $value),
                 'isMultiValue' => is_array($value) || $value instanceof \Iterator
             ];
-            $this->templateVariableContainer->add($as, $formValue);
+            $this->templateVariableContainer->add($this->arguments['as'], $formValue);
             $output .= $this->renderChildren();
-            $this->templateVariableContainer->remove($as);
+            $this->templateVariableContainer->remove($this->arguments['as']);
         }
         return $output;
     }
@@ -85,9 +100,9 @@ class RenderValuesViewHelper extends AbstractViewHelper
         if (isset($properties['options']) && is_array($properties['options'])) {
             if (is_array($value)) {
                 return $this->mapValuesToOptions($value, $properties['options']);
-            } else {
-                return $this->mapValueToOption($value, $properties['options']);
             }
+
+            return $this->mapValueToOption($value, $properties['options']);
         }
         if (is_object($value)) {
             return $this->processObject($element, $value);
@@ -104,7 +119,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      * @param array $options
      * @return array
      */
-    protected function mapValuesToOptions(array $value, array $options)
+    protected function mapValuesToOptions(array $value, array $options): array
     {
         $result = [];
         foreach ($value as $key) {
@@ -121,9 +136,9 @@ class RenderValuesViewHelper extends AbstractViewHelper
      * @param array $options
      * @return string
      */
-    protected function mapValueToOption($value, array $options)
+    protected function mapValueToOption($value, array $options): string
     {
-        return isset($options[$value]) ? $options[$value] : $value;
+        return $options[$value] ?? $value;
     }
 
     /**
@@ -133,7 +148,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      * @param object $object
      * @return string
      */
-    protected function processObject(FormElementInterface $element, $object)
+    protected function processObject(FormElementInterface $element, $object): string
     {
         $properties = $element->getProperties();
         if ($object instanceof \DateTime) {

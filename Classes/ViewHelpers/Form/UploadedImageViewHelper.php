@@ -46,21 +46,22 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
      * Initialize the arguments.
      *
      * @return void
-     * @author Sebastian Kurfürst <sebastian@typo3.org>
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception
      * @api
      */
     public function initializeArguments()
     {
         parent::initializeArguments();
+        $this->registerArgument('as', 'string', 'Variable name to use for the uploaded image', false, 'image');
     }
 
     /**
-     * @param string $as
      * @return string
      * @api
      */
-    public function render($as = 'image')
+    public function render(): string
     {
+        $as = $this->arguments['as'];
         $this->templateVariableContainer->add($as, $this->getUploadedImage());
         $output = $this->renderChildren();
         $this->templateVariableContainer->remove($as);
@@ -73,8 +74,10 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
      * If errors occurred during property mapping for this property, NULL is returned
      *
      * @return Image
+     * @throws \Neos\Flow\Property\Exception
+     * @throws \Neos\Flow\Security\Exception
      */
-    protected function getUploadedImage()
+    protected function getUploadedImage(): Image
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;
