@@ -14,7 +14,7 @@
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
             <target state="translated">Bezeichnung</target></trans-unit>
-      <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
+      <trans-unit id="forms.pages.valueTitle" xml:space="preserve" approved="yes">
                 <source>Value</source>
             <target state="translated">Wert</target></trans-unit>
     </body>
