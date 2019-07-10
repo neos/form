@@ -55,7 +55,11 @@ class RedirectFinisher extends AbstractFinisher
 
         $uriParts = parse_url($uri);
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
-            $uri = $request->getHttpRequest()->getBaseUri() . $uri;
+            $baseUri = $request->getHttpRequest()->getBaseUri();
+            if (substr($baseUri, -1) === '/') {
+                $uri = ltrim($uri, '/');
+            }
+            $uri = $baseUri . $uri;
         }
 
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
