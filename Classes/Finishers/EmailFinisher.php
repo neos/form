@@ -217,7 +217,7 @@ class EmailFinisher extends AbstractFinisher
         if (is_array($attachmentConfigurations)) {
             foreach ($attachmentConfigurations as $attachmentConfiguration) {
                 if (isset($attachmentConfiguration['resource'])) {
-                    $mail->attach(\Swift_Attachment::fromPath($attachmentConfiguration['resource']));
+                    $mail->attach(new \Swift_Attachment($attachmentConfiguration['resource']));
                     continue;
                 }
                 if (!isset($attachmentConfiguration['formElement'])) {
@@ -227,7 +227,7 @@ class EmailFinisher extends AbstractFinisher
                 if (!$resource instanceof PersistentResource) {
                     continue;
                 }
-                $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
+                $mail->attach(new \Swift_Attachment(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
             }
         }
     }
