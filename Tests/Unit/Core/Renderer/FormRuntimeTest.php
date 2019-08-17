@@ -11,8 +11,8 @@ namespace Neos\Form\Tests\Unit\Core\Runtime;
  * source code.
  */
 
-use Neos\Flow\Http\Response;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
@@ -36,13 +36,19 @@ class FormRuntimeTest extends UnitTestCase
     public function valuesSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
-        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 
-        $formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->setMethods(['createSubRequest'])->disableOriginalConstructor()->getMock();
+
+        $mockFormSubRequest = $this->getMockBuilder(ActionRequest::class)->setMethods(['getParentRequest'])->disableOriginalConstructor()->getMock();
+        $mockFormSubRequest->expects(self::any())->method('getParentRequest')->willReturn($mockActionRequest);
+
+        $mockActionRequest->expects(self::once())->method('createSubRequest')->willReturn($mockFormSubRequest);
+        $actionResponse = new ActionResponse();
+
+        $formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $actionResponse]);
 
         Assert::assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
-        Assert::assertSame($mockHttpResponse, $formRuntime->getResponse());
+        Assert::assertInstanceOf(ActionResponse::class, $formRuntime->getResponse());
         Assert::assertSame($formDefinition, $formRuntime->_get('formDefinition'));
     }
 
@@ -212,8 +218,8 @@ class FormRuntimeTest extends UnitTestCase
     protected function createFormRuntime(FormDefinition $formDefinition)
     {
         $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $mockHttpResponse = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+        $actionResponse = new ActionResponse();
 
-        return $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $mockHttpResponse]);
+        return $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $actionResponse]);
     }
 }

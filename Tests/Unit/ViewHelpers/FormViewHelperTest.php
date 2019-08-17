@@ -11,13 +11,13 @@ namespace Neos\Form\Tests\Unit\ViewHelpers;
  * source code.
  */
 
-use Neos\Flow\Http\Request;
-use Neos\Flow\Http\Uri;
+use GuzzleHttp\Psr7\Uri;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\ViewHelpers\FormViewHelper;
 use PHPUnit\Framework\Assert;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Tests for the custom FormViewHelper
@@ -78,7 +78,7 @@ class FormViewHelperTest extends UnitTestCase
         $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
         $this->mockControllerContext->expects($this->any())->method('getRequest')->will($this->returnValue($mockActionRequest));
 
-        $mockHttpRequest = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+        $mockHttpRequest = $this->getMockBuilder(ServerRequestInterface::class)->disableOriginalConstructor()->getMock();
         $mockActionRequest->expects($this->any())->method('getHttpRequest')->will($this->returnValue($mockHttpRequest));
 
         $mockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();

@@ -13,6 +13,7 @@ namespace Neos\Form\Core\Model;
 
 use Neos\Flow\Http\Response;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\ActionResponse;
 use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Exception;
 use Neos\Form\Exception\IdentifierNotValidException;
@@ -652,11 +653,11 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      * a new "instance" of the Form.
      *
      * @param ActionRequest $request
-     * @param Response $response
+     * @param ActionResponse $response
      * @return FormRuntime
      * @api
      */
-    public function bind(ActionRequest $request, Response $response)
+    public function bind(ActionRequest $request, ActionResponse $response)
     {
         return new FormRuntime($this, $request, $response);
     }

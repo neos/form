@@ -12,12 +12,16 @@ namespace Neos\Form\ViewHelpers;
  */
 
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\ActionResponse;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Http\Response;
 use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
 use Neos\Form\Core\Model\FormDefinition;
+use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
+use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Factory\ArrayFormFactory;
+use Neos\Form\Factory\FormFactoryInterface;
 use Neos\Utility\Arrays;
 use Neos\Form\Persistence\FormPersistenceManagerInterface;
 
@@ -79,12 +83,7 @@ class RenderViewHelper extends AbstractViewHelper
         if (!$formDefinition instanceof FormDefinition) {
             throw new ViewHelperException(sprintf('The factory method %s::build() has to return an instance of FormDefinition, got "%s"', $this->arguments['factoryClass'], is_object($formDefinition) ? get_class($formDefinition) : gettype($formDefinition)), 1504024351);
         }
-        $request = $this->controllerContext->getRequest();
-        if (!$request instanceof ActionRequest) {
-            throw new ViewHelperException(sprintf('This ViewHelper only works with an ActionRequest, got "%s"', is_object($request) ? get_class($request) : gettype($request)), 1504024356);
-        }
-        $response = new Response($this->controllerContext->getResponse());
-        $form = $formDefinition->bind($request, $response);
+        $form = $formDefinition->bind($this->controllerContext->getRequest(), $this->controllerContext->getResponse());
         return $form->render();
     }
 }

@@ -15,6 +15,7 @@ use Neos\Error\Messages\Result;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Http\Response;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Mvc\Controller\Arguments;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\Mvc\Routing\UriBuilder;
@@ -82,10 +83,16 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     protected $request;
 
     /**
-     * @var Response
+     * @var ActionResponse
      * @internal
      */
     protected $response;
+
+    /**
+     * @var ActionResponse
+     * @internal
+     */
+    protected $parentResponse;
 
     /**
      * @var FormState
@@ -139,23 +146,24 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     /**
      * @param FormDefinition $formDefinition
      * @param ActionRequest $request
-     * @param Response $response
+     * @param ActionResponse $response
      * @throws \Neos\Form\Exception\IdentifierNotValidException
      * @internal
      */
-    public function __construct(FormDefinition $formDefinition, ActionRequest $request, Response $response)
+    public function __construct(FormDefinition $formDefinition, ActionRequest $request, ActionResponse $response)
     {
         $this->formDefinition = $formDefinition;
         $rootRequest = $request->getMainRequest() ?: $request;
         $pluginArguments = $rootRequest->getPluginArguments();
-        $this->request = new ActionRequest($request);
+        $this->request = $request->createSubRequest();
         $formIdentifier = $this->formDefinition->getIdentifier();
         $this->request->setArgumentNamespace('--' . $formIdentifier);
         if (isset($pluginArguments[$formIdentifier])) {
             $this->request->setArguments($pluginArguments[$formIdentifier]);
         }
 
-        $this->response = $response;
+        $this->parentResponse = $request;
+        $this->response = new ActionResponse();
     }
 
     /**
@@ -338,12 +346,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     {
         if ($this->isAfterLastPage()) {
             $this->invokeFinishers();
-            $parentResponse = $this->response->getParentResponse();
-            if ($parentResponse !== null) {
-                foreach ($this->response->getHeaders()->getAll() as $key => $value) {
-                    $parentResponse->getHeaders()->set($key, $value, true);
-                }
-            }
+            $this->response->mergeIntoParentResponse($this->parentResponse);
             return $this->response->getContent();
         }
 
@@ -411,7 +414,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * This is mostly relevant inside Finishers, where you f.e. want to set response
      * headers or output content.
      *
-     * @return Response the response this object is bound to
+     * @return ActionResponse the response this object is bound to
      * @api
      */
     public function getResponse()

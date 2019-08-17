@@ -11,8 +11,8 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * source code.
  */
 
-use Neos\Flow\Http\Response;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\AbstractFormElement;
 use Neos\Form\Core\Model\FinisherInterface;
@@ -294,8 +294,7 @@ class FormDefinitionTest extends UnitTestCase
 
         /** @var ActionRequest|MockObject $mockRequest */
         $mockRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
-        /** @var Response|MockObject $mockResponse */
-        $mockResponse = $this->getMockBuilder(Response::class)->getMock();
+        $mockResponse = new ActionResponse();
 
         $form = $formDefinition->bind($mockRequest, $mockResponse);
         Assert::assertInstanceOf(FormRuntime::class, $form);
