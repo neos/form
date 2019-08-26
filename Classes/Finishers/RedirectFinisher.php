@@ -10,9 +10,14 @@ namespace Neos\Form\Finishers;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\ServerRequestAttributes;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\Mvc\Routing\Exception\MissingActionNameException;
 use Neos\Flow\Mvc\Routing\UriBuilder;
 use Neos\Form\Core\Model\AbstractFinisher;
+use Psr\Http\Message\UriFactoryInterface;
 
 /**
  * This finisher redirects to another Controller or a specific URI.
@@ -33,19 +38,24 @@ class RedirectFinisher extends AbstractFinisher
     ];
 
     /**
+     * @Flow\Inject
+     * @var UriFactoryInterface
+     */
+    protected $uriFactory;
+
+    /**
      * Executes this finisher
-     * @see AbstractFinisher::execute()
-     *
      * @return void
-     * @throws \Neos\Form\Exception\FinisherException
+     * @throws MissingActionNameException
+     * @see AbstractFinisher::execute()
      */
     public function executeInternal()
     {
         $formRuntime = $this->finisherContext->getFormRuntime();
         $request = $formRuntime->getRequest()->getMainRequest();
 
-        $delay = (integer)$this->parseOption('delay');
-        $statusCode = $this->parseOption('statusCode');
+        $delay = (int)$this->parseOption('delay');
+        $statusCode = (int)$this->parseOption('statusCode');
         $uri = trim($this->parseOption('uri'));
 
         
@@ -55,7 +65,7 @@ class RedirectFinisher extends AbstractFinisher
 
         $uriParts = parse_url($uri);
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
-            $uri = $request->getHttpRequest()->getBaseUri() . $uri;
+            $uri = $request->getHttpRequest()->getAttribute(ServerRequestAttributes::BASE_URI) . $uri;
         }
 
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
@@ -63,10 +73,10 @@ class RedirectFinisher extends AbstractFinisher
         $response = $formRuntime->getResponse();
 
         $response->setContent('<html><head><meta http-equiv="refresh" content="' . $delay . ';url=' . $escapedUri . '"/></head></html>');
-        $response->setStatus($statusCode);
+        $response->setStatusCode($statusCode);
 
         if ($delay === 0) {
-            $response->setHeader('Location', (string)$uri);
+            $response->setRedirectUri($this->uriFactory->createUri((string)$uri));
         }
     }
 
@@ -83,8 +93,9 @@ class RedirectFinisher extends AbstractFinisher
     /**
      * @param ActionRequest $request
      * @return string
+     * @throws MissingActionNameException
      */
-    protected function buildActionUri(ActionRequest $request)
+    protected function buildActionUri(ActionRequest $request): string
     {
         $packageKey = $this->parseOption('package');
         $controllerName = $this->parseOption('controller');
@@ -99,7 +110,6 @@ class RedirectFinisher extends AbstractFinisher
         $uriBuilder->setRequest($request);
         $uriBuilder->reset();
 
-        $uri = $uriBuilder->uriFor($actionName, $arguments, $controllerName, $packageKey, $subpackageKey);
-        return $uri;
+        return $uriBuilder->uriFor($actionName, $arguments, $controllerName, $packageKey, $subpackageKey);
     }
 }
