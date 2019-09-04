@@ -11,6 +11,8 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\Flow\Http\Request;
+use Neos\Flow\Http\Uri;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
 use Neos\Form\Core\Runtime\FormRuntime;
@@ -58,8 +60,14 @@ class FormViewHelper extends FluidFormViewHelper
     protected function getFormActionUri()
     {
         /** @var ActionRequest $actionRequest */
-        $actionRequest = $this->controllerContext->getRequest();
-        $uri = $actionRequest->getHttpRequest()->getUri();
+        $actionRequest = clone $this->controllerContext->getRequest();
+        $requestUri = $actionRequest->getHttpRequest()->getUri();
+        /** @var Uri $uri */
+        $uri = $actionRequest->getHttpRequest()->getAttribute(Request::ATTRIBUTE_BASE_URI)
+            ->withPath($requestUri->getPath())
+            ->withQuery($requestUri->getQuery())
+            ->withFragment($requestUri->getFragment());
+
         if ($this->hasArgument('section')) {
             $uri = preg_replace('/#.*$/', '', $uri) . '#' . $this->arguments['section'];
         }
