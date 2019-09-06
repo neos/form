@@ -12,7 +12,8 @@ namespace Neos\Form\Finishers;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Http\ServerRequestAttributes;
+use Neos\Flow\Http\BaseUriProvider;
+use Neos\Flow\Http\Exception as HttpException;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Routing\Exception\MissingActionNameException;
 use Neos\Flow\Mvc\Routing\UriBuilder;
@@ -44,9 +45,17 @@ class RedirectFinisher extends AbstractFinisher
     protected $uriFactory;
 
     /**
+     * @Flow\Inject
+     * @var BaseUriProvider
+     */
+    protected $baseUriProvider;
+
+    /**
      * Executes this finisher
+     *
      * @return void
      * @throws MissingActionNameException
+     * @throws HttpException
      * @see AbstractFinisher::execute()
      */
     public function executeInternal()
@@ -58,14 +67,14 @@ class RedirectFinisher extends AbstractFinisher
         $statusCode = (int)$this->parseOption('statusCode');
         $uri = trim($this->parseOption('uri'));
 
-        
+
         if ($uri === '') {
             $uri = $this->buildActionUri($request);
         }
 
         $uriParts = parse_url($uri);
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
-            $uri = $request->getHttpRequest()->getAttribute(ServerRequestAttributes::BASE_URI) . $uri;
+            $uri = $this->baseUriProvider->getConfiguredBaseUriOrFallbackToCurrentRequest() . $uri;
         }
 
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
