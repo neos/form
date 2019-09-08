@@ -182,7 +182,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $this->formState = new FormState();
         } else {
             $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-            $this->formState = unserialize(base64_decode($serializedFormState), [FormState::class]);
+            $this->formState = unserialize(base64_decode($serializedFormState), ['allowed_classes' => [FormState::class]]);
         }
     }
 
