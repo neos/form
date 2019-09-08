@@ -133,7 +133,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * Workaround...
      *
      * @Flow\Inject
-     * @var \Neos\Flow\Mvc\FlashMessageContainer
+     * @var \Neos\Flow\Mvc\FlashMessage\FlashMessageContainer
      * @internal
      */
     protected $flashMessageContainer;

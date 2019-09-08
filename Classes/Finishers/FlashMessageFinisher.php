@@ -40,7 +40,7 @@ class FlashMessageFinisher extends AbstractFinisher
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Mvc\FlashMessageContainer
+     * @var \Neos\Flow\Mvc\FlashMessage\FlashMessageContainer
      */
     protected $flashMessageContainer;
 
