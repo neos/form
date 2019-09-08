@@ -130,15 +130,6 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     protected $hashService;
 
     /**
-     * Workaround...
-     *
-     * @Flow\Inject
-     * @var \Neos\Flow\Mvc\FlashMessage\FlashMessageContainer
-     * @internal
-     */
-    protected $flashMessageContainer;
-
-    /**
      * @var callable[]
      */
     protected $renderCallbacks = [];

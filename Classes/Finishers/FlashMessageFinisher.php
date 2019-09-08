@@ -12,10 +12,14 @@ namespace Neos\Form\Finishers;
  */
 
 use Neos\Error\Messages\Error;
+use Neos\Error\Messages\Message;
 use Neos\Error\Messages\Notice;
 use Neos\Error\Messages\Warning;
 use Neos\Flow\Annotations as Flow;
-use Neos\Error\Messages\Message;
+use Neos\Flow\Mvc\Exception\InvalidFlashMessageConfigurationException;
+use Neos\Flow\Mvc\FlashMessage\FlashMessageService;
+use Neos\Flow\Security\Exception\InvalidRequestPatternException;
+use Neos\Flow\Security\Exception\NoRequestPatternFoundException;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 
@@ -40,27 +44,31 @@ class FlashMessageFinisher extends AbstractFinisher
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Mvc\FlashMessage\FlashMessageContainer
+     * @var FlashMessageService
      */
-    protected $flashMessageContainer;
+    protected $flashMessageService;
 
     /**
      * @var array
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
         'messageBody' => null,
         'messageTitle' => '',
         'messageArguments' => [],
         'messageCode' => null,
         'severity' => Message::SEVERITY_OK,
-    );
+    ];
 
     /**
      * Executes this finisher
-     * @see AbstractFinisher::execute()
      *
      * @return void
      * @throws FinisherException
+     * @throws InvalidFlashMessageConfigurationException
+     * @throws InvalidRequestPatternException
+     * @throws NoRequestPatternFoundException
+     * @see AbstractFinisher::execute()
+     *
      */
     protected function executeInternal()
     {
@@ -75,17 +83,20 @@ class FlashMessageFinisher extends AbstractFinisher
         switch ($severity) {
             case Message::SEVERITY_NOTICE:
                 $message = new Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
-                break;
+            break;
             case Message::SEVERITY_WARNING:
                 $message = new Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
-                break;
+            break;
             case Message::SEVERITY_ERROR:
                 $message = new Error($messageBody, $messageCode, $messageArguments, $messageTitle);
-                break;
+            break;
             default:
                 $message = new Message($messageBody, $messageCode, $messageArguments, $messageTitle);
-                break;
+            break;
         }
-        $this->flashMessageContainer->addMessage($message);
+
+        $formRuntime = $this->finisherContext->getFormRuntime();
+        $request = $formRuntime->getRequest()->getMainRequest();
+        $this->flashMessageService->getFlashMessageContainerForRequest($request)->addMessage($message);
     }
 }
