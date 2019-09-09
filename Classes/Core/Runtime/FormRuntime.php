@@ -130,15 +130,6 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     protected $hashService;
 
     /**
-     * Workaround...
-     *
-     * @Flow\Inject
-     * @var \Neos\Flow\Mvc\FlashMessageContainer
-     * @internal
-     */
-    protected $flashMessageContainer;
-
-    /**
      * @var callable[]
      */
     protected $renderCallbacks = [];
@@ -191,7 +182,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $this->formState = new FormState();
         } else {
             $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-            $this->formState = unserialize(base64_decode($serializedFormState));
+            $this->formState = unserialize(base64_decode($serializedFormState), ['allowed_classes' => [FormState::class]]);
         }
     }
 
