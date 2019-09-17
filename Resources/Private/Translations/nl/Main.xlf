@@ -10,10 +10,10 @@
             <target state="translated">Volgende pagina</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve" approved="yes">
                 <source>Submit</source>
-            <target state="translated">Verstuur</target></trans-unit>
+            <target state="final">Verstuur</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target state="translated">Label</target></trans-unit>
+            <target state="final">Label</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
             <target state="translated">Main. xlf</target></trans-unit>
