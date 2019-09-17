@@ -16,7 +16,7 @@
             <target state="translated">Etiqueta</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve" approved="yes">
                 <source>Value</source>
-            <target state="translated">Valor</target></trans-unit>
+            <target state="final">Valor</target></trans-unit>
     </body>
   </file>
 </xliff>
