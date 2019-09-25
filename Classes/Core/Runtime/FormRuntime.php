@@ -13,7 +13,6 @@ namespace Neos\Form\Core\Runtime;
 
 use Neos\Error\Messages\Result;
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Http\Response;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Mvc\Controller\Arguments;
@@ -153,7 +152,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $this->request->setArguments($pluginArguments[$formIdentifier]);
         }
 
-        $this->parentResponse = $request;
+        $this->parentResponse = $response;
         $this->response = new ActionResponse();
     }
 
