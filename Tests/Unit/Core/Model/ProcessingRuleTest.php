@@ -39,13 +39,10 @@ class ProcessingRuleTest extends UnitTestCase
     public function setUp()
     {
         $this->mockPropertyMapper = $this->getMockBuilder(PropertyMapper::class)->getMock();
-        $this->processingRule = $this->getAccessibleMock(ProcessingRule::class, array('dummy'));
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->processingRule->_set('propertyMapper', $this->mockPropertyMapper);
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->processingRule->_set('validator', new ConjunctionValidator());
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->processingRule->_set('processingMessages', new Result());
+
+        $this->processingRule = new ProcessingRule();
+
+        $this->inject($this->processingRule, 'propertyMapper', $this->mockPropertyMapper);
     }
 
     /**
@@ -124,11 +121,9 @@ class ProcessingRuleTest extends UnitTestCase
     public function processConvertsValueIfDataTypeIsSpecified()
     {
         $this->processingRule->setDataType('SomeDataType');
-        $mockPropertyMappingConfiguration = $this->getMockBuilder(PropertyMappingConfiguration::class)->getMock();
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->processingRule->_set('propertyMappingConfiguration', $mockPropertyMappingConfiguration);
+        $propertyMappingConfiguration = $this->processingRule->getPropertyMappingConfiguration();
 
-        $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $mockPropertyMappingConfiguration)->will($this->returnValue('Converted Value'));
+        $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $propertyMappingConfiguration)->will($this->returnValue('Converted Value'));
         $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new Result()));
         $this->assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
