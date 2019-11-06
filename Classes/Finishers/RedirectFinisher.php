@@ -10,6 +10,8 @@ namespace Neos\Form\Finishers;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+
+use Neos\Flow\Http\Request;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Routing\UriBuilder;
 use Neos\Form\Core\Model\AbstractFinisher;
@@ -55,7 +57,11 @@ class RedirectFinisher extends AbstractFinisher
 
         $uriParts = parse_url($uri);
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
-            $uri = $request->getHttpRequest()->getBaseUri() . $uri;
+            $uri = sprintf(
+                '%s/%s',
+                rtrim($request->getHttpRequest()->getAttribute(Request::ATTRIBUTE_BASE_URI), '/'),
+                ltrim($uri, '/')
+            );
         }
 
         $escapedUri = htmlentities($uri, ENT_QUOTES, 'utf-8');
