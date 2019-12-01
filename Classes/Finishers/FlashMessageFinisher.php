@@ -76,7 +76,7 @@ class FlashMessageFinisher extends AbstractFinisher
         if (!is_string($messageBody)) {
             throw new FinisherException(sprintf('The message body must be of type string, "%s" given.', gettype($messageBody)), 1335980069);
         }
-        $messageTitle = $this->parseOption('messageTitle');
+        $messageTitle = $this->parseOption('messageTitle') ?? '';
         $messageArguments = $this->parseOption('messageArguments');
         $messageCode = $this->parseOption('messageCode');
         $severity = $this->parseOption('severity');
