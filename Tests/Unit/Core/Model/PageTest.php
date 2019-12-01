@@ -373,7 +373,9 @@ class PageTest extends UnitTestCase
         $firstValidator = $validators[0];
         Assert::assertSame(2, count($validators));
         $this->assertInstanceOf(StringLengthValidator::class, $firstValidator);
-        Assert::assertSame(['minimum' => 10, 'maximum' => PHP_INT_MAX], $firstValidator->getOptions());
+        $validatorOptions = $firstValidator->getOptions();
+        Assert::assertSame($validatorOptions['minimum'], 10);
+        Assert::assertSame($validatorOptions['maximum'], PHP_INT_MAX);
     }
 
     /**
