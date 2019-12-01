@@ -77,11 +77,11 @@ class UploadedResourceViewHelper extends AbstractFormFieldViewHelper
      * Returns a previously uploaded resource.
      * If errors occurred during property mapping for this property, NULL is returned
      *
-     * @return PersistentResource
+     * @return null|PersistentResource
      * @throws \Neos\Flow\Property\Exception
      * @throws \Neos\Flow\Security\Exception
      */
-    protected function getUploadedResource(): PersistentResource
+    protected function getUploadedResource(): ?PersistentResource
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;
