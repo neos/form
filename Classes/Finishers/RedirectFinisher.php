@@ -11,7 +11,6 @@ namespace Neos\Form\Finishers;
  * source code.
  */
 
-use Neos\Flow\Http\Request;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Routing\UriBuilder;
 use Neos\Form\Core\Model\AbstractFinisher;
@@ -49,7 +48,6 @@ class RedirectFinisher extends AbstractFinisher
         $delay = (integer)$this->parseOption('delay');
         $statusCode = $this->parseOption('statusCode');
         $uri = trim($this->parseOption('uri'));
-
 
         if ($uri === '') {
             $uri = $this->buildActionUri($request);
