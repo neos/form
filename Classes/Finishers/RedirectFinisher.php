@@ -50,7 +50,7 @@ class RedirectFinisher extends AbstractFinisher
         $statusCode = $this->parseOption('statusCode');
         $uri = trim($this->parseOption('uri'));
 
-        
+
         if ($uri === '') {
             $uri = $this->buildActionUri($request);
         }
@@ -59,7 +59,7 @@ class RedirectFinisher extends AbstractFinisher
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
             $uri = sprintf(
                 '%s/%s',
-                rtrim($request->getHttpRequest()->getAttribute(Request::ATTRIBUTE_BASE_URI), '/'),
+                rtrim($request->getHttpRequest()->getBaseUri(), '/'),
                 ltrim($uri, '/')
             );
         }
