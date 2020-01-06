@@ -336,8 +336,12 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     {
         if ($this->isAfterLastPage()) {
             $this->invokeFinishers();
+
+            // Do not provide content to parent request as that would overwrite in later mergers.
+            $content = $this->response->getContent();
+            $this->response->setContent('');
             $this->response->mergeIntoParentResponse($this->parentResponse);
-            return $this->response->getContent();
+            return $content;
         }
 
         $this->formState->setLastDisplayedPageIndex($this->currentPage->getIndex());
