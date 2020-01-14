@@ -56,7 +56,12 @@ There are some useful related packages:
   <tr>
     <td><a href="https://github.com/bwaidelich/Wwwision.Form.MultiColumnSection">Wwwision.Form.MultiColumnSection</a></td>
     <td>Example Section Form Element that renders child Form Elements in multiple columns</td>
-    <td><a href="https://packagist.org/packages/wwwision/form-multicolumnsection">form-multicolumnsection</a></td>
+    <td><a href="https://packagist.org/packages/wwwision/form-multicolumnsection">wwwision/form-multicolumnsection</a></td>
+  </tr>
+    <tr>
+    <td><a href="https://github.com/bwaidelich/Wwwision.Form.MultiFileUpload">Wwwision.Form.MultiFileUpload</a></td>
+    <td>Example package providing a simple MultiFileUpload element for the Neos.Form framework</td>
+    <td><a href="https://packagist.org/packages/wwwision/form-multifileupload">wwwision/form-multifileupload</a></td>
   </tr>
  </table>
  
