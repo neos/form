@@ -30,13 +30,11 @@ class ProcessingRule
     protected $dataType;
 
     /**
-     * @Flow\Inject
      * @var \Neos\Flow\Property\PropertyMappingConfiguration
      */
     protected $propertyMappingConfiguration;
 
     /**
-     * @Flow\Inject
      * @var \Neos\Flow\Validation\Validator\ConjunctionValidator
      */
     protected $validator;
@@ -58,6 +56,8 @@ class ProcessingRule
      */
     public function __construct()
     {
+        $this->propertyMappingConfiguration = new \Neos\Flow\Property\PropertyMappingConfiguration();
+        $this->validator = new \Neos\Flow\Validation\Validator\ConjunctionValidator();
         $this->processingMessages = new Result();
     }
 
