@@ -76,7 +76,7 @@ class RedirectFinisher extends AbstractFinisher
         if (!isset($uriParts['scheme']) || $uriParts['scheme'] === '') {
             $uri = sprintf(
                 '%s/%s',
-                rtrim($this->baseUriProvider->getConfiguredBaseUriOrFallbackToCurrentRequest(, '/'),
+                rtrim($this->baseUriProvider->getConfiguredBaseUriOrFallbackToCurrentRequest(), '/'),
                 ltrim($uri, '/')
             );
         }
