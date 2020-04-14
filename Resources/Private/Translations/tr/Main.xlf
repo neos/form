@@ -4,10 +4,10 @@
     <body>
       <trans-unit id="forms.navigation.previousPage" xml:space="preserve">
                 <source>Previous page</source>
-            <target state="translated">Önceki sayfaya gitmek için tıklayınız</target><alt-trans><target>Önceki sayfa</target></alt-trans></trans-unit>
+            <target state="translated">Önceki sayfaya gitmek için tıklayınız</target></trans-unit>
       <trans-unit id="forms.navigation.nextPage" xml:space="preserve">
                 <source>Next page</source>
-            <target state="translated">Sonraki sayfaya gitmek için tıklayınız</target><alt-trans><target>Sonraki sayfa</target></alt-trans></trans-unit>
+            <target state="translated">Sonraki sayfaya gitmek için tıklayınız</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
             <target state="translated">Gönder</target></trans-unit>
