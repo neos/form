@@ -77,7 +77,7 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
      * @throws \Neos\Flow\Property\Exception
      * @throws \Neos\Flow\Security\Exception
      */
-    protected function getUploadedImage(): Image
+    protected function getUploadedImage(): ?Image
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;
