@@ -170,7 +170,9 @@ Neos:
             options: {  }
           'Neos.Form:Email':
             implementationClassName: Neos\Form\Finishers\EmailFinisher
-            options: {  }
+            options:
+              # supported formats are: "html", "plaintext" and "multipart"
+              format: 'html'
           'Neos.Form:FlashMessage':
             implementationClassName: Neos\Form\Finishers\FlashMessageFinisher
             options: {  }
