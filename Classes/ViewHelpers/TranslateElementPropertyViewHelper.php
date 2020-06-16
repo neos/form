@@ -66,7 +66,7 @@ class TranslateElementPropertyViewHelper extends AbstractViewHelper
         }
         $property = $this->arguments['property'];
         if ($property === 'label') {
-            $defaultValue = $element->getLabel();
+            $defaultValue = (string)$element->getLabel();
         } else {
             $defaultValue = isset($element->getProperties()[$property]) ? (string)$element->getProperties()[$property] : '';
         }
