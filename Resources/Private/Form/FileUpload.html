@@ -12,9 +12,11 @@
 		</div>
 		<f:if condition="{resource}">
 			<div id="{element.uniqueIdentifier}-preview">
-				<a href="{f:uri.resource(resource: resource)}">
-					{resource.filename}
-				</a>
+				<f:if condition="{element.properties.createLinkToFilePreview}" else="{resource.filename}">
+					<a href="{f:uri.resource(resource: resource)}">
+						{resource.filename}
+					</a>
+				</f:if>
 				<div class="clearfix">
 					<a class="btn small" href="#" onclick="return !enableUpload('{element.uniqueIdentifier}')"><f:translate id="forms.labels.replaceFile" package="{element.renderingOptions.translationPackage}">Replace File</f:translate></a>
 				</div>
