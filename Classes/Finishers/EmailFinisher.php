@@ -46,7 +46,7 @@ use Neos\Flow\Annotations as Flow;
  * - carbonCopyAddress: Email address of the copy recipient (use multiple addresses with an array)
  * - blindCarbonCopyAddress: Email address of the blind copy recipient (use multiple addresses with an array)
  * - format: format of the email (one of the FORMAT_* constants). By default mails are sent as HTML
- * - attachAllPersistentResources: if TRUE all FormElements that are converted to a PersistendResource (e.g. the FileUpload element) are added to the mail as attachments
+ * - attachAllPersistentResources: if TRUE all FormElements that are converted to a PersistentResource (e.g. the FileUpload element) are added to the mail as attachments
  * - attachments: array of explicit files to be attached. Every item in the array has to be either "resource" being the path to a file, or "formElement" referring to the identifier of an Form Element that contains the PersistentResource to attach. This can be combined with the "attachAllPersistentResources" option
  * - testMode: if TRUE the email is not actually sent but outputted for debugging purposes. Defaults to FALSE
  */
@@ -209,7 +209,7 @@ class EmailFinisher extends AbstractFinisher
         if ($this->parseOption('attachAllPersistentResources')) {
             foreach ($formValues as $formValue) {
                 if ($formValue instanceof PersistentResource) {
-                    $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($formValue->getStream()), $formValue->getFilename(), $formValue->getMediaType()));
+                    $mail->attach(new \Swift_Attachment(stream_get_contents($formValue->getStream()), $formValue->getFilename(), $formValue->getMediaType()));
                 }
             }
         }
@@ -227,7 +227,7 @@ class EmailFinisher extends AbstractFinisher
                 if (!$resource instanceof PersistentResource) {
                     continue;
                 }
-                $mail->attach(\Swift_Attachment::newInstance(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
+                $mail->attach(new \Swift_Attachment(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
             }
         }
     }
