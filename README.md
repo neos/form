@@ -63,6 +63,12 @@ There are some useful related packages:
     <td>Example package providing a simple MultiFileUpload element for the Neos.Form framework</td>
     <td><a href="https://packagist.org/packages/wwwision/form-multifileupload">wwwision/form-multifileupload</a></td>
   </tr>
+  </tr>
+    <tr>
+    <td><a href="https://github.com/bwaidelich/Wwwision.Form.SecureFileUpload">Wwwision.Form.SecureFileUpload</a></td>
+    <td>Examples and helpers for implementing secure form uploads</td>
+    <td><a href="https://packagist.org/packages/wwwision/form-securefileupload">wwwision/form-securefileupload</a></td>
+  </tr>
  </table>
  
  *Note: Feel free to create a Pull-Request with further related Form packages*
