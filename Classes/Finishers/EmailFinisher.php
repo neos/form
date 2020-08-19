@@ -17,6 +17,7 @@ use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 use Neos\SwiftMailer\Message as SwiftMailerMessage;
+use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
 use Neos\Flow\Annotations as Flow;
 
@@ -248,11 +249,13 @@ class EmailFinisher extends AbstractFinisher
             $standaloneView->setLayoutRootPath($this->options['layoutRootPath']);
         }
 
-        $standaloneView->assign('formValues', $this->finisherContext->getFormValues());
-
+        $variables = $this->finisherContext->getFormValues();
+        // Backwards compatibility, see https://github.com/neos/form/issues/121
+        $variables['formValues'] = $this->finisherContext->getFormValues();
         if (isset($this->options['variables'])) {
-            $standaloneView->assignMultiple($this->options['variables']);
+            $variables = Arrays::arrayMergeRecursiveOverrule($variables, $this->options['variables']);
         }
+        $standaloneView->assignMultiple($variables);
         return $standaloneView;
     }
 
