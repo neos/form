@@ -91,6 +91,9 @@ class ConfirmationFinisher extends AbstractFinisher
         } else {
             $message = $this->parseOption('message');
         }
+        
+        // Wrap an identifier div around the finisher message
+        $message = '<div id="'.$formRuntime->getIdentifier().'">'.$message.'</div>';
 
         $formRuntime->getResponse()->setContent($message);
     }
