@@ -60,8 +60,8 @@ class FormViewHelper extends FluidFormViewHelper
         /** @var ActionRequest $actionRequest */
         $actionRequest = $this->controllerContext->getRequest();
         $uri = $actionRequest->getHttpRequest()->getUri();
-        if ($this->hasArgument('section')) {
-            $uri = preg_replace('/#.*$/', '', $uri) . '#' . $this->arguments['section'];
+        if ($this->hasArgument('section') && $this->arguments['section'] !== '') {
+            $uri->withFragment($this->hasArgument('section'));
         }
         return (string)$uri;
     }
