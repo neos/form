@@ -15,6 +15,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Property\PropertyMapper;
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use Neos\Media\Domain\Model\Image;
+use Neos\Media\Domain\Model\ImageInterface;
 
 /**
  * This ViewHelper makes the specified Image object available for its
@@ -73,17 +74,17 @@ class UploadedImageViewHelper extends AbstractFormFieldViewHelper
      * Returns a previously uploaded image.
      * If errors occurred during property mapping for this property, NULL is returned
      *
-     * @return Image
+     * @return ImageInterface
      * @throws \Neos\Flow\Property\Exception
      * @throws \Neos\Flow\Security\Exception
      */
-    protected function getUploadedImage(): ?Image
+    protected function getUploadedImage(): ?ImageInterface
     {
         if ($this->getMappingResultsForProperty()->hasErrors()) {
             return null;
         }
         $image = $this->getPropertyValue();
-        if ($image instanceof Image) {
+        if ($image instanceof ImageInterface) {
             return $image;
         }
         return $this->propertyMapper->convert($this->getValueAttribute(), Image::class);
