@@ -82,6 +82,12 @@ class FormViewHelperTest extends UnitTestCase
         $mockActionRequest->expects($this->any())->method('getHttpRequest')->will($this->returnValue($mockHttpRequest));
 
         $mockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();
+        $mockUri->expects($this->any())->method('withFragment')->will($this->returnCallback(function ($fragment) use ($requestUri, $mockUri) {
+            $newUri = explode('#', $requestUri)[0] . '#' . $fragment;
+            $modifiedMockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();
+            $modifiedMockUri->expects($this->any())->method('__toString')->will($this->returnValue($newUri));
+            return $modifiedMockUri;
+        }));
         $mockUri->expects($this->any())->method('__toString')->will($this->returnValue($requestUri));
         $mockHttpRequest->expects($this->any())->method('getUri')->will($this->returnValue($mockUri));
 
