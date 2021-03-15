@@ -63,7 +63,7 @@ jobs:
         git -C ../${{ env.PACKAGE_FOLDER}}/${{ env.PACKAGE_NAME }} checkout -b build
         composer config minimum-stability dev
         composer config prefer-stable true
-        composer require --no-update --no-interaction --no-progress flowpack/rest-api:"dev-build as dev-master"
+        composer require --no-update --no-interaction --no-progress neos/form:"dev-build as dev-master"
         composer ${{ matrix.dependencies == 'locked' && 'install' || 'update' }} --no-interaction --no-progress ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }} ${{ matrix.composer-arguments }}
 
     - name: Set Flow Context
