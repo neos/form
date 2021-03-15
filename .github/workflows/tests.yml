@@ -95,5 +95,5 @@ jobs:
 
     - name: Run Functional tests
       run: |
-        bin/phpunit --colors -c Build/BuildEssentials/PhpUnit/FunctionalTests.xml Packages/Application/${PACKAGE_NAME}/Tests/Functional/*
+        bin/phpunit --colors -c Build/BuildEssentials/PhpUnit/FunctionalTests.xml Packages/Application/${PACKAGE_NAME}/Tests/Functional
 
