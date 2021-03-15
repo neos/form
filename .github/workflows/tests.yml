@@ -1,0 +1,99 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    env:
+      FLOW_CONTEXT: Testing
+      PACKAGE_FOLDER: flow-base-distribution/DistributionPackages
+      FLOW_FOLDER: flow-base-distribution
+      PACKAGE_NAME: 'Neos.Form'
+
+    runs-on: ubuntu-latest
+    name: PHP ${{ matrix.php-versions }} | Flow ${{ matrix.flow-versions }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['7.3', '7.4']
+        flow-versions: ['7.0']
+        dependencies: ['highest']
+
+    defaults:
+      run:
+        working-directory: ${{ env.FLOW_FOLDER }}
+
+    steps:
+    - name: Checkout Flow development distribution
+      uses: actions/checkout@v2
+      with:
+        repository: neos/flow-development-distribution
+        ref: ${{ matrix.flow-versions }}
+        path: ${{ env.FLOW_FOLDER }}
+
+    - name: Checkout package
+      uses: actions/checkout@v2
+      with:
+        path: ${{ env.PACKAGE_FOLDER}}/${{ env.PACKAGE_NAME }}
+
+    - name: Setup PHP, with composer and extensions
+      uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, mysql
+        coverage: xdebug #optional
+
+    - name: Get composer cache directory
+      id: composer-cache
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+    - name: Cache composer dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-php${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.json') }}
+        restore-keys: ${{ runner.os }}-php${{ matrix.php-versions }}-composer-
+
+    - name: Install dependencies
+      run: |
+        ls -la ./DistributionPackages
+        git -C ../${{ env.PACKAGE_FOLDER}}/${{ env.PACKAGE_NAME }} checkout -b build
+        composer config minimum-stability dev
+        composer config prefer-stable true
+        composer require --no-update --no-interaction --no-progress neos/form:"dev-build as dev-master"
+        composer ${{ matrix.dependencies == 'locked' && 'install' || 'update' }} --no-interaction --no-progress ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }} ${{ matrix.composer-arguments }}
+
+    - name: Set Flow Context
+      run: echo "FLOW_CONTEXT=${{ env.FLOW_CONTEXT }}" >> $GITHUB_ENV
+
+    - name: Setup Flow configuration
+      run: |
+        rm -f Configuration/Routes.yaml
+        rm -f Configuration/Testing/Settings.yaml
+        cat <<EOF >> Configuration/Testing/Settings.yaml
+        Neos:
+          Flow:
+            persistence:
+              backendOptions:
+                driver: pdo_sqlite
+                memory: true
+                user: 'neos'
+                password: 'neos'
+                dbname: 'flow_functional_testing'
+            mvc:
+              routes:
+                'Neos.Flow': FALSE
+                'Neos.Welcome': FALSE
+        EOF
+
+    - name: Run Unit tests
+      run: | 
+        bin/phpunit --colors -c Build/BuildEssentials/PhpUnit/UnitTests.xml Packages/Application/${PACKAGE_NAME}/Tests/Unit
+
+    - name: Run Functional tests
+      run: |
+        bin/phpunit --colors -c Build/BuildEssentials/PhpUnit/FunctionalTests.xml Packages/Application/${PACKAGE_NAME}/Tests/Functional/*
+
