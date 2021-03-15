@@ -15,6 +15,11 @@
             "Neos\\Form\\": "Classes"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Neos\\Form\\Tests\\": "Tests"
+        }
+    },
     "suggest": {
         "neos/swiftmailer": "The EmailFinisher needs this to be useable"
     },
