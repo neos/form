@@ -138,7 +138,7 @@ class RenderValuesViewHelper extends AbstractViewHelper
      */
     protected function mapValueToOption($value, array $options): string
     {
-        return $options[$value] ?? $value;
+        return $options[$value] ?? $value ?? '';
     }
 
     /**
