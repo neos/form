@@ -81,6 +81,30 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         Assert::assertSame('', $form['--three-page-form-with-validation']['text3-1']->getValue());
     }
 
+    /**
+     * @test
+     * Thanks to Anian Weber for reporting that issue!
+     */
+    public function validationIsNotSkippedForGetRequests()
+    {
+        $this->browser->request('http://localhost/test/form/simpleform/ThreePageFormWithValidation');
+
+        // Navigate to 2nd form page
+        $this->gotoNextFormPage($this->browser->getForm());
+
+        $form = $this->browser->getForm();
+        // Change form method to "GET"
+        ObjectAccess::setProperty($form, 'method', 'GET', true);
+
+        // Set invalid value (field "text2-1" has an IntegerValidator assigned)
+        $form['--three-page-form-with-validation']['text2-1']->setValue('My Text on the second page');
+
+        // Submit form
+        $this->gotoNextFormPage($form);
+
+        // Expect validation errors
+        Assert::assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="three-page-form-with-validation-text2-1"]')->attr('class'));
+    }
 
     /**
      * This is an edge-case which occurs if somebody makes the formState persistent, which can happen when subclassing the FormRuntime.
@@ -94,6 +118,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
      */
     public function goingForthAndBackStoresFormValuesOfSecondPageEvenWhenSecondPageIsManuallyCalledAsGetRequest()
     {
+        $this->markTestSkipped('This test is skipped because we no longer allow Form validators to be skipped, see https://github.com/neos/form/security/advisories/GHSA-m5vx-8chx-qvmm');
         // 1. TEST SETUP: FORM STATE PREPARATION
         // - go to the 2nd page of the form, and fill in text2-1.
         $this->browser->request('http://localhost/test/form/simpleform/ThreePageFormWithValidation');

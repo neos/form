@@ -13,7 +13,7 @@
             <target state="final">Отправить</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve" approved="yes">
                 <source>Label</source>
-            <target state="final">Обозначение</target><alt-trans><target>Этикетка</target></alt-trans><alt-trans><target>Подпись</target></alt-trans><alt-trans><target>Метка</target></alt-trans></trans-unit>
+            <target state="final">Обозначение</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve" approved="yes">
                 <source>Value</source>
             <target state="final">Значение</target></trans-unit>

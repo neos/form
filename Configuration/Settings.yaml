@@ -137,6 +137,10 @@ Neos:
               'Neos.Form:FormElement': true
             implementationClassName: Neos\Form\FormElements\FileUpload
             properties:
+              # target collection of the uploaded PersistentResource
+              resourceCollection: 'persistent'
+              # set this to "false" if you don't want to create a link to the uploaded file (required for non-public resource collections)
+              createLinkToFilePreview: true
               allowedExtensions:
                 - pdf
                 - doc

@@ -10,10 +10,10 @@
             <target state="needs-translation">Next page</target></trans-unit>
       <trans-unit id="forms.navigation.submit" xml:space="preserve">
                 <source>Submit</source>
-            <target state="translated">Надіслати</target><alt-trans><target>отправить</target></alt-trans></trans-unit>
+            <target state="translated">Надіслати</target></trans-unit>
       <trans-unit id="forms.pages.labelTitle" xml:space="preserve">
                 <source>Label</source>
-            <target state="needs-translation">Label</target></trans-unit>
+            <target state="translated">Мітка</target></trans-unit>
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
             <target state="translated">Значення</target></trans-unit>
