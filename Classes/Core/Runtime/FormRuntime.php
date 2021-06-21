@@ -165,7 +165,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
         $this->initializeFormStateFromRequest();
         $this->initializeCurrentPageFromRequest();
 
-        if (!$this->isFirstRequest() && $this->getRequest()->getHttpRequest()->getMethod() === 'POST') {
+        if (!$this->isFirstRequest()) {
             $this->processSubmittedFormValues();
         }
     }
