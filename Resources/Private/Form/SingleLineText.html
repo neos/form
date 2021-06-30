@@ -1,5 +1,12 @@
 {namespace form=Neos\Form\ViewHelpers}
 <f:layout name="Neos.Form:Field" />
 <f:section name="field">
-	<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" placeholder="{element -> form:translateElementProperty(property: 'placeholder')}" errorClass="{element.properties.elementErrorClassAttribute}" maxlength="{element.properties.maxlength}" />
+	<f:if condition="{element.properties.inputMode} == 'search'">
+		<f:then>
+			<f:form.textfield type="search" property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" additionalAttributes="{autocapitalize: element.properties.autoCapitalize}" placeholder="{element -> form:translateElementProperty(property: 'placeholder')}" errorClass="{element.properties.elementErrorClassAttribute}" maxlength="{element.properties.maxlength}" />
+		</f:then>
+		<f:else>
+			<f:form.textfield property="{element.identifier}" id="{element.uniqueIdentifier}" class="{element.properties.elementClassAttribute}" additionalAttributes="{autocapitalize: element.properties.autoCapitalize, inputmode: element.properties.inputMode}" placeholder="{element -> form:translateElementProperty(property: 'placeholder')}" errorClass="{element.properties.elementErrorClassAttribute}" maxlength="{element.properties.maxlength}" />
+		</f:else>
+	</f:if>
 </f:section>
