@@ -5,7 +5,7 @@
 			<li>
 				<label>
 					<f:form.checkbox property="{element.identifier}" multiple="1" class="{element.properties.elementClassAttribute}" value="{value}" errorClass="{element.properties.elementErrorClassAttribute}" />
-					<span>{f:translate(id: 'forms.elements.{element.identifier}.options.{value}', package: '{element.renderingOptions.translationPackage}', value: label)}</span>
+					<span>{f:translate(id: 'forms.elements.{element.identifier}.options.{value}', source: '{element.renderingOptions.translationSource}', package: '{element.renderingOptions.translationPackage}', value: label)}</span>
 				</label>
 			</li>
 		</f:for>
