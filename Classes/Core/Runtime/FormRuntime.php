@@ -106,7 +106,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      */
     protected $allowedClassesInFormState;
 
-        /**
+    /**
      * The current page is the page which will be displayed to the user
      * during rendering.
      *
