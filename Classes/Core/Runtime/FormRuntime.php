@@ -100,6 +100,13 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     protected $formState;
 
     /**
+     * @Flow\InjectConfiguration(path="formState.allowedClasses")
+     * @var array
+     * @internal
+     */
+    protected $allowedClassesInFormState;
+
+        /**
      * The current page is the page which will be displayed to the user
      * during rendering.
      *
@@ -181,7 +188,12 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $this->formState = new FormState();
         } else {
             $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-            $this->formState = unserialize(base64_decode($serializedFormState), ['allowed_classes' => [FormState::class, \DateTime::class, \DateTimeImmutable::class]]);
+            $allowedClassesInFormState = Arrays::removeEmptyElementsRecursively($this->allowedClassesInFormState);
+            if (is_array($allowedClassesInFormState) && !empty($allowedClassesInFormState)) {
+                $this->formState = unserialize(base64_decode($serializedFormState), ['allowed_classes' => $this->allowedClassesInFormState]);
+            } else {
+                $this->formState = unserialize(base64_decode($serializedFormState));
+            }
         }
     }
 

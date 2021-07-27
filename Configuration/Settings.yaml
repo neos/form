@@ -5,6 +5,11 @@ Neos:
       savePath: '%FLOW_PATH_DATA%Forms/'
     supertypeResolver:
       hiddenProperties: {  }
+    formState:
+      allowedClasses:
+        FormState: Neos\Form\Core\Runtime\FormState
+        DateTime: DateTime
+        DateTimeImmutable: DateTimeImmutable
     presets:
       default:
         title: Default
