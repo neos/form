@@ -32,7 +32,8 @@ class YamlPersistenceManagerTest extends UnitTestCase
     {
         vfsStream::setup('someSavePath');
         $this->yamlPersistenceManager = new YamlPersistenceManager();
-        $this->yamlPersistenceManager->injectSettings([
+        $this->yamlPersistenceManager->injectSettings(
+            [
                 'yamlPersistenceManager' =>
                     ['savePath' => vfsStream::url('someSavePath')
                     ]
