@@ -181,7 +181,8 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $this->formState = new FormState();
         } else {
             $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-            $this->formState = unserialize(base64_decode($serializedFormState), ['allowed_classes' => [FormState::class, \DateTime::class, \DateTimeImmutable::class]]);
+            /** @noinspection UnserializeExploitsInspection The unserialize call is safe because of the HMAC check above */
+            $this->formState = unserialize(base64_decode($serializedFormState));
         }
     }
 
