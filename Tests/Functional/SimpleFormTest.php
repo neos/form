@@ -21,6 +21,8 @@ use Symfony\Component\DomCrawler\Field\InputFormField;
  */
 class SimpleFormTest extends AbstractFunctionalTestCase
 {
+    protected static $testablePersistenceEnabled = true;
+
     /**
      * @test
      */
@@ -104,6 +106,27 @@ class SimpleFormTest extends AbstractFunctionalTestCase
 
         // Expect validation errors
         Assert::assertSame(' error', $this->browser->getCrawler()->filterXPath('//*[contains(@class,"error")]//input[@id="three-page-form-with-validation-text2-1"]')->attr('class'));
+    }
+
+    /**
+     * @test
+     * @see https://github.com/neos/form/issues/126
+     * @see https://github.com/neos/form/issues/135
+     * @see https://github.com/neos/form/issues/143
+     */
+    public function formStateCanContainArbitraryObjects()
+    {
+        $this->browser->request('http://localhost/test/form/simpleform/TwoPageFormWithUpload');
+
+        $form = $this->browser->getForm();
+        $form->get('--two-page-form-with-upload[file]')->upload(__DIR__ . '/Fixtures/dummy.txt');
+        $form->get('--two-page-form-with-upload[date][date]')->setValue('1980-12-13');
+        $this->gotoNextFormPage($form);
+        $response = $this->gotoPreviousFormPage($this->browser->getForm());
+        $form = $this->browser->getForm();
+        // Note: we can't use $form['--two-page-form-with-upload']['file']['originallySubmittedResource']['__identity'] because that is overruled by the $form['--two-page-form-with-upload']['file'] element
+        Assert::assertStringContainsString('<input type="hidden" name="--two-page-form-with-upload[file][originallySubmittedResource][__identity]"', $response->getBody()->getContents());
+        Assert::assertSame('1980-12-13', $form->get('--two-page-form-with-upload[date][date]')->getValue());
     }
 
     /**
