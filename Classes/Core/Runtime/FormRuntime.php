@@ -280,12 +280,17 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             }
         };
 
+        $pageFormValues = [];
         foreach ($page->getElementsRecursively() as $element) {
             $value = Arrays::getValueByPath($requestArguments, $element->getIdentifier());
             $element->onSubmit($this, $value);
 
-            $this->formState->setFormValue($element->getIdentifier(), $value);
+            $pageFormValues[$element->getIdentifier()] = $value;
             $registerPropertyPaths($element->getIdentifier());
+        }
+        $page->onSubmit($this, $pageFormValues);
+        foreach ($pageFormValues as $elementIdentifier => $value) {
+            $this->formState->setFormValue($elementIdentifier, $value);
         }
 
         // The more parts the path has, the more early it is processed
