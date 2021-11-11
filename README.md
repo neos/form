@@ -38,6 +38,11 @@ There are some useful related packages:
   <tr>
     <th colspan="3">Third party packages</th>
   </tr>
+    <tr>
+    <td><a href="https://github.com/punktDe/form-persistence">PunktDe.FormPersistence</a></td>
+    <td>Database persistence finisher, backend module to download data in different formats, export definition editor for field mapping, fine grained access rights, data retention mechanisms, ....</td>
+    <td><a href="https://github.com/punktDe/form-persistence">punktDe/form-persistence</a></td>
+  </tr>
   <tr>
     <td><a href="https://github.com/die-wegmeister/Wegmeister.DatabaseStorage">Wegmeister.DatabaseStorage</a></td>
     <td>Custom Form Finisher that helps storing formdata into the database and export it as Xlsx file</td>
@@ -47,6 +52,11 @@ There are some useful related packages:
     <td><a href="https://github.com/die-wegmeister/Wegmeister.Recaptcha">Wegmeister.Recaptcha</a></td>
     <td>Custom Form Element that renders <a href="https://www.google.com/recaptcha">Googles reCAPTCHAs</a></td>
     <td><a href="https://packagist.org/packages/wegmeister/recaptcha">wegmeister/recaptcha</a></td>
+  </tr>
+    <tr>
+    <td><a href="https://github.com/daniellienert/honeypotformfield">Honeypot Field</a></td>
+    <td>Honeypot form field to spam-protect your forms without further disturbance.</a></td>
+    <td><a href="https://github.com/daniellienert/honeypotformfield">dl/honeypotformfield</a></td>
   </tr>
   <tr>
     <td><a href="https://github.com/bwaidelich/Wwwision.Form.ContentReferences">Wwwision.Form.ContentReferences</a></td>
