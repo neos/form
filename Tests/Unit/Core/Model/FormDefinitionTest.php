@@ -583,12 +583,16 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = new FormDefinition('foo1');
         $page1 = new Page('bar1');
         $page2 = new Page('bar2');
+        $page3 = new Page('bar3');
         $formDefinition->addPage($page1);
         $formDefinition->addPage($page2);
+        $formDefinition->addPage($page3);
 
-        $formDefinition->removePage($page1);
-        $this->assertNull($page1->getParentRenderable());
-        Assert::assertSame([$page2], $formDefinition->getPages());
+        $formDefinition->removePage($page2);
+        $this->assertNull($page2->getParentRenderable());
+        Assert::assertSame(0, $page1->getIndex());
+        Assert::assertSame(1, $page3->getIndex());
+        Assert::assertSame([$page1, $page3], $formDefinition->getPages());
     }
 
     /**
