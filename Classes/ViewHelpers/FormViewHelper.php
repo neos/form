@@ -11,6 +11,8 @@ namespace Neos\Form\ViewHelpers;
  * source code.
  */
 
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\BaseUriProvider;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\FluidAdaptor\ViewHelpers\FormViewHelper as FluidFormViewHelper;
 use Neos\Form\Core\Runtime\FormRuntime;
@@ -21,6 +23,13 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  */
 class FormViewHelper extends FluidFormViewHelper
 {
+
+    /**
+     * @Flow\Inject
+     * @var BaseUriProvider
+     */
+    protected $baseUriProvider;
+
     /**
      * Renders hidden form fields for referrer information about
      * the current request.
@@ -58,10 +67,15 @@ class FormViewHelper extends FluidFormViewHelper
     protected function getFormActionUri()
     {
         /** @var ActionRequest $actionRequest */
-        $actionRequest = $this->controllerContext->getRequest();
-        $uri = $actionRequest->getHttpRequest()->getUri();
-        if ($this->hasArgument('section') && $this->arguments['section'] !== '') {
-            $uri = $uri->withFragment($this->arguments['section']);
+        $actionRequest = clone $this->controllerContext->getRequest();
+        $requestUri = $actionRequest->getHttpRequest()->getUri();
+        $uri = $this->baseUriProvider->getConfiguredBaseUriOrFallbackToCurrentRequest()
+            ->withPath($requestUri->getPath())
+            ->withQuery($requestUri->getQuery())
+            ->withFragment($requestUri->getFragment());
+
+        if ($this->hasArgument('section')) {
+            $uri = preg_replace('/#.*$/', '', $uri) . '#' . $this->arguments['section'];
         }
         return (string)$uri;
     }
