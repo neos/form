@@ -70,7 +70,6 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
         }
 
         $reorderedRenderables = [];
-        $i = 0;
         foreach ($this->renderables as $renderable) {
             if ($renderable === $renderableToMove) {
                 continue;
@@ -78,14 +77,11 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
 
             if ($renderable === $referenceRenderable) {
                 $reorderedRenderables[] = $renderableToMove;
-                $renderableToMove->setIndex($i);
-                $i++;
             }
             $reorderedRenderables[] = $renderable;
-            $renderable->setIndex($i);
-            $i++;
         }
         $this->renderables = $reorderedRenderables;
+        $this->reindexRenderables();
     }
 
     /**
@@ -107,23 +103,19 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
         }
 
         $reorderedRenderables = [];
-        $i = 0;
         foreach ($this->renderables as $renderable) {
             if ($renderable === $renderableToMove) {
                 continue;
             }
 
             $reorderedRenderables[] = $renderable;
-            $renderable->setIndex($i);
-            $i++;
 
             if ($renderable === $referenceRenderable) {
                 $reorderedRenderables[] = $renderableToMove;
-                $renderableToMove->setIndex($i);
-                $i++;
             }
         }
         $this->renderables = $reorderedRenderables;
+        $this->reindexRenderables();
     }
 
     /**
@@ -170,8 +162,23 @@ abstract class AbstractCompositeRenderable extends AbstractRenderable implements
             $updatedRenderables[] = $renderable;
         }
         $this->renderables = $updatedRenderables;
+        $this->reindexRenderables();
 
         $renderableToRemove->onRemoveFromParentRenderable();
+    }
+
+    /**
+     * Iterate renderables and set index
+     *
+     * @return void
+     */
+    protected function reindexRenderables()
+    {
+        $i = 0;
+        foreach ($this->renderables as $renderable) {
+            $renderable->setIndex($i);
+            $i++;
+        }
     }
 
     /**
