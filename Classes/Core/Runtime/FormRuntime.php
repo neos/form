@@ -26,6 +26,7 @@ use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
 use Neos\Form\Core\Renderer\RendererInterface;
 use Neos\Form\Exception\PropertyMappingException;
 use Neos\Form\Exception\RenderingException;
+use Neos\Form\FormState\FormStateInitializerChain;
 use Neos\Utility\Arrays;
 
 /**
@@ -100,6 +101,12 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     protected $formState;
 
     /**
+     * @Flow\Inject
+     * @var FormStateInitializerChain
+     */
+    protected $formStateInitializerChain;
+
+    /**
      * The current page is the page which will be displayed to the user
      * during rendering.
      *
@@ -162,27 +169,11 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      */
     public function initializeObject()
     {
-        $this->initializeFormStateFromRequest();
+        $this->formState = $this->formStateInitializerChain->initializeFormState($this->formDefinition, $this->request);
         $this->initializeCurrentPageFromRequest();
 
         if (!$this->isFirstRequest()) {
             $this->processSubmittedFormValues();
-        }
-    }
-
-    /**
-     * @return void
-     * @internal
-     */
-    protected function initializeFormStateFromRequest()
-    {
-        $serializedFormStateWithHmac = $this->request->getInternalArgument('__state');
-        if ($serializedFormStateWithHmac === null) {
-            $this->formState = new FormState();
-        } else {
-            $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-            /** @noinspection UnserializeExploitsInspection The unserialize call is safe because of the HMAC check above */
-            $this->formState = unserialize(base64_decode($serializedFormState));
         }
     }
 

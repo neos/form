@@ -3,8 +3,10 @@ Neos:
   Form:
     yamlPersistenceManager:
       savePath: '%FLOW_PATH_DATA%Forms/'
+
     supertypeResolver:
       hiddenProperties: {  }
+
     presets:
       default:
         title: Default
@@ -200,3 +202,8 @@ Neos:
             implementationClassName: Neos\Flow\Validation\Validator\RegularExpressionValidator
           'Neos.Flow:Count':
             implementationClassName: Neos\Flow\Validation\Validator\CountValidator
+
+    formStateInitializerChain:
+      serializedFormStateArgument:
+        class: 'Neos\Form\FormState\SerializedFormStateArgumentInitializer'
+        position: 'start'
