@@ -283,6 +283,11 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
         $pageFormValues = [];
         foreach ($page->getElementsRecursively() as $element) {
             $value = Arrays::getValueByPath($requestArguments, $element->getIdentifier());
+
+            if ($value === null) {
+                continue;
+            }
+
             $element->onSubmit($this, $value);
 
             $pageFormValues[$element->getIdentifier()] = $value;
