@@ -18,6 +18,8 @@ use Neos\Form\Core\Runtime\FormRuntime;
 use Neos\Form\Exception;
 use Neos\Form\Exception\IdentifierNotValidException;
 use Neos\Form\Exception\TypeDefinitionNotFoundException;
+use Neos\Form\FormState\DefaultFormStateInitializer;
+use Neos\Form\FormState\FormStateInitializerInterface;
 use Neos\Form\Utility\Arrays as FormArrays;
 use Neos\Form\Utility\SupertypeResolver;
 use Neos\Utility\Arrays;
@@ -318,6 +320,8 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      */
     protected $finisherPresets;
 
+    protected FormStateInitializerInterface $formStateInitializer;
+
     /**
      * Constructor. Creates a new FormDefinition with the given identifier.
      *
@@ -329,13 +333,20 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
      */
     public function __construct($identifier, $formDefaults = [], $type = 'Neos.Form:Form')
     {
-        $this->formFieldTypeManager = new SupertypeResolver(isset($formDefaults['formElementTypes']) ? $formDefaults['formElementTypes'] : []);
-        $this->validatorPresets = isset($formDefaults['validatorPresets']) ? $formDefaults['validatorPresets'] : [];
-        $this->finisherPresets = isset($formDefaults['finisherPresets']) ? $formDefaults['finisherPresets'] : [];
+        $this->formFieldTypeManager = new SupertypeResolver($formDefaults['formElementTypes'] ?? []);
+        $this->validatorPresets = $formDefaults['validatorPresets'] ?? [];
+        $this->finisherPresets = $formDefaults['finisherPresets'] ?? [];
 
         if (!is_string($identifier) || strlen($identifier) === 0) {
             throw new IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
         }
+
+        $formStateInitializer = $formDefaults['formStateInitializer'] ?? DefaultFormStateInitializer::class;
+        if (!is_a($formStateInitializer, FormStateInitializerInterface::class, true)) {
+            throw new \RuntimeException(sprintf('The given class "%s" does not implement the interface %s', $formStateInitializer, FormStateInitializerInterface::class), 1648204540);
+        }
+        $this->formStateInitializer = new $formStateInitializer();
+
         $this->identifier = $identifier;
         $this->type = $type;
 
@@ -702,5 +713,14 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
     public function getValidatorPresets()
     {
         return $this->validatorPresets;
+    }
+
+    /**
+     * @internal
+     * @return FormStateInitializerInterface
+     */
+    public function getFormStateInitializer(): FormStateInitializerInterface
+    {
+        return $this->formStateInitializer;
     }
 }
