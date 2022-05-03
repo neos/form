@@ -13,10 +13,11 @@ namespace Neos\Form\FormState;
  * source code.
  */
 
+use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Security\Cryptography\HashService;
 use Neos\Form\Core\Model\FormDefinition;
-use Neos\Fusion\Form\Runtime\Domain\FormState;
+use Neos\Form\Core\Runtime\FormState;
 
 class DefaultFormStateInitializer implements FormStateInitializerInterface
 {

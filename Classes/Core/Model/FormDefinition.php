@@ -341,11 +341,11 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
             throw new IdentifierNotValidException('The given identifier was not a string or the string was empty.', 1325574803);
         }
 
-        $formStateInitializer = $formDefaults['formStateInitializer'] ?? DefaultFormStateInitializer::class;
-        if (!is_a($formStateInitializer, FormStateInitializerInterface::class, true)) {
-            throw new \RuntimeException(sprintf('The given class "%s" does not implement the interface %s', $formStateInitializer, FormStateInitializerInterface::class), 1648204540);
+        $formStateInitializerClass = $formDefaults['formStateInitializer'] ?? DefaultFormStateInitializer::class;
+        if (!is_a($formStateInitializerClass, FormStateInitializerInterface::class, true)) {
+            throw new \RuntimeException(sprintf('The given class "%s" does not implement the interface %s', $formStateInitializerClass, FormStateInitializerInterface::class), 1648204540);
         }
-        $this->formStateInitializer = new $formStateInitializer();
+        $this->formStateInitializer = new $formStateInitializerClass();
 
         $this->identifier = $identifier;
         $this->type = $type;
@@ -717,7 +717,6 @@ class FormDefinition extends Renderable\AbstractCompositeRenderable
 
     /**
      * @internal
-     * @return FormStateInitializerInterface
      */
     public function getFormStateInitializer(): FormStateInitializerInterface
     {

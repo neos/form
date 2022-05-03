@@ -15,7 +15,7 @@ namespace Neos\Form\FormState;
 
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Form\Core\Model\FormDefinition;
-use Neos\Fusion\Form\Runtime\Domain\FormState;
+use Neos\Form\Core\Runtime\FormState;
 
 interface FormStateInitializerInterface
 {
