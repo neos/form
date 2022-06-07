@@ -10,6 +10,7 @@ Neos:
         title: Default
         stylesheets: {  }
         javaScripts: {  }
+        formStateInitializer: Neos\Form\FormState\DefaultFormStateInitializer
         formElementTypes:
           'Neos.Form:Base':
             renderingOptions:

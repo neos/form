@@ -162,27 +162,11 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      */
     public function initializeObject()
     {
-        $this->initializeFormStateFromRequest();
+        $this->formState = $this->formDefinition->getFormStateInitializer()->initializeFormState($this->formDefinition, $this->request);
         $this->initializeCurrentPageFromRequest();
 
         if (!$this->isFirstRequest()) {
             $this->processSubmittedFormValues();
-        }
-    }
-
-    /**
-     * @return void
-     * @internal
-     */
-    protected function initializeFormStateFromRequest()
-    {
-        $serializedFormStateWithHmac = $this->request->getInternalArgument('__state');
-        if ($serializedFormStateWithHmac === null) {
-            $this->formState = new FormState();
-        } else {
-            $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
-            /** @noinspection UnserializeExploitsInspection The unserialize call is safe because of the HMAC check above */
-            $this->formState = unserialize(base64_decode($serializedFormState));
         }
     }
 
