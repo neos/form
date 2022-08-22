@@ -266,6 +266,8 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
 
         $pageFormValues = [];
         foreach ($page->getElementsRecursively() as $element) {
+            $registerPropertyPaths($element->getIdentifier());
+
             $value = Arrays::getValueByPath($requestArguments, $element->getIdentifier());
 
             if ($value === null) {
@@ -275,7 +277,6 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $element->onSubmit($this, $value);
 
             $pageFormValues[$element->getIdentifier()] = $value;
-            $registerPropertyPaths($element->getIdentifier());
         }
         $page->onSubmit($this, $pageFormValues);
         foreach ($pageFormValues as $elementIdentifier => $value) {
