@@ -256,6 +256,22 @@ abstract class AbstractRenderable implements RenderableInterface
     }
 
     /**
+     * Get rendering option by $key.
+     *
+     * @param string $key
+     * @api
+     * @return mixed
+     */
+    public function getRenderingOption($key)
+    {
+        if (key_exists($key, $this->renderingOptions)) {
+            return $this->renderingOptions[$key];
+        }
+
+        return null;
+    }
+
+    /**
      * Get the parent renderable
      *
      * @return CompositeRenderableInterface

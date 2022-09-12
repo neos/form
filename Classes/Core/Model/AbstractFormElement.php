@@ -150,7 +150,11 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
      */
     public function getProperty($key)
     {
-        return $this->properties[$key];
+        if (key_exists($key, $this->properties)) {
+            return $this->properties[$key];
+        }
+
+        return null;
     }
 
     /**
