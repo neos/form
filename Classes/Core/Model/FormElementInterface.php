@@ -74,6 +74,14 @@ interface FormElementInterface extends Renderable\RenderableInterface
     public function setProperty($key, $value);
 
     /**
+     * Get a property of the element
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getProperty($key);
+
+    /**
      * Get all element-specific configuration properties
      *
      * @return array

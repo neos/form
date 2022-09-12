@@ -143,6 +143,17 @@ abstract class AbstractFormElement extends Renderable\AbstractRenderable impleme
     }
 
     /**
+     * Get a property of the element
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getProperty($key)
+    {
+        return $this->properties[$key];
+    }
+
+    /**
      * Get all properties
      *
      * @return array
