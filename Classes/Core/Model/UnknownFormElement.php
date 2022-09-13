@@ -115,6 +115,17 @@ class UnknownFormElement extends Renderable\AbstractRenderable implements FormEl
     }
 
     /**
+     * Get a property of the element
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getProperty($key)
+    {
+        return null;
+    }
+
+    /**
      * @return array
      */
     public function getProperties()
