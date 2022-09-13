@@ -17,11 +17,9 @@ use Neos\Utility\Arrays;
  * The current state of the form which is attached to the {@link FormRuntime}
  * and saved in a session or the client.
  *
- * **This class is not meant to be subclassed by developers.**
- *
  * @internal
  */
-class FormState
+final class FormState
 {
     /**
      * Constant which means that we are currently not on any page; i.e. the form
