@@ -277,11 +277,9 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             $element->onSubmit($this, $value);
 
             $pageFormValues[$element->getIdentifier()] = $value;
+            $this->formState->setFormValue($element->getIdentifier(), $value);
         }
         $page->onSubmit($this, $pageFormValues);
-        foreach ($pageFormValues as $elementIdentifier => $value) {
-            $this->formState->setFormValue($elementIdentifier, $value);
-        }
 
         // The more parts the path has, the more early it is processed
         usort($propertyPathsForWhichPropertyMappingShouldHappen, function ($a, $b) {
