@@ -97,6 +97,21 @@ class Section extends AbstractSection implements FormElementInterface
     }
 
     /**
+     * Get a property of the element
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getProperty($key)
+    {
+        if (key_exists($key, $this->properties)) {
+            return $this->properties[$key];
+        }
+
+        return null;
+    }
+
+    /**
      * Set an element-specific configuration property.
      *
      * @param string $key
