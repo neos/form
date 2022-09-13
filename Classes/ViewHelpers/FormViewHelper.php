@@ -73,7 +73,6 @@ class FormViewHelper extends FluidFormViewHelper
             ->withPath($requestUri->getPath())
             ->withQuery($requestUri->getQuery())
             ->withFragment($this->hasArgument('section') ? $this->arguments['section'] : $requestUri->getFragment());
-        }
         return (string)$uri;
     }
 }
