@@ -67,12 +67,12 @@ class FormViewHelper extends FluidFormViewHelper
     protected function getFormActionUri()
     {
         /** @var ActionRequest $actionRequest */
-        $actionRequest = clone $this->controllerContext->getRequest();
-        $requestUri = $actionRequest->getHttpRequest()->getUri();
-        $uri = $this->baseUriProvider->getConfiguredBaseUriOrFallbackToCurrentRequest()
+        $httpRequest = $this->controllerContext->getRequest()->getHttpRequest();
+        $requestUri = $httpRequest->getUri();
+        $uri = $this->baseUriProvider->getConfiguredBaseUriOrFallbackToCurrentRequest($httpRequest)
             ->withPath($requestUri->getPath())
             ->withQuery($requestUri->getQuery())
-            ->withFragment($requestUri->getFragment());
+            ->withFragment($this->hasArgument('section') ? $this->arguments['section'] : $requestUri->getFragment());
 
         if ($this->hasArgument('section')) {
             $uri = preg_replace('/#.*$/', '', $uri) . '#' . $this->arguments['section'];
