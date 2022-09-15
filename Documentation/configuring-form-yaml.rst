@@ -83,11 +83,13 @@ The following YAML is stored as ``contact.yaml``:
         options:
           templatePathAndFilename: resource://AcmeCom.SomePackage/Private/Templates/Form/Contact.txt
           subject: '{subject}'
-          recipientAddress: 'info@acme.com'
+          recipientAddress: "${Configuration.setting('Foo.Bar.Site.Forms.contact.recipientAddress')}" # reads the recipient address from the configuration. See `allowEelParsingForOptions`
           recipientName: 'Acme Customer Care'
           senderAddress: '{email}'
           senderName: '{name}'
           format: plaintext
+          allowEelParsingForOptions:
+            recipientAddress: true # allow Eel parsing for these values (Security-Note: do not allow user-input options like `senderAddress` or `senderName`)
 
 .. note:: Instead of setting the ``templatePathAndFilename`` option to specify the Fluid template file for the EmailFinisher,
           the template source can also be set directly via the ``templateSource`` option.
