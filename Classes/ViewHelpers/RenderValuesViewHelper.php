@@ -151,14 +151,14 @@ class RenderValuesViewHelper extends AbstractViewHelper
     protected function processObject(FormElementInterface $element, $object): string
     {
         $properties = $element->getProperties();
-        if ($object instanceof \DateTime) {
+        if ($object instanceof \DateTimeInterface) {
             if (isset($properties['dateFormat'])) {
                 $dateFormat = $properties['dateFormat'];
                 if (isset($properties['displayTimeSelector']) && $properties['displayTimeSelector'] === true) {
                     $dateFormat .= ' H:i';
                 }
             } else {
-                $dateFormat = \DateTime::W3C;
+                $dateFormat = \DateTimeInterface::W3C;
             }
             return $object->format($dateFormat);
         }
