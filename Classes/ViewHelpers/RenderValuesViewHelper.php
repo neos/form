@@ -96,10 +96,10 @@ class RenderValuesViewHelper extends AbstractViewHelper
      */
     protected function processElementValue(FormElementInterface $element, $value)
     {
-        $properties = $element->getProperties();
         if (is_object($value)) {
             return $this->processObject($element, $value);
         }
+        $properties = $element->getProperties();
         if (isset($properties['options']) && is_array($properties['options'])) {
             if (is_array($value)) {
                 return $this->mapValuesToOptions($value, $properties['options']);
