@@ -96,6 +96,9 @@ class RenderValuesViewHelper extends AbstractViewHelper
      */
     protected function processElementValue(FormElementInterface $element, $value)
     {
+        if (is_object($value)) {
+            return $this->processObject($element, $value);
+        }
         $properties = $element->getProperties();
         if (isset($properties['options']) && is_array($properties['options'])) {
             if (is_array($value)) {
@@ -103,9 +106,6 @@ class RenderValuesViewHelper extends AbstractViewHelper
             }
 
             return $this->mapValueToOption($value, $properties['options']);
-        }
-        if (is_object($value)) {
-            return $this->processObject($element, $value);
         }
         return $value;
     }
@@ -151,14 +151,14 @@ class RenderValuesViewHelper extends AbstractViewHelper
     protected function processObject(FormElementInterface $element, $object): string
     {
         $properties = $element->getProperties();
-        if ($object instanceof \DateTime) {
+        if ($object instanceof \DateTimeInterface) {
             if (isset($properties['dateFormat'])) {
                 $dateFormat = $properties['dateFormat'];
                 if (isset($properties['displayTimeSelector']) && $properties['displayTimeSelector'] === true) {
                     $dateFormat .= ' H:i';
                 }
             } else {
-                $dateFormat = \DateTime::W3C;
+                $dateFormat = \DateTimeInterface::W3C;
             }
             return $object->format($dateFormat);
         }
