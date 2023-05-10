@@ -83,16 +83,16 @@ class FlashMessageFinisher extends AbstractFinisher
         switch ($severity) {
             case Message::SEVERITY_NOTICE:
                 $message = new Notice($messageBody, $messageCode, $messageArguments, $messageTitle);
-            break;
+                break;
             case Message::SEVERITY_WARNING:
                 $message = new Warning($messageBody, $messageCode, $messageArguments, $messageTitle);
-            break;
+                break;
             case Message::SEVERITY_ERROR:
                 $message = new Error($messageBody, $messageCode, $messageArguments, $messageTitle);
-            break;
+                break;
             default:
                 $message = new Message($messageBody, $messageCode, $messageArguments, $messageTitle);
-            break;
+                break;
         }
 
         $formRuntime = $this->finisherContext->getFormRuntime();
