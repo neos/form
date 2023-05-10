@@ -246,7 +246,6 @@ use Neos\Utility\ObjectAccess;
  */
 class FormDefinition extends Renderable\AbstractCompositeRenderable
 {
-
     /**
      * The identifier of this Form Definition
      *
