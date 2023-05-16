@@ -486,7 +486,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * @return mixed
      * @api
      */
-    public function offsetExists($identifier)
+    public function offsetExists(mixed $identifier): bool
     {
         return ($this->getElementValue($identifier) !== null);
     }
@@ -512,7 +512,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * @return mixed
      * @api
      */
-    public function offsetGet($identifier)
+    public function offsetGet($identifier): mixed
     {
         return $this->getElementValue($identifier);
     }
@@ -523,7 +523,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * @return void
      * @api
      */
-    public function offsetSet($identifier, $value)
+    public function offsetSet($identifier, $value): void
     {
         $this->formState->setFormValue($identifier, $value);
     }
@@ -533,7 +533,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * @param string $identifier
      * @return void
      */
-    public function offsetUnset($identifier)
+    public function offsetUnset($identifier): void
     {
         $this->formState->setFormValue($identifier, null);
     }
