@@ -22,6 +22,10 @@ jobs:
         php-versions: ['8.0', '8.2']
         flow-versions: ['8.0', '8.3', '9.0']
         dependencies: ['highest']
+        exclude:
+          # excludes Flow 9 on PHP 8.0
+          - php-versions: 8.0
+            flow-versions: 9.0
 
     defaults:
       run:
