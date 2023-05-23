@@ -11,6 +11,10 @@ namespace Neos\Form\Core\Model;
  * source code.
  */
 
+use Neos\Eel\CompilingEvaluator;
+use Neos\Eel\Utility;
+use Neos\Eel\Utility as EelUtility;
+use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 
 /**
@@ -20,6 +24,19 @@ use Neos\Utility\ObjectAccess;
  */
 abstract class AbstractFinisher implements FinisherInterface
 {
+
+    /**
+     * @Flow\Inject
+     * @var CompilingEvaluator
+     */
+    protected $eelEvaluator;
+
+    /**
+     * @Flow\InjectConfiguration
+     * @var array
+     */
+    protected $settings;
+
     /**
      * The options which have been set from the outside. Instead of directly
      * accessing them, you should rather use parseOption().
@@ -110,7 +127,20 @@ abstract class AbstractFinisher implements FinisherInterface
             if (!is_string($option)) {
                 return $option;
             }
-            $option = preg_replace_callback('/{([^}]+)}/', function ($match) use ($formRuntime) {
+
+            $pregReplaceString = '/{([^}]+)}/';
+            $parseEel = false;
+            $allowEelParsingForOptions = $this->parseOption('allowEelParsingForOptions');
+            if (is_array($allowEelParsingForOptions) && key_exists($optionName, $allowEelParsingForOptions) && $allowEelParsingForOptions[$optionName] === true) {
+                $pregReplaceString = '/[{|\$]+([^}]+)}/';
+                $parseEel = true;
+            }
+
+            $option = preg_replace_callback($pregReplaceString, function ($match) use ($formRuntime, $parseEel) {
+                if ($parseEel && strpos($match[0], '${') === 0 && strpos($match[0], '}') === strlen($match[0]) - 1) {
+                    return Utility::evaluateEelExpression($match[0], $this->eelEvaluator, EelUtility::getDefaultContextVariables($this->settings['defaultContext']));
+                }
+
                 return ObjectAccess::getPropertyPath($formRuntime, $match[1]);
             }, $option);
             if ($option !== '') {
