@@ -49,7 +49,7 @@ use Neos\Form\Exception\RenderingException;
  *
  * - *resource://Neos.Form/Private/Templates/MyTemplate.html* <br />
  *   Path without any placeholders; is directly used as template.
- * - *resource://{@package}/Privat/Templates/Form/{@type}.html* <br />
+ * - *resource://{@package}/Private/Templates/Form/{@type}.html* <br />
  *   If the current renderable has the namespaced type *Neos.Form:FooBar*,
  *   then this path is *{@package}* from above is replaced with *Neos.Form*
  *   and *{@type}* is replaced with *FooBar*.
