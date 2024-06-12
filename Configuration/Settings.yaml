@@ -1,6 +1,9 @@
 
 Neos:
   Form:
+    defaultContext:
+      String: Neos\Eel\Helper\StringHelper
+      Configuration: Neos\Eel\Helper\ConfigurationHelper
     yamlPersistenceManager:
       savePath: '%FLOW_PATH_DATA%Forms/'
     supertypeResolver:
