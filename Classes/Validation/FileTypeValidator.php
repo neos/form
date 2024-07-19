@@ -43,10 +43,14 @@ class FileTypeValidator extends AbstractValidator
         }
         $fileExtension = $resource->getFileExtension();
         if ($fileExtension === null || $fileExtension === '') {
+			$resource->shutdownObject();
+			$resource->preRemove();
             $this->addError('The file has no file extension.', 1327865808);
             return;
         }
         if (!in_array($fileExtension, $this->options['allowedExtensions'])) {
+			$resource->shutdownObject();
+			$resource->preRemove();
             $this->addError('The file extension "%s" is not allowed.', 1327865764, array($resource->getFileExtension()));
             return;
         }
