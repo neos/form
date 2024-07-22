@@ -27,6 +27,7 @@ use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
 use Neos\Form\Core\Renderer\RendererInterface;
 use Neos\Form\Exception\PropertyMappingException;
 use Neos\Form\Exception\RenderingException;
+use Neos\Form\FormElements\FileUpload;
 use Neos\Http\Factories\FlowUploadedFile;
 use Neos\Utility\Arrays;
 
@@ -134,6 +135,14 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
      * @var callable[]
      */
     protected $renderCallbacks = [];
+
+    /**
+     * Resources that will be deleted after finisher are invoked.
+     * If form upload field has the option set, that resources shouldn't be kept, the uploaded resource will be added here.
+     *
+     * @var array
+     */
+    protected array $resourcesToBeDeletedAfterLastPage = [];
 
     /**
      * @param FormDefinition $formDefinition
@@ -267,6 +276,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
         };
 
         $pageFormValues = [];
+        $shouldDeleteAfterLastPage = [];
         foreach ($page->getElementsRecursively() as $element) {
             $registerPropertyPaths($element->getIdentifier());
 
@@ -277,6 +287,10 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             }
 
             $element->onSubmit($this, $value);
+
+            if ($element instanceof FileUpload) {
+                $shouldDeleteAfterLastPage[$element->getIdentifier()] = $element->getProperty('deleteAfterLastPage') ?? false;
+            }
 
             $pageFormValues[$element->getIdentifier()] = $value;
             $this->formState->setFormValue($element->getIdentifier(), $value);
@@ -289,17 +303,18 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
         });
 
         $processingRules = $this->formDefinition->getProcessingRules();
-		$uploadedResources = [];
+        $uploadedResources = [];
         foreach ($propertyPathsForWhichPropertyMappingShouldHappen as $propertyPath) {
             if (isset($processingRules[$propertyPath])) {
                 $processingRule = $processingRules[$propertyPath];
                 $value = $this->formState->getFormValue($propertyPath);
                 try {
-					$isInstanceOfUploadedFileBeforeProcess = $value instanceof FlowUploadedFile;
-					$value = $processingRule->process($value);
-					if ($isInstanceOfUploadedFileBeforeProcess && $value instanceof PersistentResource) {
-						$uploadedResources[] = $value;
-					}
+                    $isInstanceOfUploadedFileBeforeProcess = $value instanceof FlowUploadedFile;
+                    $value = $processingRule->process($value);
+                    if ($isInstanceOfUploadedFileBeforeProcess && $value instanceof PersistentResource) {
+                        $uploadedResources[] = $value;
+                        if (key_exists($propertyPath, $shouldDeleteAfterLastPage) && $shouldDeleteAfterLastPage[$propertyPath]) $this->resourcesToBeDeletedAfterLastPage[] = $value;
+                    }
                 } catch (Exception $exception) {
                     throw new PropertyMappingException('Failed to process FormValue at "' . $propertyPath . '" from "' . gettype($value) . '" to "' . $processingRule->getDataType() . '"', 1355218921, $exception);
                 }
@@ -308,14 +323,14 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
             }
         }
 
-		// Delete uploaded resources if errors in form
-		if ($result->hasErrors()) {
-			/** @var PersistentResource $resource */
-			foreach ($uploadedResources as $resource) {
-				$resource->shutdownObject();
-				$resource->preRemove();
-			}
-		}
+        // Delete uploaded resources if errors in form
+        if ($result->hasErrors()) {
+            /** @var PersistentResource $resource */
+            foreach ($uploadedResources as $resource) {
+                $resource->shutdownObject();
+                $resource->preRemove();
+            }
+        }
 
         return $result;
     }
@@ -346,6 +361,15 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
     {
         if ($this->isAfterLastPage()) {
             $this->invokeFinishers();
+
+            foreach ($this->resourcesToBeDeletedAfterLastPage as $resource) {
+                if (!$resource instanceof PersistentResource) {
+                    continue;
+                }
+
+                $resource->shutdownObject();
+                $resource->preRemove();
+            }
 
             // Do not provide content to parent request as that would overwrite in later mergers.
             $content = $this->response->getContent();
