@@ -295,8 +295,8 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
                 $processingRule = $processingRules[$propertyPath];
                 $value = $this->formState->getFormValue($propertyPath);
                 try {
-                    $value = $processingRule->process($value);
 					$isInstanceOfUploadedFileBeforeProcess = $value instanceof FlowUploadedFile;
+					$value = $processingRule->process($value);
 					if ($isInstanceOfUploadedFileBeforeProcess && $value instanceof PersistentResource) {
 						$uploadedResources[] = $value;
 					}
@@ -310,6 +310,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
 
 		// Delete uploaded resources if errors in form
 		if ($result->hasErrors()) {
+			/** @var PersistentResource $resource */
 			foreach ($uploadedResources as $resource) {
 				$resource->shutdownObject();
 				$resource->preRemove();
