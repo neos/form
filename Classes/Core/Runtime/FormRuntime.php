@@ -19,6 +19,7 @@ use Neos\Flow\Mvc\Controller\Arguments;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\Mvc\Routing\UriBuilder;
 use Neos\Flow\Property\Exception;
+use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Form\Core\Model\FinisherContext;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Model\Page;
@@ -26,6 +27,7 @@ use Neos\Form\Core\Model\Renderable\RootRenderableInterface;
 use Neos\Form\Core\Renderer\RendererInterface;
 use Neos\Form\Exception\PropertyMappingException;
 use Neos\Form\Exception\RenderingException;
+use Neos\Http\Factories\FlowUploadedFile;
 use Neos\Utility\Arrays;
 
 /**
@@ -287,12 +289,17 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
         });
 
         $processingRules = $this->formDefinition->getProcessingRules();
+		$uploadedResources = [];
         foreach ($propertyPathsForWhichPropertyMappingShouldHappen as $propertyPath) {
             if (isset($processingRules[$propertyPath])) {
                 $processingRule = $processingRules[$propertyPath];
                 $value = $this->formState->getFormValue($propertyPath);
                 try {
                     $value = $processingRule->process($value);
+					$isInstanceOfUploadedFileBeforeProcess = $value instanceof FlowUploadedFile;
+					if ($isInstanceOfUploadedFileBeforeProcess && $value instanceof PersistentResource) {
+						$uploadedResources[] = $value;
+					}
                 } catch (Exception $exception) {
                     throw new PropertyMappingException('Failed to process FormValue at "' . $propertyPath . '" from "' . gettype($value) . '" to "' . $processingRule->getDataType() . '"', 1355218921, $exception);
                 }
@@ -300,6 +307,14 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
                 $this->formState->setFormValue($propertyPath, $value);
             }
         }
+
+		// Delete uploaded resources if errors in form
+		if ($result->hasErrors()) {
+			foreach ($uploadedResources as $resource) {
+				$resource->shutdownObject();
+				$resource->preRemove();
+			}
+		}
 
         return $result;
     }
