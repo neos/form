@@ -11,7 +11,9 @@ namespace Neos\Form\Validation;
  * source code.
  */
 
+use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ResourceManagement\PersistentResource;
+use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Flow\Validation\Validator\AbstractValidator;
 
 /**
@@ -20,6 +22,12 @@ use Neos\Flow\Validation\Validator\AbstractValidator;
  */
 class FileTypeValidator extends AbstractValidator
 {
+    /**
+     * @Flow\Inject
+     * @var ResourceManager
+     */
+    protected ResourceManager $resourceManager;
+
     /**
      * @var array
      */
@@ -41,17 +49,18 @@ class FileTypeValidator extends AbstractValidator
             $this->addError('The given value was not a PersistentResource instance.', 1327865587);
             return;
         }
+
         $fileExtension = $resource->getFileExtension();
+
         if ($fileExtension === null || $fileExtension === '') {
-			$resource->shutdownObject();
-			$resource->preRemove();
             $this->addError('The file has no file extension.', 1327865808);
+            $this->resourceManager->deleteResource($resource);
             return;
         }
+
         if (!in_array($fileExtension, $this->options['allowedExtensions'])) {
-			$resource->shutdownObject();
-			$resource->preRemove();
             $this->addError('The file extension "%s" is not allowed.', 1327865764, array($resource->getFileExtension()));
+            $this->resourceManager->deleteResource($resource);
             return;
         }
     }
