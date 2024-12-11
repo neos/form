@@ -19,13 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.0', '8.2']
+        php-versions: ['8.1', '8.3']
         flow-versions: ['8.0', '8.3', '9.0']
         dependencies: ['highest']
-        exclude:
-          # excludes Flow 9 on PHP 8.0
-          - php-versions: 8.0
-            flow-versions: 9.0
 
     defaults:
       run:
@@ -33,14 +29,14 @@ jobs:
 
     steps:
     - name: Checkout Flow development distribution
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: neos/flow-development-distribution
         ref: ${{ matrix.flow-versions }}
         path: ${{ env.FLOW_FOLDER }}
 
     - name: Checkout package
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         path: ${{ env.PACKAGE_FOLDER}}/${{ env.PACKAGE_NAME }}
 
@@ -55,7 +51,7 @@ jobs:
       id: composer-cache
       run: echo "::set-output name=dir::$(composer config cache-files-dir)"
     - name: Cache composer dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-php${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.json') }}
