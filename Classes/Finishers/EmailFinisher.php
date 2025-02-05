@@ -16,6 +16,7 @@ use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
+use Neos\Media\Domain\Model\Image;
 use Neos\SwiftMailer\Message as SwiftMailerMessage;
 use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
@@ -270,7 +271,18 @@ class EmailFinisher extends AbstractFinisher
         if ($this->parseOption('attachAllPersistentResources')) {
             foreach ($formValues as $formValue) {
                 if ($formValue instanceof PersistentResource) {
-                    $mail->attach(new \Swift_Attachment(stream_get_contents($formValue->getStream()), $formValue->getFilename(), $formValue->getMediaType()));
+                    $resourceStream = $formValue->getStream();
+                    // getStream could return a bool value but stream_get_contents only excepts values of type resource
+                    if (is_resource($resourceStream)) {
+                        $mail->attach(new \Swift_Attachment(stream_get_contents($resourceStream), $formValue->getFilename(), $formValue->getMediaType()));
+                    }
+                }
+                // to also attach images to an email from the image upload component
+                if ($formValue instanceof Image) {
+                    $imageStream = $formValue->getResource()->getStream();
+                    if (is_resource($imageStream)) {
+                        $mail->attach(new \Swift_Attachment(stream_get_contents($imageStream), $formValue->getResource()->getFilename(), $formValue->getResource()->getMediaType()));
+                    }
                 }
             }
         }
@@ -285,10 +297,22 @@ class EmailFinisher extends AbstractFinisher
                     throw new FinisherException('The "attachments" options need to specify a "resource" path or a "formElement" containing the resource to attach', 1503396636);
                 }
                 $resource = ObjectAccess::getPropertyPath($formValues, $attachmentConfiguration['formElement']);
-                if (!$resource instanceof PersistentResource) {
+                if (!($resource instanceof PersistentResource || $resource instanceof Image)) {
                     continue;
                 }
-                $mail->attach(new \Swift_Attachment(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
+                if ($resource instanceof PersistentResource) {
+                    $resourceStream = $resource->getStream();
+                    if (is_resource($resourceStream)) {
+                        $mail->attach(new \Swift_Attachment(stream_get_contents($resourceStream), $resource->getFilename(), $resource->getMediaType()));
+                    }
+                }
+                // to also attach images from the image upload component
+                if ($resource instanceof Image) {
+                    $imageStream = $resource->getResource()->getStream();
+                    if (is_resource($imageStream)) {
+                        $mail->attach(new \Swift_Attachment(stream_get_contents($imageStream), $resource->getResource()->getFilename(), $resource->getResource()->getMediaType()));
+                    }
+                }
             }
         }
     }
