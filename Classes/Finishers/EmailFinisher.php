@@ -18,7 +18,6 @@ use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
-use Neos\Fusion\Form\Runtime\Domain\Exception\ActionException;
 use Neos\SymfonyMailer\Service\MailerService;
 use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
@@ -101,7 +100,7 @@ class EmailFinisher extends AbstractFinisher
     protected function executeInternal()
     {
         if (!class_exists(MailerService::class)) {
-            throw new ActionException('The "neos/symfonymailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
+            throw new FinisherException('The "neos/symfonymailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
         }
 
         $subject = $this->parseOption('subject');
