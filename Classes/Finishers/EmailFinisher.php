@@ -101,7 +101,7 @@ class EmailFinisher extends AbstractFinisher
     protected function executeInternal()
     {
         if (!class_exists(MailerService::class)) {
-            throw new ActionException('The "neos/swiftmailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
+            throw new ActionException('The "neos/symfonymailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
         }
 
         $subject = $this->parseOption('subject');
