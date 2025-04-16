@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Tests\Functional;
 
 /*
@@ -37,17 +38,34 @@ abstract class AbstractFunctionalTestCase extends FunctionalTestCase
     {
         parent::setUp();
 
-        $route = new Route();
-        $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
-        $route->setDefaults([
-            '@package' => 'Neos.Form',
-            '@subpackage' => 'Tests\Functional\Fixtures',
-            '@controller' => 'Form',
-            '@action' => 'index',
-            '@format' => 'html'
-        ]);
-        $route->setAppendExceedingArguments(true);
-        $this->router->addRoute($route);
+        if (method_exists($this, 'registerRoute')) {
+            // Flow 9.x
+            $this->registerRoute(
+                'Functional Test - Neos.Form',
+                'test/form/simpleform/{formFactoryClassName}',
+                [
+                    '@package' => 'Neos.Form',
+                    '@subpackage' => 'Tests\Functional\Fixtures',
+                    '@controller' => 'Form',
+                    '@action' => 'index',
+                    '@format' => 'html'
+                ],
+                true
+            );
+        } else {
+            // Flow 8.x
+            $route = new Route();
+            $route->setUriPattern('test/form/simpleform/{formFactoryClassName}');
+            $route->setDefaults([
+                '@package' => 'Neos.Form',
+                '@subpackage' => 'Tests\Functional\Fixtures',
+                '@controller' => 'Form',
+                '@action' => 'index',
+                '@format' => 'html'
+            ]);
+            $route->setAppendExceedingArguments(true);
+            $this->router->addRoute($route);
+        }
     }
 
     /**

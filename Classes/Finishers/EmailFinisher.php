@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Form\Finishers;
 
 /*
@@ -12,14 +13,19 @@ namespace Neos\Form\Finishers;
  */
 
 use Neos\Flow\I18n\Service;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
-use Neos\SwiftMailer\Message as SwiftMailerMessage;
+use Neos\SymfonyMailer\Service\MailerService;
 use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
 use Neos\Flow\Annotations as Flow;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\File;
 
 /**
  * This finisher sends an email to one or more recipients
@@ -69,10 +75,8 @@ class EmailFinisher extends AbstractFinisher
      */
     protected $i18nService;
 
-    protected $formatContentTypes = [
-        self::FORMAT_HTML => self::CONTENT_TYPE_HTML,
-        self::FORMAT_PLAINTEXT => self::CONTENT_TYPE_PLAINTEXT,
-    ];
+    #[Flow\Inject]
+    protected ObjectManagerInterface $objectManager;
 
     /**
      * @var array
@@ -88,16 +92,17 @@ class EmailFinisher extends AbstractFinisher
 
     /**
      * Executes this finisher
-     * @see AbstractFinisher::execute()
-     *
      * @return void
      * @throws FinisherException
+     * @see AbstractFinisher::execute()
+     *
      */
     protected function executeInternal()
     {
-        if (!class_exists(SwiftMailerMessage::class)) {
-            throw new FinisherException('The "neos/swiftmailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
+        if (!class_exists(MailerService::class)) {
+            throw new FinisherException('The "neos/symfonymailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
         }
+
         $subject = $this->parseOption('subject');
         $recipientAddress = $this->parseOption('recipientAddress');
         $recipientName = $this->parseOption('recipientName');
@@ -123,28 +128,28 @@ class EmailFinisher extends AbstractFinisher
             throw new FinisherException('The option "senderAddress" must be set for the EmailFinisher.', 1327060210);
         }
 
-        $mail = new SwiftMailerMessage();
+        $mail = new Email();
 
         $mail
-            ->setFrom(array($senderAddress => $senderName))
-            ->setSubject($subject);
+            ->addFrom(new Address($senderAddress, $senderName))
+            ->subject($subject);
 
         if (is_array($recipientAddress)) {
-            $mail->setTo($recipientAddress);
+            $mail->addTo(...array_map(fn ($entry) => new Address($entry), $recipientAddress));
         } else {
-            $mail->setTo(array($recipientAddress => $recipientName));
+            $mail->addTo(new Address($recipientAddress, $recipientName));
         }
 
         if ($replyToAddress !== null) {
-            $mail->setReplyTo($replyToAddress);
+            $mail->addReplyTo(new Address($replyToAddress));
         }
 
         if ($carbonCopyAddress !== null) {
-            $mail->setCc($carbonCopyAddress);
+            $mail->addCc(new Address($carbonCopyAddress));
         }
 
         if ($blindCarbonCopyAddress !== null) {
-            $mail->setBcc($blindCarbonCopyAddress);
+            $mail->addBcc(new Address($blindCarbonCopyAddress));
         }
 
         $this->addMessages($mail, $messages);
@@ -164,18 +169,17 @@ class EmailFinisher extends AbstractFinisher
                 'E-Mail "' . $subject . '"'
             );
         } else {
-            $mail->send();
+            $this->getMailerService()->getMailer()->send($mail);
         }
     }
 
-    protected function addMessages(SwiftMailerMessage $mail, array $messages): void
+    protected function addMessages(Email $mail, array $messages): void
     {
         foreach ($messages as $messageFormat => $message) {
-            if (count($messages) === 1) {
-                $mail->setBody($message, $this->formatContentTypes[$messageFormat]);
-            } else {
-                $mail->addPart($message, $this->formatContentTypes[$messageFormat]);
-            }
+            match ($messageFormat) {
+                self::FORMAT_HTML => $mail->html($message),
+                self::FORMAT_PLAINTEXT => $mail->text($message),
+            };
         }
     }
 
@@ -260,17 +264,17 @@ class EmailFinisher extends AbstractFinisher
     }
 
     /**
-     * @param SwiftMailerMessage $mail
+     * @param Email $mail
      * @return void
      * @throws FinisherException
      */
-    protected function addAttachments(SwiftMailerMessage $mail)
+    protected function addAttachments(Email $mail)
     {
         $formValues = $this->finisherContext->getFormValues();
         if ($this->parseOption('attachAllPersistentResources')) {
             foreach ($formValues as $formValue) {
                 if ($formValue instanceof PersistentResource) {
-                    $mail->attach(new \Swift_Attachment(stream_get_contents($formValue->getStream()), $formValue->getFilename(), $formValue->getMediaType()));
+                    $mail->addPart(new DataPart($formValue->getStream(), $formValue->getFilename(), $formValue->getMediaType()));
                 }
             }
         }
@@ -278,7 +282,7 @@ class EmailFinisher extends AbstractFinisher
         if (is_array($attachmentConfigurations)) {
             foreach ($attachmentConfigurations as $attachmentConfiguration) {
                 if (isset($attachmentConfiguration['resource'])) {
-                    $mail->attach(\Swift_Attachment::fromPath($attachmentConfiguration['resource']));
+                    $mail->addPart(new DataPart(new File($attachmentConfiguration['resource'])));
                     continue;
                 }
                 if (!isset($attachmentConfiguration['formElement'])) {
@@ -288,8 +292,16 @@ class EmailFinisher extends AbstractFinisher
                 if (!$resource instanceof PersistentResource) {
                     continue;
                 }
-                $mail->attach(new \Swift_Attachment(stream_get_contents($resource->getStream()), $resource->getFilename(), $resource->getMediaType()));
+                $content = stream_get_contents($resource->getStream());
+                if (!is_bool($content)) {
+                    $mail->addPart(new DataPart($content, $resource->getFilename(), $resource->getMediaType()));
+                }
             }
         }
+    }
+
+    private function getMailerService(): MailerService
+    {
+        return $this->objectManager->get(MailerService::class);
     }
 }
