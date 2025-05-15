@@ -105,9 +105,9 @@ class EmailFinisher extends AbstractFinisher
 
         $subject = $this->parseOption('subject');
         $recipientAddress = $this->parseOption('recipientAddress');
-        $recipientName = $this->parseOption('recipientName');
+        $recipientName = $this->parseOption('recipientName') ?? '';
         $senderAddress = $this->parseOption('senderAddress');
-        $senderName = $this->parseOption('senderName');
+        $senderName = $this->parseOption('senderName') ?? '';
         $replyToAddress = $this->parseOption('replyToAddress');
         $carbonCopyAddress = $this->parseOption('carbonCopyAddress');
         $blindCarbonCopyAddress = $this->parseOption('blindCarbonCopyAddress');
