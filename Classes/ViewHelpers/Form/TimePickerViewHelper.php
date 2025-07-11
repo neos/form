@@ -94,7 +94,7 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
      * @param \DateTime $date
      * @return string
      */
-    protected function buildHourSelector(\DateTime $date = null)
+    protected function buildHourSelector(?\DateTime $date = null)
     {
         $value = $date !== null ? $date->format('H') : null;
         $hourSelector = clone $this->tag;
@@ -113,7 +113,7 @@ class TimePickerViewHelper extends AbstractFormFieldViewHelper
      * @param \DateTime $date
      * @return string
      */
-    protected function buildMinuteSelector(\DateTime $date = null)
+    protected function buildMinuteSelector(?\DateTime $date = null)
     {
         $value = $date !== null ? $date->format('i') : null;
         $minuteSelector = clone $this->tag;
