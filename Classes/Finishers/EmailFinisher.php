@@ -18,6 +18,7 @@ use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
+use Neos\Media\Domain\Model\ResourceBasedInterface;
 use Neos\SymfonyMailer\Service\MailerService;
 use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
@@ -273,6 +274,9 @@ class EmailFinisher extends AbstractFinisher
         $formValues = $this->finisherContext->getFormValues();
         if ($this->parseOption('attachAllPersistentResources')) {
             foreach ($formValues as $formValue) {
+                if ($formValue instanceof ResourceBasedInterface) {
+                    $formValue = $formValue->getResource();
+                }
                 if ($formValue instanceof PersistentResource) {
                     $mail->addPart(new DataPart($formValue->getStream(), $formValue->getFilename(), $formValue->getMediaType()));
                 }
