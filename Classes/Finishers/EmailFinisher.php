@@ -17,6 +17,7 @@ use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 use Neos\SwiftMailer\Message as SwiftMailerMessage;
+use Neos\Media\Domain\Model\ResourceBasedInterface;
 use Neos\Utility\Arrays;
 use Neos\Utility\ObjectAccess;
 use Neos\Flow\Annotations as Flow;
@@ -269,6 +270,9 @@ class EmailFinisher extends AbstractFinisher
         $formValues = $this->finisherContext->getFormValues();
         if ($this->parseOption('attachAllPersistentResources')) {
             foreach ($formValues as $formValue) {
+                if ($formValue instanceof ResourceBasedInterface) {
+                    $formValue = $formValue->getResource();
+                }
                 if ($formValue instanceof PersistentResource) {
                     $mail->attach(new \Swift_Attachment(stream_get_contents($formValue->getStream()), $formValue->getFilename(), $formValue->getMediaType()));
                 }
