@@ -64,14 +64,15 @@ If you want to build a form with PHP, the skeleton for building a form looks as 
 	use Neos\Flow\Annotations as Flow;
 	use Neos\Form\Core\Model\FormDefinition;
 
-	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory {
-
+	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory
+	{
 		/**
 		 * @param array $factorySpecificConfiguration
 		 * @param string $presetName
 		 * @return \Neos\Form\Core\Model\FormDefinition
 		 */
-		public function build(array $factorySpecificConfiguration, $presetName) {
+		public function build(array $factorySpecificConfiguration, $presetName)
+		{
 			$formConfiguration = $this->getPresetConfiguration($presetName);
 			$form = new FormDefinition('yourFormIdentifier', $formConfiguration);
 			// Now, build your form here
@@ -84,7 +85,8 @@ needs to return the :api-core-model:`FormDefinition`.
 
 Lets add the one page and input fields for *name*, *email* and *message* of our contact form::
 
-	public function build(array $factorySpecificConfiguration, $presetName) {
+	public function build(array $factorySpecificConfiguration, $presetName)
+	{
 		$formConfiguration = $this->getPresetConfiguration($presetName);
 		$form = new FormDefinition('contactForm', $formConfiguration);
 
@@ -169,7 +171,7 @@ For this example we might want to send the data to an email address, and we can 
 the :api-finishers:`EmailFinisher` for that::
 
 	$emailFinisher = new \Neos\Form\Finishers\EmailFinisher();
-	$emailFinisher->setOptions(array(
+	$emailFinisher->setOptions([
 		'templatePathAndFilename' => 'resource://Your.Package/Private/Templates/ContactForm/NotificationEmail.txt',
 		'recipientAddress' => 'your@example.com',
 		'senderAddress' => 'mailer@example.com',
@@ -178,7 +180,7 @@ the :api-finishers:`EmailFinisher` for that::
 		'blindCarbonCopyAddress' => 'blindcopy@example.com',
 		'subject' => 'Contact Request',
 		'format' => \Neos\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
-	));
+	]);
 	$form->addFinisher($emailFinisher);
 
 
@@ -189,7 +191,7 @@ The corresponding ``NotificationEmail.txt`` template could look like this::
     From: {formValues.name} ({formValues.email})
     Message:
 
-    {formValues.message}
+    <f:format.raw>{formValues.message}</f:format.raw>
 
 .. note:: Form values can be accessed via `formValues.*`
 
@@ -197,9 +199,7 @@ And afterwards we want to redirect the user to some confirmation action, thus
 we add the :api-finishers:`RedirectFinisher`::
 
 	$redirectFinisher = new \Neos\Form\Finishers\RedirectFinisher();
-	$redirectFinisher->setOptions(
-		array('action' => 'confirmation')
-	);
+	$redirectFinisher->setOptions(['action' => 'confirmation']);
 	$form->addFinisher($redirectFinisher);
 
 Summary
@@ -217,14 +217,15 @@ That's it for the quickstart. The complete code of your form factory should look
 	/**
 	 * Flow\Scope("singleton")
 	 */
-	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory {
-
+	class QuickstartFactory extends \Neos\Form\Factory\AbstractFormFactory 
+	{
 		/**
 		 * @param array $factorySpecificConfiguration
 		 * @param string $presetName
 		 * @return \Neos\Form\Core\Model\FormDefinition
 		 */
-		public function build(array $factorySpecificConfiguration, $presetName) {
+		public function build(array $factorySpecificConfiguration, $presetName)
+		{
 			$formConfiguration = $this->getPresetConfiguration($presetName);
 			$form = new FormDefinition('contactForm', $formConfiguration);
 
@@ -245,7 +246,7 @@ That's it for the quickstart. The complete code of your form factory should look
 			$comments->addValidator(new \Neos\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3)));
 
 			$emailFinisher = new \Neos\Form\Finishers\EmailFinisher();
-			$emailFinisher->setOptions(array(
+			$emailFinisher->setOptions([
 				'templatePathAndFilename' => 'resource://Your.Package/Private/Templates/ContactForm/NotificationEmail.txt',
 				'recipientAddress' => 'your@example.com',
 				'senderAddress' => 'mailer@example.com',
@@ -254,13 +255,11 @@ That's it for the quickstart. The complete code of your form factory should look
 				'blindCarbonCopyAddress' => 'blindcopy@example.com',
 				'subject' => 'Contact Request',
 				'format' => \Neos\Form\Finishers\EmailFinisher::FORMAT_PLAINTEXT
-			));
+			]);
 			$form->addFinisher($emailFinisher);
 
 			$redirectFinisher = new \Neos\Form\Finishers\RedirectFinisher();
-			$redirectFinisher->setOptions(
-				array('action' => 'confirmation')
-			);
+			$redirectFinisher->setOptions(['action' => 'confirmation']);
 			$form->addFinisher($redirectFinisher);
 
 			return $form;
