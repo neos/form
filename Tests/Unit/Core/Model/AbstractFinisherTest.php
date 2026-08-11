@@ -13,6 +13,7 @@ namespace Neos\Form\Tests\Unit\Core\Model;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Core\Model\FinisherContext;
@@ -193,7 +194,7 @@ class AbstractFinisherTest extends UnitTestCase
     }
 
     /**
-     * @return AbstractFinisher|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractFinisher|MockObject
      */
     protected function getAbstractFinisher()
     {

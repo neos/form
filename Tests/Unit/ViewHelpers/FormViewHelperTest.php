@@ -12,6 +12,7 @@ namespace Neos\Form\Tests\Unit\ViewHelpers;
  */
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use GuzzleHttp\Psr7\Uri;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Controller\ControllerContext;
@@ -31,7 +32,7 @@ class FormViewHelperTest extends UnitTestCase
     protected $formViewHelper;
 
     /**
-     * @var ControllerContext|\PHPUnit\Framework\MockObject\MockObject
+     * @var ControllerContext|MockObject
      */
     protected $mockControllerContext;
 

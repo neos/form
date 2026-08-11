@@ -12,6 +12,8 @@ namespace Neos\Form\Tests\Unit\Core\Runtime;
  */
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Neos\Form\Tests\Unit\Core\Runtime\Renderer\Fixture\DummyFinisher;
+use PHPUnit\Framework\MockObject\MockObject;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Tests\UnitTestCase;
@@ -127,7 +129,7 @@ class FormRuntimeTest extends UnitTestCase
      */
     protected function getMockFinisher(\Closure $closureToExecute)
     {
-        $finisher = new Renderer\Fixture\DummyFinisher();
+        $finisher = new DummyFinisher();
         $finisher->cb = $closureToExecute;
 
         return $finisher;
@@ -195,7 +197,7 @@ class FormRuntimeTest extends UnitTestCase
 
     /**
      * @param FormDefinition $formDefinition
-     * @return FormRuntime|\PHPUnit\Framework\MockObject\MockObject
+     * @return FormRuntime|MockObject
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {

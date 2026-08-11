@@ -13,6 +13,7 @@ namespace Neos\Form\Tests\Unit\Core\Model;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Neos\Form\Tests\Unit\Core\Model\Fixture\EmptyFinisher;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Tests\UnitTestCase;
@@ -99,7 +100,7 @@ class FormDefinitionTest extends UnitTestCase
         $formDefinition = new FormDefinition('myForm', [
             'finisherPresets' => [
                 'myFinisher' => [
-                    'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class),
+                    'implementationClassName' => $this->buildAccessibleProxy(EmptyFinisher::class),
                     'options' => [
                         'foo' => 'bar',
                         'test' => 'asdf'
@@ -122,7 +123,7 @@ class FormDefinitionTest extends UnitTestCase
         $finishers = $formDefinition->getFinishers();
         Assert::assertSame(1, count($finishers));
         $finisher = $finishers[0];
-        $this->assertInstanceOf(Fixture\EmptyFinisher::class, $finisher);
+        $this->assertInstanceOf(EmptyFinisher::class, $finisher);
         /** @noinspection PhpUndefinedMethodInspection */
         Assert::assertSame(['foo' => 'baz', 'test' => 'asdf'], $finisher->_get('options'));
     }
@@ -645,7 +646,7 @@ class FormDefinitionTest extends UnitTestCase
     {
         $formDefinition = $this->getFormDefinitionWithFinisherConfiguration();
         $finisher = $formDefinition->createFinisher('email');
-        $this->assertInstanceOf(Fixture\EmptyFinisher::class, $finisher);
+        $this->assertInstanceOf(EmptyFinisher::class, $finisher);
         Assert::assertSame([$finisher], $formDefinition->getFinishers());
     }
 
@@ -678,10 +679,10 @@ class FormDefinitionTest extends UnitTestCase
                     'assd' => 'as'
                 ],
                 'email' => [
-                    'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class)
+                    'implementationClassName' => $this->buildAccessibleProxy(EmptyFinisher::class)
                 ],
                 'emailWithOptions' => [
-                    'implementationClassName' => $this->buildAccessibleProxy(Fixture\EmptyFinisher::class),
+                    'implementationClassName' => $this->buildAccessibleProxy(EmptyFinisher::class),
                     'options' => [
                         'foo' => 'bar',
                         'name' => 'asdf'

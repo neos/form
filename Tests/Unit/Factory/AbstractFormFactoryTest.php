@@ -13,6 +13,7 @@ namespace Neos\Form\Tests\Unit\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use Neos\Flow\Configuration\ConfigurationManager;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Exception\PresetNotFoundException;
@@ -126,7 +127,7 @@ class AbstractFormFactoryTest extends UnitTestCase
     }
 
     /**
-     * @return AbstractFormFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractFormFactory|MockObject
      */
     protected function getAbstractFormFactory()
     {
