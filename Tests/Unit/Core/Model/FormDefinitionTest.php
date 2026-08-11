@@ -53,7 +53,7 @@ class FormDefinitionTest extends UnitTestCase
         Assert::assertSame('bar', $formDefinition->getIdentifier());
     }
 
-    public function invalidIdentifiers()
+    public static function invalidIdentifiers()
     {
         return [
             'Null Identifier' => [null],

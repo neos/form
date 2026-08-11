@@ -64,7 +64,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame('Neos.Foo:Bar', $page->getType());
     }
 
-    public function invalidIdentifiers()
+    public static function invalidIdentifiers()
     {
         return [
             'Null Identifier' => [null],

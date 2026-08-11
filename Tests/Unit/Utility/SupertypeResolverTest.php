@@ -24,7 +24,7 @@ use PHPUnit\Framework\Assert;
 #[CoversClass(SupertypeResolver::class)]
 class SupertypeResolverTest extends UnitTestCase
 {
-    public function dataProviderForTypeResolving()
+    public static function dataProviderForTypeResolving()
     {
         $types = [
             'typeFoo' => [

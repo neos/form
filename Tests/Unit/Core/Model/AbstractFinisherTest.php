@@ -69,7 +69,7 @@ class AbstractFinisherTest extends UnitTestCase
         Assert::assertSame($obj, $finisher->_call('parseOption', 'baz'));
     }
 
-    public function dataProviderForDefaultOptions()
+    public static function dataProviderForDefaultOptions()
     {
         $defaultOptions = [
             'overridden1' => 'Overridden1Default',
@@ -126,7 +126,7 @@ class AbstractFinisherTest extends UnitTestCase
         Assert::assertSame($expected, $finisher->_call('parseOption', $optionKey));
     }
 
-    public function dataProviderForPlaceholderReplacement()
+    public static function dataProviderForPlaceholderReplacement()
     {
         $formValues = [
             'foo' => 'My Value',

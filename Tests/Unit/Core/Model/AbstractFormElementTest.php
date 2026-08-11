@@ -42,7 +42,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('Neos.Form:MyType', $element->getType());
     }
 
-    public function invalidIdentifiers()
+    public static function invalidIdentifiers()
     {
         return [
             'Null Identifier' => [null],
@@ -114,7 +114,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('foo-bar', $myFormElement->getUniqueIdentifier());
     }
 
-    public function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider()
+    public static function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider()
     {
         return [
             ['foo', 'bar', 'foo-bar'],

@@ -25,7 +25,7 @@ use PHPUnit\Framework\Assert;
 #[CoversClass(AbstractFormFactory::class)]
 class AbstractFormFactoryTest extends UnitTestCase
 {
-    public function dataProviderForConfigurationMerging()
+    public static function dataProviderForConfigurationMerging()
     {
         $presets = [
             'default' => [
@@ -118,7 +118,7 @@ class AbstractFormFactoryTest extends UnitTestCase
             ->expects($this->once())
             ->method('getConfiguration')
             ->with(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form')
-            ->will($this->returnValue('MyConfig'));
+            ->willReturn('MyConfig');
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
         $abstractFormFactory->_call('initializeObject');
