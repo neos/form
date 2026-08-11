@@ -10,22 +10,21 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+use PHPUnit\Framework\Attributes\Large;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Utility\ObjectAccess;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 
 /**
  * Testcase for Simple Form
- *
- * @group large
  */
+#[Large]
 class SimpleFormTest extends AbstractFunctionalTestCase
 {
     protected static $testablePersistenceEnabled = true;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function goingForthAndBackStoresFormValuesOfFirstPage()
     {
         $this->browser->request('http://localhost/test/form/simpleform/ThreePageFormWithValidation');
@@ -41,9 +40,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         Assert::assertSame('My Text on the first page', $form['--three-page-form-with-validation']['text1-1']->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function goingForthAndBackStoresFormValuesOfSecondPage()
     {
         $this->browser->request('http://localhost/test/form/simpleform/ThreePageFormWithValidation');
@@ -59,9 +56,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         Assert::assertSame('My Text on the second page', $form['--three-page-form-with-validation']['text2-1']->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function goingForthAndBackStoresFormValuesOfSecondPageAndTriggersValidationOnlyWhenGoingForward()
     {
         $this->browser->request('http://localhost/test/form/simpleform/ThreePageFormWithValidation');
@@ -83,10 +78,7 @@ class SimpleFormTest extends AbstractFunctionalTestCase
         Assert::assertSame('', $form['--three-page-form-with-validation']['text3-1']->getValue());
     }
 
-    /**
-     * @test
-     * Thanks to Anian Weber for reporting that issue!
-     */
+    #[Test]
     public function validationIsNotSkippedForGetRequests()
     {
         $this->browser->request('http://localhost/test/form/simpleform/ThreePageFormWithValidation');
@@ -109,11 +101,11 @@ class SimpleFormTest extends AbstractFunctionalTestCase
     }
 
     /**
-     * @test
      * @see https://github.com/neos/form/issues/126
      * @see https://github.com/neos/form/issues/135
      * @see https://github.com/neos/form/issues/143
      */
+    #[Test]
     public function formStateCanContainArbitraryObjects()
     {
         $this->browser->request('http://localhost/test/form/simpleform/TwoPageFormWithUpload');
@@ -136,9 +128,8 @@ class SimpleFormTest extends AbstractFunctionalTestCase
      * that we do NOT send any of the parameters with the form; as we only want the form state to be applied.
      *
      * So, if the form state contains some values, we want to be sure these values are re-displayed.
-     *
-     * @test
      */
+    #[Test]
     public function goingForthAndBackStoresFormValuesOfSecondPageEvenWhenSecondPageIsManuallyCalledAsGetRequest()
     {
         $this->markTestSkipped('This test is skipped because we no longer allow Form validators to be skipped, see https://github.com/neos/form/security/advisories/GHSA-m5vx-8chx-qvmm');

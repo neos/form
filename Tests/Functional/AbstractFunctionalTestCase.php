@@ -11,7 +11,7 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\Large;
 use Neos\Flow\Http\Client\Browser;
 use Neos\Flow\Mvc\Routing\Route;
 use Neos\Flow\Tests\FunctionalTestCase;
@@ -21,9 +21,8 @@ use Symfony\Component\DomCrawler\Form;
 
 /**
  * Testcase for Simple Form
- *
- * @group large
  */
+#[Large]
 abstract class AbstractFunctionalTestCase extends FunctionalTestCase
 {
     /**

@@ -10,7 +10,9 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Flow\Validation\Validator\ConjunctionValidator;
 use Neos\Flow\Validation\Validator\NotEmptyValidator;
@@ -33,14 +35,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Page Domain Model
- * @covers \Neos\Form\Core\Model\Page<extended>
- * @covers \Neos\Form\Core\Model\AbstractFormElement<extended>
  */
+#[CoversClass(Page::class)]
+#[CoversClass(AbstractFormElement::class)]
 class PageTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function identifierSetInConstructorCanBeReadAgain()
     {
         $page = new Page('foo');
@@ -50,18 +50,14 @@ class PageTest extends UnitTestCase
         Assert::assertSame('bar', $page->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function defaultTypeIsCorrect()
     {
         $page = new Page('foo');
         Assert::assertSame('Neos.Form:Page', $page->getType());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function typeCanBeOverridden()
     {
         $page = new Page('foo', 'Neos.Foo:Bar');
@@ -78,38 +74,32 @@ class PageTest extends UnitTestCase
     }
 
     /**
-     * @test
-     * @dataProvider invalidIdentifiers
      * @param mixed $identifier
      * @throws IdentifierNotValidException
      */
+    #[DataProvider('invalidIdentifiers')]
+    #[Test]
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
         $this->expectException(IdentifierNotValidException::class);
         new Page($identifier);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getElementsReturnsEmptyArrayByDefault()
     {
         $page = new Page('foo');
         Assert::assertSame([], $page->getElements());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getElementsRecursivelyReturnsEmptyArrayByDefault()
     {
         $page = new Page('foo');
         Assert::assertSame([], $page->getElementsRecursively());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getElementsRecursivelyReturnsFirstLevelFormElements()
     {
         $page = new Page('foo');
@@ -122,9 +112,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame([$element1, $element2], $page->getElementsRecursively());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getElementsRecursivelyReturnsRecursiveFormElementsInCorrectOrder()
     {
         $page = new Page('foo');
@@ -148,9 +136,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame([$element1, $element2, $element21, $element22, $element3], $page->getElementsRecursively());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aFormElementCanOnlyBeAttachedToASinglePage()
     {
         $this->expectException(FormDefinitionConsistencyException::class);
@@ -165,9 +151,7 @@ class PageTest extends UnitTestCase
         $page2->addElement($element);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addElementAddsElementAndSetsBackReferenceToPage()
     {
         $page = new Page('bar');
@@ -178,9 +162,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame($page, $element->getParentRenderable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createElementCreatesElementAndAddsItToForm()
     {
         $formDefinition = $this->getDummyFormDefinition();
@@ -193,9 +175,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame([$element], $page->getElements());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createElementSetsAdditionalPropertiesInElement()
     {
         $formDefinition = $this->getDummyFormDefinition();
@@ -209,9 +189,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame('MyRendererClassName', $element->getRendererClassName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createElementThrowsExceptionIfPageIsNotAttachedToParentForm()
     {
         $this->expectException(FormDefinitionConsistencyException::class);
@@ -219,9 +197,7 @@ class PageTest extends UnitTestCase
         $page->createElement('myElement', 'Neos.Form:MyElementType');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createElementThrowsExceptionIfImplementationClassNameNotFound()
     {
         $this->expectException(TypeDefinitionNotFoundException::class);
@@ -231,9 +207,7 @@ class PageTest extends UnitTestCase
         $page->createElement('myElement', 'Neos.Form:MyElementTypeWithoutImplementationClassName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createElementThrowsExceptionIfImplementationClassNameDoesNotImplementFormElementInterface()
     {
         $this->expectException(TypeDefinitionNotValidException::class);
@@ -243,9 +217,7 @@ class PageTest extends UnitTestCase
         $page->createElement('myElement', 'Neos.Form:MyElementTypeWhichDoesNotImplementFormElementInterface');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createElementThrowsExceptionIfUnknownPropertyFoundInTypeDefinition()
     {
         $this->expectException(TypeDefinitionNotValidException::class);
@@ -255,9 +227,7 @@ class PageTest extends UnitTestCase
         $page->createElement('myElement', 'Neos.Form:MyElementTypeWithUnknownProperties');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function moveElementBeforeMovesElementBeforeReferenceElement()
     {
         $formDefinition = $this->getDummyFormDefinition();
@@ -270,9 +240,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame([$element2, $element1], $page->getElements());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function moveElementBeforeThrowsExceptionIfElementsAreNotOnSamePage()
     {
         $this->expectException(FormDefinitionConsistencyException::class);
@@ -287,9 +255,7 @@ class PageTest extends UnitTestCase
         $page1->moveElementBefore($element1, $element2);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function moveElementAfterMovesElementAfterReferenceElement()
     {
         $formDefinition = $this->getDummyFormDefinition();
@@ -302,9 +268,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame([$element2, $element1], $page->getElements());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function moveElementAfterThrowsExceptionIfElementsAreNotOnSamePage()
     {
         $this->expectException(FormDefinitionConsistencyException::class);
@@ -319,9 +283,7 @@ class PageTest extends UnitTestCase
         $page1->moveElementAfter($element1, $element2);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeElementRemovesElementFromCurrentPageAndUnregistersItFromForm()
     {
         $formDefinition = $this->getDummyFormDefinition();
@@ -337,9 +299,7 @@ class PageTest extends UnitTestCase
         $this->assertNull($element1->getParentRenderable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeElementThrowsExceptionIfElementIsNotOnCurrentPage()
     {
         $this->expectException(FormDefinitionConsistencyException::class);
@@ -351,9 +311,7 @@ class PageTest extends UnitTestCase
         $page1->removeElement($element1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validatorKeyCorrectlyAddsValidator()
     {
         $formDefinition = $this->getDummyFormDefinition();
@@ -378,9 +336,7 @@ class PageTest extends UnitTestCase
         Assert::assertSame($validatorOptions['maximum'], PHP_INT_MAX);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validatorKeyThrowsExceptionIfValidatorPresetIsNotFound()
     {
         $this->expectException(ValidatorPresetNotFoundException::class);

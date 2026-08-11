@@ -10,19 +10,17 @@ namespace Neos\Form\Tests\Functional;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\Large;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Assert;
 
 /**
  * Testcase for onBuildingFinished
- *
- * @group large
  */
+#[Large]
 class FormBuildingFinishedTest extends AbstractFunctionalTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function aFormElementCanAddNewSubelementsWithValidationApplied()
     {
         $this->browser->request('http://localhost/test/form/simpleform/TestingFormBuildingFinished');

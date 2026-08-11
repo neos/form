@@ -10,7 +10,8 @@ namespace Neos\Form\Tests\Unit\ViewHelpers;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use GuzzleHttp\Psr7\Uri;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Controller\ControllerContext;
@@ -66,13 +67,13 @@ class FormViewHelperTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @param string $requestUri
      * @param string $sectionArgument
      * @param string $expectedResult
-     * @dataProvider getFormActionUriDataProvider
      * @throws \ReflectionException
      */
+    #[DataProvider('getFormActionUriDataProvider')]
+    #[Test]
     public function getFormActionUriTests($requestUri, $sectionArgument, $expectedResult)
     {
         $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
