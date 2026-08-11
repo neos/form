@@ -104,9 +104,9 @@ class PageTest extends UnitTestCase
     {
         $page = new Page('foo');
         /** @var AbstractFormElement|MockObject $element1 */
-        $element1 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element1 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         /** @var AbstractFormElement|MockObject $element2 */
-        $element2 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element2 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $page->addElement($element1);
         $page->addElement($element2);
         Assert::assertSame([$element1, $element2], $page->getElementsRecursively());
@@ -118,17 +118,17 @@ class PageTest extends UnitTestCase
         $page = new Page('foo');
 
         /** @var AbstractFormElement|MockObject $element1 */
-        $element1 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element1 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         /** @var Section|MockObject $element2 */
-        $element2 = $this->getMockBuilder(Section::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element2 = $this->getMockBuilder(Section::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         /** @var AbstractFormElement|MockObject $element21 */
-        $element21 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element21 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         /** @var AbstractFormElement|MockObject $element22 */
-        $element22 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element22 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $element2->addElement($element21);
         $element2->addElement($element22);
         /** @var AbstractFormElement|MockObject $element3 */
-        $element3 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element3 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page->addElement($element1);
         $page->addElement($element2);
@@ -142,7 +142,7 @@ class PageTest extends UnitTestCase
         $this->expectException(FormDefinitionConsistencyException::class);
 
         /** @var AbstractFormElement|MockObject $element */
-        $element = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page1 = new Page('bar1');
         $page2 = new Page('bar2');
@@ -156,7 +156,7 @@ class PageTest extends UnitTestCase
     {
         $page = new Page('bar');
         /** @var AbstractFormElement|MockObject $element */
-        $element = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
         $page->addElement($element);
         Assert::assertSame([$element], $page->getElements());
         Assert::assertSame($page, $element->getParentRenderable());
@@ -306,7 +306,7 @@ class PageTest extends UnitTestCase
         $formDefinition = $this->getDummyFormDefinition();
         $page1 = $formDefinition->createPage('myPage1');
         /** @var AbstractFormElement|MockObject $element1 */
-        $element1 = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->disableOriginalConstructor()->getMock();
+        $element1 = $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->disableOriginalConstructor()->getMock();
 
         $page1->removeElement($element1);
     }
@@ -319,7 +319,7 @@ class PageTest extends UnitTestCase
         $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, ['dummy']);
         /** @noinspection PhpUndefinedMethodInspection */
         $mockProcessingRule->_set('validator', new ConjunctionValidator());
-        $formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->will($this->returnValue($mockProcessingRule));
+        $formDefinition->expects($this->any())->method('getProcessingRule')->with('asdf')->willReturn($mockProcessingRule);
 
         $page1 = $formDefinition->createPage('myPage1');
         /** @var AbstractFormElement|MockObject $element */
@@ -414,7 +414,7 @@ class PageTest extends UnitTestCase
             ]
         ]];
 
-        $formDefinition = $this->getMockBuilder(FormDefinition::class)->setMethods(['getProcessingRule'])->setConstructorArgs($formDefinitionConstructorArguments)->getMock();
+        $formDefinition = $this->getMockBuilder(FormDefinition::class)->onlyMethods(['getProcessingRule'])->setConstructorArgs($formDefinitionConstructorArguments)->getMock();
         return $formDefinition;
     }
 }

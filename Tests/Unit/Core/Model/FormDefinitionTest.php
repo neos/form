@@ -710,8 +710,8 @@ class FormDefinitionTest extends UnitTestCase
      */
     protected function getMockFormElement($identifier)
     {
-        $mockFormElement = $this->getMockBuilder(AbstractFormElement::class)->setMethods(['getIdentifier'])->disableOriginalConstructor()->getMock();
-        $mockFormElement->expects($this->any())->method('getIdentifier')->will($this->returnValue($identifier));
+        $mockFormElement = $this->getMockBuilder(AbstractFormElement::class)->onlyMethods(['getIdentifier'])->disableOriginalConstructor()->getMock();
+        $mockFormElement->expects($this->any())->method('getIdentifier')->willReturn($identifier);
 
         return $mockFormElement;
     }

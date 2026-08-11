@@ -112,8 +112,8 @@ class ProcessingRuleTest extends UnitTestCase
         $this->processingRule->setDataType('SomeDataType');
         $propertyMappingConfiguration = $this->processingRule->getPropertyMappingConfiguration();
 
-        $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $propertyMappingConfiguration)->will($this->returnValue('Converted Value'));
-        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new Result()));
+        $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $propertyMappingConfiguration)->willReturn('Converted Value');
+        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->willReturn(new Result());
         Assert::assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
 }

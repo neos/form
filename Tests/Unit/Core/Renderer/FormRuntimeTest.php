@@ -37,9 +37,9 @@ class FormRuntimeTest extends UnitTestCase
     {
         $formDefinition = new FormDefinition('foo');
 
-        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->setMethods(['createSubRequest'])->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->onlyMethods(['createSubRequest'])->disableOriginalConstructor()->getMock();
 
-        $mockFormSubRequest = $this->getMockBuilder(ActionRequest::class)->setMethods(['getParentRequest'])->disableOriginalConstructor()->getMock();
+        $mockFormSubRequest = $this->getMockBuilder(ActionRequest::class)->onlyMethods(['getParentRequest'])->disableOriginalConstructor()->getMock();
         $mockFormSubRequest->expects(self::any())->method('getParentRequest')->willReturn($mockActionRequest);
 
         $mockActionRequest->expects(self::once())->method('createSubRequest')->willReturn($mockFormSubRequest);
