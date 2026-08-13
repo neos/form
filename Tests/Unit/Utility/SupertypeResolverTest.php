@@ -10,7 +10,9 @@ namespace Neos\Form\Tests\Unit\Utility;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Exception\TypeDefinitionNotFoundException;
 use Neos\Form\Utility\SupertypeResolver;
@@ -18,11 +20,11 @@ use PHPUnit\Framework\Assert;
 
 /**
  * Test for Supertype Resolver
- * @covers \Neos\Form\Utility\SupertypeResolver<extended>
  */
+#[CoversClass(SupertypeResolver::class)]
 class SupertypeResolverTest extends UnitTestCase
 {
-    public function dataProviderForTypeResolving()
+    public static function dataProviderForTypeResolving()
     {
         $types = [
             'typeFoo' => [
@@ -124,19 +126,15 @@ class SupertypeResolverTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderForTypeResolving
-     * @test
-     */
+    #[DataProvider('dataProviderForTypeResolving')]
+    #[Test]
     public function getMergedTypeDefinitionWorks($types, $typeName, $expected)
     {
         $supertypeResolver = new SupertypeResolver($types);
         Assert::assertSame($expected, $supertypeResolver->getMergedTypeDefinition($typeName));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMergedTypeDefinitionThrowsExceptionIfTypeNotFound()
     {
         $this->expectException(TypeDefinitionNotFoundException::class);

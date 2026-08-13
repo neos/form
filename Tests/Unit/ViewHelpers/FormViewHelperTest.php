@@ -10,7 +10,9 @@ namespace Neos\Form\Tests\Unit\ViewHelpers;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use GuzzleHttp\Psr7\Uri;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\Controller\ControllerContext;
@@ -30,7 +32,7 @@ class FormViewHelperTest extends UnitTestCase
     protected $formViewHelper;
 
     /**
-     * @var ControllerContext|\PHPUnit\Framework\MockObject\MockObject
+     * @var ControllerContext|MockObject
      */
     protected $mockControllerContext;
 
@@ -46,7 +48,7 @@ class FormViewHelperTest extends UnitTestCase
     /**
      * @return array
      */
-    public function getFormActionUriDataProvider()
+    public static function getFormActionUriDataProvider()
     {
         return [
             ['requestUri' => '', 'sectionArgument' => null, 'expectedResult' => ''],
@@ -66,32 +68,32 @@ class FormViewHelperTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @param string $requestUri
      * @param string $sectionArgument
      * @param string $expectedResult
-     * @dataProvider getFormActionUriDataProvider
      * @throws \ReflectionException
      */
+    #[DataProvider('getFormActionUriDataProvider')]
+    #[Test]
     public function getFormActionUriTests($requestUri, $sectionArgument, $expectedResult)
     {
         $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
-        $this->mockControllerContext->expects($this->any())->method('getRequest')->will($this->returnValue($mockActionRequest));
+        $this->mockControllerContext->expects($this->any())->method('getRequest')->willReturn($mockActionRequest);
 
         $mockHttpRequest = $this->getMockBuilder(ServerRequestInterface::class)->disableOriginalConstructor()->getMock();
-        $mockActionRequest->expects($this->any())->method('getHttpRequest')->will($this->returnValue($mockHttpRequest));
+        $mockActionRequest->expects($this->any())->method('getHttpRequest')->willReturn($mockHttpRequest);
 
         $mockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();
-        $mockUri->expects($this->any())->method('withFragment')->will($this->returnCallback(function ($fragment) use ($requestUri, $mockUri) {
+        $mockUri->expects($this->any())->method('withFragment')->willReturnCallback(function ($fragment) use ($requestUri, $mockUri) {
             $newUri = explode('#', $requestUri)[0] . '#' . $fragment;
             $modifiedMockUri = $this->getMockBuilder(Uri::class)->disableOriginalConstructor()->getMock();
-            $modifiedMockUri->expects($this->any())->method('__toString')->will($this->returnValue($newUri));
+            $modifiedMockUri->expects($this->any())->method('__toString')->willReturn($newUri);
             return $modifiedMockUri;
-        }));
-        $mockUri->expects($this->any())->method('__toString')->will($this->returnValue($requestUri));
-        $mockHttpRequest->expects($this->any())->method('getUri')->will($this->returnValue($mockUri));
+        });
+        $mockUri->expects($this->any())->method('__toString')->willReturn($requestUri);
+        $mockHttpRequest->expects($this->any())->method('getUri')->willReturn($mockUri);
 
-        $this->formViewHelper->expects($this->any())->method('hasArgument')->with('section')->will($this->returnValue($sectionArgument !== null));
+        $this->formViewHelper->expects($this->any())->method('hasArgument')->with('section')->willReturn($sectionArgument !== null);
         $this->formViewHelper->_set('arguments', ['section' => $sectionArgument]);
 
         Assert::assertSame($expectedResult, $this->formViewHelper->_call('getFormActionUri'));

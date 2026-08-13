@@ -10,7 +10,8 @@ namespace Neos\Form\Tests\Unit\Persistence;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Exception\PersistenceManagerException;
 use Neos\Form\Persistence\YamlPersistenceManager;
@@ -18,9 +19,7 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamWrapper;
 use PHPUnit\Framework\Assert;
 
-/**
- * @covers \Neos\Form\Persistence\YamlPersistenceManager<extended>
- */
+#[CoversClass(YamlPersistenceManager::class)]
 class YamlPersistenceManagerTest extends UnitTestCase
 {
     /**
@@ -41,9 +40,7 @@ class YamlPersistenceManagerTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectSettingsCreatesSaveDirectoryIfItDoesntExist()
     {
         Assert::assertFalse(vfsStreamWrapper::getRoot()->hasChild('foo/bar'));
@@ -58,9 +55,7 @@ class YamlPersistenceManagerTest extends UnitTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function loadThrowsExceptionIfSavePathIsNotSet()
     {
         $this->expectException(PersistenceManagerException::class);
@@ -68,9 +63,7 @@ class YamlPersistenceManagerTest extends UnitTestCase
         $yamlPersistenceManager->load('dummy');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function loadThrowsExceptionIfSpecifiedFormDoesNotExist()
     {
         $this->expectException(PersistenceManagerException::class);
@@ -85,9 +78,7 @@ class YamlPersistenceManagerTest extends UnitTestCase
         $yamlPersistenceManager->load('someNonExistingPersistenceIdentifier');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function loadReturnsFormDefinitionAsArray()
     {
         $mockYamlFormDefinition = 'type: \'Neos.Form:Form\'
@@ -105,9 +96,7 @@ label: \'Form Fixture\'
         Assert::assertEquals($expectedResult, $actualResult);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function saveStoresFormDefinitionAsYaml()
     {
         $mockArrayFormDefinition = [
@@ -126,17 +115,13 @@ label: \'Form Fixture\'
         Assert::assertEquals($expectedResult, $actualResult);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function existsReturnsFalseIfTheSpecifiedFormDoesNotExist()
     {
         $this->assertFalse($this->yamlPersistenceManager->exists('someNonExistingPersistenceIdentifier'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function existsReturnsTrueIfTheSpecifiedFormExists()
     {
         $mockYamlFormDefinition = 'type: \'Neos.Form:Form\'
@@ -147,9 +132,7 @@ label: \'Form Fixture\'
         Assert::assertTrue($this->yamlPersistenceManager->exists('mockFormPersistenceIdentifier'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function listFormsThrowsExceptionIfSavePathIsNotSet()
     {
         $this->expectException(PersistenceManagerException::class);
@@ -158,17 +141,13 @@ label: \'Form Fixture\'
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function listFormsReturnsAnEmptyArrayIfNoFormsAreAvailable()
     {
         Assert::assertEquals([], $this->yamlPersistenceManager->listForms());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function listFormsReturnsAvailableForms()
     {
         $mockYamlFormDefinition1 = 'type: \'Neos.Form:Form\'

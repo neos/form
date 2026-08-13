@@ -10,7 +10,10 @@ namespace Neos\Form\Tests\Unit\Factory;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use Neos\Flow\Configuration\ConfigurationManager;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Exception\PresetNotFoundException;
@@ -19,11 +22,11 @@ use PHPUnit\Framework\Assert;
 
 /**
  * Test for Supertype Resolver
- * @covers \Neos\Form\Factory\AbstractFormFactory<extended>
  */
+#[CoversClass(AbstractFormFactory::class)]
 class AbstractFormFactoryTest extends UnitTestCase
 {
-    public function dataProviderForConfigurationMerging()
+    public static function dataProviderForConfigurationMerging()
     {
         $presets = [
             'default' => [
@@ -86,10 +89,8 @@ class AbstractFormFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderForConfigurationMerging
-     * @test
-     */
+    #[DataProvider('dataProviderForConfigurationMerging')]
+    #[Test]
     public function getPresetConfigurationReturnsCorrectConfigurationForPresets($presets, $presetName, $expected)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
@@ -101,9 +102,7 @@ class AbstractFormFactoryTest extends UnitTestCase
         Assert::assertSame($expected, $actual);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPresetConfigurationThrowsExceptionIfPresetIsNotFound()
     {
         $this->expectException(PresetNotFoundException::class);
@@ -111,9 +110,7 @@ class AbstractFormFactoryTest extends UnitTestCase
         $abstractFormFactory->_call('getPresetConfiguration', 'NonExistingPreset');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function initializeObjectLoadsSettings()
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
@@ -122,7 +119,7 @@ class AbstractFormFactoryTest extends UnitTestCase
             ->expects($this->once())
             ->method('getConfiguration')
             ->with(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'Neos.Form')
-            ->will($this->returnValue('MyConfig'));
+            ->willReturn('MyConfig');
         $abstractFormFactory->_set('configurationManager', $mockConfigurationManager);
 
         $abstractFormFactory->_call('initializeObject');
@@ -130,18 +127,16 @@ class AbstractFormFactoryTest extends UnitTestCase
     }
 
     /**
-     * @return AbstractFormFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractFormFactory|MockObject
      */
     protected function getAbstractFormFactory()
     {
         return $this->getAccessibleMock(AbstractFormFactory::class, ['build']);
     }
 
-    /**
-     * @dataProvider dataProviderForConfigurationMerging
-     * @test
-     */
-    public function getPresetsWorks($presets)
+    #[DataProvider('dataProviderForConfigurationMerging')]
+    #[Test]
+    public function getPresetsWorks($presets, $presetName, $expected)
     {
         $abstractFormFactory = $this->getAbstractFormFactory();
         $abstractFormFactory->_set('formSettings', [

@@ -10,7 +10,8 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\FinisherContext;
 use Neos\Form\Core\Runtime\FormRuntime;
@@ -18,8 +19,8 @@ use PHPUnit\Framework\Assert;
 
 /**
  * Test for FinisherContext Domain Model
- * @covers \Neos\Form\Core\Model\FinisherContext
  */
+#[CoversClass(FinisherContext::class)]
 class FinisherContextTest extends UnitTestCase
 {
     /**
@@ -38,25 +39,19 @@ class FinisherContextTest extends UnitTestCase
         $this->finisherContext = new FinisherContext($this->mockFormRuntime);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFormRuntimeReturnsTheFormRuntime()
     {
         Assert::assertSame($this->mockFormRuntime, $this->finisherContext->getFormRuntime());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCancelReturnsFalseByDefault()
     {
         Assert::assertFalse($this->finisherContext->isCancelled());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCancelReturnsTrueIfContextHasBeenCancelled()
     {
         $this->finisherContext->cancel();

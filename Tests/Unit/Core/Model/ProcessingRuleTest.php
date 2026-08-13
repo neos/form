@@ -10,7 +10,8 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Error\Messages\Error;
 use Neos\Error\Messages\Result;
 use Neos\Flow\Property\PropertyMapper;
@@ -23,8 +24,8 @@ use PHPUnit\Framework\Assert;
 
 /**
  * Test for ProcessingRule Domain Model
- * @covers \Neos\Form\Core\Model\ProcessingRule
  */
+#[CoversClass(ProcessingRule::class)]
 class ProcessingRuleTest extends UnitTestCase
 {
     /**
@@ -46,35 +47,29 @@ class ProcessingRuleTest extends UnitTestCase
         $this->inject($this->processingRule, 'propertyMapper', $this->mockPropertyMapper);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDataTypeReturnsNullByDefault()
     {
         $this->assertNull($this->processingRule->getDataType());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDataTypeReturnsSpecifiedDataType()
     {
         $this->processingRule->setDataType('SomeDataType');
         Assert::assertSame('SomeDataType', $this->processingRule->getDataType());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getValidatorsReturnsAnEmptyCollectionByDefault()
     {
         Assert::assertSame(0, count($this->processingRule->getValidators()));
     }
 
     /**
-     * @test
      * @throws \ReflectionException
      */
+    #[Test]
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
         /** @var ValidatorInterface $mockValidator1 */
@@ -89,18 +84,14 @@ class ProcessingRuleTest extends UnitTestCase
         Assert::assertTrue($validators->contains($mockValidator2));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processReturnsTheUnchangedValueByDefault()
     {
         $actualResult = $this->processingRule->process('Some Value');
         Assert::assertEquals('Some Value', $actualResult);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processingMessagesCanBeModifiedBeforeProcessing()
     {
         $this->processingRule->getProcessingMessages()->addError(new Error('Test'));
@@ -108,25 +99,21 @@ class ProcessingRuleTest extends UnitTestCase
         Assert::assertTrue($this->processingRule->getProcessingMessages()->hasErrors());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processDoesNotConvertValueIfTargetTypeIsNotSpecified()
     {
         $this->mockPropertyMapper->expects($this->never())->method('convert');
         $this->processingRule->process('Some Value');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processConvertsValueIfDataTypeIsSpecified()
     {
         $this->processingRule->setDataType('SomeDataType');
         $propertyMappingConfiguration = $this->processingRule->getPropertyMappingConfiguration();
 
-        $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $propertyMappingConfiguration)->will($this->returnValue('Converted Value'));
-        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->will($this->returnValue(new Result()));
+        $this->mockPropertyMapper->expects($this->once())->method('convert')->with('Some Value', 'SomeDataType', $propertyMappingConfiguration)->willReturn('Converted Value');
+        $this->mockPropertyMapper->expects($this->any())->method('getMessages')->willReturn(new Result());
         Assert::assertEquals('Converted Value', $this->processingRule->process('Some Value'));
     }
 }

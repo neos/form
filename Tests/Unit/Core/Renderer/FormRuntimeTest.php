@@ -10,7 +10,10 @@ namespace Neos\Form\Tests\Unit\Core\Runtime;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use Neos\Form\Tests\Unit\Core\Runtime\Renderer\Fixture\DummyFinisher;
+use PHPUnit\Framework\MockObject\MockObject;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Mvc\ActionResponse;
 use Neos\Flow\Tests\UnitTestCase;
@@ -25,21 +28,18 @@ require_once(__DIR__ . '/Fixture/DummyFinisher.php');
 
 /**
  * Test for Form Runtime
- *
- * @covers \Neos\Form\Core\Runtime\FormRuntime<extended>
  */
+#[CoversClass(FormRuntime::class)]
 class FormRuntimeTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function valuesSetInConstructorCanBeReadAgain()
     {
         $formDefinition = new FormDefinition('foo');
 
-        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->setMethods(['createSubRequest'])->disableOriginalConstructor()->getMock();
+        $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->onlyMethods(['createSubRequest'])->disableOriginalConstructor()->getMock();
 
-        $mockFormSubRequest = $this->getMockBuilder(ActionRequest::class)->setMethods(['getParentRequest'])->disableOriginalConstructor()->getMock();
+        $mockFormSubRequest = $this->getMockBuilder(ActionRequest::class)->onlyMethods(['getParentRequest'])->disableOriginalConstructor()->getMock();
         $mockFormSubRequest->expects(self::any())->method('getParentRequest')->willReturn($mockActionRequest);
 
         $mockActionRequest->expects(self::once())->method('createSubRequest')->willReturn($mockFormSubRequest);
@@ -52,9 +52,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame($formDefinition, $formRuntime->_get('formDefinition'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTypeReturnsTypeOfFormDefinition()
     {
         $formDefinition = new FormDefinition('foo');
@@ -62,9 +60,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame('Neos.Form:Form', $formRuntime->getType());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getIdentifierReturnsIdentifierOfFormDefinition()
     {
         $formDefinition = new FormDefinition('foo');
@@ -72,9 +68,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame('foo', $formRuntime->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRenderingOptionsReturnsRenderingOptionsOfFormDefinition()
     {
         $formDefinition = new FormDefinition('foo');
@@ -83,9 +77,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame(['asdf' => 'test'], $formRuntime->getRenderingOptions());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRendererClassNameReturnsRendererClassNameOfFormDefinition()
     {
         $formDefinition = new FormDefinition('foo');
@@ -94,9 +86,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame('MyRendererClassName', $formRuntime->getRendererClassName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getLabelReturnsLabelOfFormDefinition()
     {
         $formDefinition = new FormDefinition('foo');
@@ -105,9 +95,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame('my cool label', $formRuntime->getLabel());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invokeFinishersInvokesFinishersInCorrectOrder()
     {
         $formDefinition = new FormDefinition('foo');
@@ -141,15 +129,13 @@ class FormRuntimeTest extends UnitTestCase
      */
     protected function getMockFinisher(\Closure $closureToExecute)
     {
-        $finisher = new Renderer\Fixture\DummyFinisher();
+        $finisher = new DummyFinisher();
         $finisher->cb = $closureToExecute;
 
         return $finisher;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function pageNavigationWorks()
     {
         $formDefinition = new FormDefinition('foo');
@@ -179,9 +165,7 @@ class FormRuntimeTest extends UnitTestCase
         Assert::assertSame(null, $formRuntime->getNextPage());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function arrayAccessReturnsDefaultValuesIfSet()
     {
         $formDefinition = new FormDefinition('foo');
@@ -213,7 +197,7 @@ class FormRuntimeTest extends UnitTestCase
 
     /**
      * @param FormDefinition $formDefinition
-     * @return FormRuntime|\PHPUnit\Framework\MockObject\MockObject
+     * @return FormRuntime|MockObject
      */
     protected function createFormRuntime(FormDefinition $formDefinition)
     {

@@ -10,7 +10,9 @@ namespace Neos\Form\Tests\Unit\Core\Model;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Flow\Validation\Exception\InvalidValidationOptionsException;
 use Neos\Flow\Validation\Validator\ConjunctionValidator;
@@ -28,13 +30,11 @@ use ReflectionException;
 
 /**
  * Test for AbstractFormElement Domain Model
- * @covers \Neos\Form\Core\Model\AbstractFormElement<extended>
  */
+#[CoversClass(AbstractFormElement::class)]
 class AbstractFormElementTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function constructorSetsIdentifierAndType()
     {
         $element = $this->getFormElement(['myIdentifier', 'Neos.Form:MyType']);
@@ -42,7 +42,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('Neos.Form:MyType', $element->getType());
     }
 
-    public function invalidIdentifiers()
+    public static function invalidIdentifiers()
     {
         return [
             'Null Identifier' => [null],
@@ -51,10 +51,8 @@ class AbstractFormElementTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider invalidIdentifiers
-     */
+    #[DataProvider('invalidIdentifiers')]
+    #[Test]
     public function ifBogusIdentifierSetInConstructorAnExceptionIsThrown($identifier)
     {
         $this->expectException(IdentifierNotValidException::class);
@@ -62,9 +60,7 @@ class AbstractFormElementTest extends UnitTestCase
         $this->getFormElement([$identifier, 'Neos.Form:MyType']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function labelCanBeSetAndGet()
     {
         $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
@@ -73,9 +69,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('my label', $formElement->getLabel());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function defaultValueCanBeSetAndGet()
     {
         $formDefinition = new FormDefinition('foo');
@@ -88,9 +82,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('My Default Value', $formElement->getDefaultValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderingOptionsCanBeSetAndGet()
     {
         $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
@@ -101,9 +93,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame(['option1' => 'value1', 'option2' => 'value2'], $formElement->getRenderingOptions());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function rendererClassNameCanBeGetAndSet()
     {
         $formElement = $this->getFormElement(['foo', 'Neos.Form:MyType']);
@@ -112,9 +102,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('MyRendererClassName', $formElement->getRendererClassName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getUniqueIdentifierBuildsIdentifierFromRootFormAndElementIdentifier()
     {
         $formDefinition = new FormDefinition('foo');
@@ -126,7 +114,7 @@ class AbstractFormElementTest extends UnitTestCase
         Assert::assertSame('foo-bar', $myFormElement->getUniqueIdentifier());
     }
 
-    public function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider()
+    public static function getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider()
     {
         return [
             ['foo', 'bar', 'foo-bar'],
@@ -137,14 +125,14 @@ class AbstractFormElementTest extends UnitTestCase
     }
 
     /**
-     * @test
-     * @dataProvider getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider
      * @param string $formIdentifier
      * @param string $elementIdentifier
      * @param string $expectedResult
      * @throws FormDefinitionConsistencyException
      * @throws IdentifierNotValidException
      */
+    #[DataProvider('getUniqueIdentifierReplacesSpecialCharactersByUnderscoresProvider')]
+    #[Test]
     public function getUniqueIdentifierReplacesSpecialCharactersByUnderscores($formIdentifier, $elementIdentifier, $expectedResult)
     {
         $formDefinition = new FormDefinition($formIdentifier);
@@ -157,10 +145,10 @@ class AbstractFormElementTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @throws FormDefinitionConsistencyException
      * @throws IdentifierNotValidException
      */
+    #[Test]
     public function isRequiredReturnsFalseByDefault()
     {
         $formDefinition = $this->getFormDefinitionWithProcessingRule('bar');
@@ -173,9 +161,7 @@ class AbstractFormElementTest extends UnitTestCase
         $this->assertFalse($myFormElement->isRequired());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isRequiredReturnsTrueIfNotEmptyValidatorIsAdded()
     {
         $formDefinition = $this->getFormDefinitionWithProcessingRule('bar');
@@ -196,7 +182,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMockBuilder(AbstractFormElement::class)->setMethods(['dummy'])->setConstructorArgs($constructorArguments)->getMock();
+        return $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
@@ -210,8 +196,8 @@ class AbstractFormElementTest extends UnitTestCase
         $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, ['dummy']);
         $mockProcessingRule->_set('validator', new ConjunctionValidator());
 
-        $formDefinition = $this->getMockBuilder(FormDefinition::class)->setMethods(['getProcessingRule'])->setConstructorArgs(['foo'])->getMock();
-        $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->will($this->returnValue($mockProcessingRule));
+        $formDefinition = $this->getMockBuilder(FormDefinition::class)->onlyMethods(['getProcessingRule'])->setConstructorArgs(['foo'])->getMock();
+        $formDefinition->expects($this->any())->method('getProcessingRule')->with($formElementIdentifier)->willReturn($mockProcessingRule);
 
         return $formDefinition;
     }

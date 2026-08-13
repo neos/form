@@ -10,7 +10,8 @@ namespace Neos\Form\Tests\Unit\Factory;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Form\Core\Model\Page;
 use Neos\Form\Exception\IdentifierNotValidException;
@@ -18,14 +19,10 @@ use Neos\Form\Factory\ArrayFormFactory;
 use Neos\Form\FormElements\GenericFormElement;
 use PHPUnit\Framework\Assert;
 
-/**
- * @covers \Neos\Form\Factory\ArrayFormFactory<extended>
- */
+#[CoversClass(ArrayFormFactory::class)]
 class ArrayFormFactoryTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function simpleFormObjectIsReturned()
     {
         $factory = $this->getArrayFormFactory();
@@ -37,9 +34,7 @@ class ArrayFormFactoryTest extends UnitTestCase
         Assert::assertSame('myFormIdentifier', $form->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function formObjectWithSubRenderablesIsReturned()
     {
         $factory = $this->getArrayFormFactory();
@@ -75,9 +70,7 @@ class ArrayFormFactoryTest extends UnitTestCase
         Assert::assertSame(['options' => ['MyKey' => 'MyValue']], $element1->getProperties());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderableWithoutIdentifierThrowsException()
     {
         $this->expectException(IdentifierNotValidException::class);
