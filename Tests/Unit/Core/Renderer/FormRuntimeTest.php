@@ -45,7 +45,7 @@ class FormRuntimeTest extends UnitTestCase
         $mockActionRequest->expects(self::once())->method('createSubRequest')->willReturn($mockFormSubRequest);
         $actionResponse = new ActionResponse();
 
-        $formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $actionResponse]);
+        $formRuntime = $this->getAccessibleMock(FormRuntime::class, [], [$formDefinition, $mockActionRequest, $actionResponse]);
 
         Assert::assertSame($mockActionRequest, $formRuntime->getRequest()->getParentRequest());
         Assert::assertInstanceOf(ActionResponse::class, $formRuntime->getResponse());
@@ -204,6 +204,6 @@ class FormRuntimeTest extends UnitTestCase
         $mockActionRequest = $this->getMockBuilder(ActionRequest::class)->disableOriginalConstructor()->getMock();
         $actionResponse = new ActionResponse();
 
-        return $this->getAccessibleMock(FormRuntime::class, ['dummy'], [$formDefinition, $mockActionRequest, $actionResponse]);
+        return $this->getAccessibleMock(FormRuntime::class, [], [$formDefinition, $mockActionRequest, $actionResponse]);
     }
 }
