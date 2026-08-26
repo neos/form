@@ -73,10 +73,10 @@ class ProcessingRuleTest extends UnitTestCase
     public function getValidatorsReturnsPreviouslyAddedValidators()
     {
         /** @var ValidatorInterface $mockValidator1 */
-        $mockValidator1 = $this->createMock(ValidatorInterface::class);
+        $mockValidator1 = $this->createStub(ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator1);
         /** @var ValidatorInterface $mockValidator2 */
-        $mockValidator2 = $this->createMock(ValidatorInterface::class);
+        $mockValidator2 = $this->createStub(ValidatorInterface::class);
         $this->processingRule->addValidator($mockValidator2);
 
         $validators = $this->processingRule->getValidators();

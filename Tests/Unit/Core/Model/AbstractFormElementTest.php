@@ -182,7 +182,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     protected function getFormElement(array $constructorArguments)
     {
-        return $this->getMockBuilder(AbstractFormElement::class)->addMethods(['dummy'])->setConstructorArgs($constructorArguments)->getMock();
+        return $this->getMockBuilder(AbstractFormElement::class)->onlyMethods([])->setConstructorArgs($constructorArguments)->getMock();
     }
 
     /**
@@ -193,7 +193,7 @@ class AbstractFormElementTest extends UnitTestCase
      */
     protected function getFormDefinitionWithProcessingRule($formElementIdentifier)
     {
-        $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, ['dummy']);
+        $mockProcessingRule = $this->getAccessibleMock(ProcessingRule::class, []);
         $mockProcessingRule->_set('validator', new ConjunctionValidator());
 
         $formDefinition = $this->getMockBuilder(FormDefinition::class)->onlyMethods(['getProcessingRule'])->setConstructorArgs(['foo'])->getMock();

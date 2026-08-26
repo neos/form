@@ -206,7 +206,7 @@ class AbstractFinisherTest extends UnitTestCase
      */
     protected function getFinisherContext()
     {
-        $this->formRuntime = $this->getAccessibleMock(FormRuntime::class, ['dummy'], [], '', false);
+        $this->formRuntime = $this->getAccessibleMock(FormRuntime::class, [], [], '', false);
         return new FinisherContext($this->formRuntime);
     }
 }
