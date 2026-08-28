@@ -53,7 +53,17 @@ There are some useful related packages:
     <td>Custom Form Element that renders <a href="https://www.google.com/recaptcha">Googles reCAPTCHAs</a></td>
     <td><a href="https://packagist.org/packages/wegmeister/recaptcha">wegmeister/recaptcha</a></td>
   </tr>
-    <tr>
+  <tr>
+    <td><a href="https://github.com/tmsdev/Tms.Cloudflare.Turnstile">Tms.Cloudflare.Turnstile</a></td>
+    <td>Turnstile is Cloudflare’s smart CAPTCHA alternative. It can be embedded into any website without sending traffic through Cloudflare and works without showing visitors a CAPTCHA.</td>
+    <td><a href="https://packagist.org/packages/tms/cloudflare-turnstile">tms/cloudflare-turnstile</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/tmsdev/Tms.Hcaptcha">Tms.Hcaptcha</a></td>
+    <td>hCaptcha form element for Neos CMS</td>
+    <td><a href="https://packagist.org/packages/tms/hcaptcha">tms/hcaptcha</a></td>
+  </tr>
+  <tr>
     <td><a href="https://github.com/daniellienert/honeypotformfield">Honeypot Field</a></td>
     <td>Honeypot form field to spam-protect your forms without further disturbance.</a></td>
     <td><a href="https://github.com/daniellienert/honeypotformfield">dl/honeypotformfield</a></td>
