@@ -16,6 +16,8 @@ namespace Neos\Form\FormState;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Security\Cryptography\HashService;
+use Neos\Flow\Security\Exception\InvalidArgumentForHashGenerationException;
+use Neos\Flow\Security\Exception\InvalidHashException;
 use Neos\Form\Core\Model\FormDefinition;
 use Neos\Form\Core\Runtime\FormState;
 
@@ -31,7 +33,11 @@ class DefaultFormStateInitializer implements FormStateInitializerInterface
     {
         $serializedFormStateWithHmac = $actionRequest->getInternalArgument('__state');
         if ($serializedFormStateWithHmac !== null) {
-            $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
+            try {
+                $serializedFormState = $this->hashService->validateAndStripHmac($serializedFormStateWithHmac);
+            } catch (InvalidArgumentForHashGenerationException | InvalidHashException) {
+                return new FormState();
+            }
             /** @noinspection UnserializeExploitsInspection The unserialize call is safe because of the HMAC check above */
             return unserialize(base64_decode($serializedFormState));
         }
