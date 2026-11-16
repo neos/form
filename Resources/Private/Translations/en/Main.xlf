@@ -17,6 +17,12 @@
             <trans-unit id="forms.pages.valueTitle" xml:space="preserve">
                 <source>Value</source>
             </trans-unit>
+            <trans-unit id="forms.labels.cancel" xml:space="preserve">
+                <source>Cancel</source>
+            </trans-unit>
+            <trans-unit id="forms.labels.replaceFile" xml:space="preserve">
+                <source>Replace File</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
