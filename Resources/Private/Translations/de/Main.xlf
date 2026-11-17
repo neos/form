@@ -17,6 +17,12 @@
       <trans-unit id="forms.pages.valueTitle" xml:space="preserve" approved="yes">
                 <source>Value</source>
             <target state="final">Wert</target></trans-unit>
+      <trans-unit id="forms.labels.cancel" xml:space="preserve">
+               <source>Cancel</source>
+            <target state="final">Abbrechen</target></trans-unit>
+      <trans-unit id="forms.labels.replaceFile" xml:space="preserve">
+              <source>Replace File</source>
+            <target state="final">Datei ersetzen</target></trans-unit>
     </body>
   </file>
 </xliff>
